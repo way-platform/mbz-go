@@ -1,0 +1,1991 @@
+components:
+  schemas:
+    ActualServiceStatus:
+      properties:
+        countryCode:
+          description: Country code of the service that should be updated, defaults
+            to GLOBAL.
+          example: DE
+          type: string
+        serviceId:
+          description: ID of the generic-service
+          example: '1001'
+          type: string
+        status:
+          description: The actual status of the generic-service
+          enum:
+          - ACTIVE
+          - ACTIVATION_PENDING
+          - ACTIVATION_FAILED
+          - NOT_AVAILABLE
+          - INACTIVE
+          type: string
+      required:
+      - countryCode
+      - serviceId
+      - status
+      type: object
+    ActualServiceStatusCustomerVisible_Public:
+      properties:
+        deltaPush:
+          description: Flag denoting whether delta push signals are sent for this
+            VIN.
+          type: boolean
+        services:
+          description: List services for which you want to change the actual service
+            status.
+          items:
+            $ref: '#/components/schemas/ServiceStatus_Public'
+          type: array
+        vin:
+          description: The VIN (vehicle identification number) of the vehicle
+          example: WDD00000000000000
+          type: string
+      required:
+      - deltaPush
+      - services
+      - vin
+      type: object
+    ActualServiceStatusForVehicle:
+      properties:
+        customerId:
+          description: The clientId.
+          example: mercedes-60140562
+          type: string
+        services:
+          description: List services for which you want to change the actual service
+            status.
+          items:
+            $ref: '#/components/schemas/ActualServiceStatus'
+          type: array
+        vin:
+          description: The VIN (vehicle identification number) of the vehicle
+          example: WDD00000000000000
+          type: string
+      required:
+      - customerId
+      - services
+      - vin
+      type: object
+    ActualServiceStatusRequest:
+      properties:
+        actualServiceStatusForVehicle:
+          description: List of objects containing information which service-status
+            should be changed on a specific vehicle.
+          items:
+            $ref: '#/components/schemas/ActualServiceStatusForVehicle'
+          type: array
+      required:
+      - actualServiceStatusForVehicle
+      type: object
+    BadRequestErrorResponse:
+      properties:
+        detail:
+          example: Server cannot or will not process the request
+          type: string
+        instance:
+          description: URI where this error occurred
+          example: about:blank
+          format: uri
+          type: string
+        statusCode:
+          example: 400
+          format: int32
+          type: integer
+        title:
+          example: Bad request
+          type: string
+        type:
+          description: URI-reference for type information or 'about:blank' if no more
+            information is available
+          example: about:blank
+          format: uri-reference
+          type: string
+      type: object
+    BadRequestErrorResponse_Public:
+      properties:
+        detail:
+          example: Server cannot or will not process the request
+          type: string
+        instance:
+          description: URI where this error occurred
+          example: about:blank
+          format: uri
+          type: string
+        statusCode:
+          example: 400
+          format: int32
+          type: integer
+        title:
+          example: Bad request
+          type: string
+        type:
+          description: URI-reference for type information or 'about:blank' if no more
+            information is available
+          example: about:blank
+          format: uri-reference
+          type: string
+      type: object
+    BadRequestWithPositionErrorResponse:
+      description: This error occurs, if a validation (eg. of an argument) failed
+      properties:
+        detail:
+          description: details why the request is Bad
+          example: 'Unexpected character ('','' (code 44)): was expecting double-quote
+            to start field name'
+          type: string
+        instance:
+          description: URI where this error occurred
+          example: about:blank
+          format: uri
+          type: string
+        occurredAt:
+          $ref: '#/components/schemas/Position'
+          description: Location where the request was malformed
+        statusCode:
+          example: 400
+          format: int32
+          type: integer
+        title:
+          example: Invalid JSON Input
+          type: string
+        type:
+          example: /error/validation-error
+          format: uri-reference
+          type: string
+      required:
+      - detail
+      type: object
+    CleanupNotAvailableServicesRequest:
+      properties:
+        cleanup_threshold:
+          description: Threshold in minutes, specifying the age lower bound for services
+            to be deactivated.
+          example: 1440
+          format: int32
+          type: integer
+      required:
+      - cleanup_threshold
+      type: object
+    CompatibilityGenericService:
+      properties:
+        available:
+          description: The service availability
+          type: boolean
+        serviceId:
+          description: The ID of the service
+          example: '1001'
+          type: string
+        serviceName:
+          description: The name of the service
+          example: Mileage
+          type: string
+      required:
+      - available
+      - serviceId
+      - serviceName
+      type: object
+    CompatibilityResponse:
+      properties:
+        services:
+          description: List of services with the service availability.
+          items:
+            $ref: '#/components/schemas/CompatibilityGenericService'
+          type: array
+        vehicleProvidesConnectivity:
+          description: This property indicates the base compatibility to data-services
+            for the requested vehicle.
+          example: true
+          type: boolean
+        vehicleType:
+          description: The type of the requested vehicle.
+          example: Combustion Engine Vehicle
+          type: string
+        vin:
+          description: The VIN (vehicle identification number) of the requested vehicle.
+          example: WDD00000000000000
+          type: string
+      required:
+      - services
+      - vehicleProvidesConnectivity
+      - vin
+      type: object
+    DesiredServiceStatus:
+      properties:
+        desiredStatus:
+          description: The desired service status
+          enum:
+          - ACTIVE
+          - INACTIVE
+          type: string
+        serviceId:
+          description: ID of the generic-service
+          example: '1001'
+          type: string
+      required:
+      - desiredStatus
+      - serviceId
+      type: object
+    DesiredServiceStatusRequest:
+      properties:
+        services:
+          description: List of services for which you want to change the desired service
+            status.
+          items:
+            $ref: '#/components/schemas/DesiredServiceStatus'
+          maxItems: 100
+          minItems: 0
+          type: array
+        vin:
+          description: VIN of the vehicle
+          example: WDD00000000000000
+          type: string
+      required:
+      - services
+      - vin
+      type: object
+    DesiredServiceStatusRequest_Public:
+      properties:
+        services:
+          description: List of services for which you want to change the desired service
+            status.
+          items:
+            $ref: '#/components/schemas/DesiredServiceStatus_Public'
+          maxItems: 100
+          minItems: 0
+          type: array
+        vin:
+          description: VIN of the vehicle
+          example: WDD00000000000000
+          type: string
+      required:
+      - services
+      - vin
+      type: object
+    DesiredServiceStatus_Public:
+      properties:
+        desiredStatus:
+          description: The desired service status
+          enum:
+          - ACTIVE
+          - INACTIVE
+          type: string
+        serviceId:
+          description: ID of the generic-service
+          example: '1001'
+          type: string
+      required:
+      - desiredStatus
+      - serviceId
+      type: object
+    ErrorResponse:
+      properties:
+        detail:
+          description: details why this error occurred.
+          type: string
+        instance:
+          description: URI where this error occurred
+          example: about:blank
+          format: uri
+          type: string
+        statusCode:
+          description: status code of this error (e.g. http status code)
+          format: int32
+          type: integer
+        title:
+          description: title of this error (e.g. http status reason phrase)
+          type: string
+        type:
+          description: URI-reference for type information or 'about:blank' if no more
+            information is available
+          example: about:blank
+          format: uri-reference
+          type: string
+      type: object
+    EudaDesiredServiceStatusRequest_Public:
+      properties:
+        consentToken:
+          description: Consent token
+          type: string
+        services:
+          description: List of services for which you want to change the desired service
+            status.
+          items:
+            $ref: '#/components/schemas/EudaDesiredServiceStatus_Public'
+          maxItems: 100
+          minItems: 0
+          type: array
+          uniqueItems: true
+        vins:
+          description: List of VINs of vehicles
+          example:
+          - WDD00000000000001
+          - WDD00000000000002
+          items:
+            type: string
+          maxItems: 10
+          minItems: 0
+          type: array
+          uniqueItems: true
+      required:
+      - consentToken
+      - services
+      - vins
+      type: object
+    EudaDesiredServiceStatus_Public:
+      properties:
+        desiredStatus:
+          description: The desired service status
+          enum:
+          - ACTIVE
+          - INACTIVE
+          type: string
+        serviceId:
+          description: ID of the data act service
+          example: '6001'
+          type: string
+      required:
+      - desiredStatus
+      - serviceId
+      type: object
+    GenericService:
+      properties:
+        approvalTimestamp:
+          description: Time when this service was initial activated
+          example: 1653993974696
+          format: int64
+          type: integer
+        countryCode:
+          description: Code denoting potential regional customizations. GLOBAL is
+            the base code with no customizations, any other code means the corresponding
+            country differs from the base definition.
+          example: GLOBAL
+          type: string
+        deltaPush:
+          description: Flag denoting whether delta push signals are sent for this
+            VIN.
+          type: boolean
+        desiredStatus:
+          description: The desired status of the generic-service
+          enum:
+          - ACTIVE
+          - INACTIVE
+          example: ACTIVE
+          type: string
+        orderId:
+          description: The ID of the order
+          example: 21354891-ddbf-44b5-8014-4ace3a6bed69
+          type: string
+        originalDesiredActivationTimestamp:
+          description: Time when this service was ordered by the customer
+          example: 1653993974696
+          format: int64
+          type: integer
+        serviceId:
+          description: The ID of the generic-service
+          example: '1001'
+          type: string
+        status:
+          description: The actual status of the generic-service
+          enum:
+          - ACTIVE
+          - ACTIVATION_PENDING
+          - INACTIVE
+          - ACTIVATION_FAILED
+          - NOT_AVAILABLE
+          example: ACTIVATION_PENDING
+          type: string
+      required:
+      - approvalTimestamp
+      - countryCode
+      - deltaPush
+      - desiredStatus
+      - originalDesiredActivationTimestamp
+      - serviceId
+      - status
+      type: object
+    GenericServiceListResponse:
+      properties:
+        serviceList:
+          description: List of service states per virtual-vehicle
+          items:
+            $ref: '#/components/schemas/ServiceList'
+          type: array
+      required:
+      - serviceList
+      type: object
+    JobConfigRequest:
+      description: Configuration required to trigger a job execution.
+      properties:
+        name:
+          description: Name of the job to execute.
+          enum:
+          - notifyPendingServiceActivations
+          type: string
+      required:
+      - name
+      type: object
+    JobExecutionResponse:
+      description: Job execution metadata to identify a job run.
+      properties:
+        jobId:
+          description: The id number to identify the execution with.
+          format: int64
+          type: integer
+      required:
+      - jobId
+      type: object
+    NotFoundErrorResponse:
+      properties:
+        detail:
+          example: Server can not find the requested resource
+          type: string
+        instance:
+          description: URI where this error occurred
+          example: about:blank
+          format: uri
+          type: string
+        statusCode:
+          example: 404
+          format: int32
+          type: integer
+        title:
+          example: Not found
+          type: string
+        type:
+          description: URI-reference for type information or 'about:blank' if no more
+            information is available
+          example: about:blank
+          format: uri-reference
+          type: string
+      type: object
+    NotFoundErrorResponse_Public:
+      properties:
+        detail:
+          example: Server can not find the requested resource
+          type: string
+        instance:
+          description: URI where this error occurred
+          example: about:blank
+          format: uri
+          type: string
+        statusCode:
+          example: 404
+          format: int32
+          type: integer
+        title:
+          example: Not found
+          type: string
+        type:
+          description: URI-reference for type information or 'about:blank' if no more
+            information is available
+          example: about:blank
+          format: uri-reference
+          type: string
+      type: object
+    Position:
+      properties:
+        column:
+          example: 31
+          format: int32
+          type: integer
+        line:
+          example: 2
+          format: int32
+          type: integer
+      required:
+      - column
+      - line
+      type: object
+    ServiceLicenseStatusResponse:
+      properties:
+        serviceId:
+          description: The generic service id for which the license was created.
+          example: '3002'
+          type: string
+        status:
+          description: The lifecycle status of the license.
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - EXPIRED
+          - NOT_AVAILABLE
+          type: string
+        validFrom:
+          description: Start of the validity period (Epoch Milliseconds). The time
+            when the license became ACTIVE.
+          format: int64
+          type: integer
+        validTo:
+          description: End of the validity period (Epoch Milliseconds). The time when
+            the license becomes or became EXPIRED. This field will not appear for
+            licenses with unlimited validity.
+          format: int64
+          type: integer
+        vin:
+          description: The VIN of the vehicle to which the license belongs to.
+          example: WDD00000000000000
+          type: string
+      required:
+      - serviceId
+      - status
+      - vin
+      type: object
+    ServiceList:
+      properties:
+        customerId:
+          description: clientId
+          example: mercedes-60140562
+          type: string
+        services:
+          description: List of generic-services with the service status.
+          items:
+            $ref: '#/components/schemas/GenericService'
+          type: array
+        vin:
+          description: The VIN (vehicle identification number) of the vehicle
+          example: WDD00000000000000
+          type: string
+      required:
+      - customerId
+      - services
+      - vin
+      type: object
+    ServiceStatus:
+      properties:
+        countryCode:
+          description: Code denoting potential regional customizations. GLOBAL is
+            the base code with no customizations.
+          type: string
+        deltaPush:
+          description: Flag denoting whether delta push signals are sent for this
+            VIN.
+          type: boolean
+        desiredStatus:
+          description: The desired service status
+          enum:
+          - ACTIVE
+          - ACTIVATION_PENDING
+          - INACTIVE
+          - ACTIVATION_FAILED
+          - NOT_AVAILABLE
+          type: string
+        orderId:
+          description: The ID of the order
+          example: 21354891-ddbf-44b5-8014-4ace3a6bed69
+          type: string
+        orderTime:
+          description: Time when this service was ordered by client
+          format: int64
+          type: integer
+        serviceId:
+          description: ID of the generic-service
+          example: '1001'
+          type: string
+        status:
+          description: The actual service status
+          enum:
+          - ACTIVE
+          - ACTIVATION_PENDING
+          - INACTIVE
+          - ACTIVATION_FAILED
+          - NOT_AVAILABLE
+          type: string
+      required:
+      - countryCode
+      - deltaPush
+      - desiredStatus
+      - orderTime
+      - serviceId
+      - status
+      type: object
+    ServiceStatus_Public:
+      properties:
+        orderTime:
+          description: Time when this service was ordered by client
+          format: int64
+          type: integer
+        serviceId:
+          description: ID of the generic-service
+          example: '1001'
+          type: string
+        status:
+          description: The actual service status
+          enum:
+          - ACTIVE
+          - ACTIVATION_PENDING
+          - INACTIVE
+          - ACTIVATION_FAILED
+          - NOT_AVAILABLE
+          type: string
+      required:
+      - orderTime
+      - serviceId
+      - status
+      type: object
+    SupportedVehicle:
+      properties:
+        vin:
+          description: The VIN (vehicle identification number) of the vehicle
+          example: WDD00000000000000
+          type: string
+      required:
+      - vin
+      type: object
+    TooManyObjectsToProcess:
+      properties:
+        detail:
+          example: There are too many Vehicles/Services persisted to remove them immediately.
+            Instead, they will be removed later.
+          type: string
+        instance:
+          description: URI where this error occurred
+          example: about:blank
+          format: uri
+          type: string
+        statusCode:
+          example: 202
+          format: int32
+          type: integer
+        title:
+          example: Too Many Objects to process
+          type: string
+        type:
+          example: /vehicle/too-many-objects
+          format: uri-reference
+          type: string
+      required:
+      - detail
+      - title
+      type: object
+    ValidationError:
+      description: details why the validation failed. An additional property `rejectedValue`
+        might indicate which specific value did not pass validation.
+      properties:
+        field:
+          description: name of field, which did not pass validation
+          example: vin
+          type: string
+        message:
+          description: concrete reason, why validation failed
+          example: VIN should have exactly 17 characters
+          type: string
+      required:
+      - field
+      - message
+      type: object
+    ValidationErrorResponse:
+      description: This error occurs, if a validation (eg. of an argument) failed
+      properties:
+        detail:
+          description: information, about what kind of validation failed
+          example: Argument is invalid
+          type: string
+        instance:
+          description: URI where this error occurred
+          example: about:blank
+          format: uri
+          type: string
+        statusCode:
+          example: 400
+          format: int32
+          type: integer
+        title:
+          example: Bad request
+          type: string
+        type:
+          example: /error/validation-error
+          format: uri-reference
+          type: string
+        validationErrors:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+      required:
+      - detail
+      - validationErrors
+      type: object
+    Vehicle:
+      properties:
+        vin:
+          description: The VIN (vehicle identification number) of the vehicle
+          example: WDD00000000000000
+          type: string
+      required:
+      - vin
+      type: object
+    VehicleDeltaPushPatchRequest:
+      properties:
+        deltaPush:
+          description: Flag denoting whether delta push signals are sent for this
+            VIN.
+          type: boolean
+        vin:
+          description: The VIN (vehicle identification number) of the vehicle
+          example: WDD00000000000000
+          type: string
+      required:
+      - deltaPush
+      - vin
+      type: object
+    VehicleOwnerDesiredServiceStatus:
+      properties:
+        desiredStatus:
+          description: The desired service status
+          enum:
+          - ACTIVE
+          - INACTIVE
+          type: string
+        serviceId:
+          description: ID of the generic-service
+          example: '2001'
+          type: string
+      required:
+      - desiredStatus
+      - serviceId
+      type: object
+    VehicleOwnerDesiredServiceStatusRequest:
+      properties:
+        consentToken:
+          description: Consent token
+          type: string
+        services:
+          description: List of services for which you want to change the desired service
+            status.
+          items:
+            $ref: '#/components/schemas/VehicleOwnerDesiredServiceStatus'
+          type: array
+      required:
+      - consentToken
+      - services
+      type: object
+    VehicleOwnerDesiredServiceStatusResponse:
+      properties:
+        tokenExpirationTimeMillis:
+          format: int64
+          type: integer
+      required:
+      - tokenExpirationTimeMillis
+      type: object
+    VehicleOwnerDesiredServiceStatusResponse_Public:
+      properties:
+        tokenExpirationTimeMillis:
+          format: int64
+          type: integer
+      required:
+      - tokenExpirationTimeMillis
+      type: object
+    VirtualVehicle:
+      properties:
+        clientId:
+          example: mercedes-60140562
+          type: string
+        vin:
+          example: WDD00000000000000
+          type: string
+      required:
+      - clientId
+      - vin
+      type: object
+    VirtualVehiclesPage:
+      properties:
+        isLast:
+          description: Indicates if this is the last page with elements
+          type: boolean
+        totalElements:
+          description: Total number of VirtualVehicles stored in the database
+          format: int64
+          type: integer
+        vehicles:
+          description: VirtualVehicles within this page
+          items:
+            $ref: '#/components/schemas/VirtualVehicle'
+          type: array
+      required:
+      - isLast
+      - totalElements
+      - vehicles
+      type: object
+  securitySchemes:
+    OAuth2:
+      flows:
+        clientCredentials:
+          scopes:
+            audience:server:client_id:95B37AC2-D501-4CFD-B853-7D299DD2D872: Audience
+            groups: Groups
+            openid: OpenID
+            profile: Profile
+          tokenUrl: https://ssoalpha.dvb.corpinter.net/v1/token
+      type: oauth2
+info:
+  description: '
+
+    This is a Microservice which manages the vehicles. It belongs to the Management
+    API family.
+
+    The identifier used to perform these operations is the Vehicle Identification
+    Number (VIN).
+
+
+    For example, you can add/query/delete vehicles, deactivate/activate a service
+    and query the service status of a vehicle.
+
+    From a technical point of view, a service is used to activate or deactivate a
+    data package for a vehicle. Certain services and data signals may not be available
+    for all vehicles or all countries.
+
+    '
+  title: Vehicle Management API
+  version: v1
+openapi: 3.1.0
+paths:
+  /v1/accounts/vehicles:
+    delete:
+      description: This endpoint removes a list of vehicles from your customer account
+        and deactivates their services. The limit of vehicles per request is 10000.
+      operationId: deleteVehicles
+      requestBody:
+        content:
+          application/json:
+            schema:
+              items:
+                $ref: '#/components/schemas/Vehicle'
+              type: array
+              uniqueItems: true
+        description: Provide a list of VINs to be removed from your customer account.
+        required: true
+      responses:
+        '200':
+          description: "**Success** \n\nVehicle/s successfully removed"
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid VIN/s:
+                  description: This specific error occurs if you want to remove a
+                    vehicle with an invalid VIN. Check the VIN/s.
+                  value:
+                    detail: Argument is invalid
+                    instance: about:blank
+                    statusCode: 400
+                    title: Bad request
+                    type: /error/validation-error
+                    validationErrors:
+                    - field: vin
+                      message: VIN is not a valid VIN
+                      rejectedValue: WDD00000000000000qqq
+                Number of vehicles exceeds limit:
+                  description: This specific error occurs if you want to remove a
+                    list of vehicles that exceeds the limit.
+                  value:
+                    detail: Argument is invalid
+                    instance: about:blank
+                    statusCode: 400
+                    title: Bad request
+                    type: /error/validation-error
+                    validationErrors:
+                    - field: assignVehicleRequests
+                      message: The number of vehicles must be lower than the limit
+                        of 10000.
+                      rejectedValue:
+                      - vin: WDD00000000001000
+                      - vin: WDD00000000001001
+                      - vin: WDD00000000001002
+                      - vin: WDD00000000001003
+                      - vin: '...'
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+          description: "**Bad Request** \n\nInvalid VIN/s"
+        '401':
+          description: '**Unauthorized** Access-Token is missing or invalid. Your
+            account information cannot be verified. Please try again and make sure
+            your token has not expired and is suitable for this environment.'
+        '403':
+          content:
+            application/json:
+              examples:
+                Blacklisted vehicle:
+                  description: This specific error occurs if the user tries to execute
+                    request for a VIN that is on the blacklist.
+                  value:
+                    detail: Request contains blacklisted vehicle(s)
+                    instance: about:blank
+                    statusCode: 403
+                    title: Blacklisted vehicle(s) request
+                    type: /vehicle/blacklist
+                    vins:
+                    - WDD00000000000000
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+          description: "**Forbidden** \n\n The access to the resource is forbidden.\
+            \ Please ensure that the resource exists and you have the corresponding\
+            \ rights to access this resource."
+      summary: Remove vehicles from your customer account
+      tags:
+      - Vehicles API
+    get:
+      description: This endpoint returns the list of vehicles that belongs to your
+        customer account.
+      operationId: queryVehicles
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Vehicle'
+                type: array
+          description: "**Success** \n\nThe list will be empty if there is no vehicle\
+            \ for your customer account."
+        '401':
+          description: '**Unauthorized** Access-Token is missing or invalid. Your
+            account information cannot be verified. Please try again and make sure
+            your token has not expired and is suitable for this environment.'
+        '403':
+          description: '**Forbidden** The access to the resource is forbidden. Please
+            ensure that the resource exists and you have the corresponding rights
+            to access this resource.'
+      summary: Returns all vehicles of your customer account
+      tags:
+      - Vehicles API
+    patch:
+      description: This endpoint can change the delta-push flag of vehicles that are
+        already added to your account. This will propagate to all current and future
+        service activations of those VINs. The limit of vehicles per request is 10000.
+        Note that this flag is temporary and will only be available during the migration
+        period, delta-push will become the default in the future.
+      operationId: changeVehicleDeltaPush
+      requestBody:
+        content:
+          application/json:
+            schema:
+              items:
+                $ref: '#/components/schemas/VehicleDeltaPushPatchRequest'
+              type: array
+        description: Provide a list of VINs to be patched.
+        required: true
+      responses:
+        '200':
+          description: "**Success** \n\nVehicle/s successfully updated."
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid VIN/s:
+                  description: This specific error occurs if you want to remove a
+                    vehicle with an invalid VIN. Check the VIN/s.
+                  value:
+                    detail: Argument is invalid
+                    instance: about:blank
+                    statusCode: 400
+                    title: Bad request
+                    type: /error/validation-error
+                    validationErrors:
+                    - field: vin
+                      message: VIN is not a valid VIN
+                      rejectedValue: WDD00000000000000qqq
+                Number of vehicles exceeds limit:
+                  description: This specific error occurs if you want to remove a
+                    list of vehicles that exceeds the limit.
+                  value:
+                    detail: Argument is invalid
+                    instance: about:blank
+                    statusCode: 400
+                    title: Bad request
+                    type: /error/validation-error
+                    validationErrors:
+                    - field: assignVehicleRequests
+                      message: The number of vehicles must be lower than the limit
+                        of 10000.
+                      rejectedValue:
+                      - vin: WDD00000000001000
+                      - vin: WDD00000000001001
+                      - vin: WDD00000000001002
+                      - vin: WDD00000000001003
+                      - vin: '...'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "**Bad Request** \n\nInvalid VIN/s"
+        '401':
+          description: '**Unauthorized** Access-Token is missing or invalid. Your
+            account information cannot be verified. Please try again and make sure
+            your token has not expired and is suitable for this environment.'
+        '403':
+          description: '**Forbidden** The access to the resource is forbidden. Please
+            ensure that the resource exists and you have the corresponding rights
+            to access this resource.'
+        '404':
+          content:
+            application/json:
+              examples:
+                Vehicle not found:
+                  description: This specific error occurs if you want to remove a
+                    vehicle of a customer, which does not exist.
+                  value:
+                    detail: Vehicle(s) do not exist or are not in your ownership
+                    instance: about:blank
+                    statusCode: 404
+                    title: Vehicle not found
+                    type: /vehicle/not-found
+                    vins:
+                    - WDD00000000000000
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "**Not Found** \n\nResource not found"
+      summary: Change the delta-push flag of the given vehicles
+      tags:
+      - Vehicles API
+    post:
+      description: This endpoint adds a list of vehicles to your customer account.
+        The limit of vehicles per request is 10000
+      operationId: assignVehicle
+      requestBody:
+        content:
+          application/json:
+            schema:
+              items:
+                $ref: '#/components/schemas/SupportedVehicle'
+              type: array
+              uniqueItems: true
+        description: Provide a list of VINs to be added to your customer account.
+        required: true
+      responses:
+        '201':
+          description: "**Success** \n\nVehicle/s successfully added"
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid VIN/s:
+                  description: This specific error occurs if you want to add a vehicle
+                    with an invalid VIN. Check the VIN/s.
+                  value:
+                    detail: Argument is invalid
+                    instance: about:blank
+                    statusCode: 400
+                    title: Bad request
+                    type: /error/validation-error
+                    validationErrors:
+                    - field: vin
+                      message: VIN is not a valid VIN
+                      rejectedValue: WDD00000000000000qqq
+                Number of vehicles exceeds limit:
+                  description: This specific error occurs if you want to add a list
+                    of vehicles that exceeds the limit.
+                  value:
+                    detail: Argument is invalid
+                    instance: about:blank
+                    statusCode: 400
+                    title: Bad request
+                    type: /error/validation-error
+                    validationErrors:
+                    - field: assignVehicleRequests
+                      message: The number of vehicles must be lower than the limit
+                        of 10000.
+                      rejectedValue:
+                      - vin: WDD00000000001000
+                      - vin: WDD00000000001001
+                      - vin: WDD00000000001002
+                      - vin: WDD00000000001003
+                      - vin: '...'
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+          description: "**Bad Request** \n\nInvalid VIN/s"
+        '401':
+          description: '**Unauthorized** Access-Token is missing or invalid. Your
+            account information cannot be verified. Please try again and make sure
+            your token has not expired and is suitable for this environment.'
+        '403':
+          content:
+            application/json:
+              examples:
+                Blacklisted vehicle:
+                  description: This specific error occurs if the user tries to execute
+                    request for a VIN that is on the blacklist.
+                  value:
+                    detail: Request contains blacklisted vehicle(s)
+                    instance: about:blank
+                    statusCode: 403
+                    title: Blacklisted vehicle(s) request
+                    type: /vehicle/blacklist
+                    vins:
+                    - WDD00000000000000
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+          description: "**Forbidden** \n\n The access to the resource is forbidden.\
+            \ Please ensure that the resource exists and you have the corresponding\
+            \ rights to access this resource."
+      summary: Add vehicles to your customer account
+      tags:
+      - Vehicles API
+  /v1/accounts/vehicles/services:
+    post:
+      deprecated: true
+      description: "This endpoint activates or deactivates services for a list of\
+        \ vehicles. \n\nThe limit of operations per request is 10000. The number of\
+        \ operations corresponds to the number of services in the request."
+      operationId: changeVehicleServiceStatusV1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              items:
+                $ref: '#/components/schemas/DesiredServiceStatusRequest_Public'
+              type: array
+        description: 'Provide a list of objects which contains:
+
+          - A VIN of the vehicle
+
+          - A list of services with their desired service status which can be ACTIVE
+          or INACTIVE.'
+        required: true
+      responses:
+        '202':
+          description: "**Success** \n\nService status successfully changed."
+        '400':
+          content:
+            application/json:
+              examples:
+                Illegal consent type:
+                  description: This specific error occurs if the endpoint cannot handle
+                    the consent type of 1 or more of the services whose status you
+                    want to change.
+                  value:
+                    detail: Could not activate services due to incompatible consent
+                      types.
+                    instance: about:blank
+                    services:
+                    - '1000'
+                    statusCode: 400
+                    title: Bad request
+                    type: /services/illegal-consent-type
+                Invalid VIN/s:
+                  description: This specific error occurs if you want to change the
+                    service status of a vehicle with an invalid VIN. Check the VIN/s.
+                  value:
+                    detail: Argument is invalid
+                    instance: about:blank
+                    statusCode: 400
+                    title: Bad request
+                    type: /error/validation-error
+                    validationErrors:
+                    - field: vin
+                      message: VIN is not a valid VIN
+                      rejectedValue: WDD00000000000000qqq
+                Number of operations exceeds limit:
+                  description: This specific error occurs if you want to change the
+                    service status for a list of vehicles that exceeds the limit.
+                  value:
+                    detail: Argument is invalid
+                    instance: about:blank
+                    statusCode: 400
+                    title: Bad request
+                    type: /error/validation-error
+                    validationErrors:
+                    - field: desiredServiceStatusRequests
+                      message: The number of operations muss be lower or equal the
+                        limit of 10000. The number of operations corresponds to the
+                        number of services in the request.
+                      rejectedValue:
+                      - services:
+                        - desiredStatus: ACTIVE
+                          serviceId: '1001'
+                        vin: WDD00000000101000
+                      - services:
+                        - desiredStatus: ACTIVE
+                          serviceId: '1001'
+                        vin: WDD00000000101001
+                      - services:
+                        - desiredStatus: '...'
+                          serviceId: '...'
+                        vin: '...'
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse_Public'
+          description: "**Bad Request** \n\nInvalid VIN/s, operation limit exceeded,\
+            \ illegal consent type"
+        '401':
+          description: '**Unauthorized** Access-Token is missing or invalid. Your
+            account information cannot be verified. Please try again and make sure
+            your token has not expired and is suitable for this environment.'
+        '403':
+          content:
+            application/json:
+              examples:
+                Blacklisted vehicle:
+                  description: This specific error occurs if the user tries to execute
+                    request for a VIN that is on the blacklist.
+                  value:
+                    detail: Request contains blacklisted vehicle(s)
+                    instance: about:blank
+                    statusCode: 403
+                    title: Blacklisted vehicle(s) request
+                    type: /vehicle/blacklist
+                    vins:
+                    - WDD00000000000000
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse_Public'
+          description: "**Forbidden** \n\n The access to the resource is forbidden.\
+            \ Please ensure that the resource exists and you have the corresponding\
+            \ rights to access this resource."
+        '404':
+          content:
+            application/json:
+              examples:
+                Service not found:
+                  description: This specific error occurs if you want to change the
+                    desired service status for a service which does not exist.
+                  value:
+                    detail: Requested services not found
+                    instance: about:blank
+                    services:
+                    - '1001'
+                    - '1002'
+                    statusCode: 404
+                    title: Services not found!
+                    type: /services/not-found
+                Vehicle not found:
+                  description: This specific error occurs if you want to change the
+                    desired service status of a vehicle which does not exist.
+                  value:
+                    detail: Vehicle(s) do not exist or are not in your ownership
+                    instance: about:blank
+                    statusCode: 404
+                    title: Vehicle not found
+                    type: /vehicle/not-found
+                    vins:
+                    - WDD00000000000000
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorResponse_Public'
+          description: "**Not Found** \n\nResource not found"
+      summary: Change the desired service status for vehicles
+      tags:
+      - Service state API
+  /v1/accounts/vehicles/{vin}/compatibilities:
+    get:
+      description: This endpoint delivers the indication of the compatibility of your
+        vehicle and if its basically possible to activate services. It does not mean
+        that all signals of a service are available, nor that all signals are available
+        at all times.
+      operationId: getVehicleCompatibilities
+      parameters:
+      - description: VIN of the vehicle to be queried
+        example: WDD00000000000000
+        in: path
+        name: vin
+        required: true
+        schema:
+          pattern: ^[A-HJ-NPR-Z0-9]{13}\d{4}$
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompatibilityResponse'
+          description: "**Success** \n\n"
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid VIN:
+                  description: This specific error occurs if you want to get the compatibility
+                    of a vehicle with an invalid VIN. Check the VIN.
+                  value:
+                    detail: Argument is invalid
+                    instance: about:blank
+                    statusCode: 400
+                    title: Bad request
+                    type: /error/validation-error
+                    validationErrors:
+                    - field: vin
+                      message: VIN is not a valid VIN
+                      rejectedValue: WDD00000000000000qqq
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+          description: '**Bad Request** '
+        '401':
+          description: '**Unauthorized** Access-Token is missing or invalid. Your
+            account information cannot be verified. Please try again and make sure
+            your token has not expired and is suitable for this environment.'
+        '403':
+          description: '**Forbidden** The access to the resource is forbidden. Please
+            ensure that the resource exists and you have the corresponding rights
+            to access this resource.'
+        '404':
+          content:
+            application/json:
+              examples:
+                Vehicle not found:
+                  description: This specific error occurs if you want to get the compatibility
+                    of a vehicle, that does not exist.
+                  value:
+                    detail: Vehicle(s) do not exist or are not in your ownership
+                    instance: about:blank
+                    statusCode: 404
+                    title: Vehicle not found
+                    type: /vehicle/not-found
+                    vins:
+                    - WDD00000000000000
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorResponse'
+          description: "**Not Found** \n\nResource not found"
+        '503':
+          content:
+            application/json:
+              examples:
+                Service busy:
+                  description: This specific error occurs if a depending service is
+                    currently too busy.
+                  value:
+                    detail: The compatibility service is currently not available.
+                      Please try again
+                    instance: about:blank
+                    statusCode: 503
+                    title: Service unavailable
+                    type: /error
+                Service unavailable:
+                  description: This specific error occurs if a depending service is
+                    currently not reachable from the current service.
+                  value:
+                    detail: The compatibility service is currently not available.
+                      Please try again
+                    instance: about:blank
+                    statusCode: 503
+                    title: Service unavailable
+                    type: /error
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "**Service unavailable** \n\nOne or more depending services\
+            \ are currently not available"
+          headers:
+            Retry-After:
+              description: Indicates how many seconds the user agent should wait before
+                making a follow-up request, the default is 3 seconds.
+              schema:
+                default: '3'
+                example: '3'
+              style: simple
+      summary: Get the connectivity compatibility for a specific vehicle
+      tags:
+      - Compatibilities API
+  /v1/accounts/vehicles/{vin}/drivers:
+    delete:
+      description: This endpoint removes the driver(s) from a vehicle
+      operationId: removeDrivers
+      parameters:
+      - description: VIN of the vehicle to be processed
+        example: WDD00000000000000
+        in: path
+        name: vin
+        required: true
+        schema:
+          pattern: ^[A-HJ-NPR-Z0-9]{13}\d{4}$
+          type: string
+      responses:
+        '200':
+          description: "**Success** \n\nDriver successfully removed"
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid VIN/s:
+                  description: This specific error occurs if you want to remove a
+                    vehicle with an invalid VIN. Check the VIN/s.
+                  value:
+                    detail: Argument is invalid
+                    instance: about:blank
+                    statusCode: 400
+                    title: Bad request
+                    type: /error/validation-error
+                    validationErrors:
+                    - field: vin
+                      message: VIN is not a valid VIN
+                      rejectedValue: WDD00000000000000qqq
+                Missing roles:
+                  description: This specific error occurs if you want to change the
+                    desired service status without the necessary permission.
+                  value:
+                    detail: Not allowed to activate services due to missing permissions
+                    instance: about:blank
+                    services:
+                    - '1001'
+                    statusCode: 400
+                    title: No permission
+                    type: /vehicles/services/no-permission
+                Not supported:
+                  description: This specific error occurs if you want call some operation
+                    and vehicle does not support it.
+                  value:
+                    detail: Physical-Vehicle does not supported
+                    instance: about:blank
+                    status: 400
+                    title: Physical-Vehicle not supported
+                    type: /physical-vehicle/not-supported
+                    vin: <vin>
+                Service not active:
+                  description: This specific error occurs if you want call some operation
+                    and required service is not active.
+                  value:
+                    detail: Required services not active
+                    instance: about:blank
+                    services:
+                    - '1001'
+                    statusCode: 400
+                    title: Services not active
+                    type: /services/not-active
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+          description: '**Bad Request** '
+        '401':
+          description: '**Unauthorized** Access-Token is missing or invalid. Your
+            account information cannot be verified. Please try again and make sure
+            your token has not expired and is suitable for this environment.'
+        '403':
+          description: '**Forbidden** The access to the resource is forbidden. Please
+            ensure that the resource exists and you have the corresponding rights
+            to access this resource.'
+        '404':
+          content:
+            application/json:
+              examples:
+                Physical vehicle not found:
+                  description: This specific error occurs if you want to remove a
+                    driver from a vehicle, that does not exist i.e. is not registered.
+                  value:
+                    detail: Physical-Vehicle does not exist or are not in your ownership
+                    instance: about:blank
+                    status: 404
+                    title: Physical-Vehicle not found
+                    type: /physical-vehicle/not-found
+                    vin: <vin>
+                Service not found:
+                  description: This specific error occurs if you want to use the service
+                    which does not exist.
+                  value:
+                    detail: Requested services not found
+                    instance: about:blank
+                    services:
+                    - '1001'
+                    - '1002'
+                    statusCode: 404
+                    title: Services not found!
+                    type: /services/not-found
+                Vehicle not found:
+                  description: This specific error occurs if you want to remove a
+                    driver from a vehicle, that does not exist or is not in your ownership.
+                  value:
+                    detail: Vehicle(s) do not exist or are not in your ownership
+                    instance: about:blank
+                    statusCode: 404
+                    title: Vehicle not found
+                    type: /vehicle/not-found
+                    vins:
+                    - WDD00000000000000
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorResponse'
+          description: "**Not Found** \n\nResource not found"
+      summary: Remove driver
+      tags:
+      - Drivers API
+  /v1/accounts/vehicles/{vin}/services:
+    get:
+      deprecated: true
+      description: "This endpoint returns the actual service status for a vehicle.\
+        \ The status can be one out of: \n* INACTIVE: Customer set desired state to\
+        \ INACTIVE\n* ACTIVATION_PENDING: Service activation request has been submitted\
+        \ to vehicle but was not confirmed yet.\n* ACTIVE: Service has been activated\
+        \ on vehicle.\n* ACTIVATION_FAILED: Service could not be activated after try\
+        \ out period . There are multiple reasons possible.\n* NOT_AVAILABLE: Vehicle\
+        \ does not support the requested service."
+      operationId: queryVehicleServiceStatusV1
+      parameters:
+      - description: VIN of the vehicle to be queried
+        example: WDD00000000000000
+        in: path
+        name: vin
+        required: true
+        schema:
+          pattern: ^[A-HJ-NPR-Z0-9]{13}\d{4}$
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ServiceStatus_Public'
+                type: array
+          description: '**Success**'
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid VIN/s:
+                  description: This specific error occurs if you want to change the
+                    service status of a vehicle with an invalid VIN. Check the VIN/s.
+                  value:
+                    detail: Argument is invalid
+                    instance: about:blank
+                    statusCode: 400
+                    title: Bad request
+                    type: /error/validation-error
+                    validationErrors:
+                    - field: vin
+                      message: VIN is not a valid VIN
+                      rejectedValue: WDD00000000000000qqq
+                Missing roles:
+                  description: This specific error occurs if you want to change the
+                    desired service status without the necessary permission.
+                  value:
+                    detail: Not allowed to activate services due to missing permissions
+                    instance: about:blank
+                    services:
+                    - '1001'
+                    statusCode: 400
+                    title: No permission
+                    type: /vehicles/services/no-permission
+                Number of operations exceeds limit:
+                  description: This specific error occurs if you want to change the
+                    service status for a list of vehicles that exceeds the limit.
+                  value:
+                    detail: Argument is invalid
+                    instance: about:blank
+                    statusCode: 400
+                    title: Bad request
+                    type: /error/validation-error
+                    validationErrors:
+                    - field: desiredServiceStatusRequests
+                      message: The number of operations muss be lower or equal the
+                        limit of 10000. The number of operations corresponds to the
+                        number of services in the request.
+                      rejectedValue:
+                      - services:
+                        - desiredStatus: ACTIVE
+                          serviceId: '1001'
+                        vin: WDD00000000101000
+                      - services:
+                        - desiredStatus: ACTIVE
+                          serviceId: '1001'
+                        vin: WDD00000000101001
+                      - services:
+                        - desiredStatus: '...'
+                          serviceId: '...'
+                        vin: '...'
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse_Public'
+          description: "**Bad Request** \n\nInvalid VIN/s, missing roles, operation\
+            \ limit exceeded"
+        '401':
+          description: '**Unauthorized** Access-Token is missing or invalid. Your
+            account information cannot be verified. Please try again and make sure
+            your token has not expired and is suitable for this environment.'
+        '403':
+          description: '**Forbidden** The access to the resource is forbidden. Please
+            ensure that the resource exists and you have the corresponding rights
+            to access this resource.'
+        '404':
+          content:
+            application/json:
+              examples:
+                Vehicle not found:
+                  description: This specific error occurs if you want to change the
+                    desired service status of a vehicle which does not exist.
+                  value:
+                    detail: Vehicle(s) do not exist or are not in your ownership
+                    instance: about:blank
+                    statusCode: 404
+                    title: Vehicle not found
+                    type: /vehicle/not-found
+                    vins:
+                    - WDD00000000000000
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorResponse_Public'
+          description: "**Not Found** \n\nResource not found"
+      summary: Returns the service status for a vehicle
+      tags:
+      - Service state API
+  /v1/accounts/vehicles/{vin}/services/{service-id}/license-status:
+    get:
+      description: "This endpoint returns the current status of the license for the\
+        \ given vin and service id.\nThe license status can be one of the following\
+        \ values: \n- ACTIVE: The license is currently active.\n- INACTIVE: The license\
+        \ is currently inactive and can be activated by activating the respective\
+        \ service on the vehicle.\n- EXPIRED: The license is expired and can be extended\
+        \ in the Mercedes Me B2B shop.\n- NOT_AVAILABLE: The license cannot be activated,\
+        \ because the service is currently not available for this vehicle."
+      operationId: getAllLicensesForVehicleAndGenericService
+      parameters:
+      - description: VIN of the vehicle
+        example: WDD00000000000000
+        in: path
+        name: vin
+        required: true
+        schema:
+          pattern: ^[A-HJ-NPR-Z0-9]{13}\d{4}$
+          type: string
+      - description: ID of the generic-service
+        example: '3002'
+        in: path
+        name: service-id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceLicenseStatusResponse'
+          description: '**Success**'
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid VIN:
+                  description: This specific error occurs in case the provided VIN
+                    has failed the validation. Please check the VIN.
+                  value:
+                    detail: Argument is invalid
+                    instance: about:blank
+                    statusCode: 400
+                    title: Bad request
+                    type: /error/validation-error
+                    validationErrors:
+                    - field: vin
+                      message: VIN is not a valid VIN
+                      rejectedValue: WDD00000000000000qqq
+                Missing roles:
+                  description: This specific error occurs in case the client has insufficient
+                    permissions.
+                  value:
+                    detail: Not allowed to perform this operation due to missing permissions
+                    instance: about:blank
+                    services:
+                    - '1001'
+                    statusCode: 400
+                    title: No permission
+                    type: /vehicles/services/no-permission
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+          description: "**Bad Request** \n\nInvalid VIN, missing roles"
+        '401':
+          description: '**Unauthorized** Access-Token is missing or invalid. Your
+            account information cannot be verified. Please try again and make sure
+            your token has not expired and is suitable for this environment.'
+        '403':
+          description: '**Forbidden** The access to the resource is forbidden. Please
+            ensure that the resource exists and you have the corresponding rights
+            to access this resource.'
+        '404':
+          content:
+            application/json:
+              examples:
+                Service not found:
+                  description: This specific error occurs in case the service is unknown.
+                  value:
+                    detail: Requested services not found
+                    instance: about:blank
+                    services:
+                    - '1001'
+                    - '1002'
+                    statusCode: 404
+                    title: Services not found!
+                    type: /services/not-found
+                Vehicle not found:
+                  description: This specific error occurs in case the vehicle does
+                    not exist or is not part of your fleet.
+                  value:
+                    detail: Vehicle(s) do not exist or are not in your ownership
+                    instance: about:blank
+                    statusCode: 404
+                    title: Vehicle not found
+                    type: /vehicle/not-found
+                    vins:
+                    - WDD00000000000000
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorResponse'
+          description: "**Not Found** \n\nResource not found"
+        '500':
+          description: '**Internal Server Error**
+
+
+            An internal server error occurred while processing the request. Please
+            try again later.'
+      summary: Returns the status of the vehicle service license.
+      tags:
+      - Vehicle Service Licenses API
+  /v2/accounts/vehicles/services:
+    post:
+      description: "This endpoint activates or deactivates services for a list of\
+        \ vehicles. \n\nThe limit of operations per request is 10000. The number of\
+        \ operations corresponds to the number of services in the request."
+      operationId: changeVehicleServiceStatus
+      requestBody:
+        content:
+          application/json:
+            schema:
+              items:
+                $ref: '#/components/schemas/DesiredServiceStatusRequest_Public'
+              type: array
+        description: 'Provide a list of objects which contains:
+
+          - A VIN of the vehicle
+
+          - A list of services with their desired service status which can be ACTIVE
+          or INACTIVE.'
+        required: true
+      responses:
+        '202':
+          description: "**Success** \n\nService status successfully changed."
+        '400':
+          content:
+            application/json:
+              examples:
+                Illegal consent type:
+                  description: This specific error occurs if the endpoint cannot handle
+                    the consent type of 1 or more of the services whose status you
+                    want to change.
+                  value:
+                    detail: Could not activate services due to incompatible consent
+                      types.
+                    instance: about:blank
+                    services:
+                    - '1000'
+                    statusCode: 400
+                    title: Bad request
+                    type: /services/illegal-consent-type
+                Invalid VIN/s:
+                  description: This specific error occurs if you want to change the
+                    service status of a vehicle with an invalid VIN. Check the VIN/s.
+                  value:
+                    detail: Argument is invalid
+                    instance: about:blank
+                    statusCode: 400
+                    title: Bad request
+                    type: /error/validation-error
+                    validationErrors:
+                    - field: vin
+                      message: VIN is not a valid VIN
+                      rejectedValue: WDD00000000000000qqq
+                Number of operations exceeds limit:
+                  description: This specific error occurs if you want to change the
+                    service status for a list of vehicles that exceeds the limit.
+                  value:
+                    detail: Argument is invalid
+                    instance: about:blank
+                    statusCode: 400
+                    title: Bad request
+                    type: /error/validation-error
+                    validationErrors:
+                    - field: desiredServiceStatusRequests
+                      message: The number of operations muss be lower or equal the
+                        limit of 10000. The number of operations corresponds to the
+                        number of services in the request.
+                      rejectedValue:
+                      - services:
+                        - desiredStatus: ACTIVE
+                          serviceId: '1001'
+                        vin: WDD00000000101000
+                      - services:
+                        - desiredStatus: ACTIVE
+                          serviceId: '1001'
+                        vin: WDD00000000101001
+                      - services:
+                        - desiredStatus: '...'
+                          serviceId: '...'
+                        vin: '...'
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse_Public'
+          description: "**Bad Request** \n\nInvalid VIN/s, operation limit exceeded,\
+            \ illegal consent type"
+        '401':
+          description: '**Unauthorized** Access-Token is missing or invalid. Your
+            account information cannot be verified. Please try again and make sure
+            your token has not expired and is suitable for this environment.'
+        '403':
+          content:
+            application/json:
+              examples:
+                Blacklisted vehicle:
+                  description: This specific error occurs if the user tries to execute
+                    request for a VIN that is on the blacklist.
+                  value:
+                    detail: Request contains blacklisted vehicle(s)
+                    instance: about:blank
+                    statusCode: 403
+                    title: Blacklisted vehicle(s) request
+                    type: /vehicle/blacklist
+                    vins:
+                    - WDD00000000000000
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse_Public'
+          description: "**Forbidden** \n\n The access to the resource is forbidden.\
+            \ Please ensure that the resource exists and you have the corresponding\
+            \ rights to access this resource."
+        '404':
+          content:
+            application/json:
+              examples:
+                Service not found:
+                  description: This specific error occurs if you want to change the
+                    desired service status for a service which does not exist.
+                  value:
+                    detail: Requested services not found
+                    instance: about:blank
+                    services:
+                    - '1001'
+                    - '1002'
+                    statusCode: 404
+                    title: Services not found!
+                    type: /services/not-found
+                Vehicle not found:
+                  description: This specific error occurs if you want to change the
+                    desired service status of a vehicle which does not exist.
+                  value:
+                    detail: Vehicle(s) do not exist or are not in your ownership
+                    instance: about:blank
+                    statusCode: 404
+                    title: Vehicle not found
+                    type: /vehicle/not-found
+                    vins:
+                    - WDD00000000000000
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorResponse_Public'
+          description: "**Not Found** \n\nResource not found"
+      summary: Change the desired service status for vehicles
+      tags:
+      - Service state API
+  /v2/accounts/vehicles/{vin}/services:
+    get:
+      description: "This endpoint returns the actual service status for a vehicle.\
+        \ The status can be one out of: \n* INACTIVE: Customer set desired state to\
+        \ INACTIVE\n* ACTIVATION_PENDING: Service activation request has been submitted\
+        \ to vehicle but was not confirmed yet.\n* ACTIVE: Service has been activated\
+        \ on vehicle.\n* ACTIVATION_FAILED: Service could not be activated after try\
+        \ out period . There are multiple reasons possible.\n* NOT_AVAILABLE: Vehicle\
+        \ does not support the requested service."
+      operationId: queryVehicleServiceStatus
+      parameters:
+      - description: VIN of the vehicle to be queried
+        example: WDD00000000000000
+        in: path
+        name: vin
+        required: true
+        schema:
+          pattern: ^[A-HJ-NPR-Z0-9]{13}\d{4}$
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActualServiceStatusCustomerVisible_Public'
+          description: '**Success**'
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid VIN/s:
+                  description: This specific error occurs if you want to change the
+                    service status of a vehicle with an invalid VIN. Check the VIN/s.
+                  value:
+                    detail: Argument is invalid
+                    instance: about:blank
+                    statusCode: 400
+                    title: Bad request
+                    type: /error/validation-error
+                    validationErrors:
+                    - field: vin
+                      message: VIN is not a valid VIN
+                      rejectedValue: WDD00000000000000qqq
+                Missing roles:
+                  description: This specific error occurs if you want to change the
+                    desired service status without the necessary permission.
+                  value:
+                    detail: Not allowed to activate services due to missing permissions
+                    instance: about:blank
+                    services:
+                    - '1001'
+                    statusCode: 400
+                    title: No permission
+                    type: /vehicles/services/no-permission
+                Number of operations exceeds limit:
+                  description: This specific error occurs if you want to change the
+                    service status for a list of vehicles that exceeds the limit.
+                  value:
+                    detail: Argument is invalid
+                    instance: about:blank
+                    statusCode: 400
+                    title: Bad request
+                    type: /error/validation-error
+                    validationErrors:
+                    - field: desiredServiceStatusRequests
+                      message: The number of operations muss be lower or equal the
+                        limit of 10000. The number of operations corresponds to the
+                        number of services in the request.
+                      rejectedValue:
+                      - services:
+                        - desiredStatus: ACTIVE
+                          serviceId: '1001'
+                        vin: WDD00000000101000
+                      - services:
+                        - desiredStatus: ACTIVE
+                          serviceId: '1001'
+                        vin: WDD00000000101001
+                      - services:
+                        - desiredStatus: '...'
+                          serviceId: '...'
+                        vin: '...'
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse_Public'
+          description: "**Bad Request** \n\nInvalid VIN/s, missing roles, operation\
+            \ limit exceeded"
+        '401':
+          description: '**Unauthorized** Access-Token is missing or invalid. Your
+            account information cannot be verified. Please try again and make sure
+            your token has not expired and is suitable for this environment.'
+        '403':
+          description: '**Forbidden** The access to the resource is forbidden. Please
+            ensure that the resource exists and you have the corresponding rights
+            to access this resource.'
+        '404':
+          content:
+            application/json:
+              examples:
+                Vehicle not found:
+                  description: This specific error occurs if you want to change the
+                    desired service status of a vehicle which does not exist.
+                  value:
+                    detail: Vehicle(s) do not exist or are not in your ownership
+                    instance: about:blank
+                    statusCode: 404
+                    title: Vehicle not found
+                    type: /vehicle/not-found
+                    vins:
+                    - WDD00000000000000
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorResponse_Public'
+          description: "**Not Found** \n\nResource not found"
+      summary: Returns the service status for a vehicle
+      tags:
+      - Service state API
+security:
+- OAuth2:
+  - openid
+  - groups
+  - profile
+  - audience:server:client_id:95B37AC2-D501-4CFD-B853-7D299DD2D872
+servers:
+- description: Generated server url
+  url: https://service.connect-business.net/api
+tags:
+- description: API to get information about the compatibility of your vehicles.
+  name: Compatibilities API
+- description: API to manage drivers of a specific vehicle.
+  name: Drivers API
+- description: API to manage and query service activation states for vehicles.
+  name: Service state API
+- description: API to retrieve information about vehicle service licenses.
+  name: Vehicle Service Licenses API
+- description: API to manage vehicles of a customer account.
+  name: Vehicles API

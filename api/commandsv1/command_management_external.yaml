@@ -1,0 +1,347 @@
+components:
+  schemas:
+    Command:
+      properties:
+        command:
+          description: The name of the command.
+          example: doors-lock
+          type: string
+        commandState:
+          enum:
+          - ACCEPTED
+          - FAILED
+          - SUCCESSFUL
+          type: string
+        commandTrackingId:
+          format: uuid
+          type: string
+        errors:
+          description: If applicable, contains errors that occurred during execution.
+          items:
+            $ref: '#/components/schemas/Error'
+          type: array
+        lastResponseTimestamp:
+          description: Timestamp in Unix epoch milliseconds when the last update for
+            the command was received. (optional)
+          format: int64
+          type: integer
+        requestTimestamp:
+          description: Timestamp in Unix epoch milliseconds when the vehicle the command
+            was requested.
+          format: int64
+          type: integer
+        vin:
+          description: VIN of the vehicle the command was or will be executed on.
+          example: WDD00000000000000
+          type: string
+      required:
+      - command
+      - commandState
+      - commandTrackingId
+      - errors
+      - requestTimestamp
+      - vin
+      type: object
+    CommandResponse:
+      properties:
+        command:
+          description: The name of the command that will be executed.
+          example: doors-lock
+          type: string
+        commandState:
+          enum:
+          - ACCEPTED
+          - FAILED
+          - SUCCESSFUL
+          type: string
+        commandTrackingId:
+          format: uuid
+          type: string
+        vin:
+          description: VIN of the vehicle the command will be executed on.
+          example: WDD00000000000000
+          type: string
+      required:
+      - command
+      - commandState
+      - commandTrackingId
+      - vin
+      type: object
+    Error:
+      description: Details of an error that occurred during command execution.
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+      - code
+      - message
+      type: object
+    NotFoundErrorResponse:
+      properties:
+        detail:
+          example: Server can not find the requested resource
+          type: string
+        instance:
+          description: URI where this error occurred
+          example: about:blank
+          format: uri
+          type: string
+        statusCode:
+          example: 404
+          format: int32
+          type: integer
+        title:
+          example: Not found
+          type: string
+        type:
+          description: URI-reference for type information or 'about:blank' if no more
+            information is available
+          example: about:blank
+          format: uri-reference
+          type: string
+      type: object
+    ValidationError:
+      description: details why the validation failed. An additional property `rejectedValue`
+        might indicate which specific value did not pass validation.
+      properties:
+        field:
+          description: name of field, which did not pass validation
+          example: vin
+          type: string
+        message:
+          description: concrete reason, why validation failed
+          example: VIN should have exactly 17 characters
+          type: string
+      required:
+      - field
+      - message
+      type: object
+    ValidationErrorResponse:
+      description: This error occurs, if a validation (eg. of an argument) failed
+      properties:
+        detail:
+          description: information, about what kind of validation failed
+          example: Argument is invalid
+          type: string
+        instance:
+          description: URI where this error occurred
+          example: about:blank
+          format: uri
+          type: string
+        statusCode:
+          example: 400
+          format: int32
+          type: integer
+        title:
+          example: Bad request
+          type: string
+        type:
+          example: /error/validation-error
+          format: uri-reference
+          type: string
+        validationErrors:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+      required:
+      - detail
+      - validationErrors
+      type: object
+  securitySchemes:
+    OAuth2:
+      flows:
+        clientCredentials:
+          scopes:
+            audience:server:client_id:95B37AC2-D501-4CFD-B853-7D299DD2D872: Audience
+            groups: Groups
+            openid: OpenID
+            profile: Profile
+          tokenUrl: https://ssoalpha.dvb.corpinter.net/v1/token
+      type: oauth2
+info:
+  description: '
+
+    This is a Microservice which manages vehicle commands. It belongs to the Management
+    API family.
+
+    The identifier used to perform these operations is the Vehicle Identification
+    Number (VIN).
+
+
+    You can send command requests to a vehicle in order to trigger an actuator in
+    the vehicle.
+
+    The corresponding service of the command must be activated on the specific vehicle
+    in order to send the command request successfully.
+
+    Certain services and commands may not be available for all vehicles or all countries.
+
+    '
+  title: Command Management API
+  version: v1
+openapi: 3.1.0
+paths:
+  /v1/vehicles/{vin}/commands/{command}:
+    post:
+      description: This endpoint creates a command request, that is asynchronously
+        executed. The response body contains a unique tracking id to allow correlation
+        of this APIs request and the asynchronous command response.
+      operationId: createCommandRequest
+      parameters:
+      - description: VIN of the vehicle to execute the command on.
+        example: WDD00000000000000
+        in: path
+        name: vin
+        required: true
+        schema:
+          maxLength: 17
+          minLength: 17
+          pattern: (?<VIN>[A-HJ-NPR-Z0-9]{13}\d{4})
+          type: string
+      - description: The name of the command to execute. The **Services API** may
+          be used to retrieve available commands and corresponding services.
+        examples:
+          charging-start:
+            description: Command to start the charging of a vehicle in the home zone.
+            value: charging-start
+          charging-stop:
+            description: Command to stop the charging of a vehicle in the home zone.
+            value: charging-stop
+          doors-lock:
+            description: Command to lock the doors of a vehicle.
+            value: doors-lock
+          doors-unlock:
+            description: Command to unlock the doors of a vehicle.
+            value: doors-unlock
+          key-provision:
+            description: Command to enable a vehicle key to be used as carsharing
+              key.
+            value: key-provision
+          preconditioning-start:
+            description: Command to immediately start the preconditioning on a vehicle.
+            value: preconditioning-start
+          preconditioning-stop:
+            description: Command to immediately stop the preconditioning on a vehicle.
+            value: preconditioning-stop
+          rental-end:
+            description: Command to end the rental of a vehicle.
+            value: rental-end
+          rental-start:
+            description: Command to start the rental of a vehicle.
+            value: rental-start
+          secure-vehicle:
+            description: Command to secure a vehicle.
+            value: secure-vehicle
+        in: path
+        name: command
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandResponse'
+          description: '**Accepted**
+
+
+            The command was accepted for asynchronous processing.'
+        '400':
+          content:
+            application/json:
+              examples:
+                Invalid VIN:
+                  description: This specific error occurs if you want to request a
+                    vehicle with an invalid VIN. Check the VIN.
+                  value:
+                    detail: Argument is invalid
+                    instance: about:blank
+                    statusCode: 400
+                    title: Bad request
+                    type: /error/validation-error
+                    validationErrors:
+                    - field: vin
+                      message: VIN is not a valid VIN
+                      rejectedValue: WDD00000000000000qqq
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+          description: '**Bad Request**
+
+
+            The given request parameters were invalid.'
+        '401':
+          description: '**Unauthorized** Access-Token is missing or invalid. Your
+            account information cannot be verified. Please try again and make sure
+            your token has not expired and is suitable for this environment.'
+        '403':
+          description: '**Forbidden** The access to the resource is forbidden. Please
+            ensure that the resource exists and you have the corresponding rights
+            to access this resource.'
+        '404':
+          content:
+            application/json:
+              examples:
+                Service for command not found:
+                  description: This specific error occurs if you want to execute a
+                    command, that has no corresponding service. Check if the command
+                    is spelled correctly.
+                  value:
+                    command: doors-lock
+                    detail: The given command has no service associated with it.
+                    instance: about:blank
+                    statusCode: 404
+                    title: Data not found!
+                    type: /error/data-not-found
+                Service not active:
+                  description: This specific error occurs if you want to execute a
+                    command on a vehicle without the required service.
+                  value:
+                    detail: The required service to execute the command is not active
+                      on the given vehicle.
+                    instance: about:blank
+                    serviceId: '999'
+                    statusCode: 404
+                    title: Data not found!
+                    type: /error/data-not-found
+                    vin: WDD00000000000000
+                Vehicle not found:
+                  description: This specific error occurs if you want to execute a
+                    command on an unknown vehicle. Check the VIN.
+                  value:
+                    detail: The vehicle does not exist or is not in your ownership.
+                    instance: about:blank
+                    statusCode: 404
+                    title: Data not found!
+                    type: /error/data-not-found
+                    vin: WDD00000000000000
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorResponse'
+          description: '**Not Found**
+
+
+            One or more of the following problems may have occurred:
+
+            * The vehicle does not exist or is not in your ownership.
+
+            * The required service to execute the command is not active on the given
+            vehicle.
+
+            * The given command has no service associated with it.'
+      summary: Create a command request for a vehicle.
+      tags:
+      - Command management API
+security:
+- OAuth2:
+  - openid
+  - groups
+  - profile
+  - audience:server:client_id:95B37AC2-D501-4CFD-B853-7D299DD2D872
+servers:
+- description: Generated server url
+  url: https://service.connect-business.net/api
+tags:
+- description: API to manage vehicle commands.
+  name: Command management API
