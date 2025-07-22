@@ -15,29 +15,33 @@ import (
 type Client struct {
 	baseURL    string
 	httpClient *retryablehttp.Client
-	config     ClientConfig
 }
 
 // NewClient creates a new Mercedes-Benz API client.
-func NewClient(opts ...ClientOption) *Client {
-	config := ClientConfig{}
+func NewClient(opts ...ClientOption) (*Client, error) {
+	config := newClientConfig()
 	for _, opt := range opts {
 		opt(&config)
 	}
 	client := &Client{
 		httpClient: retryablehttp.NewClient(),
-		config:     config,
 	}
-	client.httpClient.Logger = noopLogger{}
+	client.httpClient.Logger = config.logger
 	switch config.region {
 	case RegionECE:
 		client.baseURL = BaseURLECE
 	case RegionAMAPNA:
 		client.baseURL = BaseURLAMAPNA
-	default: // default to ECE region
-		client.baseURL = BaseURLECE
+	default:
+		return nil, fmt.Errorf("invalid region: %s", config.region)
 	}
 	switch {
+	case config.clientID != "" && config.clientSecret != "":
+		oauth2Config, err := NewOAuth2Config(config.region, config.clientID, config.clientSecret)
+		if err != nil {
+			return nil, err
+		}
+		client.httpClient.HTTPClient = oauth2Config.Client(context.Background())
 	case config.oauth2Config != nil:
 		client.httpClient.HTTPClient = config.oauth2Config.Client(context.Background())
 	case config.tokenSource != nil:
@@ -46,7 +50,7 @@ func NewClient(opts ...ClientOption) *Client {
 			Base:   client.httpClient.HTTPClient.Transport,
 		}
 	}
-	return client
+	return client, nil
 }
 
 func (c *Client) newRequest(ctx context.Context, method, requestPath string, body io.Reader) (_ *retryablehttp.Request, err error) {

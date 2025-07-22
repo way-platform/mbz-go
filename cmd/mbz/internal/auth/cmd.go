@@ -24,7 +24,7 @@ func NewClient() (*mbz.Client, error) {
 		mbz.WithRegion(cf.Region),
 		mbz.WithOAuth2TokenSource(oauth2.StaticTokenSource(&cf.Credentials)),
 		mbz.WithSlogLogger(slog.Default()),
-	), nil
+	)
 }
 
 // NewCommand returns a new [cobra.Command] for CLI authentication.
@@ -44,12 +44,19 @@ func newLoginCommand() *cobra.Command {
 		Short: "Login to the Mercedes-Benz Management API",
 	}
 	region := cmd.Flags().String("region", string(mbz.RegionECE), "region to use for authentication")
-	clientID := cmd.Flags().String("client-id", "", "client ID to use for authentication")
-	cmd.MarkFlagRequired("client-id")
+	clientID := cmd.Flags().String("client-id", "-", "client ID to use for authentication")
 	clientSecret := cmd.Flags().String("client-secret", "-", "client secret to use for authentication")
 	cmd.RunE = func(cmd *cobra.Command, _ []string) error {
+		if *clientID == "-" {
+			cmd.Println("\nEnter OAuth2 client ID:")
+			input, err := term.ReadPassword(int(os.Stdin.Fd()))
+			if err != nil {
+				return err
+			}
+			*clientID = string(input)
+		}
 		if *clientSecret == "-" {
-			cmd.Println("Enter OAuth2 client secret:")
+			cmd.Println("\nEnter OAuth2 client secret:")
 			input, err := term.ReadPassword(int(os.Stdin.Fd()))
 			if err != nil {
 				return err

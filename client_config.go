@@ -10,9 +10,18 @@ import (
 // ClientConfig configures a [Client].
 type ClientConfig struct {
 	region       Region
+	clientID     string
+	clientSecret string
 	tokenSource  oauth2.TokenSource
 	oauth2Config *clientcredentials.Config
 	logger       Logger
+}
+
+func newClientConfig() ClientConfig {
+	return ClientConfig{
+		region: RegionECE,
+		logger: noopLogger{},
+	}
 }
 
 // ClientOption is a configuration option for a [Client].
@@ -29,6 +38,14 @@ func WithRegion(region Region) ClientOption {
 func WithOAuth2TokenSource(tokenSource oauth2.TokenSource) ClientOption {
 	return func(config *ClientConfig) {
 		config.tokenSource = tokenSource
+	}
+}
+
+// WithOAuth2 sets the OAuth2 client ID and secret for the client.
+func WithOAuth2(clientID, clientSecret string) ClientOption {
+	return func(config *ClientConfig) {
+		config.clientID = clientID
+		config.clientSecret = clientSecret
 	}
 }
 

@@ -59,6 +59,17 @@ func Generate() error {
 	})
 }
 
+// MBZ builds the mbz CLI.
+func MBZ() error {
+	return cmd("cmd/mbz", "go", "install", ".").Run()
+}
+
+// VHS records the CLI GIF using VHS.
+func VHS() error {
+	mg.Deps(MBZ)
+	return cmd("docs", "go", "tool", "vhs", "cli.tape").Run()
+}
+
 func forEachGoMod(f func(dir string) error) error {
 	return filepath.WalkDir(".", func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
