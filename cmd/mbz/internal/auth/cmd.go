@@ -2,6 +2,7 @@ package auth
 
 import (
 	"encoding/json"
+	"log/slog"
 	"os"
 
 	"github.com/adrg/xdg"
@@ -19,6 +20,7 @@ func NewClient() (*mbz.Client, error) {
 	return mbz.NewClient(
 		mbz.WithRegion(cf.Region),
 		mbz.WithOAuth2TokenSource(oauth2.StaticTokenSource(&cf.Credentials)),
+		mbz.WithSlogLogger(slog.Default()),
 	), nil
 }
 

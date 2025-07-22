@@ -1,0 +1,91 @@
+overlay: 1.0.0
+
+info:
+  title: Overlay for Mercedes-Benz Vehicle Management API v1
+  version: 1.0.0
+
+actions:
+  - target: $.paths
+    description: "Skip code generation for requests"
+    remove: true
+
+  - target: $.components.responses
+    description: "Skip code generation for responses"
+    remove: true
+
+  - target: $.components.securitySchemes
+    description: "Skip code generation for security schemes"
+    remove: true
+
+  - target: $..[?(@.format == "uuid")].format
+    remove: true
+
+  - target: $..[?(@.type=="array")]
+    description: "Skip pointer to Go slices"
+    update:
+      x-go-type-skip-optional-pointer: true
+
+  - target: $..[?(@.type=="string")]
+    description: "Skip optional pointer for strings"
+    update:
+      x-go-type-skip-optional-pointer: true
+
+  - target: $..[?(@.format=="date-time")]
+    description: "Skip optional pointer for timestamps"
+    update:
+      x-go-type-skip-optional-pointer: true
+      x-omitzero: true
+
+  - target: $.components.schemas..[?(@ =~ /_Public$/)]
+    description: "Remove _Public schema variants"
+    remove: true
+
+  - target: $.components.schemas.JobConfigRequest
+    description: "Remove JobConfigRequest"
+    remove: true
+
+  - target: $.components.schemas.JobExecutionResponse
+    description: "Remove JobExecutionResponse"
+    remove: true
+
+  - target: $.components.schemas
+    description: "Add service Status enum"
+    update:
+      Status:
+        type: string
+        description: "Status of a service"
+        enum:
+          - ACTIVATION_FAILED
+          - ACTIVATION_PENDING
+          - ACTIVE
+          - EXPIRED
+          - INACTIVE
+          - NOT_AVAILABLE
+      ActualServiceStatus:
+        properties:
+          status:
+            $ref: "#/components/schemas/Status"
+      DesiredServiceStatus:
+        properties:
+          desiredStatus:
+            $ref: "#/components/schemas/Status"
+      GenericService:
+        properties:
+          desiredStatus:
+            $ref: "#/components/schemas/Status"
+          status:
+            $ref: "#/components/schemas/Status"
+      ServiceLicenseStatusResponse:
+        properties:
+          status:
+            $ref: "#/components/schemas/Status"
+      ServiceStatus:
+        properties:
+          desiredStatus:
+            $ref: "#/components/schemas/Status"
+          status:
+            $ref: "#/components/schemas/Status"
+      VehicleOwnerDesiredServiceStatus:
+        properties:
+          desiredStatus:
+            $ref: "#/components/schemas/Status"

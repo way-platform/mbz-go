@@ -1,0 +1,708 @@
+components:
+    schemas:
+        ActualServiceStatus:
+            properties:
+                countryCode:
+                    description: Country code of the service that should be updated, defaults to GLOBAL.
+                    example: DE
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                serviceId:
+                    description: ID of the generic-service
+                    example: '1001'
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                status:
+                    description: The actual status of the generic-service
+                    enum:
+                        - ACTIVE
+                        - ACTIVATION_PENDING
+                        - ACTIVATION_FAILED
+                        - NOT_AVAILABLE
+                        - INACTIVE
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                    $ref: "#/components/schemas/Status"
+            required:
+                - countryCode
+                - serviceId
+                - status
+            type: object
+        ActualServiceStatusForVehicle:
+            properties:
+                customerId:
+                    description: The clientId.
+                    example: mercedes-60140562
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                services:
+                    description: List services for which you want to change the actual service status.
+                    items:
+                        $ref: '#/components/schemas/ActualServiceStatus'
+                    type: array
+                    x-go-type-skip-optional-pointer: true
+                vin:
+                    description: The VIN (vehicle identification number) of the vehicle
+                    example: WDD00000000000000
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+            required:
+                - customerId
+                - services
+                - vin
+            type: object
+        ActualServiceStatusRequest:
+            properties:
+                actualServiceStatusForVehicle:
+                    description: List of objects containing information which service-status should be changed on a specific vehicle.
+                    items:
+                        $ref: '#/components/schemas/ActualServiceStatusForVehicle'
+                    type: array
+                    x-go-type-skip-optional-pointer: true
+            required:
+                - actualServiceStatusForVehicle
+            type: object
+        BadRequestErrorResponse:
+            properties:
+                detail:
+                    example: Server cannot or will not process the request
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                instance:
+                    description: URI where this error occurred
+                    example: about:blank
+                    format: uri
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                statusCode:
+                    example: 400
+                    format: int32
+                    type: integer
+                title:
+                    example: Bad request
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                type:
+                    description: URI-reference for type information or 'about:blank' if no more information is available
+                    example: about:blank
+                    format: uri-reference
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+            type: object
+        BadRequestWithPositionErrorResponse:
+            description: This error occurs, if a validation (eg. of an argument) failed
+            properties:
+                detail:
+                    description: details why the request is Bad
+                    example: 'Unexpected character ('','' (code 44)): was expecting double-quote to start field name'
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                instance:
+                    description: URI where this error occurred
+                    example: about:blank
+                    format: uri
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                occurredAt:
+                    $ref: '#/components/schemas/Position'
+                    description: Location where the request was malformed
+                statusCode:
+                    example: 400
+                    format: int32
+                    type: integer
+                title:
+                    example: Invalid JSON Input
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                type:
+                    example: /error/validation-error
+                    format: uri-reference
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+            required:
+                - detail
+            type: object
+        CleanupNotAvailableServicesRequest:
+            properties:
+                cleanup_threshold:
+                    description: Threshold in minutes, specifying the age lower bound for services to be deactivated.
+                    example: 1440
+                    format: int32
+                    type: integer
+            required:
+                - cleanup_threshold
+            type: object
+        CompatibilityGenericService:
+            properties:
+                available:
+                    description: The service availability
+                    type: boolean
+                serviceId:
+                    description: The ID of the service
+                    example: '1001'
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                serviceName:
+                    description: The name of the service
+                    example: Mileage
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+            required:
+                - available
+                - serviceId
+                - serviceName
+            type: object
+        CompatibilityResponse:
+            properties:
+                services:
+                    description: List of services with the service availability.
+                    items:
+                        $ref: '#/components/schemas/CompatibilityGenericService'
+                    type: array
+                    x-go-type-skip-optional-pointer: true
+                vehicleProvidesConnectivity:
+                    description: This property indicates the base compatibility to data-services for the requested vehicle.
+                    example: true
+                    type: boolean
+                vehicleType:
+                    description: The type of the requested vehicle.
+                    example: Combustion Engine Vehicle
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                vin:
+                    description: The VIN (vehicle identification number) of the requested vehicle.
+                    example: WDD00000000000000
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+            required:
+                - services
+                - vehicleProvidesConnectivity
+                - vin
+            type: object
+        DesiredServiceStatus:
+            properties:
+                desiredStatus:
+                    description: The desired service status
+                    enum:
+                        - ACTIVE
+                        - INACTIVE
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                    $ref: "#/components/schemas/Status"
+                serviceId:
+                    description: ID of the generic-service
+                    example: '1001'
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+            required:
+                - desiredStatus
+                - serviceId
+            type: object
+        DesiredServiceStatusRequest:
+            properties:
+                services:
+                    description: List of services for which you want to change the desired service status.
+                    items:
+                        $ref: '#/components/schemas/DesiredServiceStatus'
+                    maxItems: 100
+                    minItems: 0
+                    type: array
+                    x-go-type-skip-optional-pointer: true
+                vin:
+                    description: VIN of the vehicle
+                    example: WDD00000000000000
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+            required:
+                - services
+                - vin
+            type: object
+        ErrorResponse:
+            properties:
+                detail:
+                    description: details why this error occurred.
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                instance:
+                    description: URI where this error occurred
+                    example: about:blank
+                    format: uri
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                statusCode:
+                    description: status code of this error (e.g. http status code)
+                    format: int32
+                    type: integer
+                title:
+                    description: title of this error (e.g. http status reason phrase)
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                type:
+                    description: URI-reference for type information or 'about:blank' if no more information is available
+                    example: about:blank
+                    format: uri-reference
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+            type: object
+        GenericService:
+            properties:
+                approvalTimestamp:
+                    description: Time when this service was initial activated
+                    example: 1653993974696
+                    format: int64
+                    type: integer
+                countryCode:
+                    description: Code denoting potential regional customizations. GLOBAL is the base code with no customizations, any other code means the corresponding country differs from the base definition.
+                    example: GLOBAL
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                deltaPush:
+                    description: Flag denoting whether delta push signals are sent for this VIN.
+                    type: boolean
+                desiredStatus:
+                    description: The desired status of the generic-service
+                    enum:
+                        - ACTIVE
+                        - INACTIVE
+                    example: ACTIVE
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                    $ref: "#/components/schemas/Status"
+                orderId:
+                    description: The ID of the order
+                    example: 21354891-ddbf-44b5-8014-4ace3a6bed69
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                originalDesiredActivationTimestamp:
+                    description: Time when this service was ordered by the customer
+                    example: 1653993974696
+                    format: int64
+                    type: integer
+                serviceId:
+                    description: The ID of the generic-service
+                    example: '1001'
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                status:
+                    description: The actual status of the generic-service
+                    enum:
+                        - ACTIVE
+                        - ACTIVATION_PENDING
+                        - INACTIVE
+                        - ACTIVATION_FAILED
+                        - NOT_AVAILABLE
+                    example: ACTIVATION_PENDING
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                    $ref: "#/components/schemas/Status"
+            required:
+                - approvalTimestamp
+                - countryCode
+                - deltaPush
+                - desiredStatus
+                - originalDesiredActivationTimestamp
+                - serviceId
+                - status
+            type: object
+        GenericServiceListResponse:
+            properties:
+                serviceList:
+                    description: List of service states per virtual-vehicle
+                    items:
+                        $ref: '#/components/schemas/ServiceList'
+                    type: array
+                    x-go-type-skip-optional-pointer: true
+            required:
+                - serviceList
+            type: object
+        NotFoundErrorResponse:
+            properties:
+                detail:
+                    example: Server can not find the requested resource
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                instance:
+                    description: URI where this error occurred
+                    example: about:blank
+                    format: uri
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                statusCode:
+                    example: 404
+                    format: int32
+                    type: integer
+                title:
+                    example: Not found
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                type:
+                    description: URI-reference for type information or 'about:blank' if no more information is available
+                    example: about:blank
+                    format: uri-reference
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+            type: object
+        Position:
+            properties:
+                column:
+                    example: 31
+                    format: int32
+                    type: integer
+                line:
+                    example: 2
+                    format: int32
+                    type: integer
+            required:
+                - column
+                - line
+            type: object
+        ServiceLicenseStatusResponse:
+            properties:
+                serviceId:
+                    description: The generic service id for which the license was created.
+                    example: '3002'
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                status:
+                    description: The lifecycle status of the license.
+                    enum:
+                        - ACTIVE
+                        - INACTIVE
+                        - EXPIRED
+                        - NOT_AVAILABLE
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                    $ref: "#/components/schemas/Status"
+                validFrom:
+                    description: Start of the validity period (Epoch Milliseconds). The time when the license became ACTIVE.
+                    format: int64
+                    type: integer
+                validTo:
+                    description: End of the validity period (Epoch Milliseconds). The time when the license becomes or became EXPIRED. This field will not appear for licenses with unlimited validity.
+                    format: int64
+                    type: integer
+                vin:
+                    description: The VIN of the vehicle to which the license belongs to.
+                    example: WDD00000000000000
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+            required:
+                - serviceId
+                - status
+                - vin
+            type: object
+        ServiceList:
+            properties:
+                customerId:
+                    description: clientId
+                    example: mercedes-60140562
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                services:
+                    description: List of generic-services with the service status.
+                    items:
+                        $ref: '#/components/schemas/GenericService'
+                    type: array
+                    x-go-type-skip-optional-pointer: true
+                vin:
+                    description: The VIN (vehicle identification number) of the vehicle
+                    example: WDD00000000000000
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+            required:
+                - customerId
+                - services
+                - vin
+            type: object
+        ServiceStatus:
+            properties:
+                countryCode:
+                    description: Code denoting potential regional customizations. GLOBAL is the base code with no customizations.
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                deltaPush:
+                    description: Flag denoting whether delta push signals are sent for this VIN.
+                    type: boolean
+                desiredStatus:
+                    description: The desired service status
+                    enum:
+                        - ACTIVE
+                        - ACTIVATION_PENDING
+                        - INACTIVE
+                        - ACTIVATION_FAILED
+                        - NOT_AVAILABLE
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                    $ref: "#/components/schemas/Status"
+                orderId:
+                    description: The ID of the order
+                    example: 21354891-ddbf-44b5-8014-4ace3a6bed69
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                orderTime:
+                    description: Time when this service was ordered by client
+                    format: int64
+                    type: integer
+                serviceId:
+                    description: ID of the generic-service
+                    example: '1001'
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                status:
+                    description: The actual service status
+                    enum:
+                        - ACTIVE
+                        - ACTIVATION_PENDING
+                        - INACTIVE
+                        - ACTIVATION_FAILED
+                        - NOT_AVAILABLE
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                    $ref: "#/components/schemas/Status"
+            required:
+                - countryCode
+                - deltaPush
+                - desiredStatus
+                - orderTime
+                - serviceId
+                - status
+            type: object
+        SupportedVehicle:
+            properties:
+                vin:
+                    description: The VIN (vehicle identification number) of the vehicle
+                    example: WDD00000000000000
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+            required:
+                - vin
+            type: object
+        TooManyObjectsToProcess:
+            properties:
+                detail:
+                    example: There are too many Vehicles/Services persisted to remove them immediately. Instead, they will be removed later.
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                instance:
+                    description: URI where this error occurred
+                    example: about:blank
+                    format: uri
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                statusCode:
+                    example: 202
+                    format: int32
+                    type: integer
+                title:
+                    example: Too Many Objects to process
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                type:
+                    example: /vehicle/too-many-objects
+                    format: uri-reference
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+            required:
+                - detail
+                - title
+            type: object
+        ValidationError:
+            description: details why the validation failed. An additional property `rejectedValue` might indicate which specific value did not pass validation.
+            properties:
+                field:
+                    description: name of field, which did not pass validation
+                    example: vin
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                message:
+                    description: concrete reason, why validation failed
+                    example: VIN should have exactly 17 characters
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+            required:
+                - field
+                - message
+            type: object
+        ValidationErrorResponse:
+            description: This error occurs, if a validation (eg. of an argument) failed
+            properties:
+                detail:
+                    description: information, about what kind of validation failed
+                    example: Argument is invalid
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                instance:
+                    description: URI where this error occurred
+                    example: about:blank
+                    format: uri
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                statusCode:
+                    example: 400
+                    format: int32
+                    type: integer
+                title:
+                    example: Bad request
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                type:
+                    example: /error/validation-error
+                    format: uri-reference
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                validationErrors:
+                    items:
+                        $ref: '#/components/schemas/ValidationError'
+                    type: array
+                    x-go-type-skip-optional-pointer: true
+            required:
+                - detail
+                - validationErrors
+            type: object
+        Vehicle:
+            properties:
+                vin:
+                    description: The VIN (vehicle identification number) of the vehicle
+                    example: WDD00000000000000
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+            required:
+                - vin
+            type: object
+        VehicleDeltaPushPatchRequest:
+            properties:
+                deltaPush:
+                    description: Flag denoting whether delta push signals are sent for this VIN.
+                    type: boolean
+                vin:
+                    description: The VIN (vehicle identification number) of the vehicle
+                    example: WDD00000000000000
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+            required:
+                - deltaPush
+                - vin
+            type: object
+        VehicleOwnerDesiredServiceStatus:
+            properties:
+                desiredStatus:
+                    description: The desired service status
+                    enum:
+                        - ACTIVE
+                        - INACTIVE
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                    $ref: "#/components/schemas/Status"
+                serviceId:
+                    description: ID of the generic-service
+                    example: '2001'
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+            required:
+                - desiredStatus
+                - serviceId
+            type: object
+        VehicleOwnerDesiredServiceStatusRequest:
+            properties:
+                consentToken:
+                    description: Consent token
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                services:
+                    description: List of services for which you want to change the desired service status.
+                    items:
+                        $ref: '#/components/schemas/VehicleOwnerDesiredServiceStatus'
+                    type: array
+                    x-go-type-skip-optional-pointer: true
+            required:
+                - consentToken
+                - services
+            type: object
+        VehicleOwnerDesiredServiceStatusResponse:
+            properties:
+                tokenExpirationTimeMillis:
+                    format: int64
+                    type: integer
+            required:
+                - tokenExpirationTimeMillis
+            type: object
+        VirtualVehicle:
+            properties:
+                clientId:
+                    example: mercedes-60140562
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                vin:
+                    example: WDD00000000000000
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+            required:
+                - clientId
+                - vin
+            type: object
+        VirtualVehiclesPage:
+            properties:
+                isLast:
+                    description: Indicates if this is the last page with elements
+                    type: boolean
+                totalElements:
+                    description: Total number of VirtualVehicles stored in the database
+                    format: int64
+                    type: integer
+                vehicles:
+                    description: VirtualVehicles within this page
+                    items:
+                        $ref: '#/components/schemas/VirtualVehicle'
+                    type: array
+                    x-go-type-skip-optional-pointer: true
+            required:
+                - isLast
+                - totalElements
+                - vehicles
+            type: object
+        Status:
+            type: string
+            description: "Status of a service"
+            enum:
+                - ACTIVATION_FAILED
+                - ACTIVATION_PENDING
+                - ACTIVE
+                - EXPIRED
+                - INACTIVE
+                - NOT_AVAILABLE
+info:
+    description: '
+
+        This is a Microservice which manages the vehicles. It belongs to the Management API family.
+
+        The identifier used to perform these operations is the Vehicle Identification Number (VIN).
+
+
+        For example, you can add/query/delete vehicles, deactivate/activate a service and query the service status of a vehicle.
+
+        From a technical point of view, a service is used to activate or deactivate a data package for a vehicle. Certain services and data signals may not be available for all vehicles or all countries.
+
+'
+    title: Vehicle Management API
+    version: v1
+openapi: 3.1.0
+security:
+    - OAuth2:
+        - openid
+        - groups
+        - profile
+        - audience:server:client_id:95B37AC2-D501-4CFD-B853-7D299DD2D872
+servers:
+    - description: Generated server url
+      url: https://service.connect-business.net/api
+tags:
+    - description: API to get information about the compatibility of your vehicles.
+      name: Compatibilities API
+    - description: API to manage drivers of a specific vehicle.
+      name: Drivers API
+    - description: API to manage and query service activation states for vehicles.
+      name: Service state API
+    - description: API to retrieve information about vehicle service licenses.
+      name: Vehicle Service Licenses API
+    - description: API to manage vehicles of a customer account.
+      name: Vehicles API

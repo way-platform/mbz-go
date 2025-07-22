@@ -2,14 +2,18 @@ package mbz
 
 import (
 	"context"
+	"fmt"
+	"io"
+	"net/url"
+	"runtime/debug"
 
 	"github.com/hashicorp/go-retryablehttp"
 	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/clientcredentials"
 )
 
 // Client to the Mercedes-Benz management APIs.
 type Client struct {
+	baseURL    string
 	httpClient *retryablehttp.Client
 	config     ClientConfig
 }
@@ -24,6 +28,15 @@ func NewClient(opts ...ClientOption) *Client {
 		httpClient: retryablehttp.NewClient(),
 		config:     config,
 	}
+	client.httpClient.Logger = noopLogger{}
+	switch config.region {
+	case RegionECE:
+		client.baseURL = BaseURLECE
+	case RegionAMAPNA:
+		client.baseURL = BaseURLAMAPNA
+	default: // default to ECE region
+		client.baseURL = BaseURLECE
+	}
 	switch {
 	case config.oauth2Config != nil:
 		client.httpClient.HTTPClient = config.oauth2Config.Client(context.Background())
@@ -36,32 +49,28 @@ func NewClient(opts ...ClientOption) *Client {
 	return client
 }
 
-// ClientConfig configures a [Client].
-type ClientConfig struct {
-	region       Region
-	tokenSource  oauth2.TokenSource
-	oauth2Config *clientcredentials.Config
+func (c *Client) newRequest(ctx context.Context, method, requestPath string, body io.Reader) (_ *retryablehttp.Request, err error) {
+	defer func() {
+		if err != nil {
+			err = fmt.Errorf("new request: %w", err)
+		}
+	}()
+	requestURL, err := url.JoinPath(c.baseURL, requestPath)
+	if err != nil {
+		return nil, fmt.Errorf("invalid request URL: %w", err)
+	}
+	request, err := retryablehttp.NewRequestWithContext(ctx, method, requestURL, body)
+	if err != nil {
+		return nil, err
+	}
+	request.Header.Set("User-Agent", getUserAgent())
+	return request, nil
 }
 
-// ClientOption is a configuration option for a [Client].
-type ClientOption func(*ClientConfig)
-
-// WithRegion sets the region for the client.
-func WithRegion(region Region) ClientOption {
-	return func(config *ClientConfig) {
-		config.region = region
+func getUserAgent() string {
+	userAgent := "WayPlatformMBZGo"
+	if info, ok := debug.ReadBuildInfo(); ok && info.Main.Version != "" {
+		userAgent += "/" + info.Main.Version
 	}
-}
-
-// WithOAuth2TokenSource sets the OAuth2 token source for the client.
-func WithOAuth2TokenSource(tokenSource oauth2.TokenSource) ClientOption {
-	return func(config *ClientConfig) {
-		config.tokenSource = tokenSource
-	}
-}
-
-func WithOAuth2Config(oauth2Config *clientcredentials.Config) ClientOption {
-	return func(config *ClientConfig) {
-		config.oauth2Config = oauth2Config
-	}
+	return userAgent
 }
