@@ -30,23 +30,14 @@ client, err := mbz.NewClient(
 if err != nil {
     panic(err)
 }
-
 // List vehicles in the account.
 response, err := client.ListVehicles(ctx, &mbz.ListVehiclesRequest{})
 if err != nil {
     panic(err)
 }
-fmt.Println(response.Vehicles)
-
-// List available services with detailed info.
-response2, err := client.ListServices(ctx, &mbz.ListServicesRequest{
-    Details: true,
-})
-if err != nil {
-    panic(err)
+for _, vehicle := range response.Vehicles {
+    fmt.Println(vehicle.VIN)
 }
-fmt.Println(response2.Services)
-
 // For all available methods, see the API documentation.
 ```
 
@@ -68,6 +59,8 @@ $ go tool mage
 ```
 
 ## CLI tool
+
+The `mbz` CLI tool enables interaction with the APIs from the command line.
 
 <img src="docs/cli.gif" />
 
