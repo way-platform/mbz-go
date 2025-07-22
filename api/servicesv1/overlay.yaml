@@ -29,6 +29,43 @@ actions:
     update:
       $ref: "#/components/schemas/Service"
 
+  - target: $.components.schemas
+    description: "Add Role enum"
+    update:
+      Role:
+        type: string
+        description: The list with required access roles
+        enum:
+          - FLEET_CONSENT_STANDARD
+          - FLEET_CONSENT_DOOR_LOCK_UNLOCK
+          - FLEET_CONSENT_IMMOBILIZER
+          - FLEET_CONSENT_DRIVER
+          - VEHICLE_OWNER_CONSENT_STANDARD
+          - BETA
+          - FLEET_CONSENT_RESTRICTED_MARKET
+      Service:
+        properties:
+          roles:
+            description: The list with required access roles
+            items:
+              $ref: "#/components/schemas/Role"
+            type: array
+
+  - target: $.components.schemas
+    description: "Add ConsentModel enum"
+    update:
+      ConsentModel:
+        type: string
+        description: The required consent model
+        example: fleet
+        enum:
+          - fleet
+          - vehicle_owner
+      Service:
+        properties:
+          consent:
+            $ref: "#/components/schemas/ConsentModel"
+
   - target: $.paths
     description: "Skip code generation for requests"
     remove: true
@@ -48,6 +85,7 @@ actions:
     description: "Skip pointer to Go slices"
     update:
       x-go-type-skip-optional-pointer: true
+      x-omitzero: true
 
   - target: $..[?(@.deprecated)]
     description: "Remove deprecated properties"
@@ -71,18 +109,3 @@ actions:
   - target: $.components.schemas..[?(@ =~ /_Internal$/)]
     description: "Remove _Internal schema variants"
     remove: true
-
-  - target: $.components.schemas
-    description: "Add ConsentModel enum"
-    update:
-      ConsentModel:
-        type: string
-        description: The required consent model
-        example: fleet
-        enum:
-          - fleet
-          - vehicle_owner
-      Service:
-        properties:
-          consent:
-            $ref: "#/components/schemas/ConsentModel"

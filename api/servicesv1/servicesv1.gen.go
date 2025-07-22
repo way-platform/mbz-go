@@ -9,6 +9,17 @@ const (
 	ConsentModelVehicleOwner ConsentModel = "vehicle_owner"
 )
 
+// Defines values for Role.
+const (
+	RoleBETA                         Role = "BETA"
+	RoleFLEETCONSENTDOORLOCKUNLOCK   Role = "FLEET_CONSENT_DOOR_LOCK_UNLOCK"
+	RoleFLEETCONSENTDRIVER           Role = "FLEET_CONSENT_DRIVER"
+	RoleFLEETCONSENTIMMOBILIZER      Role = "FLEET_CONSENT_IMMOBILIZER"
+	RoleFLEETCONSENTRESTRICTEDMARKET Role = "FLEET_CONSENT_RESTRICTED_MARKET"
+	RoleFLEETCONSENTSTANDARD         Role = "FLEET_CONSENT_STANDARD"
+	RoleVEHICLEOWNERCONSENTSTANDARD  Role = "VEHICLE_OWNER_CONSENT_STANDARD"
+)
+
 // Defines values for SignalDataType.
 const (
 	SignalDataTypeBoolean SignalDataType = "boolean"
@@ -93,25 +104,28 @@ type ErrorResponse struct {
 // GetAllServicesResponse defines model for GetAllServicesResponse.
 type GetAllServicesResponse struct {
 	// Services The list of existing generic-services.
-	Services []Service `json:"services"`
+	Services []Service `json:"services,omitzero"`
 }
 
 // GetAllServicesWithSignalsAndCommandsResponse defines model for GetAllServicesWithSignalsAndCommandsResponse.
 type GetAllServicesWithSignalsAndCommandsResponse struct {
 	// Services The list of existing generic-services.
-	Services []Service `json:"services"`
+	Services []Service `json:"services,omitzero"`
 
 	// Version The version of the services spec.
 	Version string `json:"version,omitempty"`
 }
 
+// Role The list with required access roles
+type Role string
+
 // Service defines model for Service.
 type Service struct {
-	// CiamScope The required CIAM scope
-	CiamScope string `json:"ciamScope"`
+	// CIAMScope The required CIAM scope
+	CIAMScope string `json:"ciamScope"`
 
 	// Commands The list of commands the generic-service consists of.
-	Commands []Command `json:"commands,omitempty"`
+	Commands []Command `json:"commands,omitempty,omitzero"`
 
 	// Consent The required consent model
 	Consent ConsentModel `json:"consent"`
@@ -123,11 +137,13 @@ type Service struct {
 	ID string `json:"id"`
 
 	// Name The name of the generic-service.
-	Name  string        `json:"name"`
-	Roles []interface{} `json:"roles"`
+	Name string `json:"name"`
+
+	// Roles The list with required access roles
+	Roles []Role `json:"roles,omitzero"`
 
 	// Signals The list of signals the generic-service consists of.
-	Signals []Signal `json:"signals,omitempty"`
+	Signals []Signal `json:"signals,omitempty,omitzero"`
 }
 
 // Signal defines model for Signal.
@@ -142,7 +158,7 @@ type Signal struct {
 	Name string `json:"name"`
 
 	// SendingBehaviour A list that describes the sending behaviour(s) of the signal in the PUSH-API context.
-	SendingBehaviour []SignalSendingBehaviour `json:"sendingBehaviour"`
+	SendingBehaviour []SignalSendingBehaviour `json:"sendingBehaviour,omitzero"`
 
 	// Unit Describes the unit of the signal.
 	Unit SignalUnit `json:"unit,omitempty"`

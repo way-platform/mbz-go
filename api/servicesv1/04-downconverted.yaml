@@ -51,6 +51,7 @@ components:
             $ref: '#/components/schemas/Service'
           type: array
           x-go-type-skip-optional-pointer: true
+          x-omitzero: true
       required:
         - services
       type: object
@@ -62,6 +63,7 @@ components:
             $ref: '#/components/schemas/Service'
           type: array
           x-go-type-skip-optional-pointer: true
+          x-omitzero: true
         version:
           description: The version of the services spec.
           type: string
@@ -94,29 +96,25 @@ components:
           x-go-type-skip-optional-pointer: true
         roles:
           items:
-            description: The list with required access roles
-            enum:
-              - FLEET_CONSENT_STANDARD
-              - FLEET_CONSENT_DOOR_LOCK_UNLOCK
-              - FLEET_CONSENT_IMMOBILIZER
-              - FLEET_CONSENT_DRIVER
-              - VEHICLE_OWNER_CONSENT_STANDARD
-              - BETA
-              - FLEET_CONSENT_RESTRICTED_MARKET
+            $ref: '#/components/schemas/Role'
           type: array
+          description: The list with required access roles
           x-go-type-skip-optional-pointer: true
+          x-omitzero: true
         commands:
           description: The list of commands the generic-service consists of.
           items:
             $ref: '#/components/schemas/Command'
           type: array
           x-go-type-skip-optional-pointer: true
+          x-omitzero: true
         signals:
           description: The list of signals the generic-service consists of.
           items:
             $ref: '#/components/schemas/Signal'
           type: array
           x-go-type-skip-optional-pointer: true
+          x-omitzero: true
       required:
         - ciamScope
         - consent
@@ -191,6 +189,7 @@ components:
             x-go-type-skip-optional-pointer: true
           type: array
           x-go-type-skip-optional-pointer: true
+          x-omitzero: true
         unit:
           description: Describes the unit of the signal.
           enum:
@@ -218,6 +217,18 @@ components:
         - name
         - sendingBehaviour
       type: object
+    Role:
+      type: string
+      description: The list with required access roles
+      enum:
+        - FLEET_CONSENT_STANDARD
+        - FLEET_CONSENT_DOOR_LOCK_UNLOCK
+        - FLEET_CONSENT_IMMOBILIZER
+        - FLEET_CONSENT_DRIVER
+        - VEHICLE_OWNER_CONSENT_STANDARD
+        - BETA
+        - FLEET_CONSENT_RESTRICTED_MARKET
+      x-go-type-skip-optional-pointer: true
     ConsentModel:
       type: string
       description: The required consent model
@@ -225,6 +236,7 @@ components:
       enum:
         - fleet
         - vehicle_owner
+      x-go-type-skip-optional-pointer: true
 info:
   description: >
     This is a Microservice which allows to retrieve the list of available

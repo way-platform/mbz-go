@@ -15,3 +15,4 @@ output-options:
   initialism-overrides: true
   additional-initialisms:
     - VIN
+    - CIAM
