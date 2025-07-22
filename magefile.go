@@ -15,7 +15,9 @@ import (
 // Build runs a full CI build.
 func Build() {
 	mg.Deps(Download)
-	mg.Deps(Generate, Lint, Test, Tidy)
+	mg.Deps(Generate)
+	mg.Deps(Lint, Test)
+	mg.Deps(Tidy)
 	mg.Deps(Diff)
 }
 
