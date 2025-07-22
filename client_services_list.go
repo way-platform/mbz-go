@@ -21,7 +21,7 @@ type ListServicesResponse struct {
 	// Services is the list of services returned by the API.
 	Services []servicesv1.Service `json:"services"`
 	// Version is the version of the services spec.
-	Version string
+	Version string `json:"version,omitempty"`
 }
 
 // ListServices lists the vehicles for the current account.
@@ -31,7 +31,11 @@ func (c *Client) ListServices(ctx context.Context, request *ListServicesRequest)
 			err = fmt.Errorf("mbz: list vehicles: %w", err)
 		}
 	}()
-	httpRequest, err := c.newRequest(ctx, http.MethodGet, "/v2/accounts/services/details", nil)
+	url := "/v2/accounts/services"
+	if request.Details {
+		url += "/v2/accounts/services/details"
+	}
+	httpRequest, err := c.newRequest(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return nil, err
 	}

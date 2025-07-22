@@ -1,18 +1,23 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
 
+	"github.com/charmbracelet/fang"
 	"github.com/spf13/cobra"
 	"github.com/way-platform/mbz-go"
 	"github.com/way-platform/mbz-go/cmd/mbz/internal/auth"
 )
 
 func main() {
-	if err := newRootCommand().Execute(); err != nil {
-		_, _ = fmt.Fprintln(os.Stderr, err)
+	if err := fang.Execute(
+		context.Background(),
+		newRootCommand(),
+		fang.WithColorSchemeFunc(fang.AnsiColorScheme),
+	); err != nil {
 		os.Exit(1)
 	}
 }
@@ -22,17 +27,32 @@ func newRootCommand() *cobra.Command {
 		Use:   "mbz",
 		Short: "Mercedes-Benz Management API CLI",
 	}
-	cmd.AddCommand(auth.NewCommand())
+	cmd.AddGroup(&cobra.Group{
+		ID:    "auth",
+		Title: "Authentication",
+	})
+	authCmd := auth.NewCommand()
+	authCmd.GroupID = "auth"
+	cmd.AddCommand(authCmd)
+	cmd.AddGroup(&cobra.Group{
+		ID:    "vehicles",
+		Title: "Vehicles",
+	})
 	cmd.AddCommand(newListVehiclesCommand())
 	cmd.AddCommand(newGetVehicleCompatibilityCommand())
+	cmd.AddGroup(&cobra.Group{
+		ID:    "services",
+		Title: "Services",
+	})
 	cmd.AddCommand(newListServicesCommand())
 	return cmd
 }
 
 func newListVehiclesCommand() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "list-vehicles",
-		Short: "List vehicles",
+		Use:     "list-vehicles",
+		Short:   "List vehicles",
+		GroupID: "vehicles",
 	}
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
 		client, err := auth.NewClient()
@@ -51,15 +71,19 @@ func newListVehiclesCommand() *cobra.Command {
 
 func newListServicesCommand() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "list-services",
-		Short: "List services",
+		Use:     "list-services",
+		Short:   "List services",
+		GroupID: "services",
 	}
+	details := cmd.Flags().Bool("details", false, "Include service details")
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
 		client, err := auth.NewClient()
 		if err != nil {
 			return err
 		}
-		response, err := client.ListServices(cmd.Context(), &mbz.ListServicesRequest{})
+		response, err := client.ListServices(cmd.Context(), &mbz.ListServicesRequest{
+			Details: *details,
+		})
 		if err != nil {
 			return err
 		}
@@ -71,9 +95,10 @@ func newListServicesCommand() *cobra.Command {
 
 func newGetVehicleCompatibilityCommand() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "get-vehicle-compatibility",
-		Short: "Get vehicle compatibility",
-		Args:  cobra.ExactArgs(1),
+		Use:     "get-vehicle-compatibility",
+		Short:   "Get vehicle compatibility",
+		GroupID: "vehicles",
+		Args:    cobra.ExactArgs(1),
 	}
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
 		client, err := auth.NewClient()
