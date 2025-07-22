@@ -24,6 +24,7 @@ func newRootCommand() *cobra.Command {
 	}
 	cmd.AddCommand(auth.NewCommand())
 	cmd.AddCommand(newListVehiclesCommand())
+	cmd.AddCommand(newGetVehicleCompatibilityCommand())
 	return cmd
 }
 
@@ -38,6 +39,29 @@ func newListVehiclesCommand() *cobra.Command {
 			return err
 		}
 		response, err := client.ListVehicles(cmd.Context(), &mbz.ListVehiclesRequest{})
+		if err != nil {
+			return err
+		}
+		printJSON(cmd, response)
+		return nil
+	}
+	return cmd
+}
+
+func newGetVehicleCompatibilityCommand() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "get-vehicle-compatibility",
+		Short: "Get vehicle compatibility",
+		Args:  cobra.ExactArgs(1),
+	}
+	cmd.RunE = func(cmd *cobra.Command, args []string) error {
+		client, err := auth.NewClient()
+		if err != nil {
+			return err
+		}
+		response, err := client.GetVehicleCompatibility(cmd.Context(), &mbz.GetVehicleCompatibilityRequest{
+			VIN: args[0],
+		})
 		if err != nil {
 			return err
 		}
