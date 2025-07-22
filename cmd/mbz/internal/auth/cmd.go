@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/way-platform/mbz-go"
 	"golang.org/x/oauth2"
+	"golang.org/x/term"
 )
 
 // NewClient creates a new Mercedes-Benz Management API client using the current CLI credentials.
@@ -45,9 +46,16 @@ func newLoginCommand() *cobra.Command {
 	region := cmd.Flags().String("region", string(mbz.RegionECE), "region to use for authentication")
 	clientID := cmd.Flags().String("client-id", "", "client ID to use for authentication")
 	cmd.MarkFlagRequired("client-id")
-	clientSecret := cmd.Flags().String("client-secret", "", "client secret to use for authentication")
-	cmd.MarkFlagRequired("client-secret")
+	clientSecret := cmd.Flags().String("client-secret", "-", "client secret to use for authentication")
 	cmd.RunE = func(cmd *cobra.Command, _ []string) error {
+		if *clientSecret == "-" {
+			cmd.Println("Enter OAuth2 client secret:")
+			input, err := term.ReadPassword(int(os.Stdin.Fd()))
+			if err != nil {
+				return err
+			}
+			*clientSecret = string(input)
+		}
 		config, err := mbz.NewOAuth2Config(mbz.Region(*region), *clientID, *clientSecret)
 		if err != nil {
 			return err
