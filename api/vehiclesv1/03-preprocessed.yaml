@@ -556,6 +556,9 @@ components:
                     example: WDD00000000000000
                     type: string
                     x-go-type-skip-optional-pointer: true
+                deltaPush:
+                    type: boolean
+                    description: "Flag denoting whether delta push signals are sent for this VIN."
             required:
                 - vin
             type: object

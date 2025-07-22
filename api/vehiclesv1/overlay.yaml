@@ -63,6 +63,14 @@ actions:
           desiredStatus:
             $ref: "#/components/schemas/Status"
 
+  - target: $.components.schemas.Vehicle
+    description: "Add deltaPush field"
+    update:
+      properties:
+        deltaPush:
+          type: boolean
+          description: "Flag denoting whether delta push signals are sent for this VIN."
+
   - target: $.paths
     description: "Skip code generation for requests"
     remove: true

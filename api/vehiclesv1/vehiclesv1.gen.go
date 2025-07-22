@@ -282,6 +282,9 @@ type ValidationErrorResponse struct {
 
 // Vehicle defines model for Vehicle.
 type Vehicle struct {
+	// DeltaPush Flag denoting whether delta push signals are sent for this VIN.
+	DeltaPush *bool `json:"deltaPush,omitempty"`
+
 	// VIN The VIN (vehicle identification number) of the vehicle
 	VIN string `json:"vin"`
 }

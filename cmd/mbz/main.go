@@ -9,6 +9,7 @@ import (
 	"github.com/charmbracelet/fang"
 	"github.com/spf13/cobra"
 	"github.com/way-platform/mbz-go"
+	"github.com/way-platform/mbz-go/api/vehiclesv1"
 	"github.com/way-platform/mbz-go/cmd/mbz/internal/auth"
 )
 
@@ -40,6 +41,8 @@ func newRootCommand() *cobra.Command {
 	})
 	cmd.AddCommand(newListVehiclesCommand())
 	cmd.AddCommand(newGetVehicleCompatibilityCommand())
+	cmd.AddCommand(newEnableDeltaPushCommand())
+	cmd.AddCommand(newDisableDeltaPushCommand())
 	cmd.AddGroup(&cobra.Group{
 		ID:    "services",
 		Title: "Services",
@@ -117,6 +120,68 @@ func newGetVehicleCompatibilityCommand() *cobra.Command {
 	return cmd
 }
 
+func newEnableDeltaPushCommand() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "enable-delta-push",
+		Short:   "Enable delta push",
+		GroupID: "vehicles",
+		Args:    cobra.MinimumNArgs(1),
+	}
+	cmd.RunE = func(cmd *cobra.Command, args []string) error {
+		client, err := auth.NewClient()
+		if err != nil {
+			return err
+		}
+		request := mbz.PatchVehiclesRequest{
+			Vehicles: make([]vehiclesv1.Vehicle, 0, len(args)),
+		}
+		for _, vin := range args {
+			request.Vehicles = append(request.Vehicles, vehiclesv1.Vehicle{
+				VIN:       vin,
+				DeltaPush: ptr(true),
+			})
+		}
+		response, err := client.PatchVehicles(cmd.Context(), &request)
+		if err != nil {
+			return err
+		}
+		printJSON(response)
+		return nil
+	}
+	return cmd
+}
+
+func newDisableDeltaPushCommand() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "disable-delta-push",
+		Short:   "Disable delta push",
+		GroupID: "vehicles",
+		Args:    cobra.MinimumNArgs(1),
+	}
+	cmd.RunE = func(cmd *cobra.Command, args []string) error {
+		client, err := auth.NewClient()
+		if err != nil {
+			return err
+		}
+		request := mbz.PatchVehiclesRequest{
+			Vehicles: make([]vehiclesv1.Vehicle, 0, len(args)),
+		}
+		for _, vin := range args {
+			request.Vehicles = append(request.Vehicles, vehiclesv1.Vehicle{
+				VIN:       vin,
+				DeltaPush: ptr(false),
+			})
+		}
+		response, err := client.PatchVehicles(cmd.Context(), &request)
+		if err != nil {
+			return err
+		}
+		printJSON(response)
+		return nil
+	}
+	return cmd
+}
+
 func printJSON(msg any) error {
 	data, err := json.MarshalIndent(msg, "", "  ")
 	if err != nil {
@@ -124,4 +189,8 @@ func printJSON(msg any) error {
 	}
 	fmt.Println(string(data))
 	return nil
+}
+
+func ptr[T any](v T) *T {
+	return &v
 }
