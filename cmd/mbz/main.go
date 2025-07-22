@@ -25,6 +25,7 @@ func newRootCommand() *cobra.Command {
 	cmd.AddCommand(auth.NewCommand())
 	cmd.AddCommand(newListVehiclesCommand())
 	cmd.AddCommand(newGetVehicleCompatibilityCommand())
+	cmd.AddCommand(newListServicesCommand())
 	return cmd
 }
 
@@ -42,7 +43,27 @@ func newListVehiclesCommand() *cobra.Command {
 		if err != nil {
 			return err
 		}
-		printJSON(cmd, response)
+		printJSON(response)
+		return nil
+	}
+	return cmd
+}
+
+func newListServicesCommand() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "list-services",
+		Short: "List services",
+	}
+	cmd.RunE = func(cmd *cobra.Command, args []string) error {
+		client, err := auth.NewClient()
+		if err != nil {
+			return err
+		}
+		response, err := client.ListServices(cmd.Context(), &mbz.ListServicesRequest{})
+		if err != nil {
+			return err
+		}
+		printJSON(response)
 		return nil
 	}
 	return cmd
@@ -65,13 +86,13 @@ func newGetVehicleCompatibilityCommand() *cobra.Command {
 		if err != nil {
 			return err
 		}
-		printJSON(cmd, response)
+		printJSON(response)
 		return nil
 	}
 	return cmd
 }
 
-func printJSON(cmd *cobra.Command, msg any) error {
+func printJSON(msg any) error {
 	data, err := json.MarshalIndent(msg, "", "  ")
 	if err != nil {
 		return err
