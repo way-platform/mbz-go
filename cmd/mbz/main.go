@@ -40,6 +40,8 @@ func newRootCommand() *cobra.Command {
 		Title: "Vehicles",
 	})
 	cmd.AddCommand(newListVehiclesCommand())
+	cmd.AddCommand(newAssignVehiclesCommand())
+	cmd.AddCommand(newDeleteVehiclesCommand())
 	cmd.AddCommand(newGetVehicleCompatibilityCommand())
 	cmd.AddCommand(newEnableDeltaPushCommand())
 	cmd.AddCommand(newDisableDeltaPushCommand())
@@ -63,6 +65,54 @@ func newListVehiclesCommand() *cobra.Command {
 			return err
 		}
 		response, err := client.ListVehicles(cmd.Context(), &mbz.ListVehiclesRequest{})
+		if err != nil {
+			return err
+		}
+		printJSON(response)
+		return nil
+	}
+	return cmd
+}
+
+func newAssignVehiclesCommand() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "assign-vehicles",
+		Short:   "Assign vehicles",
+		GroupID: "vehicles",
+		Args:    cobra.MinimumNArgs(1),
+	}
+	cmd.RunE = func(cmd *cobra.Command, args []string) error {
+		client, err := auth.NewClient()
+		if err != nil {
+			return err
+		}
+		response, err := client.AssignVehicles(cmd.Context(), &mbz.AssignVehiclesRequest{
+			VINs: args,
+		})
+		if err != nil {
+			return err
+		}
+		printJSON(response)
+		return nil
+	}
+	return cmd
+}
+
+func newDeleteVehiclesCommand() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "delete-vehicles",
+		Short:   "Delete vehicles",
+		GroupID: "vehicles",
+		Args:    cobra.MinimumNArgs(1),
+	}
+	cmd.RunE = func(cmd *cobra.Command, args []string) error {
+		client, err := auth.NewClient()
+		if err != nil {
+			return err
+		}
+		response, err := client.DeleteVehicles(cmd.Context(), &mbz.DeleteVehiclesRequest{
+			VINs: args,
+		})
 		if err != nil {
 			return err
 		}
