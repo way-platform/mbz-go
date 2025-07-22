@@ -5,6 +5,7 @@ package main
 import (
 	"io/fs"
 	"os"
+	"os/exec"
 	"path/filepath"
 
 	"github.com/magefile/mage/mg"
@@ -13,7 +14,9 @@ import (
 
 // Build runs a full CI build.
 func Build() {
-	mg.Deps(Generate, Lint, Test, Tidy, Diff)
+	mg.Deps(Download)
+	mg.Deps(Generate, Lint, Test, Tidy)
+	mg.Deps(Diff)
 }
 
 // Lint runs the Go linter.
@@ -23,28 +26,22 @@ func Lint() error {
 
 // Test runs the Go tests.
 func Test() error {
-	mg.Deps(Generate)
-	return sh.RunV("go", "test", "-v", "-cover", "./...")
+	return forEachGoMod(func(dir string) error {
+		return cmd(dir, "go", "test", "-v", "-cover", "./...").Run()
+	})
+}
+
+// Download downloads the Go dependencies.
+func Download() error {
+	return forEachGoMod(func(dir string) error {
+		return cmd(dir, "go", "mod", "download").Run()
+	})
 }
 
 // Tidy tidies the Go mod files.
 func Tidy() error {
-	return filepath.WalkDir(".", func(path string, d fs.DirEntry, err error) error {
-		if err != nil {
-			return err
-		}
-		if d.IsDir() || d.Name() != "go.mod" {
-			return nil
-		}
-		currentDir, err := os.Getwd()
-		if err != nil {
-			return err
-		}
-		defer os.Chdir(currentDir)
-		if err := os.Chdir(filepath.Dir(path)); err != nil {
-			return err
-		}
-		return sh.RunV("go", "mod", "tidy", "-v")
+	return forEachGoMod(func(dir string) error {
+		return cmd(dir, "go", "mod", "tidy", "-v").Run()
 	})
 }
 
@@ -55,5 +52,27 @@ func Diff() error {
 
 // Generate runs all code generators.
 func Generate() error {
-	return sh.RunV("go", "generate", "-v", "./...")
+	return forEachGoMod(func(dir string) error {
+		return cmd(dir, "go", "generate", "-v", "./...").Run()
+	})
+}
+
+func forEachGoMod(f func(dir string) error) error {
+	return filepath.WalkDir(".", func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if d.IsDir() || d.Name() != "go.mod" {
+			return nil
+		}
+		return f(filepath.Dir(path))
+	})
+}
+
+func cmd(dir string, command string, args ...string) *exec.Cmd {
+	cmd := exec.Command(command, args...)
+	cmd.Dir = dir
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return cmd
 }
