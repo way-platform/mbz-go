@@ -5,6 +5,30 @@ info:
   version: 1.0.0
 
 actions:
+  - target: $.components.schemas.Service
+    description: "Consolidate Service entities"
+    update:
+      properties:
+        commands:
+          description: The list of commands the generic-service consists of.
+          items:
+            $ref: "#/components/schemas/Command"
+          type: array
+        signals:
+          description: The list of signals the generic-service consists of.
+          items:
+            $ref: "#/components/schemas/Signal"
+          type: array
+
+  - target: $.components.schemas.ServiceWithSignalsAndCommands
+    description: "Remove ServiceWithSignalsAndCommands"
+    remove: true
+
+  - target: $..[?(@.$ref=="#/components/schemas/ServiceWithSignalsAndCommands")]
+    description: "Replace ServiceWithSignalsAndCommands with Service"
+    update:
+      $ref: "#/components/schemas/Service"
+
   - target: $.paths
     description: "Skip code generation for requests"
     remove: true
@@ -47,3 +71,18 @@ actions:
   - target: $.components.schemas..[?(@ =~ /_Internal$/)]
     description: "Remove _Internal schema variants"
     remove: true
+
+  - target: $.components.schemas
+    description: "Add ConsentModel enum"
+    update:
+      ConsentModel:
+        type: string
+        description: The required consent model
+        example: fleet
+        enum:
+          - fleet
+          - vehicle_owner
+      Service:
+        properties:
+          consent:
+            $ref: "#/components/schemas/ConsentModel"

@@ -57,7 +57,7 @@ components:
                 services:
                     description: The list of existing generic-services.
                     items:
-                        $ref: '#/components/schemas/ServiceWithSignalsAndCommands'
+                        $ref: '#/components/schemas/Service'
                     type: array
                     x-go-type-skip-optional-pointer: true
                 version:
@@ -81,6 +81,7 @@ components:
                     example: fleet
                     type: string
                     x-go-type-skip-optional-pointer: true
+                    $ref: "#/components/schemas/ConsentModel"
                 countryCode:
                     default: GLOBAL
                     description: The regional accessibility
@@ -109,76 +110,25 @@ components:
                             - FLEET_CONSENT_RESTRICTED_MARKET
                     type: array
                     x-go-type-skip-optional-pointer: true
-            required:
-                - ciamScope
-                - consent
-                - id
-                - name
-                - role
-                - roles
-            type: object
-        ServiceWithSignalsAndCommands:
-            properties:
-                ciamScope:
-                    description: The required CIAM scope
-                    type: string
-                    x-go-type-skip-optional-pointer: true
                 commands:
                     description: The list of commands the generic-service consists of.
                     items:
-                        $ref: '#/components/schemas/Command'
-                    type: array
-                    x-go-type-skip-optional-pointer: true
-                consent:
-                    description: The required consent model
-                    enum:
-                        - fleet
-                        - vehicle_owner
-                    example: fleet
-                    type: string
-                    x-go-type-skip-optional-pointer: true
-                countryCode:
-                    default: GLOBAL
-                    description: The regional accessibility
-                    type: string
-                    x-go-type-skip-optional-pointer: true
-                id:
-                    description: The id of the generic-service
-                    example: '1001'
-                    type: string
-                    x-go-type-skip-optional-pointer: true
-                name:
-                    description: The name of the generic-service.
-                    example: Mileage
-                    type: string
-                    x-go-type-skip-optional-pointer: true
-                roles:
-                    items:
-                        description: The list with required access roles
-                        enum:
-                            - FLEET_CONSENT_STANDARD
-                            - FLEET_CONSENT_DOOR_LOCK_UNLOCK
-                            - FLEET_CONSENT_IMMOBILIZER
-                            - FLEET_CONSENT_DRIVER
-                            - VEHICLE_OWNER_CONSENT_STANDARD
-                            - FLEET_CONSENT_RESTRICTED_MARKET
+                        $ref: "#/components/schemas/Command"
                     type: array
                     x-go-type-skip-optional-pointer: true
                 signals:
                     description: The list of signals the generic-service consists of.
                     items:
-                        $ref: '#/components/schemas/Signal'
+                        $ref: "#/components/schemas/Signal"
                     type: array
                     x-go-type-skip-optional-pointer: true
             required:
                 - ciamScope
-                - commands
                 - consent
                 - id
                 - name
                 - role
                 - roles
-                - signals
             type: object
         Signal:
             properties:
@@ -254,6 +204,13 @@ components:
                 - name
                 - sendingBehaviour
             type: object
+        ConsentModel:
+            type: string
+            description: The required consent model
+            example: fleet
+            enum:
+                - fleet
+                - vehicle_owner
 info:
     description: 'This is a Microservice which allows to retrieve the list of available services. It belongs to the Management API family.
 
