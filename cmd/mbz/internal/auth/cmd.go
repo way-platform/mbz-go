@@ -2,8 +2,10 @@ package auth
 
 import (
 	"encoding/json"
+	"fmt"
 	"log/slog"
 	"os"
+	"time"
 
 	"github.com/adrg/xdg"
 	"github.com/spf13/cobra"
@@ -13,7 +15,7 @@ import (
 
 // NewClient creates a new Mercedes-Benz Management API client using the current CLI credentials.
 func NewClient() (*mbz.Client, error) {
-	cf, err := readCredentialsFile()
+	cf, err := ReadFile()
 	if err != nil {
 		return nil, err
 	}
@@ -54,7 +56,7 @@ func newLoginCommand() *cobra.Command {
 		if err != nil {
 			return err
 		}
-		if err := writeCredentialsFile(&credentialsFile{
+		if err := writeFile(&File{
 			Region:      mbz.Region(*region),
 			Credentials: *token,
 		}); err != nil {
@@ -71,7 +73,7 @@ func newLogoutCommand() *cobra.Command {
 		Use:   "logout",
 		Short: "Logout from the Mercedes-Benz Management API",
 		RunE: func(cmd *cobra.Command, _ []string) error {
-			if err := removeCredentialsFile(); err != nil {
+			if err := removeFile(); err != nil {
 				return err
 			}
 			cmd.Println("Logged out.")
@@ -80,56 +82,63 @@ func newLogoutCommand() *cobra.Command {
 	}
 }
 
-// credentialsFile storing authentication credentials for the CLI.
-type credentialsFile struct {
+// File storing authentication credentials for the CLI.
+type File struct {
 	// Region is the region of the credentials.
 	Region mbz.Region `json:"region"`
 	// Credentials is the current stored client credentials.
 	Credentials oauth2.Token `json:"clientCredentials"`
 }
 
-func resolveCredentialsFilepath() (string, error) {
+func (cf *File) isExpired() bool {
+	return cf.Credentials.Expiry.Before(time.Now())
+}
+
+func resolveFilepath() (string, error) {
 	return xdg.ConfigFile("mbz-go/auth.json")
 }
 
-// readCredentialsFile reads the currently stored [credentialsFile].
-func readCredentialsFile() (*credentialsFile, error) {
-	credentialsFilepath, err := resolveCredentialsFilepath()
+// ReadFile reads the currently stored [File].
+func ReadFile() (*File, error) {
+	fp, err := resolveFilepath()
 	if err != nil {
 		return nil, err
 	}
-	if _, err := os.Stat(credentialsFilepath); err != nil {
+	if _, err := os.Stat(fp); err != nil {
 		return nil, err
 	}
-	data, err := os.ReadFile(credentialsFilepath)
+	data, err := os.ReadFile(fp)
 	if err != nil {
 		return nil, err
 	}
-	var cf credentialsFile
-	if err := json.Unmarshal(data, &cf); err != nil {
+	var f File
+	if err := json.Unmarshal(data, &f); err != nil {
 		return nil, err
 	}
-	return &cf, nil
+	if f.isExpired() {
+		return nil, fmt.Errorf("credentials expired, please login again")
+	}
+	return &f, nil
 }
 
-// writeCredentialsFile writes the stored [credentialsFile].
-func writeCredentialsFile(cf *credentialsFile) error {
-	credentialsFilepath, err := resolveCredentialsFilepath()
+// writeFile writes the stored [credentialsFile].
+func writeFile(f *File) error {
+	fp, err := resolveFilepath()
 	if err != nil {
 		return err
 	}
-	data, err := json.MarshalIndent(cf, "", "  ")
+	data, err := json.MarshalIndent(f, "", "  ")
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(credentialsFilepath, data, 0o600)
+	return os.WriteFile(fp, data, 0o600)
 }
 
-// removeCredentialsFile removes the stored [credentialsFile].
-func removeCredentialsFile() error {
-	credentialsFilepath, err := resolveCredentialsFilepath()
+// removeFile removes the stored [File].
+func removeFile() error {
+	fp, err := resolveFilepath()
 	if err != nil {
 		return err
 	}
-	return os.RemoveAll(credentialsFilepath)
+	return os.RemoveAll(fp)
 }
