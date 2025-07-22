@@ -438,16 +438,6 @@ components:
         - serviceId
         - status
       type: object
-    SupportedVehicle:
-      properties:
-        vin:
-          description: The VIN (vehicle identification number) of the vehicle
-          example: WDD00000000000000
-          type: string
-          x-go-type-skip-optional-pointer: true
-      required:
-        - vin
-      type: object
     TooManyObjectsToProcess:
       properties:
         detail:
@@ -642,6 +632,7 @@ components:
         - EXPIRED
         - INACTIVE
         - NOT_AVAILABLE
+      x-go-type-skip-optional-pointer: true
 info:
   description: >
 

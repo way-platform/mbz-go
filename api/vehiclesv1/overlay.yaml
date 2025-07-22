@@ -5,36 +5,9 @@ info:
   version: 1.0.0
 
 actions:
-  - target: $.paths
-    description: "Skip code generation for requests"
+  - target: $.components.schemas.SupportedVehicle
+    description: "Remove SupportedVehicle"
     remove: true
-
-  - target: $.components.responses
-    description: "Skip code generation for responses"
-    remove: true
-
-  - target: $.components.securitySchemes
-    description: "Skip code generation for security schemes"
-    remove: true
-
-  - target: $..[?(@.format == "uuid")].format
-    remove: true
-
-  - target: $..[?(@.type=="array")]
-    description: "Skip pointer to Go slices"
-    update:
-      x-go-type-skip-optional-pointer: true
-
-  - target: $..[?(@.type=="string")]
-    description: "Skip optional pointer for strings"
-    update:
-      x-go-type-skip-optional-pointer: true
-
-  - target: $..[?(@.format=="date-time")]
-    description: "Skip optional pointer for timestamps"
-    update:
-      x-go-type-skip-optional-pointer: true
-      x-omitzero: true
 
   - target: $.components.schemas..[?(@ =~ /_Public$/)]
     description: "Remove _Public schema variants"
@@ -89,3 +62,34 @@ actions:
         properties:
           desiredStatus:
             $ref: "#/components/schemas/Status"
+
+  - target: $.paths
+    description: "Skip code generation for requests"
+    remove: true
+
+  - target: $.components.responses
+    description: "Skip code generation for responses"
+    remove: true
+
+  - target: $.components.securitySchemes
+    description: "Skip code generation for security schemes"
+    remove: true
+
+  - target: $..[?(@.format == "uuid")].format
+    remove: true
+
+  - target: $..[?(@.type=="array")]
+    description: "Skip pointer to Go slices"
+    update:
+      x-go-type-skip-optional-pointer: true
+
+  - target: $..[?(@.type=="string")]
+    description: "Skip optional pointer for strings"
+    update:
+      x-go-type-skip-optional-pointer: true
+
+  - target: $..[?(@.format=="date-time")]
+    description: "Skip optional pointer for timestamps"
+    update:
+      x-go-type-skip-optional-pointer: true
+      x-omitzero: true

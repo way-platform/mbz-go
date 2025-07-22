@@ -13,7 +13,7 @@ import (
 // GetVehicleCompatibilityRequest is the request for [Client.GetVehicleCompatibility].
 type GetVehicleCompatibilityRequest struct {
 	// VIN of the vehicle to get the compatibility for.
-	VIN string
+	VIN string `json:"vin"`
 }
 
 // GetVehicleCompatibilityResponse is the response for [Client.GetVehicleCompatibility].
@@ -42,7 +42,6 @@ func (c *Client) GetVehicleCompatibility(ctx context.Context, request *GetVehicl
 	if err != nil {
 		return nil, err
 	}
-	httpRequest.Header.Set("Content-Type", "application/json")
 	httpResponse, err := c.httpClient.Do(httpRequest)
 	if err != nil {
 		return nil, err

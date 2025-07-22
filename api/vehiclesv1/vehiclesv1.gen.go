@@ -247,12 +247,6 @@ type ServiceStatus struct {
 // Status Status of a service
 type Status string
 
-// SupportedVehicle defines model for SupportedVehicle.
-type SupportedVehicle struct {
-	// VIN The VIN (vehicle identification number) of the vehicle
-	VIN string `json:"vin"`
-}
-
 // TooManyObjectsToProcess defines model for TooManyObjectsToProcess.
 type TooManyObjectsToProcess struct {
 	Detail string `json:"detail"`

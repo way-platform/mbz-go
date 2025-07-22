@@ -21,8 +21,8 @@ components:
                         - NOT_AVAILABLE
                         - INACTIVE
                     type: string
-                    x-go-type-skip-optional-pointer: true
                     $ref: "#/components/schemas/Status"
+                    x-go-type-skip-optional-pointer: true
             required:
                 - countryCode
                 - serviceId
@@ -187,8 +187,8 @@ components:
                         - ACTIVE
                         - INACTIVE
                     type: string
-                    x-go-type-skip-optional-pointer: true
                     $ref: "#/components/schemas/Status"
+                    x-go-type-skip-optional-pointer: true
                 serviceId:
                     description: ID of the generic-service
                     example: '1001'
@@ -266,8 +266,8 @@ components:
                         - INACTIVE
                     example: ACTIVE
                     type: string
-                    x-go-type-skip-optional-pointer: true
                     $ref: "#/components/schemas/Status"
+                    x-go-type-skip-optional-pointer: true
                 orderId:
                     description: The ID of the order
                     example: 21354891-ddbf-44b5-8014-4ace3a6bed69
@@ -293,8 +293,8 @@ components:
                         - NOT_AVAILABLE
                     example: ACTIVATION_PENDING
                     type: string
-                    x-go-type-skip-optional-pointer: true
                     $ref: "#/components/schemas/Status"
+                    x-go-type-skip-optional-pointer: true
             required:
                 - approvalTimestamp
                 - countryCode
@@ -371,8 +371,8 @@ components:
                         - EXPIRED
                         - NOT_AVAILABLE
                     type: string
-                    x-go-type-skip-optional-pointer: true
                     $ref: "#/components/schemas/Status"
+                    x-go-type-skip-optional-pointer: true
                 validFrom:
                     description: Start of the validity period (Epoch Milliseconds). The time when the license became ACTIVE.
                     format: int64
@@ -432,8 +432,8 @@ components:
                         - ACTIVATION_FAILED
                         - NOT_AVAILABLE
                     type: string
-                    x-go-type-skip-optional-pointer: true
                     $ref: "#/components/schemas/Status"
+                    x-go-type-skip-optional-pointer: true
                 orderId:
                     description: The ID of the order
                     example: 21354891-ddbf-44b5-8014-4ace3a6bed69
@@ -457,8 +457,8 @@ components:
                         - ACTIVATION_FAILED
                         - NOT_AVAILABLE
                     type: string
-                    x-go-type-skip-optional-pointer: true
                     $ref: "#/components/schemas/Status"
+                    x-go-type-skip-optional-pointer: true
             required:
                 - countryCode
                 - deltaPush
@@ -466,16 +466,6 @@ components:
                 - orderTime
                 - serviceId
                 - status
-            type: object
-        SupportedVehicle:
-            properties:
-                vin:
-                    description: The VIN (vehicle identification number) of the vehicle
-                    example: WDD00000000000000
-                    type: string
-                    x-go-type-skip-optional-pointer: true
-            required:
-                - vin
             type: object
         TooManyObjectsToProcess:
             properties:
@@ -591,8 +581,8 @@ components:
                         - ACTIVE
                         - INACTIVE
                     type: string
-                    x-go-type-skip-optional-pointer: true
                     $ref: "#/components/schemas/Status"
+                    x-go-type-skip-optional-pointer: true
                 serviceId:
                     description: ID of the generic-service
                     example: '2001'
@@ -670,6 +660,7 @@ components:
                 - EXPIRED
                 - INACTIVE
                 - NOT_AVAILABLE
+            x-go-type-skip-optional-pointer: true
 info:
     description: '
 
