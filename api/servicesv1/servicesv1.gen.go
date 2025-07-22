@@ -15,24 +15,6 @@ const (
 	ServiceWithSignalsAndCommandsConsentVehicleOwner ServiceWithSignalsAndCommandsConsent = "vehicle_owner"
 )
 
-// Defines values for ServiceWithSignalsAndCommandsExternalConsent.
-const (
-	ServiceWithSignalsAndCommandsExternalConsentFleet        ServiceWithSignalsAndCommandsExternalConsent = "fleet"
-	ServiceWithSignalsAndCommandsExternalConsentVehicleOwner ServiceWithSignalsAndCommandsExternalConsent = "vehicle_owner"
-)
-
-// Defines values for ServiceExternalConsent.
-const (
-	ServiceExternalConsentFleet        ServiceExternalConsent = "fleet"
-	ServiceExternalConsentVehicleOwner ServiceExternalConsent = "vehicle_owner"
-)
-
-// Defines values for ServiceInternalConsent.
-const (
-	ServiceInternalConsentFleet        ServiceInternalConsent = "fleet"
-	ServiceInternalConsentVehicleOwner ServiceInternalConsent = "vehicle_owner"
-)
-
 // Defines values for SignalDataType.
 const (
 	SignalDataTypeBoolean SignalDataType = "boolean"
@@ -84,68 +66,8 @@ const (
 	SignalUnitV             SignalUnit = "V"
 )
 
-// Defines values for SignalExternalDataType.
-const (
-	SignalExternalDataTypeBoolean SignalExternalDataType = "boolean"
-	SignalExternalDataTypeDouble  SignalExternalDataType = "double"
-	SignalExternalDataTypeInt     SignalExternalDataType = "int"
-	SignalExternalDataTypeString  SignalExternalDataType = "string"
-	SignalExternalDataTypeUint16  SignalExternalDataType = "uint16"
-	SignalExternalDataTypeUint32  SignalExternalDataType = "uint32"
-	SignalExternalDataTypeUint8   SignalExternalDataType = "uint8"
-)
-
-// Defines values for SignalExternalSendingBehaviour.
-const (
-	SignalExternalSendingBehaviourONCHANGE             SignalExternalSendingBehaviour = "ON_CHANGE"
-	SignalExternalSendingBehaviourONCHARGINGCYCLE      SignalExternalSendingBehaviour = "ON_CHARGING_CYCLE"
-	SignalExternalSendingBehaviourONCHARGINGCYCLEEND   SignalExternalSendingBehaviour = "ON_CHARGING_CYCLE_END"
-	SignalExternalSendingBehaviourONCHARGINGDETECTION  SignalExternalSendingBehaviour = "ON_CHARGING_DETECTION"
-	SignalExternalSendingBehaviourONCHARGINGSESSION    SignalExternalSendingBehaviour = "ON_CHARGING_SESSION"
-	SignalExternalSendingBehaviourONCHARGINGSESSIONEND SignalExternalSendingBehaviour = "ON_CHARGING_SESSION_END"
-	SignalExternalSendingBehaviourONIGNITIONLOCK       SignalExternalSendingBehaviour = "ON_IGNITION_LOCK"
-	SignalExternalSendingBehaviourONINTERVAL120SEC     SignalExternalSendingBehaviour = "ON_INTERVAL_120_SEC"
-	SignalExternalSendingBehaviourONINTERVAL15SEC      SignalExternalSendingBehaviour = "ON_INTERVAL_15_SEC"
-	SignalExternalSendingBehaviourONINTERVAL30SEC      SignalExternalSendingBehaviour = "ON_INTERVAL_30_SEC"
-	SignalExternalSendingBehaviourONRECHARGESESSION    SignalExternalSendingBehaviour = "ON_RECHARGE_SESSION"
-	SignalExternalSendingBehaviourONREFRESH            SignalExternalSendingBehaviour = "ON_REFRESH"
-	SignalExternalSendingBehaviourONREFUELINGEND       SignalExternalSendingBehaviour = "ON_REFUELING_END"
-	SignalExternalSendingBehaviourONREFUELSESSION      SignalExternalSendingBehaviour = "ON_REFUEL_SESSION"
-	SignalExternalSendingBehaviourONTRIP               SignalExternalSendingBehaviour = "ON_TRIP"
-	SignalExternalSendingBehaviourONTRIPEND            SignalExternalSendingBehaviour = "ON_TRIP_END"
-)
-
-// Defines values for SignalExternalUnit.
-const (
-	SignalExternalUnitDays          SignalExternalUnit = "days"
-	SignalExternalUnitDegreeCelsius SignalExternalUnit = "degree celsius"
-	SignalExternalUnitDegrees       SignalExternalUnit = "degrees"
-	SignalExternalUnitKPa           SignalExternalUnit = "kPa"
-	SignalExternalUnitKW            SignalExternalUnit = "kW"
-	SignalExternalUnitKWh           SignalExternalUnit = "kWh"
-	SignalExternalUnitKWh100Km      SignalExternalUnit = "kWh/100km"
-	SignalExternalUnitKm            SignalExternalUnit = "km"
-	SignalExternalUnitKmH           SignalExternalUnit = "km/h"
-	SignalExternalUnitL100Km        SignalExternalUnit = "l/100km"
-	SignalExternalUnitLiter         SignalExternalUnit = "liter"
-	SignalExternalUnitMilliseconds  SignalExternalUnit = "milliseconds"
-	SignalExternalUnitMin           SignalExternalUnit = "min"
-	SignalExternalUnitPercent       SignalExternalUnit = "percent"
-	SignalExternalUnitSeconds       SignalExternalUnit = "seconds"
-	SignalExternalUnitV             SignalExternalUnit = "V"
-)
-
 // Command defines model for Command.
 type Command struct {
-	// Mandatory Indicates if the command is mandatory for the generic service.
-	Mandatory bool `json:"mandatory"`
-
-	// Name The name of the command.
-	Name string `json:"name"`
-}
-
-// CommandExternal defines model for Command_External.
-type CommandExternal struct {
 	// Mandatory Indicates if the command is mandatory for the generic service.
 	Mandatory bool `json:"mandatory"`
 
@@ -171,58 +93,10 @@ type ErrorResponse struct {
 	Type string `json:"type,omitempty"`
 }
 
-// ErrorResponseExternal defines model for ErrorResponse_External.
-type ErrorResponseExternal struct {
-	// Detail details why this error occurred.
-	Detail string `json:"detail,omitempty"`
-
-	// Instance URI where this error occurred
-	Instance string `json:"instance,omitempty"`
-
-	// StatusCode status code of this error (e.g. http status code)
-	StatusCode *int32 `json:"statusCode,omitempty"`
-
-	// Title title of this error (e.g. http status reason phrase)
-	Title string `json:"title,omitempty"`
-
-	// Type URI-reference for type information or 'about:blank' if no more information is available
-	Type string `json:"type,omitempty"`
-}
-
-// ErrorResponseInternal defines model for ErrorResponse_Internal.
-type ErrorResponseInternal struct {
-	// Detail details why this error occurred.
-	Detail string `json:"detail,omitempty"`
-
-	// Instance URI where this error occurred
-	Instance string `json:"instance,omitempty"`
-
-	// StatusCode status code of this error (e.g. http status code)
-	StatusCode *int32 `json:"statusCode,omitempty"`
-
-	// Title title of this error (e.g. http status reason phrase)
-	Title string `json:"title,omitempty"`
-
-	// Type URI-reference for type information or 'about:blank' if no more information is available
-	Type string `json:"type,omitempty"`
-}
-
 // GetAllServicesResponse defines model for GetAllServicesResponse.
 type GetAllServicesResponse struct {
 	// Services The list of existing generic-services.
 	Services []Service `json:"services"`
-}
-
-// GetAllServicesResponseExternal defines model for GetAllServicesResponse_External.
-type GetAllServicesResponseExternal struct {
-	// Services The list of existing generic-services.
-	Services []ServiceExternal `json:"services"`
-}
-
-// GetAllServicesResponseInternal defines model for GetAllServicesResponse_Internal.
-type GetAllServicesResponseInternal struct {
-	// Services The list of existing generic-services.
-	Services []ServiceInternal `json:"services"`
 }
 
 // GetAllServicesWithSignalsAndCommandsResponse defines model for GetAllServicesWithSignalsAndCommandsResponse.
@@ -232,12 +106,6 @@ type GetAllServicesWithSignalsAndCommandsResponse struct {
 
 	// Version The version of the services spec.
 	Version string `json:"version,omitempty"`
-}
-
-// GetAllServicesWithSignalsAndCommandsResponseExternal defines model for GetAllServicesWithSignalsAndCommandsResponse_External.
-type GetAllServicesWithSignalsAndCommandsResponseExternal struct {
-	// Services The list of existing generic-services.
-	Services []ServiceWithSignalsAndCommandsExternal `json:"services"`
 }
 
 // Service defines model for Service.
@@ -290,78 +158,6 @@ type ServiceWithSignalsAndCommands struct {
 // ServiceWithSignalsAndCommandsConsent The required consent model
 type ServiceWithSignalsAndCommandsConsent string
 
-// ServiceWithSignalsAndCommandsExternal defines model for ServiceWithSignalsAndCommands_External.
-type ServiceWithSignalsAndCommandsExternal struct {
-	// CiamScope The required CIAM scope
-	CiamScope string `json:"ciamScope"`
-
-	// Commands The list of commands the generic-service consists of.
-	Commands []CommandExternal `json:"commands"`
-
-	// Consent The required consent model
-	Consent ServiceWithSignalsAndCommandsExternalConsent `json:"consent"`
-
-	// CountryCode The regional accessibility
-	CountryCode string `json:"countryCode,omitempty"`
-
-	// ID The id of the generic-service
-	ID string `json:"id"`
-
-	// Name The name of the generic-service.
-	Name  string        `json:"name"`
-	Roles []interface{} `json:"roles"`
-
-	// Signals The list of signals the generic-service consists of.
-	Signals []SignalExternal `json:"signals"`
-}
-
-// ServiceWithSignalsAndCommandsExternalConsent The required consent model
-type ServiceWithSignalsAndCommandsExternalConsent string
-
-// ServiceExternal defines model for Service_External.
-type ServiceExternal struct {
-	// CiamScope The required CIAM scope
-	CiamScope string `json:"ciamScope"`
-
-	// Consent The required consent model
-	Consent ServiceExternalConsent `json:"consent"`
-
-	// CountryCode The regional accessibility
-	CountryCode string `json:"countryCode,omitempty"`
-
-	// ID The id of the generic-service
-	ID string `json:"id"`
-
-	// Name The name of the generic-service.
-	Name  string        `json:"name"`
-	Roles []interface{} `json:"roles"`
-}
-
-// ServiceExternalConsent The required consent model
-type ServiceExternalConsent string
-
-// ServiceInternal defines model for Service_Internal.
-type ServiceInternal struct {
-	// CiamScope The required CIAM scope
-	CiamScope string `json:"ciamScope"`
-
-	// Consent The required consent model
-	Consent ServiceInternalConsent `json:"consent"`
-
-	// CountryCode The regional accessibility
-	CountryCode string `json:"countryCode,omitempty"`
-
-	// ID The id of the generic-service
-	ID string `json:"id"`
-
-	// Name The name of the generic-service.
-	Name  string        `json:"name"`
-	Roles []interface{} `json:"roles"`
-}
-
-// ServiceInternalConsent The required consent model
-type ServiceInternalConsent string
-
 // Signal defines model for Signal.
 type Signal struct {
 	// DataType Describes the dataType of the signal.
@@ -404,46 +200,3 @@ type SignalSendingBehaviour string
 
 // SignalUnit Describes the unit of the signal.
 type SignalUnit string
-
-// SignalExternal defines model for Signal_External.
-type SignalExternal struct {
-	// DataType Describes the dataType of the signal.
-	DataType SignalExternalDataType `json:"dataType"`
-
-	// Mandatory Indicates if the signal is mandatory for the generic-service.
-	Mandatory bool `json:"mandatory"`
-
-	// Name The name of the signal.
-	Name string `json:"name"`
-
-	// SendingBehaviour A list that describes the sending behaviour(s) of the signal in the PUSH-API context.
-	SendingBehaviour []SignalExternalSendingBehaviour `json:"sendingBehaviour"`
-
-	// Unit Describes the unit of the signal.
-	Unit SignalExternalUnit `json:"unit,omitempty"`
-}
-
-// SignalExternalDataType Describes the dataType of the signal.
-type SignalExternalDataType string
-
-// SignalExternalSendingBehaviour Describes a sending behaviour of a signal in the PUSH-API context:
-//   - *ON_CHANGE* - The signal is published as soon as its value changes and the delivery is technically possible.
-//   - *ON_INTERVAL_120_SEC* - The signal is published at regular intervals of 120 seconds, if available.
-//   - *ON_INTERVAL_30_SEC* - The signal is published at regular intervals of 30 seconds, if available.
-//   - *ON_INTERVAL_15_SEC* - The signal is published at regular intervals of 15 seconds, if available.
-//   - *ON_TRIP* - The signal is consumed (not published) during a trip for the purpose of aggregation at the end.
-//   - *ON_TRIP_END* - The signal is published when the end of a trip is detected for a vehicle and all other trip-related signals have been received for said vehicle.
-//   - *ON_CHARGING_SESSION* - The signal is consumed (not published) during a charging session for the purpose of aggregation at the end.
-//   - *ON_CHARGING_SESSION_END* - The signal is published when the end of a charging session is detected for a vehicle and all other charging session related signals have been received for said vehicle.
-//   - *ON_IGNITION_LOCK* - The signal is published when the ignition lock is detected for a vehicle.
-//   - *ON_REFUEL_SESSION* - The signal is consumed (not published) during refueling of a vehicle with combustion engine for the purpose of aggregation.
-//   - *ON_REFUELING_END* - The signal is published when the refueling of a vehicle with combustion engine has finished.
-//   - *ON_CHARGING_CYCLE* - The signal is consumed (not published) during a charging cycle for the purpose of aggregation.
-//   - *ON_CHARGING_CYCLE_END* - The signal is published when the end of a charging cycle is detected.
-//   - *ON_RECHARGE_SESSION* - The signal is consumed (not published) during the battery charging process of an electrical or hybrid vehicle.
-//   - *ON_CHARGING_DETECTION* - The signal is published as soon as the charging process of the battery of an electrical or hybrid vehicle has been active for a set duration.
-//   - *ON_REFRESH* - The signal is published as soon as its value or timestamp changes and the delivery is technically possible.
-type SignalExternalSendingBehaviour string
-
-// SignalExternalUnit Describes the unit of the signal.
-type SignalExternalUnit string

@@ -40,6 +40,10 @@ actions:
       x-go-type-skip-optional-pointer: true
       x-omitzero: true
 
-  - target: $.components.schemas..[?(@ =~ /_Public$/)]
-    description: "Remove _Public schema variants"
+  - target: $.components.schemas..[?(@ =~ /_External$/)]
+    description: "Remove _External schema variants"
+    remove: true
+
+  - target: $.components.schemas..[?(@ =~ /_Internal$/)]
+    description: "Remove _Internal schema variants"
     remove: true
