@@ -1,0 +1,14 @@
+builds:
+  - binary: mbz
+    dir: ./cmd/mbz
+    main: main.go
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+      - windows
+
+release:
+  github:
+  prerelease: auto

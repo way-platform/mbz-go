@@ -7,6 +7,7 @@ replace github.com/way-platform/mbz-go => ../..
 require (
 	github.com/adrg/xdg v0.5.3
 	github.com/charmbracelet/fang v0.3.0
+	github.com/charmbracelet/lipgloss/v2 v2.0.0-beta.2
 	github.com/spf13/cobra v1.9.1
 	github.com/twmb/franz-go v1.19.5
 	github.com/way-platform/mbz-go v0.0.0-00010101000000-000000000000
@@ -15,7 +16,6 @@ require (
 
 require (
 	github.com/charmbracelet/colorprofile v0.3.1 // indirect
-	github.com/charmbracelet/lipgloss/v2 v2.0.0-beta.2 // indirect
 	github.com/charmbracelet/x/ansi v0.8.0 // indirect
 	github.com/charmbracelet/x/cellbuf v0.0.13 // indirect
 	github.com/charmbracelet/x/exp/charmtone v0.0.0-20250603201427-c31516f43444 // indirect
@@ -25,6 +25,7 @@ require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/klauspost/compress v1.18.0 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
+	github.com/magefile/mage v1.15.0 // indirect
 	github.com/mattn/go-runewidth v0.0.16 // indirect
 	github.com/muesli/cancelreader v0.2.2 // indirect
 	github.com/muesli/mango v0.1.0 // indirect
