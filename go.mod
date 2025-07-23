@@ -5,6 +5,7 @@ go 1.24.4
 require (
 	github.com/hashicorp/go-retryablehttp v0.7.8
 	golang.org/x/oauth2 v0.30.0
+	google.golang.org/protobuf v1.36.6
 )
 
 require (

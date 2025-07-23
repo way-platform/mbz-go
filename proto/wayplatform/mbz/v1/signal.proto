@@ -1,0 +1,621 @@
+syntax = "proto3";
+
+package wayplatform.mbz.v1;
+
+import "wayplatform/mbz/v1/annotations.proto";
+
+// SignalName is an enum of all known Mercedes-Benz Kafka message signal names.
+enum SignalName {
+  // Default value. This value is unused.
+  SIGNAL_NAME_UNSPECIFIED = 0 [(signal_name) = ""];
+
+  // Indicates whether the anti-theft system is armed.
+  ANTITHEFTSYSTEM_ALARM_ISACTIVE = 1 [(signal_name) = "AntiTheftSystem.Alarm.IsActive"];
+
+  // Indicates whether the anti-theft system alarm is triggered.
+  ANTITHEFTSYSTEM_ALARM_ISTRIGGERED = 2 [
+    (signal_name) = "AntiTheftSystem.Alarm.IsTriggered"
+  ];
+
+  // Provides the reason why the last theft warning has been triggered.
+  //
+  // * BASIC
+  // * DOORS_FRONT_LEFT
+  // * DOORS_FRONT_RIGHT
+  // * DOORS_REAR_LEFT
+  // * DOOR_REAR_RIGHT
+  // * HOOD
+  // * TRUNK
+  // * PANIC
+  // * GLOVEBOX
+  // * CENTERBOX
+  // * SIREN
+  // * NONE
+  // * REARBOX
+  // * REMOTE
+  // * OTHER
+  ANTITHEFTSYSTEM_LASTTHEFTWARNING_REASON = 3 [
+    (signal_name) = "AntiTheftSystem.LastTheftWarning.Reason"
+  ];
+
+  // Indicates whether the interior protection sensors are active.
+  ANTITHEFTSYSTEM_PROTECTIONSENSORS_INTERIORPROTECTION_ISACTIVE = 4 [
+    (signal_name) = "AntiTheftSystem.ProtectionSensors.InteriorProtection.IsActive"
+  ];
+
+  // Indicates whether the interior protection sensors are triggered.
+  ANTITHEFTSYSTEM_PROTECTIONSENSORS_INTERIORPROTECTION_ISTRIGGERED = 5 [
+    (signal_name) = "AntiTheftSystem.ProtectionSensors.InteriorProtection.IsTriggered"
+  ];
+
+  // Indicates whether the tow protection sensors are active.
+  ANTITHEFTSYSTEM_PROTECTIONSENSORS_TOWPROTECTION_ISACTIVE = 6 [
+    (signal_name) = "AntiTheftSystem.ProtectionSensors.TowProtection.IsActive"
+  ];
+
+  // Indicates whether the tow protection sensors are triggered.
+  ANTITHEFTSYSTEM_PROTECTIONSENSORS_TOWPROTECTION_ISTRIGGERED = 7 [
+    (signal_name) = "AntiTheftSystem.ProtectionSensors.TowProtection.IsTriggered"
+  ];
+
+  // Indicates whether a brake fluid warning is triggered.
+  BRAKES_BRAKEFLUID_WARNING = 8 [(signal_name) = "Brakes.Brakefluid.Warning"];
+
+  // Indicates whether a pre-warning for the brake pads is triggered.
+  BRAKES_BRAKEPADS_PREWARNING = 9 [(signal_name) = "Brakes.Brakepads.PreWarning"];
+
+  // Indicates whether a warning for the brake pads is triggered.
+  BRAKES_BRAKEPADS_WARNING = 10 [(signal_name) = "Brakes.Brakepads.Warning"];
+
+  // Inidcates whether the park brake is engaged.
+  BRAKES_PARKBRAKE_ISENGAGED = 11 [(signal_name) = "Brakes.Parkbrake.IsEngaged"];
+
+  // Indicates whether the front left door is locked.
+  DOORS_FRONT_LEFT_ISLOCKED = 12 [(signal_name) = "Doors.Front.Left.IsLocked"];
+
+  // Indicates whether the front left door is open.
+  DOORS_FRONT_LEFT_ISOPEN = 13 [(signal_name) = "Doors.Front.Left.IsOpen"];
+
+  // Indicates whether the front right door is locked.
+  DOORS_FRONT_RIGHT_ISLOCKED = 14 [(signal_name) = "Doors.Front.Right.IsLocked"];
+
+  // Indicates whether the front right door is open.
+  DOORS_FRONT_RIGHT_ISOPEN = 15 [(signal_name) = "Doors.Front.Right.IsOpen"];
+
+  // Indicates whether the rear left door is locked.
+  DOORS_REAR_LEFT_ISLOCKED = 16 [(signal_name) = "Doors.Rear.Left.IsLocked"];
+
+  // Indicates whether the rear left door is open.
+  DOORS_REAR_LEFT_ISOPEN = 17 [(signal_name) = "Doors.Rear.Left.IsOpen"];
+
+  // Indicates whether the rear right door is locked.
+  DOORS_REAR_RIGHT_ISLOCKED = 18 [(signal_name) = "Doors.Rear.Right.IsLocked"];
+
+  // Indicates whether the rear right door is open.
+  DOORS_REAR_RIGHT_ISOPEN = 19 [(signal_name) = "Doors.Rear.Right.IsOpen"];
+
+  // Indicates whether the rooftop is open.
+  DOORS_ROOFTOP_ISOPEN = 20 [(signal_name) = "Doors.Rooftop.IsOpen"];
+
+  // Provides the characteristic of the latest sunroof event.
+  //
+  // * NONE = no event
+  // * SUNROOF_LIFTED_RAIN = sunroof in stroke position through rain
+  // * SUNROOF_LIFTED_AUTOMATIC = sunroof in stroke position through automatic
+  // * SUNROOF_LIFTED_TIMER = sunroof in stroke position through timer
+  DOORS_SUNROOF_EVENT = 21 [(signal_name) = "Doors.Sunroof.Event"];
+
+  // Provides the sunroof status.
+  //
+  // * TILT-SLIDE-ROOF_CLOSED = tilt/slide sunroof is closed
+  // * TILT-SLIDE-ROOF_OPEN = tilt/slide sunroof is complete open
+  // * LIFTING-ROOF_OPEN = lifting roof is open
+  // * TILT-SLIDE-ROOF_RUNNING = tilt/slide sunroof is running (only available if no differentiation between opening/closing possible)
+  // * TILT-SLIDE-ROOF_ANTI-BOOMING = tilt/slide sunroof in anti-booming position
+  // * SLIDE-ROOF_INTERMEDIATE = sliding roof in intermediate position
+  // * LIFTING-ROOF_INTERMEDIATE = lifting roof in intermediate position
+  // * OPENING = sunroof is opening
+  // * CLOSING = sunroof is closing
+  // * LIFTING-ROOF_ANTI-BOOMING = lifting anti booming
+  // * SUNROOF_INTERMEDIATE = sunroof is in intermediate position
+  // * LIFTING-ROOF_OPENING = lifting roof is opening
+  // * LIFTING-ROOF_CLOSING = lifting roof is closing
+  DOORS_SUNROOF_STATUS = 22 [(signal_name) = "Doors.Sunroof.Status"];
+
+  // Indicates whether the tankcap is open.
+  DOORS_TANKCAP_ISOPEN = 23 [(signal_name) = "Doors.Tankcap.IsOpen"];
+
+  // Indicates whether the trunk is locked.
+  DOORS_TRUNK_ISLOCKED = 24 [(signal_name) = "Doors.Trunk.IsLocked"];
+
+  // Indicates whether the trunk is open.
+  DOORS_TRUNK_ISOPEN = 25 [(signal_name) = "Doors.Trunk.IsOpen"];
+
+  // Inidcates whether the vehicle doors are locked.
+  DOORS_VEHICLE_ISLOCKED = 26 [(signal_name) = "Doors.Vehicle.IsLocked"];
+
+  // Electric energy consumption since reset in kilowatt-hours per 100 kilometer (kWh/100km). The value refers to the time a trip session was reset using the vehicles board computer. Only available for electric vehicles.
+  DRIVING_CONSUMPTION_ELECTRICAL_SINCERESET = 27 [
+    (signal_name) = "Driving.Consumption.Electrical.SinceReset"
+  ];
+
+  // Electric energy consumption from start in kilowatt-hours per 100 kilometer (kWh/100km). The value refers to time the ignition is turned on. Ignition-on starts a new trip session, unless the last ignition-off event took place within the last 4 hours. The data is aggregated in a 4 hour interval. Only available for electric vehicles.
+  DRIVING_CONSUMPTION_ELECTRICAL_SINCESTART = 28 [
+    (signal_name) = "Driving.Consumption.Electrical.SinceStart"
+  ];
+
+  // Liquid fuel consumption from reset in liter per 100 kilometer (l/100km). The value refers to the time a trip session was reset using the vehicles board computer.
+  DRIVING_CONSUMPTION_FUEL_SINCERESET = 29 [
+    (signal_name) = "Driving.Consumption.Fuel.SinceReset"
+  ];
+
+  // Liquid fuel consumption from start in liter per 100 kilometer (l/100km). The value refers to the time the ignition is turned on. Ignition-on starts a new trip session, unless the last ignition-off event took place within the last 4 hours. The data is aggregated in a 4 hour interval.
+  DRIVING_CONSUMPTION_FUEL_SINCESTART = 30 [
+    (signal_name) = "Driving.Consumption.Fuel.SinceStart"
+  ];
+
+  // Distance driven in kilometer (km) after the last trip session was reset.
+  //
+  // *NOTE:* For a plug-in hybrid vehicle, the value refers to the distance driven using the liquid fuel. The corresponding electrical distance for the vehicle can be seen in ***Driving.Distance.ZeroEmissions.SinceReset***
+  DRIVING_DISTANCE_SINCERESET = 31 [(signal_name) = "Driving.Distance.SinceReset"];
+
+  // Distance driven in kilometer (km) during a driving session. Ignition-on starts a new driving   session, unless the latest ignition-off event took place within the last 4 hours. The data is aggregated in a 4 hour interval.
+  //
+  //
+  // *NOTE:* For a plug-in hybrid vehicle, the value refers to the distance driven using the liquid fuel. The corresponding electrical distance for the vehicle can be seen in **Driving.Distance.ZeroEmissions.SinceStart**
+  DRIVING_DISTANCE_SINCESTART = 32 [(signal_name) = "Driving.Distance.SinceStart"];
+
+  // Distance driven in kilometer (km) with electrical engine support after the last driving session was reset using the vehicles board computer. Only available for plug-in hybrid vehicles.
+  DRIVING_DISTANCE_ZEROEMISSIONS_SINCERESET = 33 [
+    (signal_name) = "Driving.Distance.ZeroEmissions.SinceReset"
+  ];
+
+  // Distance driven in kilometer (km) with electrical engine during a driving session. Ignition-on starts a new driving session, unless the latest ignition-off event took place within the last 4 hours. The data is aggregated in a 4 hour interval. Only available for plug-in hybrid vehicles.
+  DRIVING_DISTANCE_ZEROEMISSIONS_SINCESTART = 34 [
+    (signal_name) = "Driving.Distance.ZeroEmissions.SinceStart"
+  ];
+
+  // Eco-score rating for acceleration in percentage (%).
+  DRIVING_ECOSCORE_ACCELERATION = 35 [(signal_name) = "Driving.EcoScore.Acceleration"];
+
+  // Eco-score bonus in kilometer (km). While driving eco-friendly these bonus kilometers are collected.
+  DRIVING_ECOSCORE_BONUSRANGE = 36 [(signal_name) = "Driving.EcoScore.BonusRange"];
+
+  // Eco-score rating for constant driving in percentage (%).
+  DRIVING_ECOSCORE_CONSTANCY = 37 [(signal_name) = "Driving.EcoScore.Constancy"];
+
+  // Eco-score rating free wheeling in percentage (%).
+  DRIVING_ECOSCORE_FREEWHEEL = 38 [(signal_name) = "Driving.EcoScore.Freewheel"];
+
+  // Lifetime odometer value of vehicle in kilometer (km).
+  DRIVING_ODOMETER_LIFETIME = 39 [(signal_name) = "Driving.Odometer.Lifetime"];
+
+  // Lifetime odometer high resolution value of vehicle in kilometer (km). The value is provided in 0.1km resolution
+  DRIVING_ODOMETER_LIFETIME_HIGHRESOLUTION = 40 [
+    (signal_name) = "Driving.Odometer.Lifetime.HighResolution"
+  ];
+
+  // Remaining range of AdBlue in kilometer (km).
+  DRIVING_RANGE_ADBLUE = 41 [(signal_name) = "Driving.Range.AdBlue"];
+
+  // Remaining range using electric engine in kilometer (km). Only available for electric & plug-in hybrid vehicles.
+  DRIVING_RANGE_ELECTRICAL = 42 [(signal_name) = "Driving.Range.Electrical"];
+
+  // Maximum electrical range when battery is fully charged (100% state of charge) in kilometer (km). This can vary depending on the environmental situation, e.g. outside temperature. Only available for electric & plug-in hybrid vehicles.
+  DRIVING_RANGE_ELECTRICAL_MAX = 43 [(signal_name) = "Driving.Range.Electrical.Max"];
+
+  // Remaining range using liquid fuel in kilometer (km).
+  DRIVING_RANGE_FUEL = 44 [(signal_name) = "Driving.Range.Fuel"];
+
+  // Indicates whether the remaining range with liquid fuel is critical.
+  DRIVING_RANGE_FUEL_WARNING = 45 [(signal_name) = "Driving.Range.Fuel.Warning"];
+
+  // Current vehicle speed in kilometers per hour (km/h).
+  DRIVING_SPEED_CURRENT = 46 [(signal_name) = "Driving.Speed.Current"];
+
+  // Average speed since reset in kilometers per hour (km/h). The value refers to the time a trip session was reset using the vehicles board computer.
+  DRIVING_SPEED_SINCERESET_AVERAGE = 47 [(signal_name) = "Driving.Speed.SinceReset.Average"];
+
+  // Average speed since start in kilometers per hour (km/h).
+  DRIVING_SPEED_SINCESTART_AVERAGE = 48 [(signal_name) = "Driving.Speed.SinceStart.Average"];
+
+  // State of charge at departure time in percent (%). Only available for electric & plug-in hybrid vehicles.
+  DRIVING_STATEOFCHARGE_DEPARTURE = 49 [(signal_name) = "Driving.StateOfCharge.Departure"];
+
+  // Current driving status of the vehicle.
+  DRIVING_STATUS = 50 [(signal_name) = "Driving.Status"];
+
+  // Driven time since reset in minutes. The value refers to the time a trip session was reset using the vehicles board computer.
+  DRIVING_TIME_SINCERESET = 51 [(signal_name) = "Driving.Time.SinceReset"];
+
+  // Driven time since start in minutes. The value refers to the time the ignition is turned on. Ignition-on starts a new trip session, unless the last ignition-off event took place within the last 4 hours. The data is aggregated in a 4 hour interval.
+  DRIVING_TIME_SINCESTART = 52 [(signal_name) = "Driving.Time.SinceStart"];
+
+  // Driven time with electrical engine support since reset in minutes. The value refers to the time a trip session was reset using the vehicles board computer. Only available for plug-in hybrid vehicles.
+  DRIVING_TIME_ZEROEMISSIONS_SINCERESET = 53 [
+    (signal_name) = "Driving.Time.ZeroEmissions.SinceReset"
+  ];
+
+  // Driven time with electrical engine support since start in minutes. The value refers to the time the ignition is turned on. Ignition-on starts a new trip session, unless the last ignition-off event took place within the last 4 hours. The data is aggregated in a 4 hour interval. Only available for plug-in hybrid vehicles.
+  DRIVING_TIME_ZEROEMISSIONS_SINCESTART = 54 [
+    (signal_name) = "Driving.Time.ZeroEmissions.SinceStart"
+  ];
+
+  // The time that acceleration was below the threshold of -0.2g in milliseconds (ms)
+  DRIVING_ACCELERATION_LATITUDE_NEGATIVEACCELERATIONOUTLIERS = 55 [
+    (signal_name) = "Driving.Acceleration.Latitude.NegativeAccelerationOutliers"
+  ];
+
+  // The time that acceleration was above the threshold of +0.2g in milliseconds (ms)
+  DRIVING_ACCELERATION_LATITUDE_POSITIVEACCELERATIONOUTLIERS = 56 [
+    (signal_name) = "Driving.Acceleration.Latitude.PositiveAccelerationOutliers"
+  ];
+
+  // The time that acceleration was withing the threshold of +/- 0.2g in milliseconds (ms)
+  DRIVING_ACCELERATION_LATITUDE_REGULARACCELERATIONS = 57 [
+    (signal_name) = "Driving.Acceleration.Latitude.RegularAccelerations"
+  ];
+
+  // The time that acceleration was below the threshold of -0.2g in milliseconds (ms)
+  DRIVING_ACCELERATION_LONGITUDE_NEGATIVEACCELERATIONOUTLIERS = 58 [
+    (signal_name) = "Driving.Acceleration.Longitude.NegativeAccelerationOutliers"
+  ];
+
+  // The time that acceleration was above the threshold of +0.2g in milliseconds (ms)
+  DRIVING_ACCELERATION_LONGITUDE_POSITIVEACCELERATIONOUTLIERS = 59 [
+    (signal_name) = "Driving.Acceleration.Longitude.PositiveAccelerationOutliers"
+  ];
+
+  // The time that acceleration was withing the threshold of +/- 0.2g in milliseconds (ms)
+  DRIVING_ACCELERATION_LONGITUDE_REGULARACCELERATIONS = 60 [
+    (signal_name) = "Driving.Acceleration.Longitude.RegularAccelerations"
+  ];
+
+  // Status of the AC charging coupler.
+  //
+  // * CABLE_PLUGGED_BOTH_SIDES = charging wire plugged on both sides
+  // * CABLE_PLUGGED_VEHICLE_SIDE = charging wire plugged on vehicle side
+  // * CABLE_UNPLUGGED = charging wire not plugged on vehicle side
+  // * PLUG_STATE_UNKNOWN = plugged state unknown e.g due to defect
+  ELECTRICALDRIVE_CHARGING_ACCOUPLER_STATUS = 61 [
+    (signal_name) = "ElectricalDrive.Charging.ACCoupler.Status"
+  ];
+
+  // Status of the DC charging coupler.
+  //
+  // * CABLE_PLUGGED_BOTH_SIDES = charging wire plugged on both sides
+  // * CABLE_PLUGGED_VEHICLE_SIDE = charging wire plugged on vehicle side
+  // * CABLE_UNPLUGGED = charging wire not plugged on vehicle side
+  // * PLUG_STATE_UNKNOWN = plugged state unknown e.g due to defect
+  ELECTRICALDRIVE_CHARGING_DCCOUPLER_STATUS = 62 [
+    (signal_name) = "ElectricalDrive.Charging.DCCoupler.Status"
+  ];
+
+  // Time when the vehicle will be fully charged, counted in minutes from midnight depending on the local time of the vehicle. Only available for electric & plug-in hybrid vehicles.
+  ELECTRICALDRIVE_CHARGING_ENDOFCHARGINGTIME = 63 [
+    (signal_name) = "ElectricalDrive.Charging.EndOfChargingTime"
+  ];
+
+  // Day when the vehicle will be fully charged. Only available for electric & plug-in hybrid vehicles.
+  // * MONDAY
+  // * TUESDAY
+  // * WEDNESDAY
+  // * THURSDAY
+  // * FRIDAY
+  // * SATURDAY
+  // * SUNDAY
+  ELECTRICALDRIVE_CHARGING_ENDOFCHARGINGTIMEWEEKDAY = 64 [
+    (signal_name) = "ElectricalDrive.Charging.EndOfChargingTimeWeekday"
+  ];
+
+  // Indicates whether the charging of the high voltage battery is active.
+  ELECTRICALDRIVE_CHARGING_ISACTIVE = 65 [
+    (signal_name) = "ElectricalDrive.Charging.IsActive"
+  ];
+
+  // Scheduled time for the nextDeparture while charging in minutes from midnight depending on the local time of the vehicle. Only available for electric vehicles.
+  ELECTRICALDRIVE_CHARGING_NEXTDEPARTURETIME = 66 [
+    (signal_name) = "ElectricalDrive.Charging.NextDepartureTime"
+  ];
+
+  // Scheduled weekday for the nextDeparture while charging. Only available for electric vehicles.
+  // * NOT_SET
+  // * MONDAY
+  // * TUESDAY
+  // * WEDNESDAY
+  // * THURSDAY
+  // * FRIDAY
+  // * SATURDAY
+  // * SUNDAY
+  ELECTRICALDRIVE_CHARGING_NEXTDEPARTURETIMEWEEKDAY = 67 [
+    (signal_name) = "ElectricalDrive.Charging.NextDepartureTimeWeekday"
+  ];
+
+  // Current conductive charging power in kilowatts (kW). This value is only valid while charging. Only available for electric & plug-in hybrid vehicles.
+  ELECTRICALDRIVE_CHARGING_POWER = 68 [(signal_name) = "ElectricalDrive.Charging.Power"];
+
+  // Status of the optimized/intelligent charging. Only available for electric & plug-in hybrid vehicles.
+  //
+  // * WALLBOX =  wallbox or charging station is active
+  // * SMART_CHARGE_COMMUNICATION = smart charge communication is active
+  // * ON_OFF_PEAK = on/off-peak setting is active e.g day and night power
+  ELECTRICALDRIVE_CHARGING_SMARTCHARGING_STATUS = 69 [
+    (signal_name) = "ElectricalDrive.Charging.SmartCharging.Status"
+  ];
+
+  // Provides the charging status of the high voltage battery. Only available for electric & plug-in hybrid vehicles.
+  //
+  // * CHARGING = currently charging
+  // * END = end of charging
+  // * BREAK = charge break
+  // * CABLE_UNPLUGGED = charge cable unplugged
+  // * ERROR = charging error
+  // * SLOW = slow charging
+  // * FAST = fast charging
+  // * DISCHARGING = discharging
+  // * NONE = no charging
+  // * CHARGING_FOREIGN_OBJECT = charging a forein object
+  ELECTRICALDRIVE_CHARGING_STATUS = 70 [(signal_name) = "ElectricalDrive.Charging.Status"];
+
+  // The charge program type selected in the vehicle. Only available for electric & plug-in hybrid vehicles with charge program support.
+  // * DEFAULT
+  // * INSTANT
+  // * HOME
+  // * WORK
+  ELECTRICALDRIVE_CHARGING_SELECTEDCHARGEPROGRAM = 71 [
+    (signal_name) = "ElectricalDrive.Charging.SelectedChargeProgram"
+  ];
+
+  // The maximum state of charge configured for the charge program type **Home** in the vehicle. The battery will not be charged above this value when the Home charge program is active. Only available for electric & plug-in hybrid vehicles with charge program support.
+  ELECTRICALDRIVE_CHARGING_CHARGEPROGRAM_HOME_MAXIMUMSTATEOFCHARGE = 72 [
+    (signal_name) = "ElectricalDrive.Charging.ChargeProgram.Home.MaximumStateOfCharge"
+  ];
+
+  // The maximum state of charge configured for the charge program type **Default** in the vehicle. The battery will not be charged above this value when the Default charge program is active. Only available for electric & plug-in hybrid vehicles with charge program support.
+  ELECTRICALDRIVE_CHARGING_CHARGEPROGRAM_DEFAULT_MAXIMUMSTATEOFCHARGE = 73 [
+    (signal_name) = "ElectricalDrive.Charging.ChargeProgram.Default.MaximumStateOfCharge"
+  ];
+
+  // The maximum state of charge configured for the charge program type **Work** in the vehicle. The battery will not be charged above this value when the Work charge program is active. Only available for electric & plug-in hybrid vehicles with charge program support.
+  ELECTRICALDRIVE_CHARGING_CHARGEPROGRAM_WORK_MAXIMUMSTATEOFCHARGE = 74 [
+    (signal_name) = "ElectricalDrive.Charging.ChargeProgram.Work.MaximumStateOfCharge"
+  ];
+
+  // Current state of charge of the high voltage battery in percent (%). Only available for electric & plug-in hybrid vehicles.
+  ELECTRICALDRIVE_HIGHVOLTAGEBATTERY_STATEOFCHARGE = 75 [
+    (signal_name) = "ElectricalDrive.HighVoltageBattery.StateOfCharge"
+  ];
+
+  // Status of the ignition.
+  // * LOCK = head unit, communication and engine are off. State is given, when the vehicle door is opened after usage
+  // * OFF = engine is off and steering wheel is unlocked
+  // * ACCESSORY = accessories in vehicle are usable, head unit is on
+  // * ON = all systems and the engine are on
+  // * START = intermediate step between ACCESSORY and ON, starting the engine
+  IGNITION_STATUS = 76 [(signal_name) = "Ignition.Status"];
+
+  // Activation state of the vehicle keys. This signal is not available in AMAP region.
+  IMMOBILIZER_KEYS_ALLDEPROVISIONED = 77 [
+    (signal_name) = "Immobilizer.Keys.AllDeprovisioned"
+  ];
+
+  // Indicates whether a warning for the coolant level is triggered.
+  INTERNALCOMBUSTIONENGINE_COOLANT_LEVEL_WARNING = 78 [
+    (signal_name) = "InternalCombustionEngine.Coolant.Level.Warning"
+  ];
+
+  // Engine coolant temperature in degree celsius (�C).
+  INTERNALCOMBUSTIONENGINE_COOLANT_TEMPERATURE = 79 [
+    (signal_name) = "InternalCombustionEngine.Coolant.Temperature"
+  ];
+
+  // Indicates whether the engine is in fail-safe mode.
+  INTERNALCOMBUSTIONENGINE_LIMPMODE_ISACTIVE = 80 [
+    (signal_name) = "InternalCombustionEngine.LimpMode.IsActive"
+  ];
+
+  // Provides the oil level as percentage (%). The range of reported values has 60 as its lower limit and 115 as its upper limit.
+  INTERNALCOMBUSTIONENGINE_OIL_LEVEL = 81 [
+    (signal_name) = "InternalCombustionEngine.Oil.Level"
+  ];
+
+  // Indicates whether an oil level warning is triggered. Signal should be used in conjunction with InternalCombustionEngine.Oil.Level to determine the current oil level.
+  //
+  // * True = oil level is overfilled (> 100%) or underfilled (< 75%)
+  // * False = oil level is ok (75% - 100%)
+  INTERNALCOMBUSTIONENGINE_OIL_LEVEL_WARNING = 82 [
+    (signal_name) = "InternalCombustionEngine.Oil.Level.Warning"
+  ];
+
+  // Indicates whether the front interior light is on.
+  LIGHTS_INTERIOR_FRONT_ISON = 83 [(signal_name) = "Lights.Interior.Front.IsOn"];
+
+  // Indicates whether the front left reading lamp is on.
+  LIGHTS_INTERIOR_READINGLAMP_FRONT_LEFT_ISON = 84 [
+    (signal_name) = "Lights.Interior.Readinglamp.Front.Left.IsOn"
+  ];
+
+  // Indicates whether the front right reading lamp is on.
+  LIGHTS_INTERIOR_READINGLAMP_FRONT_RIGHT_ISON = 85 [
+    (signal_name) = "Lights.Interior.Readinglamp.Front.Right.IsOn"
+  ];
+
+  // Indicates whether the rear interior light is on.
+  LIGHTS_INTERIOR_REAR_ISON = 86 [(signal_name) = "Lights.Interior.Rear.IsOn"];
+
+  // Provides the light switch status.
+  //
+  // * AUTO = light switch status is automatic
+  // * LOWBEAM = light switch status is low beam
+  // * PARKINGLIGHT_LEFT = light switch status is parking light left
+  // * PARKINGLIGHT_RIGHT = light switch status is parking light right
+  // * PARKINGLIGHT = light switch status is parking light
+  LIGHTS_LIGHTSWITCH_STATUS = 87 [(signal_name) = "Lights.Lightswitch.Status"];
+
+  // UTC timestamp (in milliseconds) of the last park event. A park event happens when the parked vehicle is bumped, e.g. by another vehicle.
+  PARKING_PARKEVENT_LASTPARKEVENT_TIME = 88 [
+    (signal_name) = "Parking.Parkevent.LastParkevent.Time"
+  ];
+
+  // Provides the severity level of the last park event. A park event happens when the parked vehicle is bumped, e.g. by another vehicle.
+  //
+  // * LOW
+  // * MEDIUM
+  // * HIGH
+  PARKING_PARKEVENT_LEVEL = 89 [(signal_name) = "Parking.Parkevent.Level"];
+
+  // Provides information about the location of the last park event. A park event happens when the parked vehicle is bumped, e.g. by another vehicle.
+  //
+  // * IDLE
+  // * FRONT_LEFT
+  // * FRONT_MIDDLE
+  // * FRONT_RIGHT
+  // * RIGHT
+  // * REAR_RIGHT
+  // * REAR_MIDDLE
+  // * REAR_LEFT
+  // * LEFT
+  // * UNKNOWN
+  PARKING_PARKEVENT_TYPE = 90 [(signal_name) = "Parking.Parkevent.Type"];
+
+  // Heading of vehicle at the last known position.
+  POSITION_LASTKNOWN_HEADING = 91 [(signal_name) = "Position.LastKnown.Heading"];
+
+  // Latitude in WGS84 coordinates at the last known position of the vehicle.
+  POSITION_LASTKNOWN_LATITUDE = 92 [(signal_name) = "Position.LastKnown.Latitude"];
+
+  // Longitude in WGS84 coordinates at the last known position of the vehicle.
+  POSITION_LASTKNOWN_LONGITUDE = 93 [(signal_name) = "Position.LastKnown.Longitude"];
+
+  // Scheduled vehicle departure time (-1 value is not set), counted in minutes from midnight and depending on the time of the vehicle.
+  PRECONDITIONING_SCHEDULEDTIME = 94 [(signal_name) = "Preconditioning.ScheduledTime"];
+
+  // Indicates whether the precondition is running.
+  PRECONDITIONING_ISACTIVE = 95 [(signal_name) = "Preconditioning.IsActive"];
+
+  // Counter (min) showing the time until the precondition is completed. Active only if the precondition is running.
+  PRECONDITIONING_REMAININGRUNTIME = 96 [(signal_name) = "Preconditioning.RemainingRuntime"];
+
+  // Residual distance to service in kilometer (km). Potential negative values indicate the service is overdue.
+  SERVICE_INTERVAL_DISTANCE = 97 [(signal_name) = "Service.Interval.Distance"];
+
+  // Residual time to service in days. Potential negative values indicate the service is overdue.
+  SERVICE_INTERVAL_TIME = 98 [(signal_name) = "Service.Interval.Time"];
+
+  // Service warning status of the vehicle.
+  //
+  // * DUE_SOON = Vehicle will be due for service shortly in future
+  // * DUE = Vehicle is currently due for service
+  // * OVERDUE = Vehicle is overdue for service indicating a failure of service on time
+  // * NONE = No service warning for the vehicle
+  SERVICE_WARNING_STATUS = 99 [(signal_name) = "Service.Warning.Status"];
+
+  // Buckled up, set "true" indicate´s that the buckle switch is closed, buckled up set "false" indicates that buckle switch is open.
+  SEAT_SEATBELT_FRONT_LEFT_ISBUCKLEDUP = 100 [
+    (signal_name) = "Seat.Seatbelt.Front.Left.IsBuckledUp"
+  ];
+
+  // Provides the "charging health status" of the 12V starter battery. With each battery state change, the battery sends a signal update. When the battery state changes from ORANGE to RED, the battery sends a last hick-up signal, telling the state is RED now.
+  //
+  // * GREEN = ok
+  // * GREENYELLOW = battery partly discharged but ok
+  // * YELLOW = battery partly discharged, battery should be charged by driving the vehicle to avoid loosing functionality
+  // * ORANGE = battery is now in saving mode, remote commands are not possible anymore, battery should be charged by driving the vehicle
+  // * RED = vehicle engine will not start anymore, battery must be charged using an external system
+  SUPPLYBATTERY_STATUS = 101 [(signal_name) = "SupplyBattery.Status"];
+
+  // Supply battery voltage in Volt (V).
+  SUPPLYBATTERY_VOLTAGE = 102 [(signal_name) = "SupplyBattery.Voltage"];
+
+  // Indicates whether a warning for the supply battery is triggered.
+  SUPPLYBATTERY_WARNING = 103 [(signal_name) = "SupplyBattery.Warning"];
+
+  // AdBlue tank level in percent (%).
+  TANK_ADBLUE_LEVEL = 104 [(signal_name) = "Tank.AdBlue.Level"];
+
+  // Liquid fuel tank level in percent (%).
+  TANK_FUEL_LEVEL = 105 [(signal_name) = "Tank.Fuel.Level"];
+
+  // Liquid fuel tank level in liter.
+  TANK_FUEL_LEVEL_ABSOLUTE = 106 [(signal_name) = "Tank.Fuel.Level.Absolute"];
+
+  // Indicates whether a warning for the liquid fuel level is triggered.
+  TANK_FUEL_LEVEL_WARNING = 107 [(signal_name) = "Tank.Fuel.Level.Warning"];
+
+  // Indicates whether a warning for the washwater level is triggered.
+  TANK_WASHWATER_LEVEL_WARNING = 108 [(signal_name) = "Tank.WashWater.Level.Warning"];
+
+  // Provides the front left tire pressure in kilopascal (kPa).
+  TIRES_FRONT_LEFT_PRESSURE = 109 [(signal_name) = "Tires.Front.Left.Pressure"];
+
+  // Indicates whether a warning for the front left tire is triggered.
+  TIRES_FRONT_LEFT_WARNING = 110 [(signal_name) = "Tires.Front.Left.Warning"];
+
+  // Provides status of present warning for front left tire.
+  // * NONE = no warning
+  // * SOFT = soft warning
+  // * LOW_PRESSURE = low pressure detected
+  // * DEFLATION = the tire is deflated
+  // * UNKNOWN = unknown status
+  TIRES_FRONT_LEFT_WARNING_STATUS = 111 [(signal_name) = "Tires.Front.Left.Warning.Status"];
+
+  // Provides the front right tire pressure in kilopascal (kPa).
+  TIRES_FRONT_RIGHT_PRESSURE = 112 [(signal_name) = "Tires.Front.Right.Pressure"];
+
+  // Indicates whether a warning for the front right tire is triggered.
+  TIRES_FRONT_RIGHT_WARNING = 113 [(signal_name) = "Tires.Front.Right.Warning"];
+
+  // Provides status of present warning for front right tire.
+  //
+  // * NONE = no warning
+  // * SOFT = soft warning
+  // * LOW_PRESSURE = low pressure detected
+  // * DEFLATION = the tire is deflated
+  // * UNKNOWN = unknown status
+  TIRES_FRONT_RIGHT_WARNING_STATUS = 114 [(signal_name) = "Tires.Front.Right.Warning.Status"];
+
+  // Provides the rear left tire pressure in kilopascal (kPa).
+  TIRES_REAR_LEFT_PRESSURE = 115 [(signal_name) = "Tires.Rear.Left.Pressure"];
+
+  // Indicates whether a warning for the rear left tire is triggered.
+  TIRES_REAR_LEFT_WARNING = 116 [(signal_name) = "Tires.Rear.Left.Warning"];
+
+  // Provides status of present warning for rear left tire.
+  //
+  // * NONE = no warning
+  // * SOFT = soft warning
+  // * LOW_PRESSURE = low pressure detected
+  // * DEFLATION = the tire is deflated
+  // * UNKNOWN = unknown status
+  TIRES_REAR_LEFT_WARNING_STATUS = 117 [(signal_name) = "Tires.Rear.Left.Warning.Status"];
+
+  // Provides the rear right tire pressure in kilopascal (kPa).
+  TIRES_REAR_RIGHT_PRESSURE = 118 [(signal_name) = "Tires.Rear.Right.Pressure"];
+
+  // Indicates whether a warning for the rear right tire is triggered.
+  TIRES_REAR_RIGHT_WARNING = 119 [(signal_name) = "Tires.Rear.Right.Warning"];
+
+  // Provides status of present warning for rear right tire.
+  //
+  // * NONE = no warning
+  // * SOFT = soft warning
+  // * LOW_PRESSURE = low pressure detected
+  // * DEFLATION = the tire is deflated
+  // * UNKNOWN = unknown status
+  TIRES_REAR_RIGHT_WARNING_STATUS = 120 [(signal_name) = "Tires.Rear.Right.Warning.Status"];
+
+  // The time difference in milliseconds of local vehicle time to the UTC time. In any given moment, adding the offset value to the time in UTC will result in the equivalent time in the vehicle. A positive offset indicates that the time in vehicle is ahead of UTC time while a negative offset denotes that the vehicle time is behind the UTC.
+  VEHICLE_CLOCK_TIME_UTC_OFFSET = 121 [(signal_name) = "Vehicle.Clock.Time.UTC.Offset"];
+
+  // Indicates whether the front left window is open.
+  WINDOWS_FRONT_LEFT_ISOPEN = 122 [(signal_name) = "Windows.Front.Left.IsOpen"];
+
+  // Indicates whether the front right window is open.
+  WINDOWS_FRONT_RIGHT_ISOPEN = 123 [(signal_name) = "Windows.Front.Right.IsOpen"];
+
+  // Indicates whether the rear left window is open.
+  WINDOWS_REAR_LEFT_ISOPEN = 124 [(signal_name) = "Windows.Rear.Left.IsOpen"];
+
+  // Indicates whether the rear right window is open.
+  WINDOWS_REAR_RIGHT_ISOPEN = 125 [(signal_name) = "Windows.Rear.Right.IsOpen"];
+}
