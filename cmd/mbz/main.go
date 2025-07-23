@@ -323,7 +323,11 @@ func newConsumeVehicleSignalsCommand() *cobra.Command {
 			it := fetches.RecordIter()
 			for !it.Done() {
 				record := it.Next()
-				fmt.Println(string(record.Value))
+				var msg mbz.Message
+				if err := json.Unmarshal(record.Value, &msg); err != nil {
+					return fmt.Errorf("failed to unmarshal message: %w", err)
+				}
+				fmt.Println(msg)
 			}
 			slog.Debug("fetched records", "count", fetches.NumRecords())
 		}
