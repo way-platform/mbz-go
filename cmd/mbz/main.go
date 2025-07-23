@@ -268,9 +268,9 @@ func newConsumeVehicleSignalsCommand() *cobra.Command {
 		GroupID: "vehicle-signals",
 	}
 	topic := cmd.Flags().String("topic", "", "Topic")
-	cmd.MarkFlagRequired("topic")
+	_ = cmd.MarkFlagRequired("topic")
 	consumerGroup := cmd.Flags().String("consumer-group", "", "Consumer group")
-	cmd.MarkFlagRequired("consumer-group")
+	_ = cmd.MarkFlagRequired("consumer-group")
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
 		authFile, err := auth.ReadFile()
 		if err != nil {
@@ -317,13 +317,12 @@ func newConsumeVehicleSignalsCommand() *cobra.Command {
 	return cmd
 }
 
-func printJSON(msg any) error {
+func printJSON(msg any) {
 	data, err := json.MarshalIndent(msg, "", "  ")
 	if err != nil {
-		return err
+		slog.Error("failed to marshal JSON", "error", err)
 	}
 	fmt.Println(string(data))
-	return nil
 }
 
 func ptr[T any](v T) *T {

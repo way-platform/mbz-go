@@ -6,8 +6,8 @@ A Go SDK and CLI tool for the Mercedes-Benz [Connect Your Fleet APIs](https://de
 
 ### Features
 
-* Support for the [Vehicle Management API](https://developer.mercedes-benz.com/products/connect_your_fleet/specifications/vehicle_management_api)
-* Support for the [Services Catalog API](https://developer.mercedes-benz.com/products/connect_your_fleet/specifications/services_catalog_api)
+- Support for the [Vehicle Management API](https://developer.mercedes-benz.com/products/connect_your_fleet/specifications/vehicle_management_api)
+- Support for the [Services Catalog API](https://developer.mercedes-benz.com/products/connect_your_fleet/specifications/services_catalog_api)
 
 ### Installing
 
@@ -46,16 +46,17 @@ for _, vehicle := range response.Vehicles {
 #### Building
 
 The project is built using [Mage](https://magefile.org), see
-[magefile.go](./magefile.go).
+[tools/magefile.go](./tools/magefile.go) and the [tools/mage](./tools/mage)
+helper script.
 
 ```bash
-$ go tool mage build
+$ ./tools/mage build
 ```
 
 For all available build tasks, see:
 
 ```bash
-$ go tool mage
+$ ./tools/mage -l
 ```
 
 ## CLI tool
