@@ -18,6 +18,7 @@ func Build() {
 	mg.Deps(Generate)
 	mg.Deps(Lint, Test)
 	mg.Deps(Tidy)
+	mg.Deps(CLI)
 	mg.Deps(Diff)
 }
 
@@ -59,14 +60,14 @@ func Generate() error {
 	})
 }
 
-// MBZ builds the mbz CLI.
-func MBZ() error {
+// CLI builds the mbz CLI.
+func CLI() error {
 	return cmd("cmd/mbz", "go", "install", ".").Run()
 }
 
 // VHS records the CLI GIF using VHS.
 func VHS() error {
-	mg.Deps(MBZ)
+	mg.Deps(CLI)
 	return cmd("docs", "go", "tool", "vhs", "cli.tape").Run()
 }
 
