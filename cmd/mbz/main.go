@@ -3,11 +3,12 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"image/color"
-	"log"
 	"log/slog"
 	"os"
+	"os/signal"
 
 	"github.com/charmbracelet/fang"
 	"github.com/charmbracelet/lipgloss/v2"
@@ -271,6 +272,7 @@ func newConsumeVehicleSignalsCommand() *cobra.Command {
 	_ = cmd.MarkFlagRequired("topic")
 	consumerGroup := cmd.Flags().String("consumer-group", "", "Consumer group")
 	_ = cmd.MarkFlagRequired("consumer-group")
+	debug := cmd.Flags().Bool("debug", false, "Enable debug logging")
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
 		authFile, err := auth.ReadFile()
 		if err != nil {
@@ -285,7 +287,8 @@ func newConsumeVehicleSignalsCommand() *cobra.Command {
 		default:
 			return fmt.Errorf("invalid region: %s", authFile.Region)
 		}
-		client, err := kgo.NewClient(
+		opts := []kgo.Opt{
+			kgo.DialTLS(),
 			kgo.SeedBrokers(bootstrapServer),
 			kgo.ConsumerGroup(*consumerGroup),
 			kgo.ConsumeTopics(*topic),
@@ -294,25 +297,37 @@ func newConsumeVehicleSignalsCommand() *cobra.Command {
 					Token: authFile.Credentials.AccessToken,
 				}, nil
 			})),
-			kgo.WithLogger(&logger{sl: slog.Default()}),
-		)
+		}
+		if *debug {
+			opts = append(opts, kgo.WithLogger(&logger{sl: slog.Default()}))
+		}
+		client, err := kgo.NewClient(opts...)
 		if err != nil {
-			log.Fatalf("Failed to create Kafka client: %v", err)
+			return fmt.Errorf("failed to create Kafka client: %w", err)
 		}
 		defer client.Close()
+		ctx, cancel := signal.NotifyContext(cmd.Context(), os.Interrupt, os.Kill)
+		defer cancel()
 		for {
-			slog.Info("polling Kafka")
-			fetches := client.PollFetches(cmd.Context())
-			if err := fetches.Err(); err != nil {
-				return err
+			fetches := client.PollFetches(ctx)
+			if fetches.IsClientClosed() || ctx.Err() != nil {
+				break
 			}
-			slog.Info("fetched records", "count", fetches.NumRecords())
+			var errs []error
+			fetches.EachError(func(topic string, partition int32, err error) {
+				errs = append(errs, err)
+			})
+			if len(errs) > 0 {
+				return fmt.Errorf("errors fetching records: %w", errors.Join(errs...))
+			}
 			it := fetches.RecordIter()
 			for !it.Done() {
 				record := it.Next()
 				fmt.Println(string(record.Value))
 			}
+			slog.Debug("fetched records", "count", fetches.NumRecords())
 		}
+		return nil
 	}
 	return cmd
 }
