@@ -16,4 +16,4 @@ jobs:
         uses: actions/setup-go@v5
 
       - name: Build
-        run: go tool mage build
+        run: ./tools/mage build

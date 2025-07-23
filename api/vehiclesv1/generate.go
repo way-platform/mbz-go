@@ -1,7 +1,7 @@
 package vehiclesv1
 
 //go:generate echo applying overlay...
-//go:generate sh -c "go tool openapi-overlay apply overlay.yaml 01-original.yaml > 02-overlayed.yaml"
+//go:generate sh -c "go tool -modfile ../../tools/go.mod openapi-overlay apply overlay.yaml 01-original.yaml > 02-overlayed.yaml"
 
 //go:generate echo pre-processing...
 //go:generate sh -c "sed -f preprocess.sed 02-overlayed.yaml > 03-preprocessed.yaml"
@@ -10,4 +10,4 @@ package vehiclesv1
 //go:generate npx @apiture/openapi-down-convert@v0.14.1 --input 03-preprocessed.yaml --output 04-downconverted.yaml
 
 //go:generate echo generating code...
-//go:generate go tool oapi-codegen -config config.yaml 04-downconverted.yaml
+//go:generate go tool -modfile ../../tools/go.mod oapi-codegen -config config.yaml 04-downconverted.yaml

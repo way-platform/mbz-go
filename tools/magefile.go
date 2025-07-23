@@ -12,26 +12,31 @@ import (
 	"github.com/magefile/mage/sh"
 )
 
+var Default = Build
+
 // Build runs a full CI build.
 func Build() {
-	mg.Deps(Download)
-	mg.Deps(Generate)
-	mg.Deps(Lint, Test)
-	mg.Deps(Tidy)
-	mg.Deps(CLI)
-	mg.Deps(Diff)
+	mg.SerialDeps(
+		Download,
+		Generate,
+		Lint,
+		Test,
+		Tidy,
+		CLI,
+		Diff,
+	)
 }
 
 // Lint runs the Go linter.
 func Lint() error {
-	return sh.RunV("go", "tool", "golangci-lint", "run")
+	return forEachGoMod(func(dir string) error {
+		return tool(dir, "golangci-lint", "run", "--path-prefix", dir, "--build-tags", "mage").Run()
+	})
 }
 
 // Test runs the Go tests.
 func Test() error {
-	return forEachGoMod(func(dir string) error {
-		return cmd(dir, "go", "test", "-v", "-cover", "./...").Run()
-	})
+	return cmd(root(), "go", "test", "-v", "-cover", "./...").Run()
 }
 
 // Download downloads the Go dependencies.
@@ -50,7 +55,7 @@ func Tidy() error {
 
 // Diff checks for git diffs.
 func Diff() error {
-	return sh.RunV("git", "diff", "--exit-code")
+	return cmd(root(), "git", "diff", "--exit-code").Run()
 }
 
 // Generate runs all code generators.
@@ -62,17 +67,17 @@ func Generate() error {
 
 // CLI builds the mbz CLI.
 func CLI() error {
-	return cmd("cmd/mbz", "go", "install", ".").Run()
+	return cmd(root("cmd/mbz"), "go", "install", ".").Run()
 }
 
 // VHS records the CLI GIF using VHS.
 func VHS() error {
 	mg.Deps(CLI)
-	return cmd("docs", "go", "tool", "vhs", "cli.tape").Run()
+	return tool(root("docs"), "vhs", "cli.tape").Run()
 }
 
 func forEachGoMod(f func(dir string) error) error {
-	return filepath.WalkDir(".", func(path string, d fs.DirEntry, err error) error {
+	return filepath.WalkDir(root(), func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
@@ -89,4 +94,17 @@ func cmd(dir string, command string, args ...string) *exec.Cmd {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd
+}
+
+func tool(dir string, tool string, args ...string) *exec.Cmd {
+	cmdArgs := []string{"tool", "-modfile", filepath.Join(root(), "tools", "go.mod"), tool}
+	return cmd(dir, "go", append(cmdArgs, args...)...)
+}
+
+func root(subdirs ...string) string {
+	result, err := sh.Output("git", "rev-parse", "--show-toplevel")
+	if err != nil {
+		panic(err)
+	}
+	return filepath.Join(append([]string{result}, subdirs...)...)
 }
