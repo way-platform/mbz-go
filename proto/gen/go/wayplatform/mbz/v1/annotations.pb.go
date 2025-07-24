@@ -38,6 +38,22 @@ var file_wayplatform_mbz_v1_annotations_proto_extTypes = []protoimpl.ExtensionIn
 		Tag:           "varint,222389729,opt,name=signal_type,enum=wayplatform.mbz.v1.SignalType",
 		Filename:      "wayplatform/mbz/v1/annotations.proto",
 	},
+	{
+		ExtendedType:  (*descriptorpb.EnumValueOptions)(nil),
+		ExtensionType: (*SignalUnit)(nil),
+		Field:         56895283,
+		Name:          "wayplatform.mbz.v1.signal_unit",
+		Tag:           "varint,56895283,opt,name=signal_unit,enum=wayplatform.mbz.v1.SignalUnit",
+		Filename:      "wayplatform/mbz/v1/annotations.proto",
+	},
+	{
+		ExtendedType:  (*descriptorpb.EnumValueOptions)(nil),
+		ExtensionType: ([]*SignalEnumValue)(nil),
+		Field:         46836650,
+		Name:          "wayplatform.mbz.v1.signal_values",
+		Tag:           "bytes,46836650,rep,name=signal_values",
+		Filename:      "wayplatform/mbz/v1/annotations.proto",
+	},
 }
 
 // Extension fields to descriptorpb.EnumValueOptions.
@@ -57,31 +73,54 @@ var (
 	//
 	// optional wayplatform.mbz.v1.SignalType signal_type = 222389729;
 	E_SignalType = &file_wayplatform_mbz_v1_annotations_proto_extTypes[1]
+	// This enum options stores the unit of a signal.
+	//
+	// Field number is the 28 most significant bits in the sha256 sum of
+	// `wayplatform.mbz.v1.signal_unit`.
+	//
+	// optional wayplatform.mbz.v1.SignalUnit signal_unit = 56895283;
+	E_SignalUnit = &file_wayplatform_mbz_v1_annotations_proto_extTypes[2]
+	// This enum options stores the values of an enum signal.
+	//
+	// Field number is the 28 most significant bits in the sha256 sum of
+	// `wayplatform.mbz.v1.signal_enum_value`.
+	//
+	// repeated wayplatform.mbz.v1.SignalEnumValue signal_values = 46836650;
+	E_SignalValues = &file_wayplatform_mbz_v1_annotations_proto_extTypes[3]
 )
 
 var File_wayplatform_mbz_v1_annotations_proto protoreflect.FileDescriptor
 
 const file_wayplatform_mbz_v1_annotations_proto_rawDesc = "" +
 	"\n" +
-	"$wayplatform/mbz/v1/annotations.proto\x12\x12wayplatform.mbz.v1\x1a google/protobuf/descriptor.proto\x1a$wayplatform/mbz/v1/signal_type.proto:E\n" +
+	"$wayplatform/mbz/v1/annotations.proto\x12\x12wayplatform.mbz.v1\x1a google/protobuf/descriptor.proto\x1a*wayplatform/mbz/v1/signal_enum_value.proto\x1a$wayplatform/mbz/v1/signal_type.proto\x1a$wayplatform/mbz/v1/signal_unit.proto:E\n" +
 	"\vsignal_name\x12!.google.protobuf.EnumValueOptions\x18\xe3\xf2\xb6= \x01(\tR\n" +
 	"signalName:e\n" +
 	"\vsignal_type\x12!.google.protobuf.EnumValueOptions\x18\xe1˅j \x01(\x0e2\x1e.wayplatform.mbz.v1.SignalTypeR\n" +
-	"signalTypeB\xda\x01\n" +
+	"signalType:e\n" +
+	"\vsignal_unit\x12!.google.protobuf.EnumValueOptions\x18\xb3ΐ\x1b \x01(\x0e2\x1e.wayplatform.mbz.v1.SignalUnitR\n" +
+	"signalUnit:n\n" +
+	"\rsignal_values\x12!.google.protobuf.EnumValueOptions\x18\xaaת\x16 \x03(\v2#.wayplatform.mbz.v1.SignalEnumValueR\fsignalValuesB\xda\x01\n" +
 	"\x16com.wayplatform.mbz.v1B\x10AnnotationsProtoP\x01ZDgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1;mbzv1\xa2\x02\x03WMX\xaa\x02\x12Wayplatform.Mbz.V1\xca\x02\x12Wayplatform\\Mbz\\V1\xe2\x02\x1eWayplatform\\Mbz\\V1\\GPBMetadata\xea\x02\x14Wayplatform::Mbz::V1b\x06proto3"
 
 var file_wayplatform_mbz_v1_annotations_proto_goTypes = []any{
 	(*descriptorpb.EnumValueOptions)(nil), // 0: google.protobuf.EnumValueOptions
 	(SignalType)(0),                       // 1: wayplatform.mbz.v1.SignalType
+	(SignalUnit)(0),                       // 2: wayplatform.mbz.v1.SignalUnit
+	(*SignalEnumValue)(nil),               // 3: wayplatform.mbz.v1.SignalEnumValue
 }
 var file_wayplatform_mbz_v1_annotations_proto_depIdxs = []int32{
 	0, // 0: wayplatform.mbz.v1.signal_name:extendee -> google.protobuf.EnumValueOptions
 	0, // 1: wayplatform.mbz.v1.signal_type:extendee -> google.protobuf.EnumValueOptions
-	1, // 2: wayplatform.mbz.v1.signal_type:type_name -> wayplatform.mbz.v1.SignalType
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	2, // [2:3] is the sub-list for extension type_name
-	0, // [0:2] is the sub-list for extension extendee
+	0, // 2: wayplatform.mbz.v1.signal_unit:extendee -> google.protobuf.EnumValueOptions
+	0, // 3: wayplatform.mbz.v1.signal_values:extendee -> google.protobuf.EnumValueOptions
+	1, // 4: wayplatform.mbz.v1.signal_type:type_name -> wayplatform.mbz.v1.SignalType
+	2, // 5: wayplatform.mbz.v1.signal_unit:type_name -> wayplatform.mbz.v1.SignalUnit
+	3, // 6: wayplatform.mbz.v1.signal_values:type_name -> wayplatform.mbz.v1.SignalEnumValue
+	7, // [7:7] is the sub-list for method output_type
+	7, // [7:7] is the sub-list for method input_type
+	4, // [4:7] is the sub-list for extension type_name
+	0, // [0:4] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
 }
 
@@ -90,7 +129,9 @@ func file_wayplatform_mbz_v1_annotations_proto_init() {
 	if File_wayplatform_mbz_v1_annotations_proto != nil {
 		return
 	}
+	file_wayplatform_mbz_v1_signal_enum_value_proto_init()
 	file_wayplatform_mbz_v1_signal_type_proto_init()
+	file_wayplatform_mbz_v1_signal_unit_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
@@ -98,7 +139,7 @@ func file_wayplatform_mbz_v1_annotations_proto_init() {
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_wayplatform_mbz_v1_annotations_proto_rawDesc), len(file_wayplatform_mbz_v1_annotations_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   0,
-			NumExtensions: 2,
+			NumExtensions: 4,
 			NumServices:   0,
 		},
 		GoTypes:           file_wayplatform_mbz_v1_annotations_proto_goTypes,

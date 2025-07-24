@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package wayplatform.mbz.v1;
+
+// SignalEnumValue is a value of an enum signal.
+message SignalEnumValue {
+  // The identifier of the enum signal value.
+  string value = 1;
+
+  // The description of the enum signal value.
+  string description = 2;
+}

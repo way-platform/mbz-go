@@ -35,6 +35,8 @@ const (
 	SignalType_DOUBLE SignalType = 3
 	// A boolean signal.
 	SignalType_BOOLEAN SignalType = 4
+	// An enum signal.
+	SignalType_ENUM SignalType = 5
 )
 
 // Enum value maps for SignalType.
@@ -45,6 +47,7 @@ var (
 		2: "INTEGER",
 		3: "DOUBLE",
 		4: "BOOLEAN",
+		5: "ENUM",
 	}
 	SignalType_value = map[string]int32{
 		"SIGNAL_TYPE_UNSPECIFIED": 0,
@@ -52,6 +55,7 @@ var (
 		"INTEGER":                 2,
 		"DOUBLE":                  3,
 		"BOOLEAN":                 4,
+		"ENUM":                    5,
 	}
 )
 
@@ -86,7 +90,7 @@ var File_wayplatform_mbz_v1_signal_type_proto protoreflect.FileDescriptor
 
 const file_wayplatform_mbz_v1_signal_type_proto_rawDesc = "" +
 	"\n" +
-	"$wayplatform/mbz/v1/signal_type.proto\x12\x12wayplatform.mbz.v1*[\n" +
+	"$wayplatform/mbz/v1/signal_type.proto\x12\x12wayplatform.mbz.v1*e\n" +
 	"\n" +
 	"SignalType\x12\x1b\n" +
 	"\x17SIGNAL_TYPE_UNSPECIFIED\x10\x00\x12\n" +
@@ -95,7 +99,8 @@ const file_wayplatform_mbz_v1_signal_type_proto_rawDesc = "" +
 	"\aINTEGER\x10\x02\x12\n" +
 	"\n" +
 	"\x06DOUBLE\x10\x03\x12\v\n" +
-	"\aBOOLEAN\x10\x04B\xd9\x01\n" +
+	"\aBOOLEAN\x10\x04\x12\b\n" +
+	"\x04ENUM\x10\x05B\xd9\x01\n" +
 	"\x16com.wayplatform.mbz.v1B\x0fSignalTypeProtoP\x01ZDgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1;mbzv1\xa2\x02\x03WMX\xaa\x02\x12Wayplatform.Mbz.V1\xca\x02\x12Wayplatform\\Mbz\\V1\xe2\x02\x1eWayplatform\\Mbz\\V1\\GPBMetadata\xea\x02\x14Wayplatform::Mbz::V1b\x06proto3"
 
 var (

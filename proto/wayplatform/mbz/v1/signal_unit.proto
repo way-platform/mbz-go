@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package wayplatform.mbz.v1;
+
+// SignalUnit is an enum of all known Mercedes-Benz Kafka message signal units.
+enum SignalUnit {
+  // Default value. This value is not used.
+  SIGNAL_UNIT_UNSPECIFIED = 0;
+
+  // Kilometer per hour (km/h).
+  KILOMETER_PER_HOUR = 1;
+
+  // Kilometer (km).
+  KILOMETER = 2;
+
+  // Percent (%).
+  PERCENT = 3;
+
+  // Kilowatt-hours per 100 kilometer (kWh/100km).
+  KILOWATT_HOURS_PER_100KM = 4;
+
+  // Kilowatt-hours (kWh).
+  KILOWATT_HOURS = 5;
+
+  // Kilowatt (kW).
+  KILOWATT = 6;
+
+  // Liter per 100 kilometer (l/100km).
+  LITER_PER_100KM = 7;
+
+  // Volt (V).
+  VOLT = 9;
+
+  // Degree Celsius (°C).
+  CELSIUS = 12;
+
+  // Kilopascal (kPa).
+  KILOPASCAL = 13;
+
+  // Minute (min) or in minutes.
+  MINUTE = 14;
+
+  // Millisecond (ms).
+  MILLISECOND = 15;
+
+  // Day (in days).
+  DAY = 16;
+}

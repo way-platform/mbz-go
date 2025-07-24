@@ -4,10 +4,10 @@ package wayplatform.mbz.v1;
 
 import "wayplatform/mbz/v1/annotations.proto";
 
-// SignalName is an enum of all known Mercedes-Benz Kafka message signal names.
-enum SignalName {
+// SignalIdentifier is an enum of all known Mercedes-Benz Kafka message signal names.
+enum SignalIdentifier {
   // Default value. This value is unused.
-  SIGNAL_NAME_UNSPECIFIED = 0;
+  SIGNAL_IDENTIFIER_UNSPECIFIED = 0;
 
   // Indicates whether the anti-theft system is armed.
   ANTITHEFTSYSTEM_ALARM_ISACTIVE = 1 [
@@ -22,25 +22,24 @@ enum SignalName {
   ];
 
   // Provides the reason why the last theft warning has been triggered.
-  //
-  // * BASIC
-  // * DOORS_FRONT_LEFT
-  // * DOORS_FRONT_RIGHT
-  // * DOORS_REAR_LEFT
-  // * DOOR_REAR_RIGHT
-  // * HOOD
-  // * TRUNK
-  // * PANIC
-  // * GLOVEBOX
-  // * CENTERBOX
-  // * SIREN
-  // * NONE
-  // * REARBOX
-  // * REMOTE
-  // * OTHER
   ANTITHEFTSYSTEM_LASTTHEFTWARNING_REASON = 3 [
     (signal_name) = "AntiTheftSystem.LastTheftWarning.Reason",
-    (signal_type) = STRING
+    (signal_type) = ENUM,
+    (signal_values) = {value: "BASIC"},
+    (signal_values) = {value: "DOORS_FRONT_LEFT"},
+    (signal_values) = {value: "DOORS_FRONT_RIGHT"},
+    (signal_values) = {value: "DOORS_REAR_LEFT"},
+    (signal_values) = {value: "DOOR_REAR_RIGHT"},
+    (signal_values) = {value: "HOOD"},
+    (signal_values) = {value: "TRUNK"},
+    (signal_values) = {value: "PANIC"},
+    (signal_values) = {value: "GLOVEBOX"},
+    (signal_values) = {value: "CENTERBOX"},
+    (signal_values) = {value: "SIREN"},
+    (signal_values) = {value: "NONE"},
+    (signal_values) = {value: "REARBOX"},
+    (signal_values) = {value: "REMOTE"},
+    (signal_values) = {value: "OTHER"}
   ];
 
   // Indicates whether the interior protection sensors are active.
@@ -146,34 +145,83 @@ enum SignalName {
   ];
 
   // Provides the characteristic of the latest sunroof event.
-  //
-  // * NONE = no event
-  // * SUNROOF_LIFTED_RAIN = sunroof in stroke position through rain
-  // * SUNROOF_LIFTED_AUTOMATIC = sunroof in stroke position through automatic
-  // * SUNROOF_LIFTED_TIMER = sunroof in stroke position through timer
   DOORS_SUNROOF_EVENT = 21 [
     (signal_name) = "Doors.Sunroof.Event",
-    (signal_type) = STRING
+    (signal_type) = ENUM,
+    (signal_values) = {
+      value: "NONE"
+      description: "no event"
+    },
+    (signal_values) = {
+      value: "SUNROOF_LIFTED_RAIN"
+      description: "sunroof in stroke position through rain"
+    },
+    (signal_values) = {
+      value: "SUNROOF_LIFTED_AUTOMATIC"
+      description: "sunroof in stroke position through automatic"
+    },
+    (signal_values) = {
+      value: "SUNROOF_LIFTED_TIMER"
+      description: "sunroof in stroke position through timer"
+    }
   ];
 
   // Provides the sunroof status.
-  //
-  // * TILT-SLIDE-ROOF_CLOSED = tilt/slide sunroof is closed
-  // * TILT-SLIDE-ROOF_OPEN = tilt/slide sunroof is complete open
-  // * LIFTING-ROOF_OPEN = lifting roof is open
-  // * TILT-SLIDE-ROOF_RUNNING = tilt/slide sunroof is running (only available if no differentiation between opening/closing possible)
-  // * TILT-SLIDE-ROOF_ANTI-BOOMING = tilt/slide sunroof in anti-booming position
-  // * SLIDE-ROOF_INTERMEDIATE = sliding roof in intermediate position
-  // * LIFTING-ROOF_INTERMEDIATE = lifting roof in intermediate position
-  // * OPENING = sunroof is opening
-  // * CLOSING = sunroof is closing
-  // * LIFTING-ROOF_ANTI-BOOMING = lifting anti booming
-  // * SUNROOF_INTERMEDIATE = sunroof is in intermediate position
-  // * LIFTING-ROOF_OPENING = lifting roof is opening
-  // * LIFTING-ROOF_CLOSING = lifting roof is closing
   DOORS_SUNROOF_STATUS = 22 [
     (signal_name) = "Doors.Sunroof.Status",
-    (signal_type) = STRING
+    (signal_type) = ENUM,
+    (signal_values) = {
+      value: "TILT-SLIDE-ROOF_CLOSED"
+      description: "tilt/slide sunroof is closed"
+    },
+    (signal_values) = {
+      value: "TILT-SLIDE-ROOF_OPEN"
+      description: "tilt/slide sunroof is complete open"
+    },
+    (signal_values) = {
+      value: "LIFTING-ROOF_OPEN"
+      description: "lifting roof is open"
+    },
+    (signal_values) = {
+      value: "TILT-SLIDE-ROOF_RUNNING"
+      description: "tilt/slide sunroof is running (only available if no differentiation between opening/closing possible)"
+    },
+    (signal_values) = {
+      value: "TILT-SLIDE-ROOF_ANTI-BOOMING"
+      description: "tilt/slide sunroof in anti-booming position"
+    },
+    (signal_values) = {
+      value: "SLIDE-ROOF_INTERMEDIATE"
+      description: "sliding roof in intermediate position"
+    },
+    (signal_values) = {
+      value: "LIFTING-ROOF_INTERMEDIATE"
+      description: "lifting roof in intermediate position"
+    },
+    (signal_values) = {
+      value: "OPENING"
+      description: "sunroof is opening"
+    },
+    (signal_values) = {
+      value: "CLOSING"
+      description: "sunroof is closing"
+    },
+    (signal_values) = {
+      value: "LIFTING-ROOF_ANTI-BOOMING"
+      description: "lifting anti booming"
+    },
+    (signal_values) = {
+      value: "SUNROOF_INTERMEDIATE"
+      description: "sunroof is in intermediate position"
+    },
+    (signal_values) = {
+      value: "LIFTING-ROOF_OPENING"
+      description: "lifting roof is opening"
+    },
+    (signal_values) = {
+      value: "LIFTING-ROOF_CLOSING"
+      description: "lifting roof is closing"
+    }
   ];
 
   // Indicates whether the tankcap is open.
@@ -203,25 +251,29 @@ enum SignalName {
   // Electric energy consumption since reset in kilowatt-hours per 100 kilometer (kWh/100km). The value refers to the time a trip session was reset using the vehicles board computer. Only available for electric vehicles.
   DRIVING_CONSUMPTION_ELECTRICAL_SINCERESET = 27 [
     (signal_name) = "Driving.Consumption.Electrical.SinceReset",
-    (signal_type) = DOUBLE
+    (signal_type) = DOUBLE,
+    (signal_unit) = KILOWATT_HOURS_PER_100KM
   ];
 
   // Electric energy consumption from start in kilowatt-hours per 100 kilometer (kWh/100km). The value refers to time the ignition is turned on. Ignition-on starts a new trip session, unless the last ignition-off event took place within the last 4 hours. The data is aggregated in a 4 hour interval. Only available for electric vehicles.
   DRIVING_CONSUMPTION_ELECTRICAL_SINCESTART = 28 [
     (signal_name) = "Driving.Consumption.Electrical.SinceStart",
-    (signal_type) = DOUBLE
+    (signal_type) = DOUBLE,
+    (signal_unit) = KILOWATT_HOURS_PER_100KM
   ];
 
   // Liquid fuel consumption from reset in liter per 100 kilometer (l/100km). The value refers to the time a trip session was reset using the vehicles board computer.
   DRIVING_CONSUMPTION_FUEL_SINCERESET = 29 [
     (signal_name) = "Driving.Consumption.Fuel.SinceReset",
-    (signal_type) = DOUBLE
+    (signal_type) = DOUBLE,
+    (signal_unit) = LITER_PER_100KM
   ];
 
   // Liquid fuel consumption from start in liter per 100 kilometer (l/100km). The value refers to the time the ignition is turned on. Ignition-on starts a new trip session, unless the last ignition-off event took place within the last 4 hours. The data is aggregated in a 4 hour interval.
   DRIVING_CONSUMPTION_FUEL_SINCESTART = 30 [
     (signal_name) = "Driving.Consumption.Fuel.SinceStart",
-    (signal_type) = DOUBLE
+    (signal_type) = DOUBLE,
+    (signal_unit) = LITER_PER_100KM
   ];
 
   // Distance driven in kilometer (km) after the last trip session was reset.
@@ -229,7 +281,8 @@ enum SignalName {
   // *NOTE:* For a plug-in hybrid vehicle, the value refers to the distance driven using the liquid fuel. The corresponding electrical distance for the vehicle can be seen in ***Driving.Distance.ZeroEmissions.SinceReset***
   DRIVING_DISTANCE_SINCERESET = 31 [
     (signal_name) = "Driving.Distance.SinceReset",
-    (signal_type) = DOUBLE
+    (signal_type) = DOUBLE,
+    (signal_unit) = KILOMETER
   ];
 
   // Distance driven in kilometer (km) during a driving session. Ignition-on starts a new driving   session, unless the latest ignition-off event took place within the last 4 hours. The data is aggregated in a 4 hour interval.
@@ -238,79 +291,92 @@ enum SignalName {
   // *NOTE:* For a plug-in hybrid vehicle, the value refers to the distance driven using the liquid fuel. The corresponding electrical distance for the vehicle can be seen in **Driving.Distance.ZeroEmissions.SinceStart**
   DRIVING_DISTANCE_SINCESTART = 32 [
     (signal_name) = "Driving.Distance.SinceStart",
-    (signal_type) = DOUBLE
+    (signal_type) = DOUBLE,
+    (signal_unit) = KILOMETER
   ];
 
   // Distance driven in kilometer (km) with electrical engine support after the last driving session was reset using the vehicles board computer. Only available for plug-in hybrid vehicles.
   DRIVING_DISTANCE_ZEROEMISSIONS_SINCERESET = 33 [
     (signal_name) = "Driving.Distance.ZeroEmissions.SinceReset",
-    (signal_type) = DOUBLE
+    (signal_type) = DOUBLE,
+    (signal_unit) = KILOMETER
   ];
 
   // Distance driven in kilometer (km) with electrical engine during a driving session. Ignition-on starts a new driving session, unless the latest ignition-off event took place within the last 4 hours. The data is aggregated in a 4 hour interval. Only available for plug-in hybrid vehicles.
   DRIVING_DISTANCE_ZEROEMISSIONS_SINCESTART = 34 [
     (signal_name) = "Driving.Distance.ZeroEmissions.SinceStart",
-    (signal_type) = DOUBLE
+    (signal_type) = DOUBLE,
+    (signal_unit) = KILOMETER
   ];
 
   // Eco-score rating for acceleration in percentage (%).
   DRIVING_ECOSCORE_ACCELERATION = 35 [
     (signal_name) = "Driving.EcoScore.Acceleration",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = PERCENT
   ];
 
   // Eco-score bonus in kilometer (km). While driving eco-friendly these bonus kilometers are collected.
   DRIVING_ECOSCORE_BONUSRANGE = 36 [
     (signal_name) = "Driving.EcoScore.BonusRange",
-    (signal_type) = DOUBLE
+    (signal_type) = DOUBLE,
+    (signal_unit) = KILOMETER
   ];
 
   // Eco-score rating for constant driving in percentage (%).
   DRIVING_ECOSCORE_CONSTANCY = 37 [
     (signal_name) = "Driving.EcoScore.Constancy",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = PERCENT
   ];
 
   // Eco-score rating free wheeling in percentage (%).
   DRIVING_ECOSCORE_FREEWHEEL = 38 [
     (signal_name) = "Driving.EcoScore.Freewheel",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = PERCENT
   ];
 
   // Lifetime odometer value of vehicle in kilometer (km).
   DRIVING_ODOMETER_LIFETIME = 39 [
     (signal_name) = "Driving.Odometer.Lifetime",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = KILOMETER
   ];
 
   // Lifetime odometer high resolution value of vehicle in kilometer (km). The value is provided in 0.1km resolution
   DRIVING_ODOMETER_LIFETIME_HIGHRESOLUTION = 40 [
     (signal_name) = "Driving.Odometer.Lifetime.HighResolution",
-    (signal_type) = DOUBLE
+    (signal_type) = DOUBLE,
+    (signal_unit) = KILOMETER
   ];
 
   // Remaining range of AdBlue in kilometer (km).
   DRIVING_RANGE_ADBLUE = 41 [
     (signal_name) = "Driving.Range.AdBlue",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = KILOMETER
   ];
 
   // Remaining range using electric engine in kilometer (km). Only available for electric & plug-in hybrid vehicles.
   DRIVING_RANGE_ELECTRICAL = 42 [
     (signal_name) = "Driving.Range.Electrical",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = KILOMETER
   ];
 
   // Maximum electrical range when battery is fully charged (100% state of charge) in kilometer (km). This can vary depending on the environmental situation, e.g. outside temperature. Only available for electric & plug-in hybrid vehicles.
   DRIVING_RANGE_ELECTRICAL_MAX = 43 [
     (signal_name) = "Driving.Range.Electrical.Max",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = KILOMETER
   ];
 
   // Remaining range using liquid fuel in kilometer (km).
   DRIVING_RANGE_FUEL = 44 [
     (signal_name) = "Driving.Range.Fuel",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = KILOMETER
   ];
 
   // Indicates whether the remaining range with liquid fuel is critical.
@@ -322,25 +388,29 @@ enum SignalName {
   // Current vehicle speed in kilometers per hour (km/h).
   DRIVING_SPEED_CURRENT = 46 [
     (signal_name) = "Driving.Speed.Current",
-    (signal_type) = DOUBLE
+    (signal_type) = DOUBLE,
+    (signal_unit) = KILOMETER_PER_HOUR
   ];
 
   // Average speed since reset in kilometers per hour (km/h). The value refers to the time a trip session was reset using the vehicles board computer.
   DRIVING_SPEED_SINCERESET_AVERAGE = 47 [
     (signal_name) = "Driving.Speed.SinceReset.Average",
-    (signal_type) = DOUBLE
+    (signal_type) = DOUBLE,
+    (signal_unit) = KILOMETER_PER_HOUR
   ];
 
   // Average speed since start in kilometers per hour (km/h).
   DRIVING_SPEED_SINCESTART_AVERAGE = 48 [
     (signal_name) = "Driving.Speed.SinceStart.Average",
-    (signal_type) = DOUBLE
+    (signal_type) = DOUBLE,
+    (signal_unit) = KILOMETER_PER_HOUR
   ];
 
   // State of charge at departure time in percent (%). Only available for electric & plug-in hybrid vehicles.
   DRIVING_STATEOFCHARGE_DEPARTURE = 49 [
     (signal_name) = "Driving.StateOfCharge.Departure",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = PERCENT
   ];
 
   // Current driving status of the vehicle.
@@ -352,102 +422,135 @@ enum SignalName {
   // Driven time since reset in minutes. The value refers to the time a trip session was reset using the vehicles board computer.
   DRIVING_TIME_SINCERESET = 51 [
     (signal_name) = "Driving.Time.SinceReset",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = MINUTE
   ];
 
   // Driven time since start in minutes. The value refers to the time the ignition is turned on. Ignition-on starts a new trip session, unless the last ignition-off event took place within the last 4 hours. The data is aggregated in a 4 hour interval.
   DRIVING_TIME_SINCESTART = 52 [
     (signal_name) = "Driving.Time.SinceStart",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = MINUTE
   ];
 
   // Driven time with electrical engine support since reset in minutes. The value refers to the time a trip session was reset using the vehicles board computer. Only available for plug-in hybrid vehicles.
   DRIVING_TIME_ZEROEMISSIONS_SINCERESET = 53 [
     (signal_name) = "Driving.Time.ZeroEmissions.SinceReset",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = MINUTE
   ];
 
   // Driven time with electrical engine support since start in minutes. The value refers to the time the ignition is turned on. Ignition-on starts a new trip session, unless the last ignition-off event took place within the last 4 hours. The data is aggregated in a 4 hour interval. Only available for plug-in hybrid vehicles.
   DRIVING_TIME_ZEROEMISSIONS_SINCESTART = 54 [
     (signal_name) = "Driving.Time.ZeroEmissions.SinceStart",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = MINUTE
   ];
 
   // The time that acceleration was below the threshold of -0.2g in milliseconds (ms)
   DRIVING_ACCELERATION_LATITUDE_NEGATIVEACCELERATIONOUTLIERS = 55 [
     (signal_name) = "Driving.Acceleration.Latitude.NegativeAccelerationOutliers",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = MILLISECOND
   ];
 
   // The time that acceleration was above the threshold of +0.2g in milliseconds (ms)
   DRIVING_ACCELERATION_LATITUDE_POSITIVEACCELERATIONOUTLIERS = 56 [
     (signal_name) = "Driving.Acceleration.Latitude.PositiveAccelerationOutliers",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = MILLISECOND
   ];
 
   // The time that acceleration was withing the threshold of +/- 0.2g in milliseconds (ms)
   DRIVING_ACCELERATION_LATITUDE_REGULARACCELERATIONS = 57 [
     (signal_name) = "Driving.Acceleration.Latitude.RegularAccelerations",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = MILLISECOND
   ];
 
   // The time that acceleration was below the threshold of -0.2g in milliseconds (ms)
   DRIVING_ACCELERATION_LONGITUDE_NEGATIVEACCELERATIONOUTLIERS = 58 [
     (signal_name) = "Driving.Acceleration.Longitude.NegativeAccelerationOutliers",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = MILLISECOND
   ];
 
   // The time that acceleration was above the threshold of +0.2g in milliseconds (ms)
   DRIVING_ACCELERATION_LONGITUDE_POSITIVEACCELERATIONOUTLIERS = 59 [
     (signal_name) = "Driving.Acceleration.Longitude.PositiveAccelerationOutliers",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = MILLISECOND
   ];
 
   // The time that acceleration was withing the threshold of +/- 0.2g in milliseconds (ms)
   DRIVING_ACCELERATION_LONGITUDE_REGULARACCELERATIONS = 60 [
     (signal_name) = "Driving.Acceleration.Longitude.RegularAccelerations",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = MILLISECOND
   ];
 
   // Status of the AC charging coupler.
-  //
-  // * CABLE_PLUGGED_BOTH_SIDES = charging wire plugged on both sides
-  // * CABLE_PLUGGED_VEHICLE_SIDE = charging wire plugged on vehicle side
-  // * CABLE_UNPLUGGED = charging wire not plugged on vehicle side
-  // * PLUG_STATE_UNKNOWN = plugged state unknown e.g due to defect
   ELECTRICALDRIVE_CHARGING_ACCOUPLER_STATUS = 61 [
     (signal_name) = "ElectricalDrive.Charging.ACCoupler.Status",
-    (signal_type) = STRING
+    (signal_type) = ENUM,
+    (signal_values) = {
+      value: "CABLE_PLUGGED_BOTH_SIDES"
+      description: "charging wire plugged on both sides"
+    },
+    (signal_values) = {
+      value: "CABLE_PLUGGED_VEHICLE_SIDE"
+      description: "charging wire plugged on vehicle side"
+    },
+    (signal_values) = {
+      value: "CABLE_UNPLUGGED"
+      description: "charging wire not plugged on vehicle side"
+    },
+    (signal_values) = {
+      value: "PLUG_STATE_UNKNOWN"
+      description: "plugged state unknown e.g due to defect"
+    }
   ];
 
   // Status of the DC charging coupler.
-  //
-  // * CABLE_PLUGGED_BOTH_SIDES = charging wire plugged on both sides
-  // * CABLE_PLUGGED_VEHICLE_SIDE = charging wire plugged on vehicle side
-  // * CABLE_UNPLUGGED = charging wire not plugged on vehicle side
-  // * PLUG_STATE_UNKNOWN = plugged state unknown e.g due to defect
   ELECTRICALDRIVE_CHARGING_DCCOUPLER_STATUS = 62 [
     (signal_name) = "ElectricalDrive.Charging.DCCoupler.Status",
-    (signal_type) = STRING
+    (signal_type) = ENUM,
+    (signal_values) = {
+      value: "CABLE_PLUGGED_BOTH_SIDES"
+      description: "charging wire plugged on both sides"
+    },
+    (signal_values) = {
+      value: "CABLE_PLUGGED_VEHICLE_SIDE"
+      description: "charging wire plugged on vehicle side"
+    },
+    (signal_values) = {
+      value: "CABLE_UNPLUGGED"
+      description: "charging wire not plugged on vehicle side"
+    },
+    (signal_values) = {
+      value: "PLUG_STATE_UNKNOWN"
+      description: "plugged state unknown e.g due to defect"
+    }
   ];
 
   // Time when the vehicle will be fully charged, counted in minutes from midnight depending on the local time of the vehicle. Only available for electric & plug-in hybrid vehicles.
   ELECTRICALDRIVE_CHARGING_ENDOFCHARGINGTIME = 63 [
     (signal_name) = "ElectricalDrive.Charging.EndOfChargingTime",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = MINUTE
   ];
 
   // Day when the vehicle will be fully charged. Only available for electric & plug-in hybrid vehicles.
-  // * MONDAY
-  // * TUESDAY
-  // * WEDNESDAY
-  // * THURSDAY
-  // * FRIDAY
-  // * SATURDAY
-  // * SUNDAY
   ELECTRICALDRIVE_CHARGING_ENDOFCHARGINGTIMEWEEKDAY = 64 [
     (signal_name) = "ElectricalDrive.Charging.EndOfChargingTimeWeekday",
-    (signal_type) = STRING
+    (signal_type) = ENUM,
+    (signal_values) = {value: "MONDAY"},
+    (signal_values) = {value: "TUESDAY"},
+    (signal_values) = {value: "WEDNESDAY"},
+    (signal_values) = {value: "THURSDAY"},
+    (signal_values) = {value: "FRIDAY"},
+    (signal_values) = {value: "SATURDAY"},
+    (signal_values) = {value: "SUNDAY"}
   ];
 
   // Indicates whether the charging of the high voltage battery is active.
@@ -459,64 +562,103 @@ enum SignalName {
   // Scheduled time for the nextDeparture while charging in minutes from midnight depending on the local time of the vehicle. Only available for electric vehicles.
   ELECTRICALDRIVE_CHARGING_NEXTDEPARTURETIME = 66 [
     (signal_name) = "ElectricalDrive.Charging.NextDepartureTime",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = MINUTE
   ];
 
   // Scheduled weekday for the nextDeparture while charging. Only available for electric vehicles.
-  // * NOT_SET
-  // * MONDAY
-  // * TUESDAY
-  // * WEDNESDAY
-  // * THURSDAY
-  // * FRIDAY
-  // * SATURDAY
-  // * SUNDAY
   ELECTRICALDRIVE_CHARGING_NEXTDEPARTURETIMEWEEKDAY = 67 [
     (signal_name) = "ElectricalDrive.Charging.NextDepartureTimeWeekday",
-    (signal_type) = STRING
+    (signal_type) = ENUM,
+    (signal_values) = {value: "NOT_SET"},
+    (signal_values) = {value: "MONDAY"},
+    (signal_values) = {value: "TUESDAY"},
+    (signal_values) = {value: "WEDNESDAY"},
+    (signal_values) = {value: "THURSDAY"},
+    (signal_values) = {value: "FRIDAY"},
+    (signal_values) = {value: "SATURDAY"},
+    (signal_values) = {value: "SUNDAY"}
   ];
 
   // Current conductive charging power in kilowatts (kW). This value is only valid while charging. Only available for electric & plug-in hybrid vehicles.
   ELECTRICALDRIVE_CHARGING_POWER = 68 [
     (signal_name) = "ElectricalDrive.Charging.Power",
-    (signal_type) = DOUBLE
+    (signal_type) = DOUBLE,
+    (signal_unit) = KILOWATT
   ];
 
   // Status of the optimized/intelligent charging. Only available for electric & plug-in hybrid vehicles.
-  //
-  // * WALLBOX =  wallbox or charging station is active
-  // * SMART_CHARGE_COMMUNICATION = smart charge communication is active
-  // * ON_OFF_PEAK = on/off-peak setting is active e.g day and night power
   ELECTRICALDRIVE_CHARGING_SMARTCHARGING_STATUS = 69 [
     (signal_name) = "ElectricalDrive.Charging.SmartCharging.Status",
-    (signal_type) = STRING
+    (signal_type) = ENUM,
+    (signal_values) = {
+      value: "WALLBOX"
+      description: " wallbox or charging station is active"
+    },
+    (signal_values) = {
+      value: "SMART_CHARGE_COMMUNICATION"
+      description: "smart charge communication is active"
+    },
+    (signal_values) = {
+      value: "ON_OFF_PEAK"
+      description: "on/off-peak setting is active e.g day and night power"
+    }
   ];
 
   // Provides the charging status of the high voltage battery. Only available for electric & plug-in hybrid vehicles.
-  //
-  // * CHARGING = currently charging
-  // * END = end of charging
-  // * BREAK = charge break
-  // * CABLE_UNPLUGGED = charge cable unplugged
-  // * ERROR = charging error
-  // * SLOW = slow charging
-  // * FAST = fast charging
-  // * DISCHARGING = discharging
-  // * NONE = no charging
-  // * CHARGING_FOREIGN_OBJECT = charging a forein object
   ELECTRICALDRIVE_CHARGING_STATUS = 70 [
     (signal_name) = "ElectricalDrive.Charging.Status",
-    (signal_type) = STRING
+    (signal_type) = ENUM,
+    (signal_values) = {
+      value: "CHARGING"
+      description: "currently charging"
+    },
+    (signal_values) = {
+      value: "END"
+      description: "end of charging"
+    },
+    (signal_values) = {
+      value: "BREAK"
+      description: "charge break"
+    },
+    (signal_values) = {
+      value: "CABLE_UNPLUGGED"
+      description: "charge cable unplugged"
+    },
+    (signal_values) = {
+      value: "ERROR"
+      description: "charging error"
+    },
+    (signal_values) = {
+      value: "SLOW"
+      description: "slow charging"
+    },
+    (signal_values) = {
+      value: "FAST"
+      description: "fast charging"
+    },
+    (signal_values) = {
+      value: "DISCHARGING"
+      description: "discharging"
+    },
+    (signal_values) = {
+      value: "NONE"
+      description: "no charging"
+    },
+    (signal_values) = {
+      value: "CHARGING_FOREIGN_OBJECT"
+      description: "charging a forein object"
+    }
   ];
 
   // The charge program type selected in the vehicle. Only available for electric & plug-in hybrid vehicles with charge program support.
-  // * DEFAULT
-  // * INSTANT
-  // * HOME
-  // * WORK
   ELECTRICALDRIVE_CHARGING_SELECTEDCHARGEPROGRAM = 71 [
     (signal_name) = "ElectricalDrive.Charging.SelectedChargeProgram",
-    (signal_type) = STRING
+    (signal_type) = ENUM,
+    (signal_values) = {value: "DEFAULT"},
+    (signal_values) = {value: "INSTANT"},
+    (signal_values) = {value: "HOME"},
+    (signal_values) = {value: "WORK"}
   ];
 
   // The maximum state of charge configured for the charge program type **Home** in the vehicle. The battery will not be charged above this value when the Home charge program is active. Only available for electric & plug-in hybrid vehicles with charge program support.
@@ -540,18 +682,34 @@ enum SignalName {
   // Current state of charge of the high voltage battery in percent (%). Only available for electric & plug-in hybrid vehicles.
   ELECTRICALDRIVE_HIGHVOLTAGEBATTERY_STATEOFCHARGE = 75 [
     (signal_name) = "ElectricalDrive.HighVoltageBattery.StateOfCharge",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = PERCENT
   ];
 
   // Status of the ignition.
-  // * LOCK = head unit, communication and engine are off. State is given, when the vehicle door is opened after usage
-  // * OFF = engine is off and steering wheel is unlocked
-  // * ACCESSORY = accessories in vehicle are usable, head unit is on
-  // * ON = all systems and the engine are on
-  // * START = intermediate step between ACCESSORY and ON, starting the engine
   IGNITION_STATUS = 76 [
     (signal_name) = "Ignition.Status",
-    (signal_type) = STRING
+    (signal_type) = ENUM,
+    (signal_values) = {
+      value: "LOCK"
+      description: "head unit, communication and engine are off. State is given, when the vehicle door is opened after usage"
+    },
+    (signal_values) = {
+      value: "OFF"
+      description: "engine is off and steering wheel is unlocked"
+    },
+    (signal_values) = {
+      value: "ACCESSORY"
+      description: "accessories in vehicle are usable, head unit is on"
+    },
+    (signal_values) = {
+      value: "ON"
+      description: "all systems and the engine are on"
+    },
+    (signal_values) = {
+      value: "START"
+      description: "intermediate step between ACCESSORY and ON, starting the engine"
+    }
   ];
 
   // Activation state of the vehicle keys. This signal is not available in AMAP region.
@@ -581,7 +739,8 @@ enum SignalName {
   // Provides the oil level as percentage (%). The range of reported values has 60 as its lower limit and 115 as its upper limit.
   INTERNALCOMBUSTIONENGINE_OIL_LEVEL = 81 [
     (signal_name) = "InternalCombustionEngine.Oil.Level",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = PERCENT
   ];
 
   // Indicates whether an oil level warning is triggered. Signal should be used in conjunction with InternalCombustionEngine.Oil.Level to determine the current oil level.
@@ -618,48 +777,61 @@ enum SignalName {
   ];
 
   // Provides the light switch status.
-  //
-  // * AUTO = light switch status is automatic
-  // * LOWBEAM = light switch status is low beam
-  // * PARKINGLIGHT_LEFT = light switch status is parking light left
-  // * PARKINGLIGHT_RIGHT = light switch status is parking light right
-  // * PARKINGLIGHT = light switch status is parking light
   LIGHTS_LIGHTSWITCH_STATUS = 87 [
     (signal_name) = "Lights.Lightswitch.Status",
-    (signal_type) = STRING
+    (signal_type) = ENUM,
+    (signal_values) = {
+      value: "AUTO"
+      description: "light switch status is automatic"
+    },
+    (signal_values) = {
+      value: "LOWBEAM"
+      description: "light switch status is low beam"
+    },
+    (signal_values) = {
+      value: "PARKINGLIGHT_LEFT"
+      description: "light switch status is parking light left"
+    },
+    (signal_values) = {
+      value: "PARKINGLIGHT_RIGHT"
+      description: "light switch status is parking light right"
+    },
+    (signal_values) = {
+      value: "PARKINGLIGHT"
+      description: "light switch status is parking light"
+    }
   ];
 
   // UTC timestamp (in milliseconds) of the last park event. A park event happens when the parked vehicle is bumped, e.g. by another vehicle.
   PARKING_PARKEVENT_LASTPARKEVENT_TIME = 88 [
     (signal_name) = "Parking.Parkevent.LastParkevent.Time",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = MILLISECOND
   ];
 
   // Provides the severity level of the last park event. A park event happens when the parked vehicle is bumped, e.g. by another vehicle.
-  //
-  // * LOW
-  // * MEDIUM
-  // * HIGH
   PARKING_PARKEVENT_LEVEL = 89 [
     (signal_name) = "Parking.Parkevent.Level",
-    (signal_type) = STRING
+    (signal_type) = ENUM,
+    (signal_values) = {value: "LOW"},
+    (signal_values) = {value: "MEDIUM"},
+    (signal_values) = {value: "HIGH"}
   ];
 
   // Provides information about the location of the last park event. A park event happens when the parked vehicle is bumped, e.g. by another vehicle.
-  //
-  // * IDLE
-  // * FRONT_LEFT
-  // * FRONT_MIDDLE
-  // * FRONT_RIGHT
-  // * RIGHT
-  // * REAR_RIGHT
-  // * REAR_MIDDLE
-  // * REAR_LEFT
-  // * LEFT
-  // * UNKNOWN
   PARKING_PARKEVENT_TYPE = 90 [
     (signal_name) = "Parking.Parkevent.Type",
-    (signal_type) = STRING
+    (signal_type) = ENUM,
+    (signal_values) = {value: "IDLE"},
+    (signal_values) = {value: "FRONT_LEFT"},
+    (signal_values) = {value: "FRONT_MIDDLE"},
+    (signal_values) = {value: "FRONT_RIGHT"},
+    (signal_values) = {value: "RIGHT"},
+    (signal_values) = {value: "REAR_RIGHT"},
+    (signal_values) = {value: "REAR_MIDDLE"},
+    (signal_values) = {value: "REAR_LEFT"},
+    (signal_values) = {value: "LEFT"},
+    (signal_values) = {value: "UNKNOWN"}
   ];
 
   // Heading of vehicle at the last known position.
@@ -683,7 +855,8 @@ enum SignalName {
   // Scheduled vehicle departure time (-1 value is not set), counted in minutes from midnight and depending on the time of the vehicle.
   PRECONDITIONING_SCHEDULEDTIME = 94 [
     (signal_name) = "Preconditioning.ScheduledTime",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = MINUTE
   ];
 
   // Indicates whether the precondition is running.
@@ -695,30 +868,44 @@ enum SignalName {
   // Counter (min) showing the time until the precondition is completed. Active only if the precondition is running.
   PRECONDITIONING_REMAININGRUNTIME = 96 [
     (signal_name) = "Preconditioning.RemainingRuntime",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = MINUTE
   ];
 
   // Residual distance to service in kilometer (km). Potential negative values indicate the service is overdue.
   SERVICE_INTERVAL_DISTANCE = 97 [
     (signal_name) = "Service.Interval.Distance",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = KILOMETER
   ];
 
   // Residual time to service in days. Potential negative values indicate the service is overdue.
   SERVICE_INTERVAL_TIME = 98 [
     (signal_name) = "Service.Interval.Time",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = DAY
   ];
 
   // Service warning status of the vehicle.
-  //
-  // * DUE_SOON = Vehicle will be due for service shortly in future
-  // * DUE = Vehicle is currently due for service
-  // * OVERDUE = Vehicle is overdue for service indicating a failure of service on time
-  // * NONE = No service warning for the vehicle
   SERVICE_WARNING_STATUS = 99 [
     (signal_name) = "Service.Warning.Status",
-    (signal_type) = STRING
+    (signal_type) = ENUM,
+    (signal_values) = {
+      value: "DUE_SOON"
+      description: "Vehicle will be due for service shortly in future"
+    },
+    (signal_values) = {
+      value: "DUE"
+      description: "Vehicle is currently due for service"
+    },
+    (signal_values) = {
+      value: "OVERDUE"
+      description: "Vehicle is overdue for service indicating a failure of service on time"
+    },
+    (signal_values) = {
+      value: "NONE"
+      description: "No service warning for the vehicle"
+    }
   ];
 
   // Buckled up, set "true" indicate´s that the buckle switch is closed, buckled up set "false" indicates that buckle switch is open.
@@ -728,21 +915,36 @@ enum SignalName {
   ];
 
   // Provides the "charging health status" of the 12V starter battery. With each battery state change, the battery sends a signal update. When the battery state changes from ORANGE to RED, the battery sends a last hick-up signal, telling the state is RED now.
-  //
-  // * GREEN = ok
-  // * GREENYELLOW = battery partly discharged but ok
-  // * YELLOW = battery partly discharged, battery should be charged by driving the vehicle to avoid loosing functionality
-  // * ORANGE = battery is now in saving mode, remote commands are not possible anymore, battery should be charged by driving the vehicle
-  // * RED = vehicle engine will not start anymore, battery must be charged using an external system
   SUPPLYBATTERY_STATUS = 101 [
     (signal_name) = "SupplyBattery.Status",
-    (signal_type) = STRING
+    (signal_type) = ENUM,
+    (signal_values) = {
+      value: "GREEN"
+      description: "ok"
+    },
+    (signal_values) = {
+      value: "GREENYELLOW"
+      description: "battery partly discharged but ok"
+    },
+    (signal_values) = {
+      value: "YELLOW"
+      description: "battery partly discharged, battery should be charged by driving the vehicle to avoid loosing functionality"
+    },
+    (signal_values) = {
+      value: "ORANGE"
+      description: "battery is now in saving mode, remote commands are not possible anymore, battery should be charged by driving the vehicle"
+    },
+    (signal_values) = {
+      value: "RED"
+      description: "vehicle engine will not start anymore, battery must be charged using an external system"
+    }
   ];
 
   // Supply battery voltage in Volt (V).
   SUPPLYBATTERY_VOLTAGE = 102 [
     (signal_name) = "SupplyBattery.Voltage",
-    (signal_type) = DOUBLE
+    (signal_type) = DOUBLE,
+    (signal_unit) = VOLT
   ];
 
   // Indicates whether a warning for the supply battery is triggered.
@@ -754,13 +956,15 @@ enum SignalName {
   // AdBlue tank level in percent (%).
   TANK_ADBLUE_LEVEL = 104 [
     (signal_name) = "Tank.AdBlue.Level",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = PERCENT
   ];
 
   // Liquid fuel tank level in percent (%).
   TANK_FUEL_LEVEL = 105 [
     (signal_name) = "Tank.Fuel.Level",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = PERCENT
   ];
 
   // Liquid fuel tank level in liter.
@@ -784,7 +988,8 @@ enum SignalName {
   // Provides the front left tire pressure in kilopascal (kPa).
   TIRES_FRONT_LEFT_PRESSURE = 109 [
     (signal_name) = "Tires.Front.Left.Pressure",
-    (signal_type) = DOUBLE
+    (signal_type) = DOUBLE,
+    (signal_unit) = KILOPASCAL
   ];
 
   // Indicates whether a warning for the front left tire is triggered.
@@ -794,20 +999,36 @@ enum SignalName {
   ];
 
   // Provides status of present warning for front left tire.
-  // * NONE = no warning
-  // * SOFT = soft warning
-  // * LOW_PRESSURE = low pressure detected
-  // * DEFLATION = the tire is deflated
-  // * UNKNOWN = unknown status
   TIRES_FRONT_LEFT_WARNING_STATUS = 111 [
     (signal_name) = "Tires.Front.Left.Warning.Status",
-    (signal_type) = STRING
+    (signal_type) = ENUM,
+    (signal_values) = {
+      value: "NONE"
+      description: "no warning"
+    },
+    (signal_values) = {
+      value: "SOFT"
+      description: "soft warning"
+    },
+    (signal_values) = {
+      value: "LOW_PRESSURE"
+      description: "low pressure detected"
+    },
+    (signal_values) = {
+      value: "DEFLATION"
+      description: "the tire is deflated"
+    },
+    (signal_values) = {
+      value: "UNKNOWN"
+      description: "unknown status"
+    }
   ];
 
   // Provides the front right tire pressure in kilopascal (kPa).
   TIRES_FRONT_RIGHT_PRESSURE = 112 [
     (signal_name) = "Tires.Front.Right.Pressure",
-    (signal_type) = DOUBLE
+    (signal_type) = DOUBLE,
+    (signal_unit) = KILOPASCAL
   ];
 
   // Indicates whether a warning for the front right tire is triggered.
@@ -817,21 +1038,36 @@ enum SignalName {
   ];
 
   // Provides status of present warning for front right tire.
-  //
-  // * NONE = no warning
-  // * SOFT = soft warning
-  // * LOW_PRESSURE = low pressure detected
-  // * DEFLATION = the tire is deflated
-  // * UNKNOWN = unknown status
   TIRES_FRONT_RIGHT_WARNING_STATUS = 114 [
     (signal_name) = "Tires.Front.Right.Warning.Status",
-    (signal_type) = STRING
+    (signal_type) = ENUM,
+    (signal_values) = {
+      value: "NONE"
+      description: "no warning"
+    },
+    (signal_values) = {
+      value: "SOFT"
+      description: "soft warning"
+    },
+    (signal_values) = {
+      value: "LOW_PRESSURE"
+      description: "low pressure detected"
+    },
+    (signal_values) = {
+      value: "DEFLATION"
+      description: "the tire is deflated"
+    },
+    (signal_values) = {
+      value: "UNKNOWN"
+      description: "unknown status"
+    }
   ];
 
   // Provides the rear left tire pressure in kilopascal (kPa).
   TIRES_REAR_LEFT_PRESSURE = 115 [
     (signal_name) = "Tires.Rear.Left.Pressure",
-    (signal_type) = DOUBLE
+    (signal_type) = DOUBLE,
+    (signal_unit) = KILOPASCAL
   ];
 
   // Indicates whether a warning for the rear left tire is triggered.
@@ -841,21 +1077,36 @@ enum SignalName {
   ];
 
   // Provides status of present warning for rear left tire.
-  //
-  // * NONE = no warning
-  // * SOFT = soft warning
-  // * LOW_PRESSURE = low pressure detected
-  // * DEFLATION = the tire is deflated
-  // * UNKNOWN = unknown status
   TIRES_REAR_LEFT_WARNING_STATUS = 117 [
     (signal_name) = "Tires.Rear.Left.Warning.Status",
-    (signal_type) = STRING
+    (signal_type) = ENUM,
+    (signal_values) = {
+      value: "NONE"
+      description: "no warning"
+    },
+    (signal_values) = {
+      value: "SOFT"
+      description: "soft warning"
+    },
+    (signal_values) = {
+      value: "LOW_PRESSURE"
+      description: "low pressure detected"
+    },
+    (signal_values) = {
+      value: "DEFLATION"
+      description: "the tire is deflated"
+    },
+    (signal_values) = {
+      value: "UNKNOWN"
+      description: "unknown status"
+    }
   ];
 
   // Provides the rear right tire pressure in kilopascal (kPa).
   TIRES_REAR_RIGHT_PRESSURE = 118 [
     (signal_name) = "Tires.Rear.Right.Pressure",
-    (signal_type) = DOUBLE
+    (signal_type) = DOUBLE,
+    (signal_unit) = KILOPASCAL
   ];
 
   // Indicates whether a warning for the rear right tire is triggered.
@@ -865,21 +1116,36 @@ enum SignalName {
   ];
 
   // Provides status of present warning for rear right tire.
-  //
-  // * NONE = no warning
-  // * SOFT = soft warning
-  // * LOW_PRESSURE = low pressure detected
-  // * DEFLATION = the tire is deflated
-  // * UNKNOWN = unknown status
   TIRES_REAR_RIGHT_WARNING_STATUS = 120 [
     (signal_name) = "Tires.Rear.Right.Warning.Status",
-    (signal_type) = STRING
+    (signal_type) = ENUM,
+    (signal_values) = {
+      value: "NONE"
+      description: "no warning"
+    },
+    (signal_values) = {
+      value: "SOFT"
+      description: "soft warning"
+    },
+    (signal_values) = {
+      value: "LOW_PRESSURE"
+      description: "low pressure detected"
+    },
+    (signal_values) = {
+      value: "DEFLATION"
+      description: "the tire is deflated"
+    },
+    (signal_values) = {
+      value: "UNKNOWN"
+      description: "unknown status"
+    }
   ];
 
   // The time difference in milliseconds of local vehicle time to the UTC time. In any given moment, adding the offset value to the time in UTC will result in the equivalent time in the vehicle. A positive offset indicates that the time in vehicle is ahead of UTC time while a negative offset denotes that the vehicle time is behind the UTC.
   VEHICLE_CLOCK_TIME_UTC_OFFSET = 121 [
     (signal_name) = "Vehicle.Clock.Time.UTC.Offset",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = MILLISECOND
   ];
 
   // Indicates whether the front left window is open.

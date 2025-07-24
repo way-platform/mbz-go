@@ -3,7 +3,9 @@ syntax = "proto3";
 package wayplatform.mbz.v1;
 
 import "google/protobuf/descriptor.proto";
+import "wayplatform/mbz/v1/signal_enum_value.proto";
 import "wayplatform/mbz/v1/signal_type.proto";
+import "wayplatform/mbz/v1/signal_unit.proto";
 
 extend google.protobuf.EnumValueOptions {
   // This enum options stores the exact string representation of a
@@ -18,4 +20,16 @@ extend google.protobuf.EnumValueOptions {
   // Field number is the 28 most significant bits in the sha256 sum of
   // `wayplatform.mbz.v1.signal_type`.
   SignalType signal_type = 222389729;
+
+  // This enum options stores the unit of a signal.
+  //
+  // Field number is the 28 most significant bits in the sha256 sum of
+  // `wayplatform.mbz.v1.signal_unit`.
+  SignalUnit signal_unit = 56895283;
+
+  // This enum options stores the values of an enum signal.
+  //
+  // Field number is the 28 most significant bits in the sha256 sum of
+  // `wayplatform.mbz.v1.signal_enum_value`.
+  repeated SignalEnumValue signal_values = 46836650;
 }
