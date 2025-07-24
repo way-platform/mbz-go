@@ -577,7 +577,7 @@ var File_wayplatform_mbz_v1_signal_identifier_proto protoreflect.FileDescriptor
 
 const file_wayplatform_mbz_v1_signal_identifier_proto_rawDesc = "" +
 	"\n" +
-	"*wayplatform/mbz/v1/signal_identifier.proto\x12\x12wayplatform.mbz.v1\x1a$wayplatform/mbz/v1/annotations.proto*\xc0{\n" +
+	"*wayplatform/mbz/v1/signal_identifier.proto\x12\x12wayplatform.mbz.v1\x1a$wayplatform/mbz/v1/annotations.proto*\xc6{\n" +
 	"\x10SignalIdentifier\x12!\n" +
 	"\x1dSIGNAL_IDENTIFIER_UNSPECIFIED\x10\x00\x12N\n" +
 	"\x1eANTITHEFTSYSTEM_ALARM_ISACTIVE\x10\x01\x1a*\x9a\x96\xb7\xeb\x03\x1eAntiTheftSystem.Alarm.IsActive\x88ެ\xd0\x06\x04\x12T\n" +
@@ -740,8 +740,9 @@ const file_wayplatform_mbz_v1_signal_identifier_proto_rawDesc = "" +
 	"\x02ON\x12!all systems and the engine are onҺղ\x01H\n" +
 	"\x05START\x12?intermediate step between ACCESSORY and ON, starting the engine\x9a\x96\xb7\xeb\x03\x0fIgnition.Status\x88ެ\xd0\x06\x05\x12T\n" +
 	"!IMMOBILIZER_KEYS_ALLDEPROVISIONED\x10M\x1a-\x9a\x96\xb7\xeb\x03!Immobilizer.Keys.AllDeprovisioned\x88ެ\xd0\x06\x04\x12n\n" +
-	".INTERNALCOMBUSTIONENGINE_COOLANT_LEVEL_WARNING\x10N\x1a:\x9a\x96\xb7\xeb\x03.InternalCombustionEngine.Coolant.Level.Warning\x88ެ\xd0\x06\x04\x12j\n" +
-	",INTERNALCOMBUSTIONENGINE_COOLANT_TEMPERATURE\x10O\x1a8\x9a\x96\xb7\xeb\x03,InternalCombustionEngine.Coolant.Temperature\x88ެ\xd0\x06\x02\x12f\n" +
+	".INTERNALCOMBUSTIONENGINE_COOLANT_LEVEL_WARNING\x10N\x1a:\x9a\x96\xb7\xeb\x03.InternalCombustionEngine.Coolant.Level.Warning\x88ެ\xd0\x06\x04\x12p\n" +
+	",INTERNALCOMBUSTIONENGINE_COOLANT_TEMPERATURE\x10O\x1a>\x98\xf3\x84\xd9\x01\n" +
+	"\x9a\x96\xb7\xeb\x03,InternalCombustionEngine.Coolant.Temperature\x88ެ\xd0\x06\x02\x12f\n" +
 	"*INTERNALCOMBUSTIONENGINE_LIMPMODE_ISACTIVE\x10P\x1a6\x9a\x96\xb7\xeb\x03*InternalCombustionEngine.LimpMode.IsActive\x88ެ\xd0\x06\x04\x12\\\n" +
 	"\"INTERNALCOMBUSTIONENGINE_OIL_LEVEL\x10Q\x1a4\x98\xf3\x84\xd9\x01\x03\x9a\x96\xb7\xeb\x03\"InternalCombustionEngine.Oil.Level\x88ެ\xd0\x06\x02\x12f\n" +
 	"*INTERNALCOMBUSTIONENGINE_OIL_LEVEL_WARNING\x10R\x1a6\x9a\x96\xb7\xeb\x03*InternalCombustionEngine.Oil.Level.Warning\x88ެ\xd0\x06\x04\x12F\n" +
