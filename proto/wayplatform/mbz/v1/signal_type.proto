@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package wayplatform.mbz.v1;
+
+// SignalType represents the type of a signal.
+enum SignalType {
+  // Default value. This value is not used.
+  SIGNAL_TYPE_UNSPECIFIED = 0;
+
+  // A string signal.
+  STRING = 1;
+
+  // An integer signal.
+  INTEGER = 2;
+
+  // A double signal.
+  DOUBLE = 3;
+
+  // A boolean signal.
+  BOOLEAN = 4;
+}

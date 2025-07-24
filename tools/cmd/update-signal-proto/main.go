@@ -22,6 +22,9 @@ type asyncAPISchema struct {
 			Properties  struct {
 				Data struct {
 					Properties struct {
+						Type struct {
+							Type string `yaml:"type"`
+						} `yaml:"type"`
 						Signals struct {
 							Items []struct {
 								Ref string `yaml:"$ref"`
