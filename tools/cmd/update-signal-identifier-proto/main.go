@@ -218,7 +218,7 @@ func tryInferSignalUnit(comment string) string {
 		return "LITER"
 	case strings.Contains(comment, "(V)"):
 		return "VOLT"
-	case strings.Contains(comment, "(°C)"):
+	case strings.Contains(comment, "(°C)") || strings.Contains(comment, "celsius"):
 		return "CELSIUS"
 	case strings.Contains(comment, "(kPa)"):
 		return "KILOPASCAL"

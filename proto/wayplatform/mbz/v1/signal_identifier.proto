@@ -598,7 +598,8 @@ enum SignalIdentifier {
   // Engine coolant temperature in degree celsius (�C).
   INTERNALCOMBUSTIONENGINE_COOLANT_TEMPERATURE = 79 [
     (signal_name) = "InternalCombustionEngine.Coolant.Temperature",
-    (signal_type) = INTEGER
+    (signal_type) = INTEGER,
+    (signal_unit) = CELSIUS
   ];
 
   // Indicates whether the engine is in fail-safe mode.
