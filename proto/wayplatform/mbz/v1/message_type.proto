@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package wayplatform.mbz.v1;
+
+// MessageType represents the type of a message.
+enum MessageType {
+  MESSAGE_TYPE_UNSPECIFIED = 0;
+
+  // A vehicle signal message contains the vehicle signals as well as meta
+  // data providing context information.
+  //
+  // It contains the signals belonging to a specific service and for every service
+  // a separate message is sent.
+  SIGNALS = 1;
+
+  // A vehicle registration response message reports whether a vehicle has
+  // been registered successfully or whether the registration has failed.
+  REGISTRATION_RESPONSE = 2;
+
+  // A vehicle service status update message reports whether service status
+  // has changed.
+  SERVICE_STATUS_UPDATE = 3;
+
+  // A notification message if the service status of a vehicle is in
+  // ACTIVATION_PENDING state for more than 28 days.
+  SERVICE_ACTIVATION_PENDING = 4;
+
+  // A vehicle's trip summary message reports signals that were computed and/or
+  // aggregated during a trip.
+  TRIP_SUMMARY = 5;
+
+  // A vehicle's refueling detection message reports signals that were computed
+  // and/or aggregated after the vehicle has been refueled.
+  REFUELING_DETECTION = 6;
+
+  // A vehicle's charging detection message reports signals that were computed
+  // and/or aggregated after the vehicle has been charging for a certain amount of
+  // time.
+  CHARGING_DETECTION = 7;
+
+  // A vehicle's charging cycle summary message reports signals that were computed
+  // and/or aggregated while the battery was charged.
+  CHARGING_CYCLE_SUMMARY = 8;
+}

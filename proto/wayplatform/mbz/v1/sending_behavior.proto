@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package wayplatform.mbz.v1;
+
+// SendingBehavior represents the sending behavior of a message.
+enum SendingBehavior {
+  // Default value. This value is not used.
+  SENDING_BEHAVIOR_UNSPECIFIED = 0;
+
+  // The signal is published as soon as its value changes and the delivery is technically possible.
+  ON_CHANGE = 1;
+
+  // The signal is published at regular intervals of 120 seconds, if available.
+  ON_INTERVAL_120_SEC = 2;
+
+  // The signal is published at regular intervals of 30 seconds, if available.
+  ON_INTERVAL_30_SEC = 3;
+
+  // The signal is published at regular intervals of 15 seconds, if available.
+  ON_INTERVAL_15_SEC = 4;
+
+  // The signal is consumed (not published) during a trip for the purpose of aggregation at the end.
+  ON_TRIP = 5;
+
+  // The signal is published when the end of a trip is detected for a vehicle and all other trip-related signals have been received for said vehicle.
+  ON_TRIP_END = 6;
+
+  // The signal is consumed (not published) during a charging session for the purpose of aggregation at the end.
+  ON_CHARGING_SESSION = 7;
+
+  // The signal is published when the end of a charging session is detected for a vehicle and all other charging session related signals have been received for said vehicle.
+  ON_CHARGING_SESSION_END = 8;
+
+  // The signal is published when the ignition lock is detected for a vehicle.
+  ON_IGNITION_LOCK = 9;
+
+  // The signal is consumed (not published) during refueling of a vehicle with combustion engine for the purpose of aggregation.
+  ON_REFUEL_SESSION = 10;
+
+  // The signal is published when the refueling of a vehicle with combustion engine has finished.
+  ON_REFUELING_END = 11;
+
+  // The signal is consumed (not published) during a charging cycle for the purpose of aggregation.
+  ON_CHARGING_CYCLE = 12;
+
+  // The signal is published when the end of a charging cycle is detected.
+  ON_CHARGING_CYCLE_END = 13;
+
+  // The signal is consumed (not published) during the battery charging process of an electrical or hybrid vehicle.
+  ON_RECHARGE_SESSION = 14;
+
+  // The signal is published as soon as the charging process of the battery of an electrical or hybrid vehicle has been active for a set duration.
+  ON_CHARGING_DETECTION = 15;
+
+  // The signal is published as soon as its value or timestamp changes and the delivery is technically possible.
+  ON_REFRESH = 16;
+}

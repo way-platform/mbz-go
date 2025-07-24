@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package wayplatform.mbz.v1;
+
+import "wayplatform/mbz/v1/message_type.proto";
+import "wayplatform/mbz/v1/sending_behavior.proto";
+import "wayplatform/mbz/v1/signal.proto";
+
+// A push message from the Mercedes-Benz Kafka push API.
+message PushMessage {
+  // Unique message identifier.
+  string message_id = 1;
+
+  // Vehicle identification number (VIN).
+  string vin = 2;
+
+  // Time when the message was created (in microseconds since Unix epoch).
+  int64 timestamp = 3;
+
+  // Message type.
+  MessageType message_type = 4;
+
+  // Version tag for the message.
+  string version = 5;
+
+  // Service associated with the message.
+  string service_id = 6;
+
+  // Sending behavior.
+  SendingBehavior sending_behavior = 7;
+
+  // Signals (valid for SIGNALS message type).
+  repeated Signal signals = 8;
+}

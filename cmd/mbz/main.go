@@ -18,6 +18,7 @@ import (
 	"github.com/way-platform/mbz-go"
 	"github.com/way-platform/mbz-go/api/vehiclesv1"
 	"github.com/way-platform/mbz-go/cmd/mbz/internal/auth"
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 func main() {
@@ -272,7 +273,8 @@ func newConsumeVehicleSignalsCommand() *cobra.Command {
 	_ = cmd.MarkFlagRequired("topic")
 	consumerGroup := cmd.Flags().String("consumer-group", "", "Consumer group")
 	_ = cmd.MarkFlagRequired("consumer-group")
-	debug := cmd.Flags().Bool("debug", false, "Enable debug logging")
+	enableDebug := cmd.Flags().Bool("debug", false, "Enable debug logging")
+	format := cmd.Flags().String("format", "json", "Format to use for output")
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
 		authFile, err := auth.ReadFile()
 		if err != nil {
@@ -298,7 +300,7 @@ func newConsumeVehicleSignalsCommand() *cobra.Command {
 				}, nil
 			})),
 		}
-		if *debug {
+		if *enableDebug {
 			opts = append(opts, kgo.WithLogger(&logger{sl: slog.Default()}))
 		}
 		client, err := kgo.NewClient(opts...)
@@ -323,11 +325,30 @@ func newConsumeVehicleSignalsCommand() *cobra.Command {
 			it := fetches.RecordIter()
 			for !it.Done() {
 				record := it.Next()
-				var msg mbz.Message
-				if err := json.Unmarshal(record.Value, &msg); err != nil {
-					return fmt.Errorf("failed to unmarshal message: %w", err)
+				switch *format {
+				case "json":
+					var msg mbz.PushMessage
+					if err := json.Unmarshal(record.Value, &msg); err != nil {
+						return fmt.Errorf("failed to unmarshal message: %w", err)
+					}
+					data, err := json.MarshalIndent(msg, "", "  ")
+					if err != nil {
+						return fmt.Errorf("failed to marshal message: %w", err)
+					}
+					fmt.Println(string(data))
+				case "proto":
+					var msg mbz.PushMessage
+					if err := json.Unmarshal(record.Value, &msg); err != nil {
+						return fmt.Errorf("failed to unmarshal message: %w", err)
+					}
+					protoMsg, err := msg.AsProto()
+					if err != nil {
+						return fmt.Errorf("failed to convert message to protobuf: %w", err)
+					}
+					fmt.Println(protojson.Format(protoMsg))
+				case "raw":
+					fmt.Println(string(record.Value))
 				}
-				fmt.Println(msg)
 			}
 			slog.Debug("fetched records", "count", fetches.NumRecords())
 		}
