@@ -1,5 +1,9 @@
 # Mercedes-Benz Go
 
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/way-platform/mbz-go)](https://pkg.go.dev/github.com/way-platform/mbz-go)
+[![GoReportCard](https://goreportcard.com/badge/github.com/way-platform/mbz-go)](https://goreportcard.com/report/github.com/way-platform/mbz-go)
+[![CI](https://github.com/way-platform/mbz-go/actions/workflows/release.yaml/badge.svg)](https://github.com/way-platform/mbz-go/actions/workflows/release.yaml)
+
 A Go SDK and CLI tool for the Mercedes-Benz [Connect Your Fleet APIs](https://developer.mercedes-benz.com/products/connect_your_fleet).
 
 ## SDK
@@ -114,3 +118,15 @@ $ mbz consume-vehicle-signals --consumer-group $MBZ_CONSUMER_GROUP --topic $MBZ_
   }
 }
 ```
+
+## License
+
+This SDK is published under the [MIT License](./LICENSE).
+
+## Security
+
+Security researchers, see the [Security Policy](https://github.com/way-platform/mbz-go?tab=security-ov-file#readme).
+
+## Code of Conduct
+
+Be nice. For more info, see the [Code of Conduct](https://github.com/way-platform/mbz-go?tab=coc-ov-file#readme).
