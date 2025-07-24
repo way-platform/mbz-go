@@ -716,136 +716,136 @@ var File_wayplatform_mbz_v1_signal_proto protoreflect.FileDescriptor
 
 const file_wayplatform_mbz_v1_signal_proto_rawDesc = "" +
 	"\n" +
-	"\x1fwayplatform/mbz/v1/signal.proto\x12\x12wayplatform.mbz.v1\x1a$wayplatform/mbz/v1/annotations.proto*\xf3L\n" +
+	"\x1fwayplatform/mbz/v1/signal.proto\x12\x12wayplatform.mbz.v1\x1a$wayplatform/mbz/v1/annotations.proto*\xdaR\n" +
 	"\n" +
-	"SignalName\x12#\n" +
-	"\x17SIGNAL_NAME_UNSPECIFIED\x10\x00\x1a\x06\x9a\x96\xb7\xeb\x03\x00\x12H\n" +
-	"\x1eANTITHEFTSYSTEM_ALARM_ISACTIVE\x10\x01\x1a$\x9a\x96\xb7\xeb\x03\x1eAntiTheftSystem.Alarm.IsActive\x12N\n" +
-	"!ANTITHEFTSYSTEM_ALARM_ISTRIGGERED\x10\x02\x1a'\x9a\x96\xb7\xeb\x03!AntiTheftSystem.Alarm.IsTriggered\x12Z\n" +
-	"'ANTITHEFTSYSTEM_LASTTHEFTWARNING_REASON\x10\x03\x1a-\x9a\x96\xb7\xeb\x03'AntiTheftSystem.LastTheftWarning.Reason\x12\x86\x01\n" +
-	"=ANTITHEFTSYSTEM_PROTECTIONSENSORS_INTERIORPROTECTION_ISACTIVE\x10\x04\x1aC\x9a\x96\xb7\xeb\x03=AntiTheftSystem.ProtectionSensors.InteriorProtection.IsActive\x12\x8c\x01\n" +
-	"@ANTITHEFTSYSTEM_PROTECTIONSENSORS_INTERIORPROTECTION_ISTRIGGERED\x10\x05\x1aF\x9a\x96\xb7\xeb\x03@AntiTheftSystem.ProtectionSensors.InteriorProtection.IsTriggered\x12|\n" +
-	"8ANTITHEFTSYSTEM_PROTECTIONSENSORS_TOWPROTECTION_ISACTIVE\x10\x06\x1a>\x9a\x96\xb7\xeb\x038AntiTheftSystem.ProtectionSensors.TowProtection.IsActive\x12\x82\x01\n" +
-	";ANTITHEFTSYSTEM_PROTECTIONSENSORS_TOWPROTECTION_ISTRIGGERED\x10\a\x1aA\x9a\x96\xb7\xeb\x03;AntiTheftSystem.ProtectionSensors.TowProtection.IsTriggered\x12>\n" +
-	"\x19BRAKES_BRAKEFLUID_WARNING\x10\b\x1a\x1f\x9a\x96\xb7\xeb\x03\x19Brakes.Brakefluid.Warning\x12B\n" +
-	"\x1bBRAKES_BRAKEPADS_PREWARNING\x10\t\x1a!\x9a\x96\xb7\xeb\x03\x1bBrakes.Brakepads.PreWarning\x12<\n" +
+	"SignalName\x12\x1b\n" +
+	"\x17SIGNAL_NAME_UNSPECIFIED\x10\x00\x12N\n" +
+	"\x1eANTITHEFTSYSTEM_ALARM_ISACTIVE\x10\x01\x1a*\x9a\x96\xb7\xeb\x03\x1eAntiTheftSystem.Alarm.IsActive\x88ެ\xd0\x06\x04\x12T\n" +
+	"!ANTITHEFTSYSTEM_ALARM_ISTRIGGERED\x10\x02\x1a-\x9a\x96\xb7\xeb\x03!AntiTheftSystem.Alarm.IsTriggered\x88ެ\xd0\x06\x04\x12`\n" +
+	"'ANTITHEFTSYSTEM_LASTTHEFTWARNING_REASON\x10\x03\x1a3\x9a\x96\xb7\xeb\x03'AntiTheftSystem.LastTheftWarning.Reason\x88ެ\xd0\x06\x01\x12\x8c\x01\n" +
+	"=ANTITHEFTSYSTEM_PROTECTIONSENSORS_INTERIORPROTECTION_ISACTIVE\x10\x04\x1aI\x9a\x96\xb7\xeb\x03=AntiTheftSystem.ProtectionSensors.InteriorProtection.IsActive\x88ެ\xd0\x06\x04\x12\x92\x01\n" +
+	"@ANTITHEFTSYSTEM_PROTECTIONSENSORS_INTERIORPROTECTION_ISTRIGGERED\x10\x05\x1aL\x9a\x96\xb7\xeb\x03@AntiTheftSystem.ProtectionSensors.InteriorProtection.IsTriggered\x88ެ\xd0\x06\x04\x12\x82\x01\n" +
+	"8ANTITHEFTSYSTEM_PROTECTIONSENSORS_TOWPROTECTION_ISACTIVE\x10\x06\x1aD\x9a\x96\xb7\xeb\x038AntiTheftSystem.ProtectionSensors.TowProtection.IsActive\x88ެ\xd0\x06\x04\x12\x88\x01\n" +
+	";ANTITHEFTSYSTEM_PROTECTIONSENSORS_TOWPROTECTION_ISTRIGGERED\x10\a\x1aG\x9a\x96\xb7\xeb\x03;AntiTheftSystem.ProtectionSensors.TowProtection.IsTriggered\x88ެ\xd0\x06\x04\x12D\n" +
+	"\x19BRAKES_BRAKEFLUID_WARNING\x10\b\x1a%\x9a\x96\xb7\xeb\x03\x19Brakes.Brakefluid.Warning\x88ެ\xd0\x06\x04\x12H\n" +
+	"\x1bBRAKES_BRAKEPADS_PREWARNING\x10\t\x1a'\x9a\x96\xb7\xeb\x03\x1bBrakes.Brakepads.PreWarning\x88ެ\xd0\x06\x04\x12B\n" +
 	"\x18BRAKES_BRAKEPADS_WARNING\x10\n" +
-	"\x1a\x1e\x9a\x96\xb7\xeb\x03\x18Brakes.Brakepads.Warning\x12@\n" +
-	"\x1aBRAKES_PARKBRAKE_ISENGAGED\x10\v\x1a \x9a\x96\xb7\xeb\x03\x1aBrakes.Parkbrake.IsEngaged\x12>\n" +
-	"\x19DOORS_FRONT_LEFT_ISLOCKED\x10\f\x1a\x1f\x9a\x96\xb7\xeb\x03\x19Doors.Front.Left.IsLocked\x12:\n" +
-	"\x17DOORS_FRONT_LEFT_ISOPEN\x10\r\x1a\x1d\x9a\x96\xb7\xeb\x03\x17Doors.Front.Left.IsOpen\x12@\n" +
-	"\x1aDOORS_FRONT_RIGHT_ISLOCKED\x10\x0e\x1a \x9a\x96\xb7\xeb\x03\x1aDoors.Front.Right.IsLocked\x12<\n" +
-	"\x18DOORS_FRONT_RIGHT_ISOPEN\x10\x0f\x1a\x1e\x9a\x96\xb7\xeb\x03\x18Doors.Front.Right.IsOpen\x12<\n" +
-	"\x18DOORS_REAR_LEFT_ISLOCKED\x10\x10\x1a\x1e\x9a\x96\xb7\xeb\x03\x18Doors.Rear.Left.IsLocked\x128\n" +
-	"\x16DOORS_REAR_LEFT_ISOPEN\x10\x11\x1a\x1c\x9a\x96\xb7\xeb\x03\x16Doors.Rear.Left.IsOpen\x12>\n" +
-	"\x19DOORS_REAR_RIGHT_ISLOCKED\x10\x12\x1a\x1f\x9a\x96\xb7\xeb\x03\x19Doors.Rear.Right.IsLocked\x12:\n" +
-	"\x17DOORS_REAR_RIGHT_ISOPEN\x10\x13\x1a\x1d\x9a\x96\xb7\xeb\x03\x17Doors.Rear.Right.IsOpen\x124\n" +
-	"\x14DOORS_ROOFTOP_ISOPEN\x10\x14\x1a\x1a\x9a\x96\xb7\xeb\x03\x14Doors.Rooftop.IsOpen\x122\n" +
-	"\x13DOORS_SUNROOF_EVENT\x10\x15\x1a\x19\x9a\x96\xb7\xeb\x03\x13Doors.Sunroof.Event\x124\n" +
-	"\x14DOORS_SUNROOF_STATUS\x10\x16\x1a\x1a\x9a\x96\xb7\xeb\x03\x14Doors.Sunroof.Status\x124\n" +
-	"\x14DOORS_TANKCAP_ISOPEN\x10\x17\x1a\x1a\x9a\x96\xb7\xeb\x03\x14Doors.Tankcap.IsOpen\x124\n" +
-	"\x14DOORS_TRUNK_ISLOCKED\x10\x18\x1a\x1a\x9a\x96\xb7\xeb\x03\x14Doors.Trunk.IsLocked\x120\n" +
-	"\x12DOORS_TRUNK_ISOPEN\x10\x19\x1a\x18\x9a\x96\xb7\xeb\x03\x12Doors.Trunk.IsOpen\x128\n" +
-	"\x16DOORS_VEHICLE_ISLOCKED\x10\x1a\x1a\x1c\x9a\x96\xb7\xeb\x03\x16Doors.Vehicle.IsLocked\x12^\n" +
-	")DRIVING_CONSUMPTION_ELECTRICAL_SINCERESET\x10\x1b\x1a/\x9a\x96\xb7\xeb\x03)Driving.Consumption.Electrical.SinceReset\x12^\n" +
-	")DRIVING_CONSUMPTION_ELECTRICAL_SINCESTART\x10\x1c\x1a/\x9a\x96\xb7\xeb\x03)Driving.Consumption.Electrical.SinceStart\x12R\n" +
-	"#DRIVING_CONSUMPTION_FUEL_SINCERESET\x10\x1d\x1a)\x9a\x96\xb7\xeb\x03#Driving.Consumption.Fuel.SinceReset\x12R\n" +
-	"#DRIVING_CONSUMPTION_FUEL_SINCESTART\x10\x1e\x1a)\x9a\x96\xb7\xeb\x03#Driving.Consumption.Fuel.SinceStart\x12B\n" +
-	"\x1bDRIVING_DISTANCE_SINCERESET\x10\x1f\x1a!\x9a\x96\xb7\xeb\x03\x1bDriving.Distance.SinceReset\x12B\n" +
-	"\x1bDRIVING_DISTANCE_SINCESTART\x10 \x1a!\x9a\x96\xb7\xeb\x03\x1bDriving.Distance.SinceStart\x12^\n" +
-	")DRIVING_DISTANCE_ZEROEMISSIONS_SINCERESET\x10!\x1a/\x9a\x96\xb7\xeb\x03)Driving.Distance.ZeroEmissions.SinceReset\x12^\n" +
-	")DRIVING_DISTANCE_ZEROEMISSIONS_SINCESTART\x10\"\x1a/\x9a\x96\xb7\xeb\x03)Driving.Distance.ZeroEmissions.SinceStart\x12F\n" +
-	"\x1dDRIVING_ECOSCORE_ACCELERATION\x10#\x1a#\x9a\x96\xb7\xeb\x03\x1dDriving.EcoScore.Acceleration\x12B\n" +
-	"\x1bDRIVING_ECOSCORE_BONUSRANGE\x10$\x1a!\x9a\x96\xb7\xeb\x03\x1bDriving.EcoScore.BonusRange\x12@\n" +
-	"\x1aDRIVING_ECOSCORE_CONSTANCY\x10%\x1a \x9a\x96\xb7\xeb\x03\x1aDriving.EcoScore.Constancy\x12@\n" +
-	"\x1aDRIVING_ECOSCORE_FREEWHEEL\x10&\x1a \x9a\x96\xb7\xeb\x03\x1aDriving.EcoScore.Freewheel\x12>\n" +
-	"\x19DRIVING_ODOMETER_LIFETIME\x10'\x1a\x1f\x9a\x96\xb7\xeb\x03\x19Driving.Odometer.Lifetime\x12\\\n" +
-	"(DRIVING_ODOMETER_LIFETIME_HIGHRESOLUTION\x10(\x1a.\x9a\x96\xb7\xeb\x03(Driving.Odometer.Lifetime.HighResolution\x124\n" +
-	"\x14DRIVING_RANGE_ADBLUE\x10)\x1a\x1a\x9a\x96\xb7\xeb\x03\x14Driving.Range.AdBlue\x12<\n" +
-	"\x18DRIVING_RANGE_ELECTRICAL\x10*\x1a\x1e\x9a\x96\xb7\xeb\x03\x18Driving.Range.Electrical\x12D\n" +
-	"\x1cDRIVING_RANGE_ELECTRICAL_MAX\x10+\x1a\"\x9a\x96\xb7\xeb\x03\x1cDriving.Range.Electrical.Max\x120\n" +
-	"\x12DRIVING_RANGE_FUEL\x10,\x1a\x18\x9a\x96\xb7\xeb\x03\x12Driving.Range.Fuel\x12@\n" +
-	"\x1aDRIVING_RANGE_FUEL_WARNING\x10-\x1a \x9a\x96\xb7\xeb\x03\x1aDriving.Range.Fuel.Warning\x126\n" +
-	"\x15DRIVING_SPEED_CURRENT\x10.\x1a\x1b\x9a\x96\xb7\xeb\x03\x15Driving.Speed.Current\x12L\n" +
-	" DRIVING_SPEED_SINCERESET_AVERAGE\x10/\x1a&\x9a\x96\xb7\xeb\x03 Driving.Speed.SinceReset.Average\x12L\n" +
-	" DRIVING_SPEED_SINCESTART_AVERAGE\x100\x1a&\x9a\x96\xb7\xeb\x03 Driving.Speed.SinceStart.Average\x12J\n" +
-	"\x1fDRIVING_STATEOFCHARGE_DEPARTURE\x101\x1a%\x9a\x96\xb7\xeb\x03\x1fDriving.StateOfCharge.Departure\x12(\n" +
-	"\x0eDRIVING_STATUS\x102\x1a\x14\x9a\x96\xb7\xeb\x03\x0eDriving.Status\x12:\n" +
-	"\x17DRIVING_TIME_SINCERESET\x103\x1a\x1d\x9a\x96\xb7\xeb\x03\x17Driving.Time.SinceReset\x12:\n" +
-	"\x17DRIVING_TIME_SINCESTART\x104\x1a\x1d\x9a\x96\xb7\xeb\x03\x17Driving.Time.SinceStart\x12V\n" +
-	"%DRIVING_TIME_ZEROEMISSIONS_SINCERESET\x105\x1a+\x9a\x96\xb7\xeb\x03%Driving.Time.ZeroEmissions.SinceReset\x12V\n" +
-	"%DRIVING_TIME_ZEROEMISSIONS_SINCESTART\x106\x1a+\x9a\x96\xb7\xeb\x03%Driving.Time.ZeroEmissions.SinceStart\x12\x80\x01\n" +
-	":DRIVING_ACCELERATION_LATITUDE_NEGATIVEACCELERATIONOUTLIERS\x107\x1a@\x9a\x96\xb7\xeb\x03:Driving.Acceleration.Latitude.NegativeAccelerationOutliers\x12\x80\x01\n" +
-	":DRIVING_ACCELERATION_LATITUDE_POSITIVEACCELERATIONOUTLIERS\x108\x1a@\x9a\x96\xb7\xeb\x03:Driving.Acceleration.Latitude.PositiveAccelerationOutliers\x12p\n" +
-	"2DRIVING_ACCELERATION_LATITUDE_REGULARACCELERATIONS\x109\x1a8\x9a\x96\xb7\xeb\x032Driving.Acceleration.Latitude.RegularAccelerations\x12\x82\x01\n" +
-	";DRIVING_ACCELERATION_LONGITUDE_NEGATIVEACCELERATIONOUTLIERS\x10:\x1aA\x9a\x96\xb7\xeb\x03;Driving.Acceleration.Longitude.NegativeAccelerationOutliers\x12\x82\x01\n" +
-	";DRIVING_ACCELERATION_LONGITUDE_POSITIVEACCELERATIONOUTLIERS\x10;\x1aA\x9a\x96\xb7\xeb\x03;Driving.Acceleration.Longitude.PositiveAccelerationOutliers\x12r\n" +
-	"3DRIVING_ACCELERATION_LONGITUDE_REGULARACCELERATIONS\x10<\x1a9\x9a\x96\xb7\xeb\x033Driving.Acceleration.Longitude.RegularAccelerations\x12^\n" +
-	")ELECTRICALDRIVE_CHARGING_ACCOUPLER_STATUS\x10=\x1a/\x9a\x96\xb7\xeb\x03)ElectricalDrive.Charging.ACCoupler.Status\x12^\n" +
-	")ELECTRICALDRIVE_CHARGING_DCCOUPLER_STATUS\x10>\x1a/\x9a\x96\xb7\xeb\x03)ElectricalDrive.Charging.DCCoupler.Status\x12`\n" +
-	"*ELECTRICALDRIVE_CHARGING_ENDOFCHARGINGTIME\x10?\x1a0\x9a\x96\xb7\xeb\x03*ElectricalDrive.Charging.EndOfChargingTime\x12n\n" +
-	"1ELECTRICALDRIVE_CHARGING_ENDOFCHARGINGTIMEWEEKDAY\x10@\x1a7\x9a\x96\xb7\xeb\x031ElectricalDrive.Charging.EndOfChargingTimeWeekday\x12N\n" +
-	"!ELECTRICALDRIVE_CHARGING_ISACTIVE\x10A\x1a'\x9a\x96\xb7\xeb\x03!ElectricalDrive.Charging.IsActive\x12`\n" +
-	"*ELECTRICALDRIVE_CHARGING_NEXTDEPARTURETIME\x10B\x1a0\x9a\x96\xb7\xeb\x03*ElectricalDrive.Charging.NextDepartureTime\x12n\n" +
-	"1ELECTRICALDRIVE_CHARGING_NEXTDEPARTURETIMEWEEKDAY\x10C\x1a7\x9a\x96\xb7\xeb\x031ElectricalDrive.Charging.NextDepartureTimeWeekday\x12H\n" +
-	"\x1eELECTRICALDRIVE_CHARGING_POWER\x10D\x1a$\x9a\x96\xb7\xeb\x03\x1eElectricalDrive.Charging.Power\x12f\n" +
-	"-ELECTRICALDRIVE_CHARGING_SMARTCHARGING_STATUS\x10E\x1a3\x9a\x96\xb7\xeb\x03-ElectricalDrive.Charging.SmartCharging.Status\x12J\n" +
-	"\x1fELECTRICALDRIVE_CHARGING_STATUS\x10F\x1a%\x9a\x96\xb7\xeb\x03\x1fElectricalDrive.Charging.Status\x12h\n" +
-	".ELECTRICALDRIVE_CHARGING_SELECTEDCHARGEPROGRAM\x10G\x1a4\x9a\x96\xb7\xeb\x03.ElectricalDrive.Charging.SelectedChargeProgram\x12\x8c\x01\n" +
-	"@ELECTRICALDRIVE_CHARGING_CHARGEPROGRAM_HOME_MAXIMUMSTATEOFCHARGE\x10H\x1aF\x9a\x96\xb7\xeb\x03@ElectricalDrive.Charging.ChargeProgram.Home.MaximumStateOfCharge\x12\x92\x01\n" +
-	"CELECTRICALDRIVE_CHARGING_CHARGEPROGRAM_DEFAULT_MAXIMUMSTATEOFCHARGE\x10I\x1aI\x9a\x96\xb7\xeb\x03CElectricalDrive.Charging.ChargeProgram.Default.MaximumStateOfCharge\x12\x8c\x01\n" +
-	"@ELECTRICALDRIVE_CHARGING_CHARGEPROGRAM_WORK_MAXIMUMSTATEOFCHARGE\x10J\x1aF\x9a\x96\xb7\xeb\x03@ElectricalDrive.Charging.ChargeProgram.Work.MaximumStateOfCharge\x12l\n" +
-	"0ELECTRICALDRIVE_HIGHVOLTAGEBATTERY_STATEOFCHARGE\x10K\x1a6\x9a\x96\xb7\xeb\x030ElectricalDrive.HighVoltageBattery.StateOfCharge\x12*\n" +
-	"\x0fIGNITION_STATUS\x10L\x1a\x15\x9a\x96\xb7\xeb\x03\x0fIgnition.Status\x12N\n" +
-	"!IMMOBILIZER_KEYS_ALLDEPROVISIONED\x10M\x1a'\x9a\x96\xb7\xeb\x03!Immobilizer.Keys.AllDeprovisioned\x12h\n" +
-	".INTERNALCOMBUSTIONENGINE_COOLANT_LEVEL_WARNING\x10N\x1a4\x9a\x96\xb7\xeb\x03.InternalCombustionEngine.Coolant.Level.Warning\x12d\n" +
-	",INTERNALCOMBUSTIONENGINE_COOLANT_TEMPERATURE\x10O\x1a2\x9a\x96\xb7\xeb\x03,InternalCombustionEngine.Coolant.Temperature\x12`\n" +
-	"*INTERNALCOMBUSTIONENGINE_LIMPMODE_ISACTIVE\x10P\x1a0\x9a\x96\xb7\xeb\x03*InternalCombustionEngine.LimpMode.IsActive\x12P\n" +
-	"\"INTERNALCOMBUSTIONENGINE_OIL_LEVEL\x10Q\x1a(\x9a\x96\xb7\xeb\x03\"InternalCombustionEngine.Oil.Level\x12`\n" +
-	"*INTERNALCOMBUSTIONENGINE_OIL_LEVEL_WARNING\x10R\x1a0\x9a\x96\xb7\xeb\x03*InternalCombustionEngine.Oil.Level.Warning\x12@\n" +
-	"\x1aLIGHTS_INTERIOR_FRONT_ISON\x10S\x1a \x9a\x96\xb7\xeb\x03\x1aLights.Interior.Front.IsOn\x12b\n" +
-	"+LIGHTS_INTERIOR_READINGLAMP_FRONT_LEFT_ISON\x10T\x1a1\x9a\x96\xb7\xeb\x03+Lights.Interior.Readinglamp.Front.Left.IsOn\x12d\n" +
-	",LIGHTS_INTERIOR_READINGLAMP_FRONT_RIGHT_ISON\x10U\x1a2\x9a\x96\xb7\xeb\x03,Lights.Interior.Readinglamp.Front.Right.IsOn\x12>\n" +
-	"\x19LIGHTS_INTERIOR_REAR_ISON\x10V\x1a\x1f\x9a\x96\xb7\xeb\x03\x19Lights.Interior.Rear.IsOn\x12>\n" +
-	"\x19LIGHTS_LIGHTSWITCH_STATUS\x10W\x1a\x1f\x9a\x96\xb7\xeb\x03\x19Lights.Lightswitch.Status\x12T\n" +
-	"$PARKING_PARKEVENT_LASTPARKEVENT_TIME\x10X\x1a*\x9a\x96\xb7\xeb\x03$Parking.Parkevent.LastParkevent.Time\x12:\n" +
-	"\x17PARKING_PARKEVENT_LEVEL\x10Y\x1a\x1d\x9a\x96\xb7\xeb\x03\x17Parking.Parkevent.Level\x128\n" +
-	"\x16PARKING_PARKEVENT_TYPE\x10Z\x1a\x1c\x9a\x96\xb7\xeb\x03\x16Parking.Parkevent.Type\x12@\n" +
-	"\x1aPOSITION_LASTKNOWN_HEADING\x10[\x1a \x9a\x96\xb7\xeb\x03\x1aPosition.LastKnown.Heading\x12B\n" +
-	"\x1bPOSITION_LASTKNOWN_LATITUDE\x10\\\x1a!\x9a\x96\xb7\xeb\x03\x1bPosition.LastKnown.Latitude\x12D\n" +
-	"\x1cPOSITION_LASTKNOWN_LONGITUDE\x10]\x1a\"\x9a\x96\xb7\xeb\x03\x1cPosition.LastKnown.Longitude\x12F\n" +
-	"\x1dPRECONDITIONING_SCHEDULEDTIME\x10^\x1a#\x9a\x96\xb7\xeb\x03\x1dPreconditioning.ScheduledTime\x12<\n" +
-	"\x18PRECONDITIONING_ISACTIVE\x10_\x1a\x1e\x9a\x96\xb7\xeb\x03\x18Preconditioning.IsActive\x12L\n" +
-	" PRECONDITIONING_REMAININGRUNTIME\x10`\x1a&\x9a\x96\xb7\xeb\x03 Preconditioning.RemainingRuntime\x12>\n" +
-	"\x19SERVICE_INTERVAL_DISTANCE\x10a\x1a\x1f\x9a\x96\xb7\xeb\x03\x19Service.Interval.Distance\x126\n" +
-	"\x15SERVICE_INTERVAL_TIME\x10b\x1a\x1b\x9a\x96\xb7\xeb\x03\x15Service.Interval.Time\x128\n" +
-	"\x16SERVICE_WARNING_STATUS\x10c\x1a\x1c\x9a\x96\xb7\xeb\x03\x16Service.Warning.Status\x12T\n" +
-	"$SEAT_SEATBELT_FRONT_LEFT_ISBUCKLEDUP\x10d\x1a*\x9a\x96\xb7\xeb\x03$Seat.Seatbelt.Front.Left.IsBuckledUp\x124\n" +
-	"\x14SUPPLYBATTERY_STATUS\x10e\x1a\x1a\x9a\x96\xb7\xeb\x03\x14SupplyBattery.Status\x126\n" +
-	"\x15SUPPLYBATTERY_VOLTAGE\x10f\x1a\x1b\x9a\x96\xb7\xeb\x03\x15SupplyBattery.Voltage\x126\n" +
-	"\x15SUPPLYBATTERY_WARNING\x10g\x1a\x1b\x9a\x96\xb7\xeb\x03\x15SupplyBattery.Warning\x12.\n" +
-	"\x11TANK_ADBLUE_LEVEL\x10h\x1a\x17\x9a\x96\xb7\xeb\x03\x11Tank.AdBlue.Level\x12*\n" +
-	"\x0fTANK_FUEL_LEVEL\x10i\x1a\x15\x9a\x96\xb7\xeb\x03\x0fTank.Fuel.Level\x12<\n" +
-	"\x18TANK_FUEL_LEVEL_ABSOLUTE\x10j\x1a\x1e\x9a\x96\xb7\xeb\x03\x18Tank.Fuel.Level.Absolute\x12:\n" +
-	"\x17TANK_FUEL_LEVEL_WARNING\x10k\x1a\x1d\x9a\x96\xb7\xeb\x03\x17Tank.Fuel.Level.Warning\x12D\n" +
-	"\x1cTANK_WASHWATER_LEVEL_WARNING\x10l\x1a\"\x9a\x96\xb7\xeb\x03\x1cTank.WashWater.Level.Warning\x12>\n" +
-	"\x19TIRES_FRONT_LEFT_PRESSURE\x10m\x1a\x1f\x9a\x96\xb7\xeb\x03\x19Tires.Front.Left.Pressure\x12<\n" +
-	"\x18TIRES_FRONT_LEFT_WARNING\x10n\x1a\x1e\x9a\x96\xb7\xeb\x03\x18Tires.Front.Left.Warning\x12J\n" +
-	"\x1fTIRES_FRONT_LEFT_WARNING_STATUS\x10o\x1a%\x9a\x96\xb7\xeb\x03\x1fTires.Front.Left.Warning.Status\x12@\n" +
-	"\x1aTIRES_FRONT_RIGHT_PRESSURE\x10p\x1a \x9a\x96\xb7\xeb\x03\x1aTires.Front.Right.Pressure\x12>\n" +
-	"\x19TIRES_FRONT_RIGHT_WARNING\x10q\x1a\x1f\x9a\x96\xb7\xeb\x03\x19Tires.Front.Right.Warning\x12L\n" +
-	" TIRES_FRONT_RIGHT_WARNING_STATUS\x10r\x1a&\x9a\x96\xb7\xeb\x03 Tires.Front.Right.Warning.Status\x12<\n" +
-	"\x18TIRES_REAR_LEFT_PRESSURE\x10s\x1a\x1e\x9a\x96\xb7\xeb\x03\x18Tires.Rear.Left.Pressure\x12:\n" +
-	"\x17TIRES_REAR_LEFT_WARNING\x10t\x1a\x1d\x9a\x96\xb7\xeb\x03\x17Tires.Rear.Left.Warning\x12H\n" +
-	"\x1eTIRES_REAR_LEFT_WARNING_STATUS\x10u\x1a$\x9a\x96\xb7\xeb\x03\x1eTires.Rear.Left.Warning.Status\x12>\n" +
-	"\x19TIRES_REAR_RIGHT_PRESSURE\x10v\x1a\x1f\x9a\x96\xb7\xeb\x03\x19Tires.Rear.Right.Pressure\x12<\n" +
-	"\x18TIRES_REAR_RIGHT_WARNING\x10w\x1a\x1e\x9a\x96\xb7\xeb\x03\x18Tires.Rear.Right.Warning\x12J\n" +
-	"\x1fTIRES_REAR_RIGHT_WARNING_STATUS\x10x\x1a%\x9a\x96\xb7\xeb\x03\x1fTires.Rear.Right.Warning.Status\x12F\n" +
-	"\x1dVEHICLE_CLOCK_TIME_UTC_OFFSET\x10y\x1a#\x9a\x96\xb7\xeb\x03\x1dVehicle.Clock.Time.UTC.Offset\x12>\n" +
-	"\x19WINDOWS_FRONT_LEFT_ISOPEN\x10z\x1a\x1f\x9a\x96\xb7\xeb\x03\x19Windows.Front.Left.IsOpen\x12@\n" +
-	"\x1aWINDOWS_FRONT_RIGHT_ISOPEN\x10{\x1a \x9a\x96\xb7\xeb\x03\x1aWindows.Front.Right.IsOpen\x12<\n" +
-	"\x18WINDOWS_REAR_LEFT_ISOPEN\x10|\x1a\x1e\x9a\x96\xb7\xeb\x03\x18Windows.Rear.Left.IsOpen\x12>\n" +
-	"\x19WINDOWS_REAR_RIGHT_ISOPEN\x10}\x1a\x1f\x9a\x96\xb7\xeb\x03\x19Windows.Rear.Right.IsOpenB\xd5\x01\n" +
+	"\x1a$\x9a\x96\xb7\xeb\x03\x18Brakes.Brakepads.Warning\x88ެ\xd0\x06\x04\x12F\n" +
+	"\x1aBRAKES_PARKBRAKE_ISENGAGED\x10\v\x1a&\x9a\x96\xb7\xeb\x03\x1aBrakes.Parkbrake.IsEngaged\x88ެ\xd0\x06\x04\x12D\n" +
+	"\x19DOORS_FRONT_LEFT_ISLOCKED\x10\f\x1a%\x9a\x96\xb7\xeb\x03\x19Doors.Front.Left.IsLocked\x88ެ\xd0\x06\x04\x12@\n" +
+	"\x17DOORS_FRONT_LEFT_ISOPEN\x10\r\x1a#\x9a\x96\xb7\xeb\x03\x17Doors.Front.Left.IsOpen\x88ެ\xd0\x06\x04\x12F\n" +
+	"\x1aDOORS_FRONT_RIGHT_ISLOCKED\x10\x0e\x1a&\x9a\x96\xb7\xeb\x03\x1aDoors.Front.Right.IsLocked\x88ެ\xd0\x06\x04\x12B\n" +
+	"\x18DOORS_FRONT_RIGHT_ISOPEN\x10\x0f\x1a$\x9a\x96\xb7\xeb\x03\x18Doors.Front.Right.IsOpen\x88ެ\xd0\x06\x04\x12B\n" +
+	"\x18DOORS_REAR_LEFT_ISLOCKED\x10\x10\x1a$\x9a\x96\xb7\xeb\x03\x18Doors.Rear.Left.IsLocked\x88ެ\xd0\x06\x04\x12>\n" +
+	"\x16DOORS_REAR_LEFT_ISOPEN\x10\x11\x1a\"\x9a\x96\xb7\xeb\x03\x16Doors.Rear.Left.IsOpen\x88ެ\xd0\x06\x04\x12D\n" +
+	"\x19DOORS_REAR_RIGHT_ISLOCKED\x10\x12\x1a%\x9a\x96\xb7\xeb\x03\x19Doors.Rear.Right.IsLocked\x88ެ\xd0\x06\x04\x12@\n" +
+	"\x17DOORS_REAR_RIGHT_ISOPEN\x10\x13\x1a#\x9a\x96\xb7\xeb\x03\x17Doors.Rear.Right.IsOpen\x88ެ\xd0\x06\x04\x12:\n" +
+	"\x14DOORS_ROOFTOP_ISOPEN\x10\x14\x1a \x9a\x96\xb7\xeb\x03\x14Doors.Rooftop.IsOpen\x88ެ\xd0\x06\x04\x128\n" +
+	"\x13DOORS_SUNROOF_EVENT\x10\x15\x1a\x1f\x9a\x96\xb7\xeb\x03\x13Doors.Sunroof.Event\x88ެ\xd0\x06\x01\x12:\n" +
+	"\x14DOORS_SUNROOF_STATUS\x10\x16\x1a \x9a\x96\xb7\xeb\x03\x14Doors.Sunroof.Status\x88ެ\xd0\x06\x01\x12:\n" +
+	"\x14DOORS_TANKCAP_ISOPEN\x10\x17\x1a \x9a\x96\xb7\xeb\x03\x14Doors.Tankcap.IsOpen\x88ެ\xd0\x06\x04\x12:\n" +
+	"\x14DOORS_TRUNK_ISLOCKED\x10\x18\x1a \x9a\x96\xb7\xeb\x03\x14Doors.Trunk.IsLocked\x88ެ\xd0\x06\x04\x126\n" +
+	"\x12DOORS_TRUNK_ISOPEN\x10\x19\x1a\x1e\x9a\x96\xb7\xeb\x03\x12Doors.Trunk.IsOpen\x88ެ\xd0\x06\x04\x12>\n" +
+	"\x16DOORS_VEHICLE_ISLOCKED\x10\x1a\x1a\"\x9a\x96\xb7\xeb\x03\x16Doors.Vehicle.IsLocked\x88ެ\xd0\x06\x04\x12d\n" +
+	")DRIVING_CONSUMPTION_ELECTRICAL_SINCERESET\x10\x1b\x1a5\x9a\x96\xb7\xeb\x03)Driving.Consumption.Electrical.SinceReset\x88ެ\xd0\x06\x03\x12d\n" +
+	")DRIVING_CONSUMPTION_ELECTRICAL_SINCESTART\x10\x1c\x1a5\x9a\x96\xb7\xeb\x03)Driving.Consumption.Electrical.SinceStart\x88ެ\xd0\x06\x03\x12X\n" +
+	"#DRIVING_CONSUMPTION_FUEL_SINCERESET\x10\x1d\x1a/\x9a\x96\xb7\xeb\x03#Driving.Consumption.Fuel.SinceReset\x88ެ\xd0\x06\x03\x12X\n" +
+	"#DRIVING_CONSUMPTION_FUEL_SINCESTART\x10\x1e\x1a/\x9a\x96\xb7\xeb\x03#Driving.Consumption.Fuel.SinceStart\x88ެ\xd0\x06\x03\x12H\n" +
+	"\x1bDRIVING_DISTANCE_SINCERESET\x10\x1f\x1a'\x9a\x96\xb7\xeb\x03\x1bDriving.Distance.SinceReset\x88ެ\xd0\x06\x03\x12H\n" +
+	"\x1bDRIVING_DISTANCE_SINCESTART\x10 \x1a'\x9a\x96\xb7\xeb\x03\x1bDriving.Distance.SinceStart\x88ެ\xd0\x06\x03\x12d\n" +
+	")DRIVING_DISTANCE_ZEROEMISSIONS_SINCERESET\x10!\x1a5\x9a\x96\xb7\xeb\x03)Driving.Distance.ZeroEmissions.SinceReset\x88ެ\xd0\x06\x03\x12d\n" +
+	")DRIVING_DISTANCE_ZEROEMISSIONS_SINCESTART\x10\"\x1a5\x9a\x96\xb7\xeb\x03)Driving.Distance.ZeroEmissions.SinceStart\x88ެ\xd0\x06\x03\x12L\n" +
+	"\x1dDRIVING_ECOSCORE_ACCELERATION\x10#\x1a)\x9a\x96\xb7\xeb\x03\x1dDriving.EcoScore.Acceleration\x88ެ\xd0\x06\x02\x12H\n" +
+	"\x1bDRIVING_ECOSCORE_BONUSRANGE\x10$\x1a'\x9a\x96\xb7\xeb\x03\x1bDriving.EcoScore.BonusRange\x88ެ\xd0\x06\x03\x12F\n" +
+	"\x1aDRIVING_ECOSCORE_CONSTANCY\x10%\x1a&\x9a\x96\xb7\xeb\x03\x1aDriving.EcoScore.Constancy\x88ެ\xd0\x06\x02\x12F\n" +
+	"\x1aDRIVING_ECOSCORE_FREEWHEEL\x10&\x1a&\x9a\x96\xb7\xeb\x03\x1aDriving.EcoScore.Freewheel\x88ެ\xd0\x06\x02\x12D\n" +
+	"\x19DRIVING_ODOMETER_LIFETIME\x10'\x1a%\x9a\x96\xb7\xeb\x03\x19Driving.Odometer.Lifetime\x88ެ\xd0\x06\x02\x12b\n" +
+	"(DRIVING_ODOMETER_LIFETIME_HIGHRESOLUTION\x10(\x1a4\x9a\x96\xb7\xeb\x03(Driving.Odometer.Lifetime.HighResolution\x88ެ\xd0\x06\x03\x12:\n" +
+	"\x14DRIVING_RANGE_ADBLUE\x10)\x1a \x9a\x96\xb7\xeb\x03\x14Driving.Range.AdBlue\x88ެ\xd0\x06\x02\x12B\n" +
+	"\x18DRIVING_RANGE_ELECTRICAL\x10*\x1a$\x9a\x96\xb7\xeb\x03\x18Driving.Range.Electrical\x88ެ\xd0\x06\x02\x12J\n" +
+	"\x1cDRIVING_RANGE_ELECTRICAL_MAX\x10+\x1a(\x9a\x96\xb7\xeb\x03\x1cDriving.Range.Electrical.Max\x88ެ\xd0\x06\x02\x126\n" +
+	"\x12DRIVING_RANGE_FUEL\x10,\x1a\x1e\x9a\x96\xb7\xeb\x03\x12Driving.Range.Fuel\x88ެ\xd0\x06\x02\x12F\n" +
+	"\x1aDRIVING_RANGE_FUEL_WARNING\x10-\x1a&\x9a\x96\xb7\xeb\x03\x1aDriving.Range.Fuel.Warning\x88ެ\xd0\x06\x04\x12<\n" +
+	"\x15DRIVING_SPEED_CURRENT\x10.\x1a!\x9a\x96\xb7\xeb\x03\x15Driving.Speed.Current\x88ެ\xd0\x06\x03\x12R\n" +
+	" DRIVING_SPEED_SINCERESET_AVERAGE\x10/\x1a,\x9a\x96\xb7\xeb\x03 Driving.Speed.SinceReset.Average\x88ެ\xd0\x06\x03\x12R\n" +
+	" DRIVING_SPEED_SINCESTART_AVERAGE\x100\x1a,\x9a\x96\xb7\xeb\x03 Driving.Speed.SinceStart.Average\x88ެ\xd0\x06\x03\x12P\n" +
+	"\x1fDRIVING_STATEOFCHARGE_DEPARTURE\x101\x1a+\x9a\x96\xb7\xeb\x03\x1fDriving.StateOfCharge.Departure\x88ެ\xd0\x06\x02\x12.\n" +
+	"\x0eDRIVING_STATUS\x102\x1a\x1a\x9a\x96\xb7\xeb\x03\x0eDriving.Status\x88ެ\xd0\x06\x01\x12@\n" +
+	"\x17DRIVING_TIME_SINCERESET\x103\x1a#\x9a\x96\xb7\xeb\x03\x17Driving.Time.SinceReset\x88ެ\xd0\x06\x02\x12@\n" +
+	"\x17DRIVING_TIME_SINCESTART\x104\x1a#\x9a\x96\xb7\xeb\x03\x17Driving.Time.SinceStart\x88ެ\xd0\x06\x02\x12\\\n" +
+	"%DRIVING_TIME_ZEROEMISSIONS_SINCERESET\x105\x1a1\x9a\x96\xb7\xeb\x03%Driving.Time.ZeroEmissions.SinceReset\x88ެ\xd0\x06\x02\x12\\\n" +
+	"%DRIVING_TIME_ZEROEMISSIONS_SINCESTART\x106\x1a1\x9a\x96\xb7\xeb\x03%Driving.Time.ZeroEmissions.SinceStart\x88ެ\xd0\x06\x02\x12\x86\x01\n" +
+	":DRIVING_ACCELERATION_LATITUDE_NEGATIVEACCELERATIONOUTLIERS\x107\x1aF\x9a\x96\xb7\xeb\x03:Driving.Acceleration.Latitude.NegativeAccelerationOutliers\x88ެ\xd0\x06\x02\x12\x86\x01\n" +
+	":DRIVING_ACCELERATION_LATITUDE_POSITIVEACCELERATIONOUTLIERS\x108\x1aF\x9a\x96\xb7\xeb\x03:Driving.Acceleration.Latitude.PositiveAccelerationOutliers\x88ެ\xd0\x06\x02\x12v\n" +
+	"2DRIVING_ACCELERATION_LATITUDE_REGULARACCELERATIONS\x109\x1a>\x9a\x96\xb7\xeb\x032Driving.Acceleration.Latitude.RegularAccelerations\x88ެ\xd0\x06\x02\x12\x88\x01\n" +
+	";DRIVING_ACCELERATION_LONGITUDE_NEGATIVEACCELERATIONOUTLIERS\x10:\x1aG\x9a\x96\xb7\xeb\x03;Driving.Acceleration.Longitude.NegativeAccelerationOutliers\x88ެ\xd0\x06\x02\x12\x88\x01\n" +
+	";DRIVING_ACCELERATION_LONGITUDE_POSITIVEACCELERATIONOUTLIERS\x10;\x1aG\x9a\x96\xb7\xeb\x03;Driving.Acceleration.Longitude.PositiveAccelerationOutliers\x88ެ\xd0\x06\x02\x12x\n" +
+	"3DRIVING_ACCELERATION_LONGITUDE_REGULARACCELERATIONS\x10<\x1a?\x9a\x96\xb7\xeb\x033Driving.Acceleration.Longitude.RegularAccelerations\x88ެ\xd0\x06\x02\x12d\n" +
+	")ELECTRICALDRIVE_CHARGING_ACCOUPLER_STATUS\x10=\x1a5\x9a\x96\xb7\xeb\x03)ElectricalDrive.Charging.ACCoupler.Status\x88ެ\xd0\x06\x01\x12d\n" +
+	")ELECTRICALDRIVE_CHARGING_DCCOUPLER_STATUS\x10>\x1a5\x9a\x96\xb7\xeb\x03)ElectricalDrive.Charging.DCCoupler.Status\x88ެ\xd0\x06\x01\x12f\n" +
+	"*ELECTRICALDRIVE_CHARGING_ENDOFCHARGINGTIME\x10?\x1a6\x9a\x96\xb7\xeb\x03*ElectricalDrive.Charging.EndOfChargingTime\x88ެ\xd0\x06\x02\x12t\n" +
+	"1ELECTRICALDRIVE_CHARGING_ENDOFCHARGINGTIMEWEEKDAY\x10@\x1a=\x9a\x96\xb7\xeb\x031ElectricalDrive.Charging.EndOfChargingTimeWeekday\x88ެ\xd0\x06\x01\x12T\n" +
+	"!ELECTRICALDRIVE_CHARGING_ISACTIVE\x10A\x1a-\x9a\x96\xb7\xeb\x03!ElectricalDrive.Charging.IsActive\x88ެ\xd0\x06\x04\x12f\n" +
+	"*ELECTRICALDRIVE_CHARGING_NEXTDEPARTURETIME\x10B\x1a6\x9a\x96\xb7\xeb\x03*ElectricalDrive.Charging.NextDepartureTime\x88ެ\xd0\x06\x02\x12t\n" +
+	"1ELECTRICALDRIVE_CHARGING_NEXTDEPARTURETIMEWEEKDAY\x10C\x1a=\x9a\x96\xb7\xeb\x031ElectricalDrive.Charging.NextDepartureTimeWeekday\x88ެ\xd0\x06\x01\x12N\n" +
+	"\x1eELECTRICALDRIVE_CHARGING_POWER\x10D\x1a*\x9a\x96\xb7\xeb\x03\x1eElectricalDrive.Charging.Power\x88ެ\xd0\x06\x03\x12l\n" +
+	"-ELECTRICALDRIVE_CHARGING_SMARTCHARGING_STATUS\x10E\x1a9\x9a\x96\xb7\xeb\x03-ElectricalDrive.Charging.SmartCharging.Status\x88ެ\xd0\x06\x01\x12P\n" +
+	"\x1fELECTRICALDRIVE_CHARGING_STATUS\x10F\x1a+\x9a\x96\xb7\xeb\x03\x1fElectricalDrive.Charging.Status\x88ެ\xd0\x06\x01\x12n\n" +
+	".ELECTRICALDRIVE_CHARGING_SELECTEDCHARGEPROGRAM\x10G\x1a:\x9a\x96\xb7\xeb\x03.ElectricalDrive.Charging.SelectedChargeProgram\x88ެ\xd0\x06\x01\x12\x92\x01\n" +
+	"@ELECTRICALDRIVE_CHARGING_CHARGEPROGRAM_HOME_MAXIMUMSTATEOFCHARGE\x10H\x1aL\x9a\x96\xb7\xeb\x03@ElectricalDrive.Charging.ChargeProgram.Home.MaximumStateOfCharge\x88ެ\xd0\x06\x02\x12\x98\x01\n" +
+	"CELECTRICALDRIVE_CHARGING_CHARGEPROGRAM_DEFAULT_MAXIMUMSTATEOFCHARGE\x10I\x1aO\x9a\x96\xb7\xeb\x03CElectricalDrive.Charging.ChargeProgram.Default.MaximumStateOfCharge\x88ެ\xd0\x06\x02\x12\x92\x01\n" +
+	"@ELECTRICALDRIVE_CHARGING_CHARGEPROGRAM_WORK_MAXIMUMSTATEOFCHARGE\x10J\x1aL\x9a\x96\xb7\xeb\x03@ElectricalDrive.Charging.ChargeProgram.Work.MaximumStateOfCharge\x88ެ\xd0\x06\x02\x12r\n" +
+	"0ELECTRICALDRIVE_HIGHVOLTAGEBATTERY_STATEOFCHARGE\x10K\x1a<\x9a\x96\xb7\xeb\x030ElectricalDrive.HighVoltageBattery.StateOfCharge\x88ެ\xd0\x06\x02\x120\n" +
+	"\x0fIGNITION_STATUS\x10L\x1a\x1b\x9a\x96\xb7\xeb\x03\x0fIgnition.Status\x88ެ\xd0\x06\x01\x12T\n" +
+	"!IMMOBILIZER_KEYS_ALLDEPROVISIONED\x10M\x1a-\x9a\x96\xb7\xeb\x03!Immobilizer.Keys.AllDeprovisioned\x88ެ\xd0\x06\x04\x12n\n" +
+	".INTERNALCOMBUSTIONENGINE_COOLANT_LEVEL_WARNING\x10N\x1a:\x9a\x96\xb7\xeb\x03.InternalCombustionEngine.Coolant.Level.Warning\x88ެ\xd0\x06\x04\x12j\n" +
+	",INTERNALCOMBUSTIONENGINE_COOLANT_TEMPERATURE\x10O\x1a8\x9a\x96\xb7\xeb\x03,InternalCombustionEngine.Coolant.Temperature\x88ެ\xd0\x06\x02\x12f\n" +
+	"*INTERNALCOMBUSTIONENGINE_LIMPMODE_ISACTIVE\x10P\x1a6\x9a\x96\xb7\xeb\x03*InternalCombustionEngine.LimpMode.IsActive\x88ެ\xd0\x06\x04\x12V\n" +
+	"\"INTERNALCOMBUSTIONENGINE_OIL_LEVEL\x10Q\x1a.\x9a\x96\xb7\xeb\x03\"InternalCombustionEngine.Oil.Level\x88ެ\xd0\x06\x02\x12f\n" +
+	"*INTERNALCOMBUSTIONENGINE_OIL_LEVEL_WARNING\x10R\x1a6\x9a\x96\xb7\xeb\x03*InternalCombustionEngine.Oil.Level.Warning\x88ެ\xd0\x06\x04\x12F\n" +
+	"\x1aLIGHTS_INTERIOR_FRONT_ISON\x10S\x1a&\x9a\x96\xb7\xeb\x03\x1aLights.Interior.Front.IsOn\x88ެ\xd0\x06\x04\x12h\n" +
+	"+LIGHTS_INTERIOR_READINGLAMP_FRONT_LEFT_ISON\x10T\x1a7\x9a\x96\xb7\xeb\x03+Lights.Interior.Readinglamp.Front.Left.IsOn\x88ެ\xd0\x06\x04\x12j\n" +
+	",LIGHTS_INTERIOR_READINGLAMP_FRONT_RIGHT_ISON\x10U\x1a8\x9a\x96\xb7\xeb\x03,Lights.Interior.Readinglamp.Front.Right.IsOn\x88ެ\xd0\x06\x04\x12D\n" +
+	"\x19LIGHTS_INTERIOR_REAR_ISON\x10V\x1a%\x9a\x96\xb7\xeb\x03\x19Lights.Interior.Rear.IsOn\x88ެ\xd0\x06\x04\x12D\n" +
+	"\x19LIGHTS_LIGHTSWITCH_STATUS\x10W\x1a%\x9a\x96\xb7\xeb\x03\x19Lights.Lightswitch.Status\x88ެ\xd0\x06\x01\x12Z\n" +
+	"$PARKING_PARKEVENT_LASTPARKEVENT_TIME\x10X\x1a0\x9a\x96\xb7\xeb\x03$Parking.Parkevent.LastParkevent.Time\x88ެ\xd0\x06\x02\x12@\n" +
+	"\x17PARKING_PARKEVENT_LEVEL\x10Y\x1a#\x9a\x96\xb7\xeb\x03\x17Parking.Parkevent.Level\x88ެ\xd0\x06\x01\x12>\n" +
+	"\x16PARKING_PARKEVENT_TYPE\x10Z\x1a\"\x9a\x96\xb7\xeb\x03\x16Parking.Parkevent.Type\x88ެ\xd0\x06\x01\x12F\n" +
+	"\x1aPOSITION_LASTKNOWN_HEADING\x10[\x1a&\x9a\x96\xb7\xeb\x03\x1aPosition.LastKnown.Heading\x88ެ\xd0\x06\x03\x12H\n" +
+	"\x1bPOSITION_LASTKNOWN_LATITUDE\x10\\\x1a'\x9a\x96\xb7\xeb\x03\x1bPosition.LastKnown.Latitude\x88ެ\xd0\x06\x03\x12J\n" +
+	"\x1cPOSITION_LASTKNOWN_LONGITUDE\x10]\x1a(\x9a\x96\xb7\xeb\x03\x1cPosition.LastKnown.Longitude\x88ެ\xd0\x06\x03\x12L\n" +
+	"\x1dPRECONDITIONING_SCHEDULEDTIME\x10^\x1a)\x9a\x96\xb7\xeb\x03\x1dPreconditioning.ScheduledTime\x88ެ\xd0\x06\x02\x12B\n" +
+	"\x18PRECONDITIONING_ISACTIVE\x10_\x1a$\x9a\x96\xb7\xeb\x03\x18Preconditioning.IsActive\x88ެ\xd0\x06\x04\x12R\n" +
+	" PRECONDITIONING_REMAININGRUNTIME\x10`\x1a,\x9a\x96\xb7\xeb\x03 Preconditioning.RemainingRuntime\x88ެ\xd0\x06\x02\x12D\n" +
+	"\x19SERVICE_INTERVAL_DISTANCE\x10a\x1a%\x9a\x96\xb7\xeb\x03\x19Service.Interval.Distance\x88ެ\xd0\x06\x02\x12<\n" +
+	"\x15SERVICE_INTERVAL_TIME\x10b\x1a!\x9a\x96\xb7\xeb\x03\x15Service.Interval.Time\x88ެ\xd0\x06\x02\x12>\n" +
+	"\x16SERVICE_WARNING_STATUS\x10c\x1a\"\x9a\x96\xb7\xeb\x03\x16Service.Warning.Status\x88ެ\xd0\x06\x01\x12Z\n" +
+	"$SEAT_SEATBELT_FRONT_LEFT_ISBUCKLEDUP\x10d\x1a0\x9a\x96\xb7\xeb\x03$Seat.Seatbelt.Front.Left.IsBuckledUp\x88ެ\xd0\x06\x04\x12:\n" +
+	"\x14SUPPLYBATTERY_STATUS\x10e\x1a \x9a\x96\xb7\xeb\x03\x14SupplyBattery.Status\x88ެ\xd0\x06\x01\x12<\n" +
+	"\x15SUPPLYBATTERY_VOLTAGE\x10f\x1a!\x9a\x96\xb7\xeb\x03\x15SupplyBattery.Voltage\x88ެ\xd0\x06\x03\x12<\n" +
+	"\x15SUPPLYBATTERY_WARNING\x10g\x1a!\x9a\x96\xb7\xeb\x03\x15SupplyBattery.Warning\x88ެ\xd0\x06\x04\x124\n" +
+	"\x11TANK_ADBLUE_LEVEL\x10h\x1a\x1d\x9a\x96\xb7\xeb\x03\x11Tank.AdBlue.Level\x88ެ\xd0\x06\x02\x120\n" +
+	"\x0fTANK_FUEL_LEVEL\x10i\x1a\x1b\x9a\x96\xb7\xeb\x03\x0fTank.Fuel.Level\x88ެ\xd0\x06\x02\x12B\n" +
+	"\x18TANK_FUEL_LEVEL_ABSOLUTE\x10j\x1a$\x9a\x96\xb7\xeb\x03\x18Tank.Fuel.Level.Absolute\x88ެ\xd0\x06\x02\x12@\n" +
+	"\x17TANK_FUEL_LEVEL_WARNING\x10k\x1a#\x9a\x96\xb7\xeb\x03\x17Tank.Fuel.Level.Warning\x88ެ\xd0\x06\x04\x12J\n" +
+	"\x1cTANK_WASHWATER_LEVEL_WARNING\x10l\x1a(\x9a\x96\xb7\xeb\x03\x1cTank.WashWater.Level.Warning\x88ެ\xd0\x06\x04\x12D\n" +
+	"\x19TIRES_FRONT_LEFT_PRESSURE\x10m\x1a%\x9a\x96\xb7\xeb\x03\x19Tires.Front.Left.Pressure\x88ެ\xd0\x06\x03\x12B\n" +
+	"\x18TIRES_FRONT_LEFT_WARNING\x10n\x1a$\x9a\x96\xb7\xeb\x03\x18Tires.Front.Left.Warning\x88ެ\xd0\x06\x04\x12P\n" +
+	"\x1fTIRES_FRONT_LEFT_WARNING_STATUS\x10o\x1a+\x9a\x96\xb7\xeb\x03\x1fTires.Front.Left.Warning.Status\x88ެ\xd0\x06\x01\x12F\n" +
+	"\x1aTIRES_FRONT_RIGHT_PRESSURE\x10p\x1a&\x9a\x96\xb7\xeb\x03\x1aTires.Front.Right.Pressure\x88ެ\xd0\x06\x03\x12D\n" +
+	"\x19TIRES_FRONT_RIGHT_WARNING\x10q\x1a%\x9a\x96\xb7\xeb\x03\x19Tires.Front.Right.Warning\x88ެ\xd0\x06\x04\x12R\n" +
+	" TIRES_FRONT_RIGHT_WARNING_STATUS\x10r\x1a,\x9a\x96\xb7\xeb\x03 Tires.Front.Right.Warning.Status\x88ެ\xd0\x06\x01\x12B\n" +
+	"\x18TIRES_REAR_LEFT_PRESSURE\x10s\x1a$\x9a\x96\xb7\xeb\x03\x18Tires.Rear.Left.Pressure\x88ެ\xd0\x06\x03\x12@\n" +
+	"\x17TIRES_REAR_LEFT_WARNING\x10t\x1a#\x9a\x96\xb7\xeb\x03\x17Tires.Rear.Left.Warning\x88ެ\xd0\x06\x04\x12N\n" +
+	"\x1eTIRES_REAR_LEFT_WARNING_STATUS\x10u\x1a*\x9a\x96\xb7\xeb\x03\x1eTires.Rear.Left.Warning.Status\x88ެ\xd0\x06\x01\x12D\n" +
+	"\x19TIRES_REAR_RIGHT_PRESSURE\x10v\x1a%\x9a\x96\xb7\xeb\x03\x19Tires.Rear.Right.Pressure\x88ެ\xd0\x06\x03\x12B\n" +
+	"\x18TIRES_REAR_RIGHT_WARNING\x10w\x1a$\x9a\x96\xb7\xeb\x03\x18Tires.Rear.Right.Warning\x88ެ\xd0\x06\x04\x12P\n" +
+	"\x1fTIRES_REAR_RIGHT_WARNING_STATUS\x10x\x1a+\x9a\x96\xb7\xeb\x03\x1fTires.Rear.Right.Warning.Status\x88ެ\xd0\x06\x01\x12L\n" +
+	"\x1dVEHICLE_CLOCK_TIME_UTC_OFFSET\x10y\x1a)\x9a\x96\xb7\xeb\x03\x1dVehicle.Clock.Time.UTC.Offset\x88ެ\xd0\x06\x02\x12D\n" +
+	"\x19WINDOWS_FRONT_LEFT_ISOPEN\x10z\x1a%\x9a\x96\xb7\xeb\x03\x19Windows.Front.Left.IsOpen\x88ެ\xd0\x06\x04\x12F\n" +
+	"\x1aWINDOWS_FRONT_RIGHT_ISOPEN\x10{\x1a&\x9a\x96\xb7\xeb\x03\x1aWindows.Front.Right.IsOpen\x88ެ\xd0\x06\x04\x12B\n" +
+	"\x18WINDOWS_REAR_LEFT_ISOPEN\x10|\x1a$\x9a\x96\xb7\xeb\x03\x18Windows.Rear.Left.IsOpen\x88ެ\xd0\x06\x04\x12D\n" +
+	"\x19WINDOWS_REAR_RIGHT_ISOPEN\x10}\x1a%\x9a\x96\xb7\xeb\x03\x19Windows.Rear.Right.IsOpen\x88ެ\xd0\x06\x04B\xd5\x01\n" +
 	"\x16com.wayplatform.mbz.v1B\vSignalProtoP\x01ZDgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1;mbzv1\xa2\x02\x03WMX\xaa\x02\x12Wayplatform.Mbz.V1\xca\x02\x12Wayplatform\\Mbz\\V1\xe2\x02\x1eWayplatform\\Mbz\\V1\\GPBMetadata\xea\x02\x14Wayplatform::Mbz::V1b\x06proto3"
 
 var (

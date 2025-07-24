@@ -20,11 +20,11 @@ type asyncAPISchema struct {
 		Schemas map[string]struct {
 			Description string `yaml:"description"`
 			Properties  struct {
+				Type struct {
+					Const string `yaml:"const"`
+				} `yaml:"type"`
 				Data struct {
 					Properties struct {
-						Type struct {
-							Type string `yaml:"type"`
-						} `yaml:"type"`
 						Signals struct {
 							Items []struct {
 								Ref string `yaml:"$ref"`
@@ -41,6 +41,7 @@ func main() {
 	const (
 		signalProtoPath      = "wayplatform/mbz/v1/signal.proto"
 		annotationsProtoPath = "wayplatform/mbz/v1/annotations.proto"
+		signalTypeProtoPath  = "wayplatform/mbz/v1/signal_type.proto"
 	)
 	cmd := &cobra.Command{
 		Use:   "update-signal-proto",
@@ -69,12 +70,17 @@ func main() {
 		if err != nil {
 			return fmt.Errorf("failed to read annotations.proto file: %w", err)
 		}
+		signalTypeProtoData, err := os.ReadFile(filepath.Join(*protoDir, signalTypeProtoPath))
+		if err != nil {
+			return fmt.Errorf("failed to read signal.proto file: %w", err)
+		}
 		fileDescriptors, err := protoparse.Parser{
 			Accessor: protoparse.FileContentsFromMap(map[string]string{
 				signalProtoPath:      string(signalProtoData),
 				annotationsProtoPath: string(annotationsProtoData),
+				signalTypeProtoPath:  string(signalTypeProtoData),
 			}),
-		}.ParseFiles(signalProtoPath, annotationsProtoPath)
+		}.ParseFiles(signalProtoPath, annotationsProtoPath, signalTypeProtoPath)
 		if err != nil {
 			return fmt.Errorf("failed to parse existing proto files: %w", err)
 		}
@@ -91,25 +97,48 @@ func main() {
 			return fmt.Errorf("SignalName enum not found in signal.proto")
 		}
 		addedSignalNames := make(map[string]bool)
-		enumBuilder.AddValue(newEnumValue("SIGNAL_NAME_UNSPECIFIED", 0, "", "Default value. This value is unused."))
+		enumBuilder.AddValue(
+			builder.NewEnumValue("SIGNAL_NAME_UNSPECIFIED").
+				SetNumber(0).
+				SetComments(builder.Comments{
+					LeadingComment: "Default value. This value is unused.",
+				}),
+		)
 		addedSignalNames[""] = true
 		maxNumber := int32(0)
 		for _, enumValue := range existingEnum.GetValues() {
-			signalName := ""
+			if enumValue.GetName() == "SIGNAL_NAME_UNSPECIFIED" {
+				continue
+			}
+			var signalName, signalType string
 			if options := enumValue.GetEnumValueOptions(); options != nil {
 				for _, uninterpreted := range options.GetUninterpretedOption() {
-					if len(uninterpreted.GetName()) > 0 &&
-						uninterpreted.GetName()[0].GetNamePart() == "signal_name" &&
-						uninterpreted.GetName()[0].GetIsExtension() {
+					if len(uninterpreted.GetName()) == 0 {
+						continue
+					}
+					if !uninterpreted.GetName()[0].GetIsExtension() {
+						continue
+					}
+					switch uninterpreted.GetName()[0].GetNamePart() {
+					case "signal_name":
 						signalName = string(uninterpreted.GetStringValue())
-						break
+					case "signal_type":
+						signalType = string(uninterpreted.GetIdentifierValue())
 					}
 				}
 			}
-			if addedSignalNames[signalName] {
+			if addedSignalNames[signalName] || signalType == "" {
 				continue
 			}
-			enumBuilder.AddValue(newEnumValue(enumValue.GetName(), enumValue.GetNumber(), signalName, enumValue.GetSourceInfo().GetLeadingComments()))
+			enumBuilder.AddValue(
+				newEnumValue(
+					enumValue.GetName(),
+					enumValue.GetNumber(),
+					signalName,
+					signalType,
+					enumValue.GetSourceInfo().GetLeadingComments(),
+				),
+			)
 			addedSignalNames[signalName] = true
 			if enumValue.GetNumber() > maxNumber {
 				maxNumber = enumValue.GetNumber()
@@ -126,10 +155,14 @@ func main() {
 			if !ok {
 				return fmt.Errorf("signal schema not found: %s", signalName)
 			}
+			signalType := signalSchema.Properties.Type.Const
+			if signalType == "" {
+				return fmt.Errorf("signal type not found: %s", signalName)
+			}
 			comment := strings.TrimSpace(signalSchema.Description)
 			comment = strings.TrimPrefix(comment, signalName)
 			comment = strings.TrimSpace(comment)
-			enumBuilder.AddValue(newEnumValue(enumName, maxNumber, signalName, comment))
+			enumBuilder.AddValue(newEnumValue(enumName, maxNumber, signalName, signalType, comment))
 			addedSignalNames[signalName] = true
 		}
 		fb.AddEnum(enumBuilder)
@@ -149,7 +182,7 @@ func main() {
 	}
 }
 
-func newEnumValue(name string, number int32, stringName, comment string) *builder.EnumValueBuilder {
+func newEnumValue(name string, number int32, stringName, signalType, comment string) *builder.EnumValueBuilder {
 	result := builder.NewEnumValue(name).SetNumber(number)
 	result.SetComments(builder.Comments{
 		LeadingComment: comment,
@@ -164,6 +197,15 @@ func newEnumValue(name string, number int32, stringName, comment string) *builde
 					},
 				},
 				StringValue: []byte(stringName),
+			},
+			{
+				Name: []*descriptorpb.UninterpretedOption_NamePart{
+					{
+						NamePart:    proto.String("signal_type"),
+						IsExtension: proto.Bool(true),
+					},
+				},
+				IdentifierValue: proto.String(strings.ToUpper(signalType)),
 			},
 		},
 	})

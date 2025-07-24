@@ -17,5 +17,5 @@ extend google.protobuf.EnumValueOptions {
   //
   // Field number is the 28 most significant bits in the sha256 sum of
   // `wayplatform.mbz.v1.signal_type`.
-  SignalType signal_type = 128825698;
+  SignalType signal_type = 222389729;
 }
