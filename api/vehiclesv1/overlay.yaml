@@ -9,16 +9,20 @@ actions:
     description: "Remove SupportedVehicle"
     remove: true
 
-  - target: $.components.schemas..[?(@ =~ /_Public$/)]
-    description: "Remove _Public schema variants"
-    remove: true
-
   - target: $.components.schemas.JobConfigRequest
     description: "Remove JobConfigRequest"
     remove: true
 
   - target: $.components.schemas.JobExecutionResponse
     description: "Remove JobExecutionResponse"
+    remove: true
+
+  - target: $.components.schemas.ServiceStatus
+    description: "Remove ServiceStatus (use ServiceStatus_Public)"
+    remove: true
+
+  - target: $.components.schemas.DesiredServiceStatus
+    description: "Remove DesiredServiceStatus (use DesiredServiceStatus_Public)"
     remove: true
 
   - target: $.components.schemas
@@ -38,7 +42,7 @@ actions:
         properties:
           status:
             $ref: "#/components/schemas/Status"
-      DesiredServiceStatus:
+      DesiredServiceStatus_Public:
         properties:
           desiredStatus:
             $ref: "#/components/schemas/Status"
@@ -52,7 +56,7 @@ actions:
         properties:
           status:
             $ref: "#/components/schemas/Status"
-      ServiceStatus:
+      ServiceStatus_Public:
         properties:
           desiredStatus:
             $ref: "#/components/schemas/Status"

@@ -69,6 +69,7 @@ func newRootCommand() *cobra.Command {
 	cmd.AddCommand(newAssignVehiclesCommand())
 	cmd.AddCommand(newDeleteVehiclesCommand())
 	cmd.AddCommand(newGetVehicleCompatibilityCommand())
+	cmd.AddCommand(newGetVehicleServicesCommand())
 	cmd.AddCommand(newEnableDeltaPushCommand())
 	cmd.AddCommand(newDisableDeltaPushCommand())
 	cmd.AddGroup(&cobra.Group{
@@ -190,6 +191,30 @@ func newGetVehicleCompatibilityCommand() *cobra.Command {
 			return err
 		}
 		response, err := client.GetVehicleCompatibility(cmd.Context(), &mbz.GetVehicleCompatibilityRequest{
+			VIN: args[0],
+		})
+		if err != nil {
+			return err
+		}
+		printJSON(response)
+		return nil
+	}
+	return cmd
+}
+
+func newGetVehicleServicesCommand() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "get-vehicle-services",
+		Short:   "Get vehicle services",
+		GroupID: "vehicles",
+		Args:    cobra.ExactArgs(1),
+	}
+	cmd.RunE = func(cmd *cobra.Command, args []string) error {
+		client, err := auth.NewClient()
+		if err != nil {
+			return err
+		}
+		response, err := client.GetVehicleServices(cmd.Context(), &mbz.GetVehicleServicesRequest{
 			VIN: args[0],
 		})
 		if err != nil {

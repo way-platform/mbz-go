@@ -1,0 +1,3 @@
+s/ActualServiceStatusCustomerVisible_Public/VehicleServiceStatus/g
+s/ServiceStatus_Public/ServiceStatus/g
+s/DesiredServiceStatus_Public/DesiredServiceStatus/g

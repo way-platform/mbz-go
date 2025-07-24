@@ -21,6 +21,29 @@ components:
         - serviceId
         - status
       type: object
+    VehicleServiceStatus:
+      properties:
+        deltaPush:
+          description: Flag denoting whether delta push signals are sent for this VIN.
+          type: boolean
+        services:
+          description: >-
+            List services for which you want to change the actual service
+            status.
+          items:
+            $ref: '#/components/schemas/ServiceStatus'
+          type: array
+          x-go-type-skip-optional-pointer: true
+        vin:
+          description: The VIN (vehicle identification number) of the vehicle
+          example: WDD00000000000000
+          type: string
+          x-go-type-skip-optional-pointer: true
+      required:
+        - deltaPush
+        - services
+        - vin
+      type: object
     ActualServiceStatusForVehicle:
       properties:
         customerId:
@@ -60,6 +83,35 @@ components:
         - actualServiceStatusForVehicle
       type: object
     BadRequestErrorResponse:
+      properties:
+        detail:
+          example: Server cannot or will not process the request
+          type: string
+          x-go-type-skip-optional-pointer: true
+        instance:
+          description: URI where this error occurred
+          example: about:blank
+          format: uri
+          type: string
+          x-go-type-skip-optional-pointer: true
+        statusCode:
+          example: 400
+          format: int32
+          type: integer
+        title:
+          example: Bad request
+          type: string
+          x-go-type-skip-optional-pointer: true
+        type:
+          description: >-
+            URI-reference for type information or 'about:blank' if no more
+            information is available
+          example: about:blank
+          format: uri-reference
+          type: string
+          x-go-type-skip-optional-pointer: true
+      type: object
+    BadRequestErrorResponse_Public:
       properties:
         detail:
           example: Server cannot or will not process the request
@@ -183,19 +235,6 @@ components:
         - vehicleProvidesConnectivity
         - vin
       type: object
-    DesiredServiceStatus:
-      properties:
-        desiredStatus:
-          $ref: '#/components/schemas/Status'
-        serviceId:
-          description: ID of the generic-service
-          example: '1001'
-          type: string
-          x-go-type-skip-optional-pointer: true
-      required:
-        - desiredStatus
-        - serviceId
-      type: object
     DesiredServiceStatusRequest:
       properties:
         services:
@@ -216,6 +255,40 @@ components:
       required:
         - services
         - vin
+      type: object
+    DesiredServiceStatusRequest_Public:
+      properties:
+        services:
+          description: >-
+            List of services for which you want to change the desired service
+            status.
+          items:
+            $ref: '#/components/schemas/DesiredServiceStatus'
+          maxItems: 100
+          minItems: 0
+          type: array
+          x-go-type-skip-optional-pointer: true
+        vin:
+          description: VIN of the vehicle
+          example: WDD00000000000000
+          type: string
+          x-go-type-skip-optional-pointer: true
+      required:
+        - services
+        - vin
+      type: object
+    DesiredServiceStatus:
+      properties:
+        desiredStatus:
+          $ref: '#/components/schemas/Status'
+        serviceId:
+          description: ID of the generic-service
+          example: '1001'
+          type: string
+          x-go-type-skip-optional-pointer: true
+      required:
+        - desiredStatus
+        - serviceId
       type: object
     ErrorResponse:
       properties:
@@ -245,6 +318,59 @@ components:
           format: uri-reference
           type: string
           x-go-type-skip-optional-pointer: true
+      type: object
+    EudaDesiredServiceStatusRequest_Public:
+      properties:
+        consentToken:
+          description: Consent token
+          type: string
+          x-go-type-skip-optional-pointer: true
+        services:
+          description: >-
+            List of services for which you want to change the desired service
+            status.
+          items:
+            $ref: '#/components/schemas/EudaDesiredServiceStatus'
+          maxItems: 100
+          minItems: 0
+          type: array
+          uniqueItems: true
+          x-go-type-skip-optional-pointer: true
+        vins:
+          description: List of VINs of vehicles
+          example:
+            - WDD00000000000001
+            - WDD00000000000002
+          items:
+            type: string
+            x-go-type-skip-optional-pointer: true
+          maxItems: 10
+          minItems: 0
+          type: array
+          uniqueItems: true
+          x-go-type-skip-optional-pointer: true
+      required:
+        - consentToken
+        - services
+        - vins
+      type: object
+    EudaDesiredServiceStatus:
+      properties:
+        desiredStatus:
+          description: The desired service status
+          enum:
+            - ACTIVE
+            - INACTIVE
+          type: string
+          x-go-type-skip-optional-pointer: true
+        serviceId:
+          description: ID of the data act service
+          example: '6001'
+          type: string
+          x-go-type-skip-optional-pointer: true
+      required:
+        - desiredStatus
+        - serviceId
       type: object
     GenericService:
       properties:
@@ -304,6 +430,35 @@ components:
         - serviceList
       type: object
     NotFoundErrorResponse:
+      properties:
+        detail:
+          example: Server can not find the requested resource
+          type: string
+          x-go-type-skip-optional-pointer: true
+        instance:
+          description: URI where this error occurred
+          example: about:blank
+          format: uri
+          type: string
+          x-go-type-skip-optional-pointer: true
+        statusCode:
+          example: 404
+          format: int32
+          type: integer
+        title:
+          example: Not found
+          type: string
+          x-go-type-skip-optional-pointer: true
+        type:
+          description: >-
+            URI-reference for type information or 'about:blank' if no more
+            information is available
+          example: about:blank
+          format: uri-reference
+          type: string
+          x-go-type-skip-optional-pointer: true
+      type: object
+    NotFoundErrorResponse_Public:
       properties:
         detail:
           example: Server can not find the requested resource
@@ -403,22 +558,6 @@ components:
       type: object
     ServiceStatus:
       properties:
-        countryCode:
-          description: >-
-            Code denoting potential regional customizations. GLOBAL is the base
-            code with no customizations.
-          type: string
-          x-go-type-skip-optional-pointer: true
-        deltaPush:
-          description: Flag denoting whether delta push signals are sent for this VIN.
-          type: boolean
-        desiredStatus:
-          $ref: '#/components/schemas/Status'
-        orderId:
-          description: The ID of the order
-          example: 21354891-ddbf-44b5-8014-4ace3a6bed69
-          type: string
-          x-go-type-skip-optional-pointer: true
         orderTime:
           description: Time when this service was ordered by client
           format: int64
@@ -430,10 +569,9 @@ components:
           x-go-type-skip-optional-pointer: true
         status:
           $ref: '#/components/schemas/Status'
+        desiredStatus:
+          $ref: '#/components/schemas/Status'
       required:
-        - countryCode
-        - deltaPush
-        - desiredStatus
         - orderTime
         - serviceId
         - status
@@ -584,6 +722,14 @@ components:
         - services
       type: object
     VehicleOwnerDesiredServiceStatusResponse:
+      properties:
+        tokenExpirationTimeMillis:
+          format: int64
+          type: integer
+      required:
+        - tokenExpirationTimeMillis
+      type: object
+    VehicleOwnerDesiredServiceStatusResponse_Public:
       properties:
         tokenExpirationTimeMillis:
           format: int64
