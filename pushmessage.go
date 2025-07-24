@@ -56,6 +56,21 @@ func (m *PushMessage) AsProto() (*mbzv1.PushMessage, error) {
 		ServiceId:       m.ServiceID,
 		SendingBehavior: sendingBehavior,
 	}
+	switch messageType {
+	case mbzv1.MessageType_SIGNALS:
+		var data VehicleSignalData
+		if err := json.Unmarshal(m.Data, &data); err != nil {
+			return nil, err
+		}
+		result.Signals = make([]*mbzv1.Signal, 0, len(data.Signals))
+		for _, signal := range data.Signals {
+			signalProto, err := signal.AsProto()
+			if err != nil {
+				return nil, err
+			}
+			result.Signals = append(result.Signals, signalProto)
+		}
+	}
 	return result, nil
 }
 

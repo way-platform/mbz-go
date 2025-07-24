@@ -25,24 +25,27 @@ enum SignalUnit {
   // Kilowatt (kW).
   KILOWATT = 6;
 
+  // Liter (l) or in liters.
+  LITER = 7;
+
   // Liter per 100 kilometer (l/100km).
-  LITER_PER_100KM = 7;
+  LITER_PER_100KM = 8;
 
   // Volt (V).
   VOLT = 9;
 
   // Degree Celsius (°C).
-  CELSIUS = 12;
+  CELSIUS = 10;
 
   // Kilopascal (kPa).
-  KILOPASCAL = 13;
+  KILOPASCAL = 11;
 
   // Minute (min) or in minutes.
-  MINUTE = 14;
+  MINUTE = 12;
 
   // Millisecond (ms).
-  MILLISECOND = 15;
+  MILLISECOND = 13;
 
   // Day (in days).
-  DAY = 16;
+  DAY = 14;
 }

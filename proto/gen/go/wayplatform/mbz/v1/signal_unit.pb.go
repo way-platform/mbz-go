@@ -39,20 +39,22 @@ const (
 	SignalUnit_KILOWATT_HOURS SignalUnit = 5
 	// Kilowatt (kW).
 	SignalUnit_KILOWATT SignalUnit = 6
+	// Liter (l) or in liters.
+	SignalUnit_LITER SignalUnit = 7
 	// Liter per 100 kilometer (l/100km).
-	SignalUnit_LITER_PER_100KM SignalUnit = 7
+	SignalUnit_LITER_PER_100KM SignalUnit = 8
 	// Volt (V).
 	SignalUnit_VOLT SignalUnit = 9
 	// Degree Celsius (°C).
-	SignalUnit_CELSIUS SignalUnit = 12
+	SignalUnit_CELSIUS SignalUnit = 10
 	// Kilopascal (kPa).
-	SignalUnit_KILOPASCAL SignalUnit = 13
+	SignalUnit_KILOPASCAL SignalUnit = 11
 	// Minute (min) or in minutes.
-	SignalUnit_MINUTE SignalUnit = 14
+	SignalUnit_MINUTE SignalUnit = 12
 	// Millisecond (ms).
-	SignalUnit_MILLISECOND SignalUnit = 15
+	SignalUnit_MILLISECOND SignalUnit = 13
 	// Day (in days).
-	SignalUnit_DAY SignalUnit = 16
+	SignalUnit_DAY SignalUnit = 14
 )
 
 // Enum value maps for SignalUnit.
@@ -65,13 +67,14 @@ var (
 		4:  "KILOWATT_HOURS_PER_100KM",
 		5:  "KILOWATT_HOURS",
 		6:  "KILOWATT",
-		7:  "LITER_PER_100KM",
+		7:  "LITER",
+		8:  "LITER_PER_100KM",
 		9:  "VOLT",
-		12: "CELSIUS",
-		13: "KILOPASCAL",
-		14: "MINUTE",
-		15: "MILLISECOND",
-		16: "DAY",
+		10: "CELSIUS",
+		11: "KILOPASCAL",
+		12: "MINUTE",
+		13: "MILLISECOND",
+		14: "DAY",
 	}
 	SignalUnit_value = map[string]int32{
 		"SIGNAL_UNIT_UNSPECIFIED":  0,
@@ -81,13 +84,14 @@ var (
 		"KILOWATT_HOURS_PER_100KM": 4,
 		"KILOWATT_HOURS":           5,
 		"KILOWATT":                 6,
-		"LITER_PER_100KM":          7,
+		"LITER":                    7,
+		"LITER_PER_100KM":          8,
 		"VOLT":                     9,
-		"CELSIUS":                  12,
-		"KILOPASCAL":               13,
-		"MINUTE":                   14,
-		"MILLISECOND":              15,
-		"DAY":                      16,
+		"CELSIUS":                  10,
+		"KILOPASCAL":               11,
+		"MINUTE":                   12,
+		"MILLISECOND":              13,
+		"DAY":                      14,
 	}
 )
 
@@ -122,7 +126,7 @@ var File_wayplatform_mbz_v1_signal_unit_proto protoreflect.FileDescriptor
 
 const file_wayplatform_mbz_v1_signal_unit_proto_rawDesc = "" +
 	"\n" +
-	"$wayplatform/mbz/v1/signal_unit.proto\x12\x12wayplatform.mbz.v1*\xff\x01\n" +
+	"$wayplatform/mbz/v1/signal_unit.proto\x12\x12wayplatform.mbz.v1*\x8a\x02\n" +
 	"\n" +
 	"SignalUnit\x12\x1b\n" +
 	"\x17SIGNAL_UNIT_UNSPECIFIED\x10\x00\x12\x16\n" +
@@ -131,16 +135,18 @@ const file_wayplatform_mbz_v1_signal_unit_proto_rawDesc = "" +
 	"\aPERCENT\x10\x03\x12\x1c\n" +
 	"\x18KILOWATT_HOURS_PER_100KM\x10\x04\x12\x12\n" +
 	"\x0eKILOWATT_HOURS\x10\x05\x12\f\n" +
-	"\bKILOWATT\x10\x06\x12\x13\n" +
-	"\x0fLITER_PER_100KM\x10\a\x12\b\n" +
+	"\bKILOWATT\x10\x06\x12\t\n" +
+	"\x05LITER\x10\a\x12\x13\n" +
+	"\x0fLITER_PER_100KM\x10\b\x12\b\n" +
 	"\x04VOLT\x10\t\x12\v\n" +
-	"\aCELSIUS\x10\f\x12\x0e\n" +
+	"\aCELSIUS\x10\n" +
+	"\x12\x0e\n" +
 	"\n" +
-	"KILOPASCAL\x10\r\x12\n" +
+	"KILOPASCAL\x10\v\x12\n" +
 	"\n" +
-	"\x06MINUTE\x10\x0e\x12\x0f\n" +
-	"\vMILLISECOND\x10\x0f\x12\a\n" +
-	"\x03DAY\x10\x10B\xd9\x01\n" +
+	"\x06MINUTE\x10\f\x12\x0f\n" +
+	"\vMILLISECOND\x10\r\x12\a\n" +
+	"\x03DAY\x10\x0eB\xd9\x01\n" +
 	"\x16com.wayplatform.mbz.v1B\x0fSignalUnitProtoP\x01ZDgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1;mbzv1\xa2\x02\x03WMX\xaa\x02\x12Wayplatform.Mbz.V1\xca\x02\x12Wayplatform\\Mbz\\V1\xe2\x02\x1eWayplatform\\Mbz\\V1\\GPBMetadata\xea\x02\x14Wayplatform::Mbz::V1b\x06proto3"
 
 var (

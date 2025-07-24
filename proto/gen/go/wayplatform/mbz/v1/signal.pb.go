@@ -25,19 +25,23 @@ const (
 type Signal struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// The identifier of the signal.
-	Identifier SignalIdentifier `protobuf:"varint,1,opt,name=identifier,proto3,enum=wayplatform.mbz.v1.SignalIdentifier" json:"identifier,omitempty"`
+	Id SignalIdentifier `protobuf:"varint,1,opt,name=id,proto3,enum=wayplatform.mbz.v1.SignalIdentifier" json:"id,omitempty"`
 	// The timestamp of the signal (microseconds since the Unix epoch).
-	Timestamp int64 `protobuf:"varint,2,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	Time int64 `protobuf:"varint,2,opt,name=time,proto3" json:"time,omitempty"`
+	// The type of the signal.
+	Type SignalType `protobuf:"varint,3,opt,name=type,proto3,enum=wayplatform.mbz.v1.SignalType" json:"type,omitempty"`
 	// The string value of the signal (valid for string signals).
-	StringValue *string `protobuf:"bytes,3,opt,name=string_value,json=stringValue,proto3,oneof" json:"string_value,omitempty"`
+	StringValue *string `protobuf:"bytes,4,opt,name=string_value,json=stringValue,proto3,oneof" json:"string_value,omitempty"`
 	// The integer value of the signal (valid for integer signals).
-	IntValue *int32 `protobuf:"varint,4,opt,name=int_value,json=intValue,proto3,oneof" json:"int_value,omitempty"`
+	IntValue *int32 `protobuf:"varint,5,opt,name=int_value,json=intValue,proto3,oneof" json:"int_value,omitempty"`
 	// The double value of the signal (valid for double signals).
-	DoubleValue *float64 `protobuf:"fixed64,5,opt,name=double_value,json=doubleValue,proto3,oneof" json:"double_value,omitempty"`
+	DoubleValue *float64 `protobuf:"fixed64,6,opt,name=double_value,json=doubleValue,proto3,oneof" json:"double_value,omitempty"`
 	// The boolean value of the signal (valid for boolean signals).
-	BoolValue *bool `protobuf:"varint,6,opt,name=bool_value,json=boolValue,proto3,oneof" json:"bool_value,omitempty"`
+	BoolValue *bool `protobuf:"varint,7,opt,name=bool_value,json=boolValue,proto3,oneof" json:"bool_value,omitempty"`
 	// The enum value of the signal (valid for enum signals).
-	EnumValue     *string `protobuf:"bytes,7,opt,name=enum_value,json=enumValue,proto3,oneof" json:"enum_value,omitempty"`
+	EnumValue *string `protobuf:"bytes,8,opt,name=enum_value,json=enumValue,proto3,oneof" json:"enum_value,omitempty"`
+	// The unit of the signal.
+	Unit          SignalUnit `protobuf:"varint,9,opt,name=unit,proto3,enum=wayplatform.mbz.v1.SignalUnit" json:"unit,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -72,18 +76,25 @@ func (*Signal) Descriptor() ([]byte, []int) {
 	return file_wayplatform_mbz_v1_signal_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Signal) GetIdentifier() SignalIdentifier {
+func (x *Signal) GetId() SignalIdentifier {
 	if x != nil {
-		return x.Identifier
+		return x.Id
 	}
 	return SignalIdentifier_SIGNAL_IDENTIFIER_UNSPECIFIED
 }
 
-func (x *Signal) GetTimestamp() int64 {
+func (x *Signal) GetTime() int64 {
 	if x != nil {
-		return x.Timestamp
+		return x.Time
 	}
 	return 0
+}
+
+func (x *Signal) GetType() SignalType {
+	if x != nil {
+		return x.Type
+	}
+	return SignalType_SIGNAL_TYPE_UNSPECIFIED
 }
 
 func (x *Signal) GetStringValue() string {
@@ -121,23 +132,30 @@ func (x *Signal) GetEnumValue() string {
 	return ""
 }
 
+func (x *Signal) GetUnit() SignalUnit {
+	if x != nil {
+		return x.Unit
+	}
+	return SignalUnit_SIGNAL_UNIT_UNSPECIFIED
+}
+
 var File_wayplatform_mbz_v1_signal_proto protoreflect.FileDescriptor
 
 const file_wayplatform_mbz_v1_signal_proto_rawDesc = "" +
 	"\n" +
-	"\x1fwayplatform/mbz/v1/signal.proto\x12\x12wayplatform.mbz.v1\x1a*wayplatform/mbz/v1/signal_identifier.proto\"\xf4\x02\n" +
-	"\x06Signal\x12D\n" +
+	"\x1fwayplatform/mbz/v1/signal.proto\x12\x12wayplatform.mbz.v1\x1a*wayplatform/mbz/v1/signal_identifier.proto\x1a$wayplatform/mbz/v1/signal_type.proto\x1a$wayplatform/mbz/v1/signal_unit.proto\"\xc2\x03\n" +
+	"\x06Signal\x124\n" +
+	"\x02id\x18\x01 \x01(\x0e2$.wayplatform.mbz.v1.SignalIdentifierR\x02id\x12\x12\n" +
+	"\x04time\x18\x02 \x01(\x03R\x04time\x122\n" +
+	"\x04type\x18\x03 \x01(\x0e2\x1e.wayplatform.mbz.v1.SignalTypeR\x04type\x12&\n" +
+	"\fstring_value\x18\x04 \x01(\tH\x00R\vstringValue\x88\x01\x01\x12 \n" +
+	"\tint_value\x18\x05 \x01(\x05H\x01R\bintValue\x88\x01\x01\x12&\n" +
+	"\fdouble_value\x18\x06 \x01(\x01H\x02R\vdoubleValue\x88\x01\x01\x12\"\n" +
 	"\n" +
-	"identifier\x18\x01 \x01(\x0e2$.wayplatform.mbz.v1.SignalIdentifierR\n" +
-	"identifier\x12\x1c\n" +
-	"\ttimestamp\x18\x02 \x01(\x03R\ttimestamp\x12&\n" +
-	"\fstring_value\x18\x03 \x01(\tH\x00R\vstringValue\x88\x01\x01\x12 \n" +
-	"\tint_value\x18\x04 \x01(\x05H\x01R\bintValue\x88\x01\x01\x12&\n" +
-	"\fdouble_value\x18\x05 \x01(\x01H\x02R\vdoubleValue\x88\x01\x01\x12\"\n" +
+	"bool_value\x18\a \x01(\bH\x03R\tboolValue\x88\x01\x01\x12\"\n" +
 	"\n" +
-	"bool_value\x18\x06 \x01(\bH\x03R\tboolValue\x88\x01\x01\x12\"\n" +
-	"\n" +
-	"enum_value\x18\a \x01(\tH\x04R\tenumValue\x88\x01\x01B\x0f\n" +
+	"enum_value\x18\b \x01(\tH\x04R\tenumValue\x88\x01\x01\x122\n" +
+	"\x04unit\x18\t \x01(\x0e2\x1e.wayplatform.mbz.v1.SignalUnitR\x04unitB\x0f\n" +
 	"\r_string_valueB\f\n" +
 	"\n" +
 	"_int_valueB\x0f\n" +
@@ -162,14 +180,18 @@ var file_wayplatform_mbz_v1_signal_proto_msgTypes = make([]protoimpl.MessageInfo
 var file_wayplatform_mbz_v1_signal_proto_goTypes = []any{
 	(*Signal)(nil),        // 0: wayplatform.mbz.v1.Signal
 	(SignalIdentifier)(0), // 1: wayplatform.mbz.v1.SignalIdentifier
+	(SignalType)(0),       // 2: wayplatform.mbz.v1.SignalType
+	(SignalUnit)(0),       // 3: wayplatform.mbz.v1.SignalUnit
 }
 var file_wayplatform_mbz_v1_signal_proto_depIdxs = []int32{
-	1, // 0: wayplatform.mbz.v1.Signal.identifier:type_name -> wayplatform.mbz.v1.SignalIdentifier
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	1, // 0: wayplatform.mbz.v1.Signal.id:type_name -> wayplatform.mbz.v1.SignalIdentifier
+	2, // 1: wayplatform.mbz.v1.Signal.type:type_name -> wayplatform.mbz.v1.SignalType
+	3, // 2: wayplatform.mbz.v1.Signal.unit:type_name -> wayplatform.mbz.v1.SignalUnit
+	3, // [3:3] is the sub-list for method output_type
+	3, // [3:3] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_wayplatform_mbz_v1_signal_proto_init() }
@@ -178,6 +200,8 @@ func file_wayplatform_mbz_v1_signal_proto_init() {
 		return
 	}
 	file_wayplatform_mbz_v1_signal_identifier_proto_init()
+	file_wayplatform_mbz_v1_signal_type_proto_init()
+	file_wayplatform_mbz_v1_signal_unit_proto_init()
 	file_wayplatform_mbz_v1_signal_proto_msgTypes[0].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

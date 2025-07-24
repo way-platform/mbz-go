@@ -214,6 +214,8 @@ func tryInferSignalUnit(comment string) string {
 		return "KILOWATT"
 	case strings.Contains(comment, "(l/100km)"):
 		return "LITER_PER_100KM"
+	case strings.Contains(comment, "(l)") || strings.Contains(comment, "in liter"):
+		return "LITER"
 	case strings.Contains(comment, "(V)"):
 		return "VOLT"
 	case strings.Contains(comment, "(°C)"):

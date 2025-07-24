@@ -3,27 +3,35 @@ syntax = "proto3";
 package wayplatform.mbz.v1;
 
 import "wayplatform/mbz/v1/signal_identifier.proto";
+import "wayplatform/mbz/v1/signal_type.proto";
+import "wayplatform/mbz/v1/signal_unit.proto";
 
 // A signal is a single value of a signal identifier.
 message Signal {
   // The identifier of the signal.
-  SignalIdentifier identifier = 1;
+  SignalIdentifier id = 1;
 
   // The timestamp of the signal (microseconds since the Unix epoch).
-  int64 timestamp = 2;
+  int64 time = 2;
+
+  // The type of the signal.
+  SignalType type = 3;
 
   // The string value of the signal (valid for string signals).
-  optional string string_value = 3;
+  optional string string_value = 4;
 
   // The integer value of the signal (valid for integer signals).
-  optional int32 int_value = 4;
+  optional int32 int_value = 5;
 
   // The double value of the signal (valid for double signals).
-  optional double double_value = 5;
+  optional double double_value = 6;
 
   // The boolean value of the signal (valid for boolean signals).
-  optional bool bool_value = 6;
+  optional bool bool_value = 7;
 
   // The enum value of the signal (valid for enum signals).
-  optional string enum_value = 7;
+  optional string enum_value = 8;
+
+  // The unit of the signal.
+  SignalUnit unit = 9;
 }
