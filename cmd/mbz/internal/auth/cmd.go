@@ -120,6 +120,9 @@ func ReadFile() (*File, error) {
 		return nil, err
 	}
 	if _, err := os.Stat(fp); err != nil {
+		if os.IsNotExist(err) {
+			return nil, fmt.Errorf("no credentials found, please login using `mbz auth login`")
+		}
 		return nil, err
 	}
 	data, err := os.ReadFile(fp)
