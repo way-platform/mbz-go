@@ -82,6 +82,12 @@ func newRootCommand() *cobra.Command {
 		Title: "Services",
 	})
 	cmd.AddCommand(newListServicesCommand())
+	cmd.AddGroup(&cobra.Group{
+		ID:    "utils",
+		Title: "Utils",
+	})
+	cmd.SetHelpCommandGroupID("utils")
+	cmd.SetCompletionCommandGroupID("utils")
 	return cmd
 }
 

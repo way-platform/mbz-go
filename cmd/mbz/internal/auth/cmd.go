@@ -14,7 +14,7 @@ import (
 	"golang.org/x/term"
 )
 
-// NewClient creates a new Mercedes-Benz Management API client using the current CLI credentials.
+// NewClient creates a new Mercedes-Benz API client using the current CLI credentials.
 func NewClient() (*mbz.Client, error) {
 	cf, err := ReadFile()
 	if err != nil {
@@ -31,7 +31,7 @@ func NewClient() (*mbz.Client, error) {
 func NewCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "auth",
-		Short: "Authenticate with the Mercedes-Benz Management API",
+		Short: "Authenticate to the Mercedes-Benz API",
 	}
 	cmd.AddCommand(newLoginCommand())
 	cmd.AddCommand(newLogoutCommand())
@@ -41,7 +41,7 @@ func NewCommand() *cobra.Command {
 func newLoginCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "login",
-		Short: "Login to the Mercedes-Benz Management API",
+		Short: "Login to the Mercedes-Benz API",
 	}
 	region := cmd.Flags().String("region", string(mbz.RegionECE), "region to use for authentication")
 	clientID := cmd.Flags().String("client-id", "-", "client ID to use for authentication")
@@ -86,7 +86,7 @@ func newLoginCommand() *cobra.Command {
 func newLogoutCommand() *cobra.Command {
 	return &cobra.Command{
 		Use:   "logout",
-		Short: "Logout from the Mercedes-Benz Management API",
+		Short: "Logout from the Mercedes-Benz API",
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if err := removeFile(); err != nil {
 				return err
