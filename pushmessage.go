@@ -50,7 +50,7 @@ func (m *PushMessage) AsProto() (*mbzv1.PushMessage, error) {
 	result := &mbzv1.PushMessage{
 		MessageId:       m.MessageID,
 		Vin:             m.VIN,
-		Timestamp:       m.Timestamp,
+		Time:            unixTimestampMillisToMicros(m.Timestamp),
 		MessageType:     messageType,
 		Version:         m.Version,
 		ServiceId:       m.ServiceID,

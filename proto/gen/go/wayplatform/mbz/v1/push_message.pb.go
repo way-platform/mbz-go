@@ -29,7 +29,7 @@ type PushMessage struct {
 	// Vehicle identification number (VIN).
 	Vin string `protobuf:"bytes,2,opt,name=vin,proto3" json:"vin,omitempty"`
 	// Time when the message was created (in microseconds since Unix epoch).
-	Timestamp int64 `protobuf:"varint,3,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	Time int64 `protobuf:"varint,3,opt,name=time,proto3" json:"time,omitempty"`
 	// Message type.
 	MessageType MessageType `protobuf:"varint,4,opt,name=message_type,json=messageType,proto3,enum=wayplatform.mbz.v1.MessageType" json:"message_type,omitempty"`
 	// Version tag for the message.
@@ -88,9 +88,9 @@ func (x *PushMessage) GetVin() string {
 	return ""
 }
 
-func (x *PushMessage) GetTimestamp() int64 {
+func (x *PushMessage) GetTime() int64 {
 	if x != nil {
-		return x.Timestamp
+		return x.Time
 	}
 	return 0
 }
@@ -134,12 +134,12 @@ var File_wayplatform_mbz_v1_push_message_proto protoreflect.FileDescriptor
 
 const file_wayplatform_mbz_v1_push_message_proto_rawDesc = "" +
 	"\n" +
-	"%wayplatform/mbz/v1/push_message.proto\x12\x12wayplatform.mbz.v1\x1a%wayplatform/mbz/v1/message_type.proto\x1a)wayplatform/mbz/v1/sending_behavior.proto\x1a\x1fwayplatform/mbz/v1/signal.proto\"\xdf\x02\n" +
+	"%wayplatform/mbz/v1/push_message.proto\x12\x12wayplatform.mbz.v1\x1a%wayplatform/mbz/v1/message_type.proto\x1a)wayplatform/mbz/v1/sending_behavior.proto\x1a\x1fwayplatform/mbz/v1/signal.proto\"\xd5\x02\n" +
 	"\vPushMessage\x12\x1d\n" +
 	"\n" +
 	"message_id\x18\x01 \x01(\tR\tmessageId\x12\x10\n" +
-	"\x03vin\x18\x02 \x01(\tR\x03vin\x12\x1c\n" +
-	"\ttimestamp\x18\x03 \x01(\x03R\ttimestamp\x12B\n" +
+	"\x03vin\x18\x02 \x01(\tR\x03vin\x12\x12\n" +
+	"\x04time\x18\x03 \x01(\x03R\x04time\x12B\n" +
 	"\fmessage_type\x18\x04 \x01(\x0e2\x1f.wayplatform.mbz.v1.MessageTypeR\vmessageType\x12\x18\n" +
 	"\aversion\x18\x05 \x01(\tR\aversion\x12\x1d\n" +
 	"\n" +

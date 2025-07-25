@@ -15,7 +15,7 @@ message PushMessage {
   string vin = 2;
 
   // Time when the message was created (in microseconds since Unix epoch).
-  int64 timestamp = 3;
+  int64 time = 3;
 
   // Message type.
   MessageType message_type = 4;
