@@ -41,7 +41,7 @@ type Signal struct {
 	// The enum value of the signal (valid for enum signals).
 	EnumValue *string `protobuf:"bytes,8,opt,name=enum_value,json=enumValue,proto3,oneof" json:"enum_value,omitempty"`
 	// The unit of the signal.
-	Unit          SignalUnit `protobuf:"varint,9,opt,name=unit,proto3,enum=wayplatform.mbz.v1.SignalUnit" json:"unit,omitempty"`
+	Unit          *SignalUnit `protobuf:"varint,9,opt,name=unit,proto3,enum=wayplatform.mbz.v1.SignalUnit,oneof" json:"unit,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -133,8 +133,8 @@ func (x *Signal) GetEnumValue() string {
 }
 
 func (x *Signal) GetUnit() SignalUnit {
-	if x != nil {
-		return x.Unit
+	if x != nil && x.Unit != nil {
+		return *x.Unit
 	}
 	return SignalUnit_SIGNAL_UNIT_UNSPECIFIED
 }
@@ -143,7 +143,7 @@ var File_wayplatform_mbz_v1_signal_proto protoreflect.FileDescriptor
 
 const file_wayplatform_mbz_v1_signal_proto_rawDesc = "" +
 	"\n" +
-	"\x1fwayplatform/mbz/v1/signal.proto\x12\x12wayplatform.mbz.v1\x1a*wayplatform/mbz/v1/signal_identifier.proto\x1a$wayplatform/mbz/v1/signal_type.proto\x1a$wayplatform/mbz/v1/signal_unit.proto\"\xc2\x03\n" +
+	"\x1fwayplatform/mbz/v1/signal.proto\x12\x12wayplatform.mbz.v1\x1a*wayplatform/mbz/v1/signal_identifier.proto\x1a$wayplatform/mbz/v1/signal_type.proto\x1a$wayplatform/mbz/v1/signal_unit.proto\"\xd0\x03\n" +
 	"\x06Signal\x124\n" +
 	"\x02id\x18\x01 \x01(\x0e2$.wayplatform.mbz.v1.SignalIdentifierR\x02id\x12\x12\n" +
 	"\x04time\x18\x02 \x01(\x03R\x04time\x122\n" +
@@ -154,14 +154,15 @@ const file_wayplatform_mbz_v1_signal_proto_rawDesc = "" +
 	"\n" +
 	"bool_value\x18\a \x01(\bH\x03R\tboolValue\x88\x01\x01\x12\"\n" +
 	"\n" +
-	"enum_value\x18\b \x01(\tH\x04R\tenumValue\x88\x01\x01\x122\n" +
-	"\x04unit\x18\t \x01(\x0e2\x1e.wayplatform.mbz.v1.SignalUnitR\x04unitB\x0f\n" +
+	"enum_value\x18\b \x01(\tH\x04R\tenumValue\x88\x01\x01\x127\n" +
+	"\x04unit\x18\t \x01(\x0e2\x1e.wayplatform.mbz.v1.SignalUnitH\x05R\x04unit\x88\x01\x01B\x0f\n" +
 	"\r_string_valueB\f\n" +
 	"\n" +
 	"_int_valueB\x0f\n" +
 	"\r_double_valueB\r\n" +
 	"\v_bool_valueB\r\n" +
-	"\v_enum_valueB\xd5\x01\n" +
+	"\v_enum_valueB\a\n" +
+	"\x05_unitB\xd5\x01\n" +
 	"\x16com.wayplatform.mbz.v1B\vSignalProtoP\x01ZDgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1;mbzv1\xa2\x02\x03WMX\xaa\x02\x12Wayplatform.Mbz.V1\xca\x02\x12Wayplatform\\Mbz\\V1\xe2\x02\x1eWayplatform\\Mbz\\V1\\GPBMetadata\xea\x02\x14Wayplatform::Mbz::V1b\x06proto3"
 
 var (

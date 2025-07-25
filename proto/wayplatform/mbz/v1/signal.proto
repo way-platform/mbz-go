@@ -33,5 +33,5 @@ message Signal {
   optional string enum_value = 8;
 
   // The unit of the signal.
-  SignalUnit unit = 9;
+  optional SignalUnit unit = 9;
 }
