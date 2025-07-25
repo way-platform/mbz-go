@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	mbzv1 "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1"
+	mbzv1 "buf.build/gen/go/way-platform/mbz/protocolbuffers/go/wayplatform/mbz/v1"
 	"google.golang.org/protobuf/proto"
 )
 

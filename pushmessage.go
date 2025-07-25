@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/way-platform/mbz-go/api/servicesv1"
-	mbzv1 "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1"
+	mbzv1 "buf.build/gen/go/way-platform/mbz/protocolbuffers/go/wayplatform/mbz/v1"
 )
 
 // PushMessage represents a push message.
