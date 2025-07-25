@@ -61,6 +61,7 @@ func (s *Signal) AsProto() (*mbzv1.Signal, error) {
 	if !ok {
 		return nil, fmt.Errorf("failed to get signal type for signal %s", s.Name)
 	}
+	result.Type = signalType
 	switch signalType {
 	case mbzv1.SignalType_STRING:
 		result.StringValue = ptr(s.Value)
