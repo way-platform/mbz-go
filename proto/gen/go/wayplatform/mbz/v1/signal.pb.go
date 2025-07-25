@@ -7,6 +7,7 @@
 package mbzv1
 
 import (
+	_ "github.com/GoogleCloudPlatform/protoc-gen-bq-schema/protos"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -143,10 +144,10 @@ var File_wayplatform_mbz_v1_signal_proto protoreflect.FileDescriptor
 
 const file_wayplatform_mbz_v1_signal_proto_rawDesc = "" +
 	"\n" +
-	"\x1fwayplatform/mbz/v1/signal.proto\x12\x12wayplatform.mbz.v1\x1a*wayplatform/mbz/v1/signal_identifier.proto\x1a$wayplatform/mbz/v1/signal_type.proto\x1a$wayplatform/mbz/v1/signal_unit.proto\"\xd0\x03\n" +
+	"\x1fwayplatform/mbz/v1/signal.proto\x12\x12wayplatform.mbz.v1\x1a\x0ebq_field.proto\x1a*wayplatform/mbz/v1/signal_identifier.proto\x1a$wayplatform/mbz/v1/signal_type.proto\x1a$wayplatform/mbz/v1/signal_unit.proto\"\xe0\x03\n" +
 	"\x06Signal\x124\n" +
-	"\x02id\x18\x01 \x01(\x0e2$.wayplatform.mbz.v1.SignalIdentifierR\x02id\x12\x12\n" +
-	"\x04time\x18\x02 \x01(\x03R\x04time\x122\n" +
+	"\x02id\x18\x01 \x01(\x0e2$.wayplatform.mbz.v1.SignalIdentifierR\x02id\x12\"\n" +
+	"\x04time\x18\x02 \x01(\x03B\x0e\xea?\v\x12\tTIMESTAMPR\x04time\x122\n" +
 	"\x04type\x18\x03 \x01(\x0e2\x1e.wayplatform.mbz.v1.SignalTypeR\x04type\x12&\n" +
 	"\fstring_value\x18\x04 \x01(\tH\x00R\vstringValue\x88\x01\x01\x12 \n" +
 	"\tint_value\x18\x05 \x01(\x05H\x01R\bintValue\x88\x01\x01\x12&\n" +

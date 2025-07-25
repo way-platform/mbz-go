@@ -1,0 +1,12 @@
+syntax = "proto2";
+message Signal {
+  optional int32 id = 1;
+  optional int64 time = 2;
+  optional int32 type = 3;
+  optional string string_value = 4;
+  optional int32 int_value = 5;
+  optional double double_value = 6;
+  optional bool bool_value = 7;
+  optional string enum_value = 8;
+  optional int32 unit = 9;
+}

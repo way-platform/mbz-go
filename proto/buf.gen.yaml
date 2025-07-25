@@ -18,3 +18,11 @@ plugins:
     out: gen/go
     opt:
       - module=github.com/way-platform/mbz-go/proto/gen/go
+
+  - remote: buf.build/googlecloudplatform/bq-schema:v3.1.0
+    out: gen/bq
+    opt:
+      - module=github.com/way-platform/mbz-go/proto/gen/bq
+
+  - remote: buf.build/bufbuild/protoschema-pubsub:v0.5.1
+    out: gen/pubsub
