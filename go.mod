@@ -1,6 +1,8 @@
 module github.com/way-platform/mbz-go
 
-go 1.24.4
+go 1.24.0
+
+toolchain go1.24.4
 
 require (
 	buf.build/gen/go/way-platform/mbz/protocolbuffers/go v1.36.6-20250725111242-d0e0e7b1227c.1
