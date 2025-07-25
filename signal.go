@@ -111,7 +111,9 @@ func (s *Signal) AsProto() (*mbzv1.Signal, error) {
 	if !ok {
 		return nil, fmt.Errorf("failed to get signal unit for signal %s", s.Name)
 	}
-	result.Unit = ptr(signalUnit)
+	if signalUnit != mbzv1.SignalUnit_SIGNAL_UNIT_UNSPECIFIED {
+		result.Unit = ptr(signalUnit)
+	}
 	return result, nil
 }
 
