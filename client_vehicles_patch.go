@@ -5,7 +5,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 
 	"github.com/way-platform/mbz-go/api/vehiclesv1"
@@ -18,10 +17,7 @@ type PatchVehiclesRequest struct {
 }
 
 // PatchVehiclesResponse is the response for [Client.PatchVehicles].
-type PatchVehiclesResponse struct {
-	// Vehicles is the list of vehicles returned by the API.
-	Vehicles []vehiclesv1.Vehicle `json:"vehicles"`
-}
+type PatchVehiclesResponse struct{}
 
 // PatchVehicles patches vehicles. Only the deltaPush field is supported.
 func (c *Client) PatchVehicles(ctx context.Context, request *PatchVehiclesRequest) (_ *PatchVehiclesResponse, err error) {
@@ -32,29 +28,21 @@ func (c *Client) PatchVehicles(ctx context.Context, request *PatchVehiclesReques
 	}()
 	requestBodyData, err := json.Marshal(request.Vehicles)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("marshal request: %w", err)
 	}
 	httpRequest, err := c.newRequest(ctx, http.MethodPatch, "/v1/accounts/vehicles", bytes.NewReader(requestBodyData))
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("new request: %w", err)
 	}
+	httpRequest.Header.Set("Content-Type", "application/json")
+	httpRequest.Header.Set("Accept", "application/json")
 	httpResponse, err := c.httpClient.Do(httpRequest)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("do request: %w", err)
 	}
 	defer httpResponse.Body.Close()
 	if httpResponse.StatusCode != http.StatusOK {
 		return nil, newResponseError(httpResponse)
 	}
-	data, err := io.ReadAll(httpResponse.Body)
-	if err != nil {
-		return nil, err
-	}
-	var vehicles []vehiclesv1.Vehicle
-	if err := json.Unmarshal(data, &vehicles); err != nil {
-		return nil, err
-	}
-	return &PatchVehiclesResponse{
-		Vehicles: vehicles,
-	}, nil
+	return &PatchVehiclesResponse{}, nil
 }

@@ -19,6 +19,8 @@ type GetVehicleServicesRequest struct {
 
 // GetVehicleServicesResponse is the response for [Client.GetVehicleServices].
 type GetVehicleServicesResponse struct {
+	// DeltaPush indicates if delta push is enabled for the vehicle.
+	DeltaPush bool `json:"deltaPush"`
 	// Services with the service availability.
 	Services []vehiclesv1.ServiceStatus `json:"services"`
 }
@@ -30,7 +32,7 @@ func (c *Client) GetVehicleServices(ctx context.Context, request *GetVehicleServ
 			err = fmt.Errorf("mbz: get vehicle services: %w", err)
 		}
 	}()
-	httpRequest, err := c.newRequest(ctx, http.MethodGet, "/v1/accounts/vehicles/"+request.VIN+"/services", nil)
+	httpRequest, err := c.newRequest(ctx, http.MethodGet, "/v2/accounts/vehicles/"+request.VIN+"/services", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -47,11 +49,12 @@ func (c *Client) GetVehicleServices(ctx context.Context, request *GetVehicleServ
 		return nil, err
 	}
 	log.Println(string(data))
-	var responseBody []vehiclesv1.ServiceStatus
+	var responseBody vehiclesv1.VehicleServiceStatus
 	if err := json.Unmarshal(data, &responseBody); err != nil {
 		return nil, err
 	}
 	return &GetVehicleServicesResponse{
-		Services: responseBody,
+		DeltaPush: responseBody.DeltaPush,
+		Services:  responseBody.Services,
 	}, nil
 }
