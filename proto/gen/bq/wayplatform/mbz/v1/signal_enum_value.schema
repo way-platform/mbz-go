@@ -1,0 +1,14 @@
+[
+ {
+  "name": "value",
+  "type": "STRING",
+  "mode": "NULLABLE",
+  "description": "The identifier of the enum signal value."
+ },
+ {
+  "name": "description",
+  "type": "STRING",
+  "mode": "NULLABLE",
+  "description": "The description of the enum signal value."
+ }
+]

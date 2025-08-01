@@ -1,8 +1,5 @@
 version: v2
 
-deps:
-  - buf.build/googlecloudplatform/bq-schema-api
-
 modules:
   - path: .
     name: buf.build/way-platform/mbz

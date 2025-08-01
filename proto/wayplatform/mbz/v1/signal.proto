@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package wayplatform.mbz.v1;
 
-import "bq_field.proto";
 import "wayplatform/mbz/v1/signal_identifier.proto";
 import "wayplatform/mbz/v1/signal_type.proto";
 import "wayplatform/mbz/v1/signal_unit.proto";
@@ -13,7 +12,7 @@ message Signal {
   SignalIdentifier id = 1;
 
   // The timestamp of the signal (microseconds since the Unix epoch).
-  int64 time = 2 [(gen_bq_schema.bigquery).type_override = 'TIMESTAMP'];
+  int64 time = 2;
 
   // The type of the signal.
   SignalType type = 3;

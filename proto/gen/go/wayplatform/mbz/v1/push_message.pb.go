@@ -7,7 +7,6 @@
 package mbzv1
 
 import (
-	_ "github.com/GoogleCloudPlatform/protoc-gen-bq-schema/protos"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -135,19 +134,18 @@ var File_wayplatform_mbz_v1_push_message_proto protoreflect.FileDescriptor
 
 const file_wayplatform_mbz_v1_push_message_proto_rawDesc = "" +
 	"\n" +
-	"%wayplatform/mbz/v1/push_message.proto\x12\x12wayplatform.mbz.v1\x1a\x0ebq_field.proto\x1a\x0ebq_table.proto\x1a%wayplatform/mbz/v1/message_type.proto\x1a)wayplatform/mbz/v1/sending_behavior.proto\x1a\x1fwayplatform/mbz/v1/signal.proto\"\xf9\x02\n" +
+	"%wayplatform/mbz/v1/push_message.proto\x12\x12wayplatform.mbz.v1\x1a%wayplatform/mbz/v1/message_type.proto\x1a)wayplatform/mbz/v1/sending_behavior.proto\x1a\x1fwayplatform/mbz/v1/signal.proto\"\xd5\x02\n" +
 	"\vPushMessage\x12\x1d\n" +
 	"\n" +
 	"message_id\x18\x01 \x01(\tR\tmessageId\x12\x10\n" +
-	"\x03vin\x18\x02 \x01(\tR\x03vin\x12\"\n" +
-	"\x04time\x18\x03 \x01(\x03B\x0e\xea?\v\x12\tTIMESTAMPR\x04time\x12B\n" +
+	"\x03vin\x18\x02 \x01(\tR\x03vin\x12\x12\n" +
+	"\x04time\x18\x03 \x01(\x03R\x04time\x12B\n" +
 	"\fmessage_type\x18\x04 \x01(\x0e2\x1f.wayplatform.mbz.v1.MessageTypeR\vmessageType\x12\x18\n" +
 	"\aversion\x18\x05 \x01(\tR\aversion\x12\x1d\n" +
 	"\n" +
 	"service_id\x18\x06 \x01(\tR\tserviceId\x12N\n" +
 	"\x10sending_behavior\x18\a \x01(\x0e2#.wayplatform.mbz.v1.SendingBehaviorR\x0fsendingBehavior\x124\n" +
-	"\asignals\x18\b \x03(\v2\x1a.wayplatform.mbz.v1.SignalR\asignals:\x12\xea?\x0f\n" +
-	"\rpush_messagesB\xda\x01\n" +
+	"\asignals\x18\b \x03(\v2\x1a.wayplatform.mbz.v1.SignalR\asignalsB\xda\x01\n" +
 	"\x16com.wayplatform.mbz.v1B\x10PushMessageProtoP\x01ZDgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1;mbzv1\xa2\x02\x03WMX\xaa\x02\x12Wayplatform.Mbz.V1\xca\x02\x12Wayplatform\\Mbz\\V1\xe2\x02\x1eWayplatform\\Mbz\\V1\\GPBMetadata\xea\x02\x14Wayplatform::Mbz::V1b\x06proto3"
 
 var (

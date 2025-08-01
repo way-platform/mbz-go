@@ -13,7 +13,7 @@
  },
  {
   "name": "time",
-  "type": "TIMESTAMP",
+  "type": "INTEGER",
   "mode": "NULLABLE",
   "description": "Time when the message was created (in microseconds since Unix epoch)."
  },
@@ -55,7 +55,7 @@
    },
    {
     "name": "time",
-    "type": "TIMESTAMP",
+    "type": "INTEGER",
     "mode": "NULLABLE",
     "description": "The timestamp of the signal (microseconds since the Unix epoch)."
    },

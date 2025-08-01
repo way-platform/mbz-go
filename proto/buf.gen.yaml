@@ -23,6 +23,7 @@ plugins:
     out: gen/bq
     opt:
       - module=github.com/way-platform/mbz-go/proto/gen/bq
+      - single-message
 
   - remote: buf.build/bufbuild/protoschema-pubsub:v0.5.1
     out: gen/pubsub
