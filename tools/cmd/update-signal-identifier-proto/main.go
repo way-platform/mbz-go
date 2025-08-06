@@ -99,7 +99,7 @@ func main() {
 		}
 		fb := builder.NewFile(signalIdentifierProtoPath)
 		fb.SetPackageName("wayplatform.mbz.v1")
-		fb.IsProto3 = true
+		fb.Edition = descriptorpb.Edition_EDITION_2023
 		fb.AddImportedDependency(fileDescriptors[1])
 		enumBuilder := builder.NewEnum("SignalIdentifier")
 		enumBuilder.SetComments(builder.Comments{

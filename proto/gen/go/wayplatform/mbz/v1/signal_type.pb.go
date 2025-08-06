@@ -10,7 +10,6 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
-	sync "sync"
 	unsafe "unsafe"
 )
 
@@ -81,11 +80,6 @@ func (x SignalType) Number() protoreflect.EnumNumber {
 	return protoreflect.EnumNumber(x)
 }
 
-// Deprecated: Use SignalType.Descriptor instead.
-func (SignalType) EnumDescriptor() ([]byte, []int) {
-	return file_wayplatform_mbz_v1_signal_type_proto_rawDescGZIP(), []int{0}
-}
-
 var File_wayplatform_mbz_v1_signal_type_proto protoreflect.FileDescriptor
 
 const file_wayplatform_mbz_v1_signal_type_proto_rawDesc = "" +
@@ -101,19 +95,7 @@ const file_wayplatform_mbz_v1_signal_type_proto_rawDesc = "" +
 	"\x06DOUBLE\x10\x03\x12\v\n" +
 	"\aBOOLEAN\x10\x04\x12\b\n" +
 	"\x04ENUM\x10\x05B\xd9\x01\n" +
-	"\x16com.wayplatform.mbz.v1B\x0fSignalTypeProtoP\x01ZDgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1;mbzv1\xa2\x02\x03WMX\xaa\x02\x12Wayplatform.Mbz.V1\xca\x02\x12Wayplatform\\Mbz\\V1\xe2\x02\x1eWayplatform\\Mbz\\V1\\GPBMetadata\xea\x02\x14Wayplatform::Mbz::V1b\x06proto3"
-
-var (
-	file_wayplatform_mbz_v1_signal_type_proto_rawDescOnce sync.Once
-	file_wayplatform_mbz_v1_signal_type_proto_rawDescData []byte
-)
-
-func file_wayplatform_mbz_v1_signal_type_proto_rawDescGZIP() []byte {
-	file_wayplatform_mbz_v1_signal_type_proto_rawDescOnce.Do(func() {
-		file_wayplatform_mbz_v1_signal_type_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_wayplatform_mbz_v1_signal_type_proto_rawDesc), len(file_wayplatform_mbz_v1_signal_type_proto_rawDesc)))
-	})
-	return file_wayplatform_mbz_v1_signal_type_proto_rawDescData
-}
+	"\x16com.wayplatform.mbz.v1B\x0fSignalTypeProtoP\x01ZDgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1;mbzv1\xa2\x02\x03WMX\xaa\x02\x12Wayplatform.Mbz.V1\xca\x02\x12Wayplatform\\Mbz\\V1\xe2\x02\x1eWayplatform\\Mbz\\V1\\GPBMetadata\xea\x02\x14Wayplatform::Mbz::V1b\beditionsp\xe8\a"
 
 var file_wayplatform_mbz_v1_signal_type_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_wayplatform_mbz_v1_signal_type_proto_goTypes = []any{

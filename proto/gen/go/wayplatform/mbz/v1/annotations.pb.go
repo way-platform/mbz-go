@@ -101,7 +101,7 @@ const file_wayplatform_mbz_v1_annotations_proto_rawDesc = "" +
 	"\vsignal_unit\x12!.google.protobuf.EnumValueOptions\x18\xb3ΐ\x1b \x01(\x0e2\x1e.wayplatform.mbz.v1.SignalUnitR\n" +
 	"signalUnit:n\n" +
 	"\rsignal_values\x12!.google.protobuf.EnumValueOptions\x18\xaaת\x16 \x03(\v2#.wayplatform.mbz.v1.SignalEnumValueR\fsignalValuesB\xda\x01\n" +
-	"\x16com.wayplatform.mbz.v1B\x10AnnotationsProtoP\x01ZDgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1;mbzv1\xa2\x02\x03WMX\xaa\x02\x12Wayplatform.Mbz.V1\xca\x02\x12Wayplatform\\Mbz\\V1\xe2\x02\x1eWayplatform\\Mbz\\V1\\GPBMetadata\xea\x02\x14Wayplatform::Mbz::V1b\x06proto3"
+	"\x16com.wayplatform.mbz.v1B\x10AnnotationsProtoP\x01ZDgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1;mbzv1\xa2\x02\x03WMX\xaa\x02\x12Wayplatform.Mbz.V1\xca\x02\x12Wayplatform\\Mbz\\V1\xe2\x02\x1eWayplatform\\Mbz\\V1\\GPBMetadata\xea\x02\x14Wayplatform::Mbz::V1b\beditionsp\xe8\a"
 
 var file_wayplatform_mbz_v1_annotations_proto_goTypes = []any{
 	(*descriptorpb.EnumValueOptions)(nil), // 0: google.protobuf.EnumValueOptions

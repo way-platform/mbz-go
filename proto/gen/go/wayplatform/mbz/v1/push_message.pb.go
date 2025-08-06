@@ -10,7 +10,6 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
-	sync "sync"
 	unsafe "unsafe"
 )
 
@@ -23,25 +22,19 @@ const (
 
 // A push message from the Mercedes-Benz Kafka push API.
 type PushMessage struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// Unique message identifier.
-	MessageId string `protobuf:"bytes,1,opt,name=message_id,json=messageId,proto3" json:"message_id,omitempty"`
-	// Vehicle identification number (VIN).
-	Vin string `protobuf:"bytes,2,opt,name=vin,proto3" json:"vin,omitempty"`
-	// Time when the message was created (in microseconds since Unix epoch).
-	Time int64 `protobuf:"varint,3,opt,name=time,proto3" json:"time,omitempty"`
-	// Message type.
-	MessageType MessageType `protobuf:"varint,4,opt,name=message_type,json=messageType,proto3,enum=wayplatform.mbz.v1.MessageType" json:"message_type,omitempty"`
-	// Version tag for the message.
-	Version string `protobuf:"bytes,5,opt,name=version,proto3" json:"version,omitempty"`
-	// Service associated with the message.
-	ServiceId string `protobuf:"bytes,6,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
-	// Sending behavior.
-	SendingBehavior SendingBehavior `protobuf:"varint,7,opt,name=sending_behavior,json=sendingBehavior,proto3,enum=wayplatform.mbz.v1.SendingBehavior" json:"sending_behavior,omitempty"`
-	// Signals (valid for SIGNALS message type).
-	Signals       []*Signal `protobuf:"bytes,8,rep,name=signals,proto3" json:"signals,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state                      protoimpl.MessageState `protogen:"opaque.v1"`
+	xxx_hidden_MessageId       *string                `protobuf:"bytes,1,opt,name=message_id,json=messageId"`
+	xxx_hidden_Vin             *string                `protobuf:"bytes,2,opt,name=vin"`
+	xxx_hidden_Time            int64                  `protobuf:"varint,3,opt,name=time"`
+	xxx_hidden_MessageType     MessageType            `protobuf:"varint,4,opt,name=message_type,json=messageType,enum=wayplatform.mbz.v1.MessageType"`
+	xxx_hidden_Version         *string                `protobuf:"bytes,5,opt,name=version"`
+	xxx_hidden_ServiceId       *string                `protobuf:"bytes,6,opt,name=service_id,json=serviceId"`
+	xxx_hidden_SendingBehavior SendingBehavior        `protobuf:"varint,7,opt,name=sending_behavior,json=sendingBehavior,enum=wayplatform.mbz.v1.SendingBehavior"`
+	xxx_hidden_Signals         *[]*Signal             `protobuf:"bytes,8,rep,name=signals"`
+	XXX_raceDetectHookData     protoimpl.RaceDetectHookData
+	XXX_presence               [1]uint32
+	unknownFields              protoimpl.UnknownFields
+	sizeCache                  protoimpl.SizeCache
 }
 
 func (x *PushMessage) Reset() {
@@ -69,65 +62,258 @@ func (x *PushMessage) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use PushMessage.ProtoReflect.Descriptor instead.
-func (*PushMessage) Descriptor() ([]byte, []int) {
-	return file_wayplatform_mbz_v1_push_message_proto_rawDescGZIP(), []int{0}
-}
-
 func (x *PushMessage) GetMessageId() string {
 	if x != nil {
-		return x.MessageId
+		if x.xxx_hidden_MessageId != nil {
+			return *x.xxx_hidden_MessageId
+		}
+		return ""
 	}
 	return ""
 }
 
 func (x *PushMessage) GetVin() string {
 	if x != nil {
-		return x.Vin
+		if x.xxx_hidden_Vin != nil {
+			return *x.xxx_hidden_Vin
+		}
+		return ""
 	}
 	return ""
 }
 
 func (x *PushMessage) GetTime() int64 {
 	if x != nil {
-		return x.Time
+		return x.xxx_hidden_Time
 	}
 	return 0
 }
 
 func (x *PushMessage) GetMessageType() MessageType {
 	if x != nil {
-		return x.MessageType
+		if protoimpl.X.Present(&(x.XXX_presence[0]), 3) {
+			return x.xxx_hidden_MessageType
+		}
 	}
 	return MessageType_MESSAGE_TYPE_UNSPECIFIED
 }
 
 func (x *PushMessage) GetVersion() string {
 	if x != nil {
-		return x.Version
+		if x.xxx_hidden_Version != nil {
+			return *x.xxx_hidden_Version
+		}
+		return ""
 	}
 	return ""
 }
 
 func (x *PushMessage) GetServiceId() string {
 	if x != nil {
-		return x.ServiceId
+		if x.xxx_hidden_ServiceId != nil {
+			return *x.xxx_hidden_ServiceId
+		}
+		return ""
 	}
 	return ""
 }
 
 func (x *PushMessage) GetSendingBehavior() SendingBehavior {
 	if x != nil {
-		return x.SendingBehavior
+		if protoimpl.X.Present(&(x.XXX_presence[0]), 6) {
+			return x.xxx_hidden_SendingBehavior
+		}
 	}
 	return SendingBehavior_SENDING_BEHAVIOR_UNSPECIFIED
 }
 
 func (x *PushMessage) GetSignals() []*Signal {
 	if x != nil {
-		return x.Signals
+		if x.xxx_hidden_Signals != nil {
+			return *x.xxx_hidden_Signals
+		}
 	}
 	return nil
+}
+
+func (x *PushMessage) SetMessageId(v string) {
+	x.xxx_hidden_MessageId = &v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 0, 8)
+}
+
+func (x *PushMessage) SetVin(v string) {
+	x.xxx_hidden_Vin = &v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 1, 8)
+}
+
+func (x *PushMessage) SetTime(v int64) {
+	x.xxx_hidden_Time = v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 2, 8)
+}
+
+func (x *PushMessage) SetMessageType(v MessageType) {
+	x.xxx_hidden_MessageType = v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 3, 8)
+}
+
+func (x *PushMessage) SetVersion(v string) {
+	x.xxx_hidden_Version = &v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 4, 8)
+}
+
+func (x *PushMessage) SetServiceId(v string) {
+	x.xxx_hidden_ServiceId = &v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 5, 8)
+}
+
+func (x *PushMessage) SetSendingBehavior(v SendingBehavior) {
+	x.xxx_hidden_SendingBehavior = v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 6, 8)
+}
+
+func (x *PushMessage) SetSignals(v []*Signal) {
+	x.xxx_hidden_Signals = &v
+}
+
+func (x *PushMessage) HasMessageId() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 0)
+}
+
+func (x *PushMessage) HasVin() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 1)
+}
+
+func (x *PushMessage) HasTime() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 2)
+}
+
+func (x *PushMessage) HasMessageType() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 3)
+}
+
+func (x *PushMessage) HasVersion() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 4)
+}
+
+func (x *PushMessage) HasServiceId() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 5)
+}
+
+func (x *PushMessage) HasSendingBehavior() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 6)
+}
+
+func (x *PushMessage) ClearMessageId() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 0)
+	x.xxx_hidden_MessageId = nil
+}
+
+func (x *PushMessage) ClearVin() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 1)
+	x.xxx_hidden_Vin = nil
+}
+
+func (x *PushMessage) ClearTime() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 2)
+	x.xxx_hidden_Time = 0
+}
+
+func (x *PushMessage) ClearMessageType() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 3)
+	x.xxx_hidden_MessageType = MessageType_MESSAGE_TYPE_UNSPECIFIED
+}
+
+func (x *PushMessage) ClearVersion() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 4)
+	x.xxx_hidden_Version = nil
+}
+
+func (x *PushMessage) ClearServiceId() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 5)
+	x.xxx_hidden_ServiceId = nil
+}
+
+func (x *PushMessage) ClearSendingBehavior() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 6)
+	x.xxx_hidden_SendingBehavior = SendingBehavior_SENDING_BEHAVIOR_UNSPECIFIED
+}
+
+type PushMessage_builder struct {
+	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
+
+	// Unique message identifier.
+	MessageId *string
+	// Vehicle identification number (VIN).
+	Vin *string
+	// Time when the message was created (in microseconds since Unix epoch).
+	Time *int64
+	// Message type.
+	MessageType *MessageType
+	// Version tag for the message.
+	Version *string
+	// Service associated with the message.
+	ServiceId *string
+	// Sending behavior.
+	SendingBehavior *SendingBehavior
+	// Signals (valid for SIGNALS message type).
+	Signals []*Signal
+}
+
+func (b0 PushMessage_builder) Build() *PushMessage {
+	m0 := &PushMessage{}
+	b, x := &b0, m0
+	_, _ = b, x
+	if b.MessageId != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 0, 8)
+		x.xxx_hidden_MessageId = b.MessageId
+	}
+	if b.Vin != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 1, 8)
+		x.xxx_hidden_Vin = b.Vin
+	}
+	if b.Time != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 2, 8)
+		x.xxx_hidden_Time = *b.Time
+	}
+	if b.MessageType != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 3, 8)
+		x.xxx_hidden_MessageType = *b.MessageType
+	}
+	if b.Version != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 4, 8)
+		x.xxx_hidden_Version = b.Version
+	}
+	if b.ServiceId != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 5, 8)
+		x.xxx_hidden_ServiceId = b.ServiceId
+	}
+	if b.SendingBehavior != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 6, 8)
+		x.xxx_hidden_SendingBehavior = *b.SendingBehavior
+	}
+	x.xxx_hidden_Signals = &b.Signals
+	return m0
 }
 
 var File_wayplatform_mbz_v1_push_message_proto protoreflect.FileDescriptor
@@ -146,19 +332,7 @@ const file_wayplatform_mbz_v1_push_message_proto_rawDesc = "" +
 	"service_id\x18\x06 \x01(\tR\tserviceId\x12N\n" +
 	"\x10sending_behavior\x18\a \x01(\x0e2#.wayplatform.mbz.v1.SendingBehaviorR\x0fsendingBehavior\x124\n" +
 	"\asignals\x18\b \x03(\v2\x1a.wayplatform.mbz.v1.SignalR\asignalsB\xda\x01\n" +
-	"\x16com.wayplatform.mbz.v1B\x10PushMessageProtoP\x01ZDgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1;mbzv1\xa2\x02\x03WMX\xaa\x02\x12Wayplatform.Mbz.V1\xca\x02\x12Wayplatform\\Mbz\\V1\xe2\x02\x1eWayplatform\\Mbz\\V1\\GPBMetadata\xea\x02\x14Wayplatform::Mbz::V1b\x06proto3"
-
-var (
-	file_wayplatform_mbz_v1_push_message_proto_rawDescOnce sync.Once
-	file_wayplatform_mbz_v1_push_message_proto_rawDescData []byte
-)
-
-func file_wayplatform_mbz_v1_push_message_proto_rawDescGZIP() []byte {
-	file_wayplatform_mbz_v1_push_message_proto_rawDescOnce.Do(func() {
-		file_wayplatform_mbz_v1_push_message_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_wayplatform_mbz_v1_push_message_proto_rawDesc), len(file_wayplatform_mbz_v1_push_message_proto_rawDesc)))
-	})
-	return file_wayplatform_mbz_v1_push_message_proto_rawDescData
-}
+	"\x16com.wayplatform.mbz.v1B\x10PushMessageProtoP\x01ZDgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1;mbzv1\xa2\x02\x03WMX\xaa\x02\x12Wayplatform.Mbz.V1\xca\x02\x12Wayplatform\\Mbz\\V1\xe2\x02\x1eWayplatform\\Mbz\\V1\\GPBMetadata\xea\x02\x14Wayplatform::Mbz::V1b\beditionsp\xe8\a"
 
 var file_wayplatform_mbz_v1_push_message_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_wayplatform_mbz_v1_push_message_proto_goTypes = []any{

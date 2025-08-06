@@ -10,7 +10,6 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
-	sync "sync"
 	unsafe "unsafe"
 )
 
@@ -23,13 +22,13 @@ const (
 
 // SignalEnumValue is a value of an enum signal.
 type SignalEnumValue struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// The identifier of the enum signal value.
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
-	// The description of the enum signal value.
-	Description   string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state                  protoimpl.MessageState `protogen:"opaque.v1"`
+	xxx_hidden_Value       *string                `protobuf:"bytes,1,opt,name=value"`
+	xxx_hidden_Description *string                `protobuf:"bytes,2,opt,name=description"`
+	XXX_raceDetectHookData protoimpl.RaceDetectHookData
+	XXX_presence           [1]uint32
+	unknownFields          protoimpl.UnknownFields
+	sizeCache              protoimpl.SizeCache
 }
 
 func (x *SignalEnumValue) Reset() {
@@ -57,23 +56,82 @@ func (x *SignalEnumValue) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SignalEnumValue.ProtoReflect.Descriptor instead.
-func (*SignalEnumValue) Descriptor() ([]byte, []int) {
-	return file_wayplatform_mbz_v1_signal_enum_value_proto_rawDescGZIP(), []int{0}
-}
-
 func (x *SignalEnumValue) GetValue() string {
 	if x != nil {
-		return x.Value
+		if x.xxx_hidden_Value != nil {
+			return *x.xxx_hidden_Value
+		}
+		return ""
 	}
 	return ""
 }
 
 func (x *SignalEnumValue) GetDescription() string {
 	if x != nil {
-		return x.Description
+		if x.xxx_hidden_Description != nil {
+			return *x.xxx_hidden_Description
+		}
+		return ""
 	}
 	return ""
+}
+
+func (x *SignalEnumValue) SetValue(v string) {
+	x.xxx_hidden_Value = &v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 0, 2)
+}
+
+func (x *SignalEnumValue) SetDescription(v string) {
+	x.xxx_hidden_Description = &v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 1, 2)
+}
+
+func (x *SignalEnumValue) HasValue() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 0)
+}
+
+func (x *SignalEnumValue) HasDescription() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 1)
+}
+
+func (x *SignalEnumValue) ClearValue() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 0)
+	x.xxx_hidden_Value = nil
+}
+
+func (x *SignalEnumValue) ClearDescription() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 1)
+	x.xxx_hidden_Description = nil
+}
+
+type SignalEnumValue_builder struct {
+	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
+
+	// The identifier of the enum signal value.
+	Value *string
+	// The description of the enum signal value.
+	Description *string
+}
+
+func (b0 SignalEnumValue_builder) Build() *SignalEnumValue {
+	m0 := &SignalEnumValue{}
+	b, x := &b0, m0
+	_, _ = b, x
+	if b.Value != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 0, 2)
+		x.xxx_hidden_Value = b.Value
+	}
+	if b.Description != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 1, 2)
+		x.xxx_hidden_Description = b.Description
+	}
+	return m0
 }
 
 var File_wayplatform_mbz_v1_signal_enum_value_proto protoreflect.FileDescriptor
@@ -84,19 +142,7 @@ const file_wayplatform_mbz_v1_signal_enum_value_proto_rawDesc = "" +
 	"\x0fSignalEnumValue\x12\x14\n" +
 	"\x05value\x18\x01 \x01(\tR\x05value\x12 \n" +
 	"\vdescription\x18\x02 \x01(\tR\vdescriptionB\xde\x01\n" +
-	"\x16com.wayplatform.mbz.v1B\x14SignalEnumValueProtoP\x01ZDgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1;mbzv1\xa2\x02\x03WMX\xaa\x02\x12Wayplatform.Mbz.V1\xca\x02\x12Wayplatform\\Mbz\\V1\xe2\x02\x1eWayplatform\\Mbz\\V1\\GPBMetadata\xea\x02\x14Wayplatform::Mbz::V1b\x06proto3"
-
-var (
-	file_wayplatform_mbz_v1_signal_enum_value_proto_rawDescOnce sync.Once
-	file_wayplatform_mbz_v1_signal_enum_value_proto_rawDescData []byte
-)
-
-func file_wayplatform_mbz_v1_signal_enum_value_proto_rawDescGZIP() []byte {
-	file_wayplatform_mbz_v1_signal_enum_value_proto_rawDescOnce.Do(func() {
-		file_wayplatform_mbz_v1_signal_enum_value_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_wayplatform_mbz_v1_signal_enum_value_proto_rawDesc), len(file_wayplatform_mbz_v1_signal_enum_value_proto_rawDesc)))
-	})
-	return file_wayplatform_mbz_v1_signal_enum_value_proto_rawDescData
-}
+	"\x16com.wayplatform.mbz.v1B\x14SignalEnumValueProtoP\x01ZDgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1;mbzv1\xa2\x02\x03WMX\xaa\x02\x12Wayplatform.Mbz.V1\xca\x02\x12Wayplatform\\Mbz\\V1\xe2\x02\x1eWayplatform\\Mbz\\V1\\GPBMetadata\xea\x02\x14Wayplatform::Mbz::V1b\beditionsp\xe8\a"
 
 var file_wayplatform_mbz_v1_signal_enum_value_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_wayplatform_mbz_v1_signal_enum_value_proto_goTypes = []any{
