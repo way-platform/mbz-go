@@ -10,7 +10,6 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
-	sync "sync"
 	unsafe "unsafe"
 )
 
@@ -23,27 +22,20 @@ const (
 
 // A signal is a single value of a signal identifier.
 type Signal struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// The identifier of the signal.
-	Id SignalIdentifier `protobuf:"varint,1,opt,name=id,proto3,enum=wayplatform.mbz.v1.SignalIdentifier" json:"id,omitempty"`
-	// The timestamp of the signal (microseconds since the Unix epoch).
-	Time int64 `protobuf:"varint,2,opt,name=time,proto3" json:"time,omitempty"`
-	// The type of the signal.
-	Type SignalType `protobuf:"varint,3,opt,name=type,proto3,enum=wayplatform.mbz.v1.SignalType" json:"type,omitempty"`
-	// The string value of the signal (valid for string signals).
-	StringValue *string `protobuf:"bytes,4,opt,name=string_value,json=stringValue,proto3,oneof" json:"string_value,omitempty"`
-	// The integer value of the signal (valid for integer signals).
-	IntValue *int32 `protobuf:"varint,5,opt,name=int_value,json=intValue,proto3,oneof" json:"int_value,omitempty"`
-	// The double value of the signal (valid for double signals).
-	DoubleValue *float64 `protobuf:"fixed64,6,opt,name=double_value,json=doubleValue,proto3,oneof" json:"double_value,omitempty"`
-	// The boolean value of the signal (valid for boolean signals).
-	BoolValue *bool `protobuf:"varint,7,opt,name=bool_value,json=boolValue,proto3,oneof" json:"bool_value,omitempty"`
-	// The enum value of the signal (valid for enum signals).
-	EnumValue *string `protobuf:"bytes,8,opt,name=enum_value,json=enumValue,proto3,oneof" json:"enum_value,omitempty"`
-	// The unit of the signal.
-	Unit          *SignalUnit `protobuf:"varint,9,opt,name=unit,proto3,enum=wayplatform.mbz.v1.SignalUnit,oneof" json:"unit,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state                  protoimpl.MessageState `protogen:"opaque.v1"`
+	xxx_hidden_Id          SignalIdentifier       `protobuf:"varint,1,opt,name=id,enum=wayplatform.mbz.v1.SignalIdentifier"`
+	xxx_hidden_Time        int64                  `protobuf:"varint,2,opt,name=time"`
+	xxx_hidden_Type        SignalType             `protobuf:"varint,3,opt,name=type,enum=wayplatform.mbz.v1.SignalType"`
+	xxx_hidden_StringValue *string                `protobuf:"bytes,4,opt,name=string_value,json=stringValue"`
+	xxx_hidden_IntValue    int32                  `protobuf:"varint,5,opt,name=int_value,json=intValue"`
+	xxx_hidden_DoubleValue float64                `protobuf:"fixed64,6,opt,name=double_value,json=doubleValue"`
+	xxx_hidden_BoolValue   bool                   `protobuf:"varint,7,opt,name=bool_value,json=boolValue"`
+	xxx_hidden_EnumValue   *string                `protobuf:"bytes,8,opt,name=enum_value,json=enumValue"`
+	xxx_hidden_Unit        SignalUnit             `protobuf:"varint,9,opt,name=unit,enum=wayplatform.mbz.v1.SignalUnit"`
+	XXX_raceDetectHookData protoimpl.RaceDetectHookData
+	XXX_presence           [1]uint32
+	unknownFields          protoimpl.UnknownFields
+	sizeCache              protoimpl.SizeCache
 }
 
 func (x *Signal) Reset() {
@@ -71,111 +63,318 @@ func (x *Signal) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Signal.ProtoReflect.Descriptor instead.
-func (*Signal) Descriptor() ([]byte, []int) {
-	return file_wayplatform_mbz_v1_signal_proto_rawDescGZIP(), []int{0}
-}
-
 func (x *Signal) GetId() SignalIdentifier {
 	if x != nil {
-		return x.Id
+		if protoimpl.X.Present(&(x.XXX_presence[0]), 0) {
+			return x.xxx_hidden_Id
+		}
 	}
 	return SignalIdentifier_SIGNAL_IDENTIFIER_UNSPECIFIED
 }
 
 func (x *Signal) GetTime() int64 {
 	if x != nil {
-		return x.Time
+		return x.xxx_hidden_Time
 	}
 	return 0
 }
 
 func (x *Signal) GetType() SignalType {
 	if x != nil {
-		return x.Type
+		if protoimpl.X.Present(&(x.XXX_presence[0]), 2) {
+			return x.xxx_hidden_Type
+		}
 	}
 	return SignalType_SIGNAL_TYPE_UNSPECIFIED
 }
 
 func (x *Signal) GetStringValue() string {
-	if x != nil && x.StringValue != nil {
-		return *x.StringValue
+	if x != nil {
+		if x.xxx_hidden_StringValue != nil {
+			return *x.xxx_hidden_StringValue
+		}
+		return ""
 	}
 	return ""
 }
 
 func (x *Signal) GetIntValue() int32 {
-	if x != nil && x.IntValue != nil {
-		return *x.IntValue
+	if x != nil {
+		return x.xxx_hidden_IntValue
 	}
 	return 0
 }
 
 func (x *Signal) GetDoubleValue() float64 {
-	if x != nil && x.DoubleValue != nil {
-		return *x.DoubleValue
+	if x != nil {
+		return x.xxx_hidden_DoubleValue
 	}
 	return 0
 }
 
 func (x *Signal) GetBoolValue() bool {
-	if x != nil && x.BoolValue != nil {
-		return *x.BoolValue
+	if x != nil {
+		return x.xxx_hidden_BoolValue
 	}
 	return false
 }
 
 func (x *Signal) GetEnumValue() string {
-	if x != nil && x.EnumValue != nil {
-		return *x.EnumValue
+	if x != nil {
+		if x.xxx_hidden_EnumValue != nil {
+			return *x.xxx_hidden_EnumValue
+		}
+		return ""
 	}
 	return ""
 }
 
 func (x *Signal) GetUnit() SignalUnit {
-	if x != nil && x.Unit != nil {
-		return *x.Unit
+	if x != nil {
+		if protoimpl.X.Present(&(x.XXX_presence[0]), 8) {
+			return x.xxx_hidden_Unit
+		}
 	}
 	return SignalUnit_SIGNAL_UNIT_UNSPECIFIED
+}
+
+func (x *Signal) SetId(v SignalIdentifier) {
+	x.xxx_hidden_Id = v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 0, 9)
+}
+
+func (x *Signal) SetTime(v int64) {
+	x.xxx_hidden_Time = v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 1, 9)
+}
+
+func (x *Signal) SetType(v SignalType) {
+	x.xxx_hidden_Type = v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 2, 9)
+}
+
+func (x *Signal) SetStringValue(v string) {
+	x.xxx_hidden_StringValue = &v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 3, 9)
+}
+
+func (x *Signal) SetIntValue(v int32) {
+	x.xxx_hidden_IntValue = v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 4, 9)
+}
+
+func (x *Signal) SetDoubleValue(v float64) {
+	x.xxx_hidden_DoubleValue = v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 5, 9)
+}
+
+func (x *Signal) SetBoolValue(v bool) {
+	x.xxx_hidden_BoolValue = v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 6, 9)
+}
+
+func (x *Signal) SetEnumValue(v string) {
+	x.xxx_hidden_EnumValue = &v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 7, 9)
+}
+
+func (x *Signal) SetUnit(v SignalUnit) {
+	x.xxx_hidden_Unit = v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 8, 9)
+}
+
+func (x *Signal) HasId() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 0)
+}
+
+func (x *Signal) HasTime() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 1)
+}
+
+func (x *Signal) HasType() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 2)
+}
+
+func (x *Signal) HasStringValue() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 3)
+}
+
+func (x *Signal) HasIntValue() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 4)
+}
+
+func (x *Signal) HasDoubleValue() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 5)
+}
+
+func (x *Signal) HasBoolValue() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 6)
+}
+
+func (x *Signal) HasEnumValue() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 7)
+}
+
+func (x *Signal) HasUnit() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 8)
+}
+
+func (x *Signal) ClearId() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 0)
+	x.xxx_hidden_Id = SignalIdentifier_SIGNAL_IDENTIFIER_UNSPECIFIED
+}
+
+func (x *Signal) ClearTime() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 1)
+	x.xxx_hidden_Time = 0
+}
+
+func (x *Signal) ClearType() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 2)
+	x.xxx_hidden_Type = SignalType_SIGNAL_TYPE_UNSPECIFIED
+}
+
+func (x *Signal) ClearStringValue() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 3)
+	x.xxx_hidden_StringValue = nil
+}
+
+func (x *Signal) ClearIntValue() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 4)
+	x.xxx_hidden_IntValue = 0
+}
+
+func (x *Signal) ClearDoubleValue() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 5)
+	x.xxx_hidden_DoubleValue = 0
+}
+
+func (x *Signal) ClearBoolValue() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 6)
+	x.xxx_hidden_BoolValue = false
+}
+
+func (x *Signal) ClearEnumValue() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 7)
+	x.xxx_hidden_EnumValue = nil
+}
+
+func (x *Signal) ClearUnit() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 8)
+	x.xxx_hidden_Unit = SignalUnit_SIGNAL_UNIT_UNSPECIFIED
+}
+
+type Signal_builder struct {
+	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
+
+	// The identifier of the signal.
+	Id *SignalIdentifier
+	// The timestamp of the signal (microseconds since the Unix epoch).
+	Time *int64
+	// The type of the signal.
+	Type *SignalType
+	// The string value of the signal (valid for string signals).
+	StringValue *string
+	// The integer value of the signal (valid for integer signals).
+	IntValue *int32
+	// The double value of the signal (valid for double signals).
+	DoubleValue *float64
+	// The boolean value of the signal (valid for boolean signals).
+	BoolValue *bool
+	// The enum value of the signal (valid for enum signals).
+	EnumValue *string
+	// The unit of the signal.
+	Unit *SignalUnit
+}
+
+func (b0 Signal_builder) Build() *Signal {
+	m0 := &Signal{}
+	b, x := &b0, m0
+	_, _ = b, x
+	if b.Id != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 0, 9)
+		x.xxx_hidden_Id = *b.Id
+	}
+	if b.Time != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 1, 9)
+		x.xxx_hidden_Time = *b.Time
+	}
+	if b.Type != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 2, 9)
+		x.xxx_hidden_Type = *b.Type
+	}
+	if b.StringValue != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 3, 9)
+		x.xxx_hidden_StringValue = b.StringValue
+	}
+	if b.IntValue != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 4, 9)
+		x.xxx_hidden_IntValue = *b.IntValue
+	}
+	if b.DoubleValue != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 5, 9)
+		x.xxx_hidden_DoubleValue = *b.DoubleValue
+	}
+	if b.BoolValue != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 6, 9)
+		x.xxx_hidden_BoolValue = *b.BoolValue
+	}
+	if b.EnumValue != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 7, 9)
+		x.xxx_hidden_EnumValue = b.EnumValue
+	}
+	if b.Unit != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 8, 9)
+		x.xxx_hidden_Unit = *b.Unit
+	}
+	return m0
 }
 
 var File_wayplatform_mbz_v1_signal_proto protoreflect.FileDescriptor
 
 const file_wayplatform_mbz_v1_signal_proto_rawDesc = "" +
 	"\n" +
-	"\x1fwayplatform/mbz/v1/signal.proto\x12\x12wayplatform.mbz.v1\x1a*wayplatform/mbz/v1/signal_identifier.proto\x1a$wayplatform/mbz/v1/signal_type.proto\x1a$wayplatform/mbz/v1/signal_unit.proto\"\xd0\x03\n" +
+	"\x1fwayplatform/mbz/v1/signal.proto\x12\x12wayplatform.mbz.v1\x1a*wayplatform/mbz/v1/signal_identifier.proto\x1a$wayplatform/mbz/v1/signal_type.proto\x1a$wayplatform/mbz/v1/signal_unit.proto\"\xdb\x02\n" +
 	"\x06Signal\x124\n" +
 	"\x02id\x18\x01 \x01(\x0e2$.wayplatform.mbz.v1.SignalIdentifierR\x02id\x12\x12\n" +
 	"\x04time\x18\x02 \x01(\x03R\x04time\x122\n" +
-	"\x04type\x18\x03 \x01(\x0e2\x1e.wayplatform.mbz.v1.SignalTypeR\x04type\x12&\n" +
-	"\fstring_value\x18\x04 \x01(\tH\x00R\vstringValue\x88\x01\x01\x12 \n" +
-	"\tint_value\x18\x05 \x01(\x05H\x01R\bintValue\x88\x01\x01\x12&\n" +
-	"\fdouble_value\x18\x06 \x01(\x01H\x02R\vdoubleValue\x88\x01\x01\x12\"\n" +
+	"\x04type\x18\x03 \x01(\x0e2\x1e.wayplatform.mbz.v1.SignalTypeR\x04type\x12!\n" +
+	"\fstring_value\x18\x04 \x01(\tR\vstringValue\x12\x1b\n" +
+	"\tint_value\x18\x05 \x01(\x05R\bintValue\x12!\n" +
+	"\fdouble_value\x18\x06 \x01(\x01R\vdoubleValue\x12\x1d\n" +
 	"\n" +
-	"bool_value\x18\a \x01(\bH\x03R\tboolValue\x88\x01\x01\x12\"\n" +
+	"bool_value\x18\a \x01(\bR\tboolValue\x12\x1d\n" +
 	"\n" +
-	"enum_value\x18\b \x01(\tH\x04R\tenumValue\x88\x01\x01\x127\n" +
-	"\x04unit\x18\t \x01(\x0e2\x1e.wayplatform.mbz.v1.SignalUnitH\x05R\x04unit\x88\x01\x01B\x0f\n" +
-	"\r_string_valueB\f\n" +
-	"\n" +
-	"_int_valueB\x0f\n" +
-	"\r_double_valueB\r\n" +
-	"\v_bool_valueB\r\n" +
-	"\v_enum_valueB\a\n" +
-	"\x05_unitB\xd5\x01\n" +
-	"\x16com.wayplatform.mbz.v1B\vSignalProtoP\x01ZDgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1;mbzv1\xa2\x02\x03WMX\xaa\x02\x12Wayplatform.Mbz.V1\xca\x02\x12Wayplatform\\Mbz\\V1\xe2\x02\x1eWayplatform\\Mbz\\V1\\GPBMetadata\xea\x02\x14Wayplatform::Mbz::V1b\x06proto3"
-
-var (
-	file_wayplatform_mbz_v1_signal_proto_rawDescOnce sync.Once
-	file_wayplatform_mbz_v1_signal_proto_rawDescData []byte
-)
-
-func file_wayplatform_mbz_v1_signal_proto_rawDescGZIP() []byte {
-	file_wayplatform_mbz_v1_signal_proto_rawDescOnce.Do(func() {
-		file_wayplatform_mbz_v1_signal_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_wayplatform_mbz_v1_signal_proto_rawDesc), len(file_wayplatform_mbz_v1_signal_proto_rawDesc)))
-	})
-	return file_wayplatform_mbz_v1_signal_proto_rawDescData
-}
+	"enum_value\x18\b \x01(\tR\tenumValue\x122\n" +
+	"\x04unit\x18\t \x01(\x0e2\x1e.wayplatform.mbz.v1.SignalUnitR\x04unitB\xd5\x01\n" +
+	"\x16com.wayplatform.mbz.v1B\vSignalProtoP\x01ZDgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1;mbzv1\xa2\x02\x03WMX\xaa\x02\x12Wayplatform.Mbz.V1\xca\x02\x12Wayplatform\\Mbz\\V1\xe2\x02\x1eWayplatform\\Mbz\\V1\\GPBMetadata\xea\x02\x14Wayplatform::Mbz::V1b\beditionsp\xe8\a"
 
 var file_wayplatform_mbz_v1_signal_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_wayplatform_mbz_v1_signal_proto_goTypes = []any{
@@ -203,7 +402,6 @@ func file_wayplatform_mbz_v1_signal_proto_init() {
 	file_wayplatform_mbz_v1_signal_identifier_proto_init()
 	file_wayplatform_mbz_v1_signal_type_proto_init()
 	file_wayplatform_mbz_v1_signal_unit_proto_init()
-	file_wayplatform_mbz_v1_signal_proto_msgTypes[0].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

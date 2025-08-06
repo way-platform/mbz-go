@@ -1,4 +1,4 @@
-syntax = "proto3";
+edition = "2023";
 
 package wayplatform.mbz.v1;
 
@@ -18,20 +18,20 @@ message Signal {
   SignalType type = 3;
 
   // The string value of the signal (valid for string signals).
-  optional string string_value = 4;
+  string string_value = 4;
 
   // The integer value of the signal (valid for integer signals).
-  optional int32 int_value = 5;
+  int32 int_value = 5;
 
   // The double value of the signal (valid for double signals).
-  optional double double_value = 6;
+  double double_value = 6;
 
   // The boolean value of the signal (valid for boolean signals).
-  optional bool bool_value = 7;
+  bool bool_value = 7;
 
   // The enum value of the signal (valid for enum signals).
-  optional string enum_value = 8;
+  string enum_value = 8;
 
   // The unit of the signal.
-  optional SignalUnit unit = 9;
+  SignalUnit unit = 9;
 }

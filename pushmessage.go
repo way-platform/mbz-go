@@ -47,31 +47,30 @@ func (m *PushMessage) AsProto() (*mbzv1.PushMessage, error) {
 	if err != nil {
 		return nil, err
 	}
-	result := &mbzv1.PushMessage{
-		MessageId:       m.MessageID,
-		Vin:             m.VIN,
-		Time:            unixTimestampMillisToMicros(m.Timestamp),
-		MessageType:     messageType,
-		Version:         m.Version,
-		ServiceId:       m.ServiceID,
-		SendingBehavior: sendingBehavior,
-	}
+	var result mbzv1.PushMessage
+	result.SetMessageId(m.MessageID)
+	result.SetVin(m.VIN)
+	result.SetTime(unixTimestampMillisToMicros(m.Timestamp))
+	result.SetMessageType(messageType)
+	result.SetVersion(m.Version)
+	result.SetServiceId(m.ServiceID)
+	result.SetSendingBehavior(sendingBehavior)
 	switch messageType {
 	case mbzv1.MessageType_SIGNALS:
 		var data VehicleSignalData
 		if err := json.Unmarshal(m.Data, &data); err != nil {
 			return nil, err
 		}
-		result.Signals = make([]*mbzv1.Signal, 0, len(data.Signals))
+		result.SetSignals(make([]*mbzv1.Signal, 0, len(data.Signals)))
 		for _, signal := range data.Signals {
 			signalProto, err := signal.AsProto()
 			if err != nil {
 				return nil, err
 			}
-			result.Signals = append(result.Signals, signalProto)
+			result.SetSignals(append(result.GetSignals(), signalProto))
 		}
 	}
-	return result, nil
+	return &result, nil
 }
 
 func sendingBehaviorToProto(sendingBehavior servicesv1.SignalSendingBehaviour) (mbzv1.SendingBehavior, error) {

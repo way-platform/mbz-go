@@ -10,7 +10,6 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
-	sync "sync"
 	unsafe "unsafe"
 )
 
@@ -568,11 +567,6 @@ func (x SignalIdentifier) Number() protoreflect.EnumNumber {
 	return protoreflect.EnumNumber(x)
 }
 
-// Deprecated: Use SignalIdentifier.Descriptor instead.
-func (SignalIdentifier) EnumDescriptor() ([]byte, []int) {
-	return file_wayplatform_mbz_v1_signal_identifier_proto_rawDescGZIP(), []int{0}
-}
-
 var File_wayplatform_mbz_v1_signal_identifier_proto protoreflect.FileDescriptor
 
 const file_wayplatform_mbz_v1_signal_identifier_proto_rawDesc = "" +
@@ -842,19 +836,7 @@ const file_wayplatform_mbz_v1_signal_identifier_proto_rawDesc = "" +
 	"\x1aWINDOWS_FRONT_RIGHT_ISOPEN\x10{\x1a&\x9a\x96\xb7\xeb\x03\x1aWindows.Front.Right.IsOpen\x88ެ\xd0\x06\x04\x12B\n" +
 	"\x18WINDOWS_REAR_LEFT_ISOPEN\x10|\x1a$\x9a\x96\xb7\xeb\x03\x18Windows.Rear.Left.IsOpen\x88ެ\xd0\x06\x04\x12D\n" +
 	"\x19WINDOWS_REAR_RIGHT_ISOPEN\x10}\x1a%\x9a\x96\xb7\xeb\x03\x19Windows.Rear.Right.IsOpen\x88ެ\xd0\x06\x04B\xdf\x01\n" +
-	"\x16com.wayplatform.mbz.v1B\x15SignalIdentifierProtoP\x01ZDgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1;mbzv1\xa2\x02\x03WMX\xaa\x02\x12Wayplatform.Mbz.V1\xca\x02\x12Wayplatform\\Mbz\\V1\xe2\x02\x1eWayplatform\\Mbz\\V1\\GPBMetadata\xea\x02\x14Wayplatform::Mbz::V1b\x06proto3"
-
-var (
-	file_wayplatform_mbz_v1_signal_identifier_proto_rawDescOnce sync.Once
-	file_wayplatform_mbz_v1_signal_identifier_proto_rawDescData []byte
-)
-
-func file_wayplatform_mbz_v1_signal_identifier_proto_rawDescGZIP() []byte {
-	file_wayplatform_mbz_v1_signal_identifier_proto_rawDescOnce.Do(func() {
-		file_wayplatform_mbz_v1_signal_identifier_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_wayplatform_mbz_v1_signal_identifier_proto_rawDesc), len(file_wayplatform_mbz_v1_signal_identifier_proto_rawDesc)))
-	})
-	return file_wayplatform_mbz_v1_signal_identifier_proto_rawDescData
-}
+	"\x16com.wayplatform.mbz.v1B\x15SignalIdentifierProtoP\x01ZDgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1;mbzv1\xa2\x02\x03WMX\xaa\x02\x12Wayplatform.Mbz.V1\xca\x02\x12Wayplatform\\Mbz\\V1\xe2\x02\x1eWayplatform\\Mbz\\V1\\GPBMetadata\xea\x02\x14Wayplatform::Mbz::V1b\beditionsp\xe8\a"
 
 var file_wayplatform_mbz_v1_signal_identifier_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_wayplatform_mbz_v1_signal_identifier_proto_goTypes = []any{

@@ -50,10 +50,9 @@ func (s *Signal) AsProto() (*mbzv1.Signal, error) {
 	if err != nil {
 		return nil, err
 	}
-	result := &mbzv1.Signal{
-		Id:   identifier,
-		Time: unixTimestampMillisToMicros(s.Timestamp),
-	}
+	var result mbzv1.Signal
+	result.SetId(identifier)
+	result.SetTime(unixTimestampMillisToMicros(s.Timestamp))
 	signalType, ok := proto.GetExtension(
 		identifier.Descriptor().Values().ByNumber(identifier.Number()).Options(),
 		mbzv1.E_SignalType,
@@ -61,28 +60,28 @@ func (s *Signal) AsProto() (*mbzv1.Signal, error) {
 	if !ok {
 		return nil, fmt.Errorf("failed to get signal type for signal %s", s.Name)
 	}
-	result.Type = signalType
+	result.SetType(signalType)
 	switch signalType {
 	case mbzv1.SignalType_STRING:
-		result.StringValue = ptr(s.Value)
+		result.SetStringValue(s.Value)
 	case mbzv1.SignalType_INTEGER:
 		intValue, err := strconv.Atoi(s.Value)
 		if err != nil {
 			return nil, fmt.Errorf("failed to parse integer value for signal %s: %w", s.Name, err)
 		}
-		result.IntValue = ptr(int32(intValue))
+		result.SetIntValue(int32(intValue))
 	case mbzv1.SignalType_DOUBLE:
 		doubleValue, err := strconv.ParseFloat(s.Value, 64)
 		if err != nil {
 			return nil, fmt.Errorf("failed to parse double value for signal %s: %w", s.Name, err)
 		}
-		result.DoubleValue = ptr(doubleValue)
+		result.SetDoubleValue(doubleValue)
 	case mbzv1.SignalType_BOOLEAN:
 		booleanValue, err := strconv.ParseBool(s.Value)
 		if err != nil {
 			return nil, fmt.Errorf("failed to parse boolean value for signal %s: %w", s.Name, err)
 		}
-		result.BoolValue = ptr(booleanValue)
+		result.SetBoolValue(booleanValue)
 	case mbzv1.SignalType_ENUM:
 		enumValues, ok := proto.GetExtension(
 			identifier.Descriptor().Values().ByNumber(identifier.Number()).Options(),
@@ -101,7 +100,7 @@ func (s *Signal) AsProto() (*mbzv1.Signal, error) {
 		if !validEnumValue {
 			return nil, fmt.Errorf("invalid enum value for signal %s: %s", s.Name, s.Value)
 		}
-		result.EnumValue = ptr(s.Value)
+		result.SetEnumValue(s.Value)
 	default:
 		return nil, fmt.Errorf("unknown signal type: %s", signalType)
 	}
@@ -113,11 +112,7 @@ func (s *Signal) AsProto() (*mbzv1.Signal, error) {
 		return nil, fmt.Errorf("failed to get signal unit for signal %s", s.Name)
 	}
 	if signalUnit != mbzv1.SignalUnit_SIGNAL_UNIT_UNSPECIFIED {
-		result.Unit = ptr(signalUnit)
+		result.SetUnit(signalUnit)
 	}
-	return result, nil
-}
-
-func ptr[T any](v T) *T {
-	return &v
+	return &result, nil
 }

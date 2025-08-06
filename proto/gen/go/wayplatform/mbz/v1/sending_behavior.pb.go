@@ -10,7 +10,6 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
-	sync "sync"
 	unsafe "unsafe"
 )
 
@@ -125,11 +124,6 @@ func (x SendingBehavior) Number() protoreflect.EnumNumber {
 	return protoreflect.EnumNumber(x)
 }
 
-// Deprecated: Use SendingBehavior.Descriptor instead.
-func (SendingBehavior) EnumDescriptor() ([]byte, []int) {
-	return file_wayplatform_mbz_v1_sending_behavior_proto_rawDescGZIP(), []int{0}
-}
-
 var File_wayplatform_mbz_v1_sending_behavior_proto protoreflect.FileDescriptor
 
 const file_wayplatform_mbz_v1_sending_behavior_proto_rawDesc = "" +
@@ -155,19 +149,7 @@ const file_wayplatform_mbz_v1_sending_behavior_proto_rawDesc = "" +
 	"\x15ON_CHARGING_DETECTION\x10\x0f\x12\x0e\n" +
 	"\n" +
 	"ON_REFRESH\x10\x10B\xde\x01\n" +
-	"\x16com.wayplatform.mbz.v1B\x14SendingBehaviorProtoP\x01ZDgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1;mbzv1\xa2\x02\x03WMX\xaa\x02\x12Wayplatform.Mbz.V1\xca\x02\x12Wayplatform\\Mbz\\V1\xe2\x02\x1eWayplatform\\Mbz\\V1\\GPBMetadata\xea\x02\x14Wayplatform::Mbz::V1b\x06proto3"
-
-var (
-	file_wayplatform_mbz_v1_sending_behavior_proto_rawDescOnce sync.Once
-	file_wayplatform_mbz_v1_sending_behavior_proto_rawDescData []byte
-)
-
-func file_wayplatform_mbz_v1_sending_behavior_proto_rawDescGZIP() []byte {
-	file_wayplatform_mbz_v1_sending_behavior_proto_rawDescOnce.Do(func() {
-		file_wayplatform_mbz_v1_sending_behavior_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_wayplatform_mbz_v1_sending_behavior_proto_rawDesc), len(file_wayplatform_mbz_v1_sending_behavior_proto_rawDesc)))
-	})
-	return file_wayplatform_mbz_v1_sending_behavior_proto_rawDescData
-}
+	"\x16com.wayplatform.mbz.v1B\x14SendingBehaviorProtoP\x01ZDgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1;mbzv1\xa2\x02\x03WMX\xaa\x02\x12Wayplatform.Mbz.V1\xca\x02\x12Wayplatform\\Mbz\\V1\xe2\x02\x1eWayplatform\\Mbz\\V1\\GPBMetadata\xea\x02\x14Wayplatform::Mbz::V1b\beditionsp\xe8\a"
 
 var file_wayplatform_mbz_v1_sending_behavior_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_wayplatform_mbz_v1_sending_behavior_proto_goTypes = []any{
