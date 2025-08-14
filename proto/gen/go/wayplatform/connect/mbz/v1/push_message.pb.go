@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.6
 // 	protoc        (unknown)
-// source: wayplatform/mbz/v1/push_message.proto
+// source: wayplatform/connect/mbz/v1/push_message.proto
 
 package mbzv1
 
@@ -25,11 +25,11 @@ type PushMessage struct {
 	state                      protoimpl.MessageState `protogen:"opaque.v1"`
 	xxx_hidden_MessageId       *string                `protobuf:"bytes,1,opt,name=message_id,json=messageId"`
 	xxx_hidden_Vin             *string                `protobuf:"bytes,2,opt,name=vin"`
-	xxx_hidden_Time            int64                  `protobuf:"varint,3,opt,name=time"`
-	xxx_hidden_MessageType     MessageType            `protobuf:"varint,4,opt,name=message_type,json=messageType,enum=wayplatform.mbz.v1.MessageType"`
+	xxx_hidden_Time            *string                `protobuf:"bytes,3,opt,name=time"`
+	xxx_hidden_MessageType     MessageType            `protobuf:"varint,4,opt,name=message_type,json=messageType,enum=wayplatform.connect.mbz.v1.MessageType"`
 	xxx_hidden_Version         *string                `protobuf:"bytes,5,opt,name=version"`
 	xxx_hidden_ServiceId       *string                `protobuf:"bytes,6,opt,name=service_id,json=serviceId"`
-	xxx_hidden_SendingBehavior SendingBehavior        `protobuf:"varint,7,opt,name=sending_behavior,json=sendingBehavior,enum=wayplatform.mbz.v1.SendingBehavior"`
+	xxx_hidden_SendingBehavior SendingBehavior        `protobuf:"varint,7,opt,name=sending_behavior,json=sendingBehavior,enum=wayplatform.connect.mbz.v1.SendingBehavior"`
 	xxx_hidden_Signals         *[]*Signal             `protobuf:"bytes,8,rep,name=signals"`
 	XXX_raceDetectHookData     protoimpl.RaceDetectHookData
 	XXX_presence               [1]uint32
@@ -39,7 +39,7 @@ type PushMessage struct {
 
 func (x *PushMessage) Reset() {
 	*x = PushMessage{}
-	mi := &file_wayplatform_mbz_v1_push_message_proto_msgTypes[0]
+	mi := &file_wayplatform_connect_mbz_v1_push_message_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -51,7 +51,7 @@ func (x *PushMessage) String() string {
 func (*PushMessage) ProtoMessage() {}
 
 func (x *PushMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_wayplatform_mbz_v1_push_message_proto_msgTypes[0]
+	mi := &file_wayplatform_connect_mbz_v1_push_message_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -82,11 +82,14 @@ func (x *PushMessage) GetVin() string {
 	return ""
 }
 
-func (x *PushMessage) GetTime() int64 {
+func (x *PushMessage) GetTime() string {
 	if x != nil {
-		return x.xxx_hidden_Time
+		if x.xxx_hidden_Time != nil {
+			return *x.xxx_hidden_Time
+		}
+		return ""
 	}
-	return 0
+	return ""
 }
 
 func (x *PushMessage) GetMessageType() MessageType {
@@ -146,8 +149,8 @@ func (x *PushMessage) SetVin(v string) {
 	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 1, 8)
 }
 
-func (x *PushMessage) SetTime(v int64) {
-	x.xxx_hidden_Time = v
+func (x *PushMessage) SetTime(v string) {
+	x.xxx_hidden_Time = &v
 	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 2, 8)
 }
 
@@ -236,7 +239,7 @@ func (x *PushMessage) ClearVin() {
 
 func (x *PushMessage) ClearTime() {
 	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 2)
-	x.xxx_hidden_Time = 0
+	x.xxx_hidden_Time = nil
 }
 
 func (x *PushMessage) ClearMessageType() {
@@ -266,8 +269,8 @@ type PushMessage_builder struct {
 	MessageId *string
 	// Vehicle identification number (VIN).
 	Vin *string
-	// Time when the message was created (in microseconds since Unix epoch).
-	Time *int64
+	// Time when the message was created (RFC3339).
+	Time *string
 	// Message type.
 	MessageType *MessageType
 	// Version tag for the message.
@@ -294,7 +297,7 @@ func (b0 PushMessage_builder) Build() *PushMessage {
 	}
 	if b.Time != nil {
 		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 2, 8)
-		x.xxx_hidden_Time = *b.Time
+		x.xxx_hidden_Time = b.Time
 	}
 	if b.MessageType != nil {
 		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 3, 8)
@@ -316,35 +319,35 @@ func (b0 PushMessage_builder) Build() *PushMessage {
 	return m0
 }
 
-var File_wayplatform_mbz_v1_push_message_proto protoreflect.FileDescriptor
+var File_wayplatform_connect_mbz_v1_push_message_proto protoreflect.FileDescriptor
 
-const file_wayplatform_mbz_v1_push_message_proto_rawDesc = "" +
+const file_wayplatform_connect_mbz_v1_push_message_proto_rawDesc = "" +
 	"\n" +
-	"%wayplatform/mbz/v1/push_message.proto\x12\x12wayplatform.mbz.v1\x1a%wayplatform/mbz/v1/message_type.proto\x1a)wayplatform/mbz/v1/sending_behavior.proto\x1a\x1fwayplatform/mbz/v1/signal.proto\"\xd5\x02\n" +
+	"-wayplatform/connect/mbz/v1/push_message.proto\x12\x1awayplatform.connect.mbz.v1\x1a-wayplatform/connect/mbz/v1/message_type.proto\x1a1wayplatform/connect/mbz/v1/sending_behavior.proto\x1a'wayplatform/connect/mbz/v1/signal.proto\"\xed\x02\n" +
 	"\vPushMessage\x12\x1d\n" +
 	"\n" +
 	"message_id\x18\x01 \x01(\tR\tmessageId\x12\x10\n" +
 	"\x03vin\x18\x02 \x01(\tR\x03vin\x12\x12\n" +
-	"\x04time\x18\x03 \x01(\x03R\x04time\x12B\n" +
-	"\fmessage_type\x18\x04 \x01(\x0e2\x1f.wayplatform.mbz.v1.MessageTypeR\vmessageType\x12\x18\n" +
+	"\x04time\x18\x03 \x01(\tR\x04time\x12J\n" +
+	"\fmessage_type\x18\x04 \x01(\x0e2'.wayplatform.connect.mbz.v1.MessageTypeR\vmessageType\x12\x18\n" +
 	"\aversion\x18\x05 \x01(\tR\aversion\x12\x1d\n" +
 	"\n" +
-	"service_id\x18\x06 \x01(\tR\tserviceId\x12N\n" +
-	"\x10sending_behavior\x18\a \x01(\x0e2#.wayplatform.mbz.v1.SendingBehaviorR\x0fsendingBehavior\x124\n" +
-	"\asignals\x18\b \x03(\v2\x1a.wayplatform.mbz.v1.SignalR\asignalsB\xda\x01\n" +
-	"\x16com.wayplatform.mbz.v1B\x10PushMessageProtoP\x01ZDgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1;mbzv1\xa2\x02\x03WMX\xaa\x02\x12Wayplatform.Mbz.V1\xca\x02\x12Wayplatform\\Mbz\\V1\xe2\x02\x1eWayplatform\\Mbz\\V1\\GPBMetadata\xea\x02\x14Wayplatform::Mbz::V1b\beditionsp\xe8\a"
+	"service_id\x18\x06 \x01(\tR\tserviceId\x12V\n" +
+	"\x10sending_behavior\x18\a \x01(\x0e2+.wayplatform.connect.mbz.v1.SendingBehaviorR\x0fsendingBehavior\x12<\n" +
+	"\asignals\x18\b \x03(\v2\".wayplatform.connect.mbz.v1.SignalR\asignalsB\x8b\x02\n" +
+	"\x1ecom.wayplatform.connect.mbz.v1B\x10PushMessageProtoP\x01ZLgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mbz/v1;mbzv1\xa2\x02\x03WCM\xaa\x02\x1aWayplatform.Connect.Mbz.V1\xca\x02\x1aWayplatform\\Connect\\Mbz\\V1\xe2\x02&Wayplatform\\Connect\\Mbz\\V1\\GPBMetadata\xea\x02\x1dWayplatform::Connect::Mbz::V1b\beditionsp\xe8\a"
 
-var file_wayplatform_mbz_v1_push_message_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
-var file_wayplatform_mbz_v1_push_message_proto_goTypes = []any{
-	(*PushMessage)(nil),  // 0: wayplatform.mbz.v1.PushMessage
-	(MessageType)(0),     // 1: wayplatform.mbz.v1.MessageType
-	(SendingBehavior)(0), // 2: wayplatform.mbz.v1.SendingBehavior
-	(*Signal)(nil),       // 3: wayplatform.mbz.v1.Signal
+var file_wayplatform_connect_mbz_v1_push_message_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_wayplatform_connect_mbz_v1_push_message_proto_goTypes = []any{
+	(*PushMessage)(nil),  // 0: wayplatform.connect.mbz.v1.PushMessage
+	(MessageType)(0),     // 1: wayplatform.connect.mbz.v1.MessageType
+	(SendingBehavior)(0), // 2: wayplatform.connect.mbz.v1.SendingBehavior
+	(*Signal)(nil),       // 3: wayplatform.connect.mbz.v1.Signal
 }
-var file_wayplatform_mbz_v1_push_message_proto_depIdxs = []int32{
-	1, // 0: wayplatform.mbz.v1.PushMessage.message_type:type_name -> wayplatform.mbz.v1.MessageType
-	2, // 1: wayplatform.mbz.v1.PushMessage.sending_behavior:type_name -> wayplatform.mbz.v1.SendingBehavior
-	3, // 2: wayplatform.mbz.v1.PushMessage.signals:type_name -> wayplatform.mbz.v1.Signal
+var file_wayplatform_connect_mbz_v1_push_message_proto_depIdxs = []int32{
+	1, // 0: wayplatform.connect.mbz.v1.PushMessage.message_type:type_name -> wayplatform.connect.mbz.v1.MessageType
+	2, // 1: wayplatform.connect.mbz.v1.PushMessage.sending_behavior:type_name -> wayplatform.connect.mbz.v1.SendingBehavior
+	3, // 2: wayplatform.connect.mbz.v1.PushMessage.signals:type_name -> wayplatform.connect.mbz.v1.Signal
 	3, // [3:3] is the sub-list for method output_type
 	3, // [3:3] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name
@@ -352,29 +355,29 @@ var file_wayplatform_mbz_v1_push_message_proto_depIdxs = []int32{
 	0, // [0:3] is the sub-list for field type_name
 }
 
-func init() { file_wayplatform_mbz_v1_push_message_proto_init() }
-func file_wayplatform_mbz_v1_push_message_proto_init() {
-	if File_wayplatform_mbz_v1_push_message_proto != nil {
+func init() { file_wayplatform_connect_mbz_v1_push_message_proto_init() }
+func file_wayplatform_connect_mbz_v1_push_message_proto_init() {
+	if File_wayplatform_connect_mbz_v1_push_message_proto != nil {
 		return
 	}
-	file_wayplatform_mbz_v1_message_type_proto_init()
-	file_wayplatform_mbz_v1_sending_behavior_proto_init()
-	file_wayplatform_mbz_v1_signal_proto_init()
+	file_wayplatform_connect_mbz_v1_message_type_proto_init()
+	file_wayplatform_connect_mbz_v1_sending_behavior_proto_init()
+	file_wayplatform_connect_mbz_v1_signal_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_wayplatform_mbz_v1_push_message_proto_rawDesc), len(file_wayplatform_mbz_v1_push_message_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_wayplatform_connect_mbz_v1_push_message_proto_rawDesc), len(file_wayplatform_connect_mbz_v1_push_message_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   1,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_wayplatform_mbz_v1_push_message_proto_goTypes,
-		DependencyIndexes: file_wayplatform_mbz_v1_push_message_proto_depIdxs,
-		MessageInfos:      file_wayplatform_mbz_v1_push_message_proto_msgTypes,
+		GoTypes:           file_wayplatform_connect_mbz_v1_push_message_proto_goTypes,
+		DependencyIndexes: file_wayplatform_connect_mbz_v1_push_message_proto_depIdxs,
+		MessageInfos:      file_wayplatform_connect_mbz_v1_push_message_proto_msgTypes,
 	}.Build()
-	File_wayplatform_mbz_v1_push_message_proto = out.File
-	file_wayplatform_mbz_v1_push_message_proto_goTypes = nil
-	file_wayplatform_mbz_v1_push_message_proto_depIdxs = nil
+	File_wayplatform_connect_mbz_v1_push_message_proto = out.File
+	file_wayplatform_connect_mbz_v1_push_message_proto_goTypes = nil
+	file_wayplatform_connect_mbz_v1_push_message_proto_depIdxs = nil
 }

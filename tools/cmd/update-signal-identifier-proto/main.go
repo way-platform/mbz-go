@@ -40,11 +40,11 @@ type asyncAPISchema struct {
 
 func main() {
 	const (
-		signalIdentifierProtoPath = "wayplatform/mbz/v1/signal_identifier.proto"
-		annotationsProtoPath      = "wayplatform/mbz/v1/annotations.proto"
-		signalTypeProtoPath       = "wayplatform/mbz/v1/signal_type.proto"
-		signalUnitProtoPath       = "wayplatform/mbz/v1/signal_unit.proto"
-		signalEnumValueProtoPath  = "wayplatform/mbz/v1/signal_enum_value.proto"
+		signalIdentifierProtoPath = "wayplatform/connect/mbz/v1/signal_identifier.proto"
+		annotationsProtoPath      = "wayplatform/connect/mbz/v1/annotations.proto"
+		signalTypeProtoPath       = "wayplatform/connect/mbz/v1/signal_type.proto"
+		signalUnitProtoPath       = "wayplatform/connect/mbz/v1/signal_unit.proto"
+		signalEnumValueProtoPath  = "wayplatform/connect/mbz/v1/signal_enum_value.proto"
 	)
 	cmd := &cobra.Command{
 		Use:   "update-signal-proto",
@@ -98,14 +98,14 @@ func main() {
 			return fmt.Errorf("failed to parse existing proto files: %w", err)
 		}
 		fb := builder.NewFile(signalIdentifierProtoPath)
-		fb.SetPackageName("wayplatform.mbz.v1")
+		fb.SetPackageName("wayplatform.connect.mbz.v1")
 		fb.Edition = descriptorpb.Edition_EDITION_2023
 		fb.AddImportedDependency(fileDescriptors[1])
 		enumBuilder := builder.NewEnum("SignalIdentifier")
 		enumBuilder.SetComments(builder.Comments{
 			LeadingComment: "SignalIdentifier is an enum of all known Mercedes-Benz Kafka message signal names.",
 		})
-		existingEnum := fileDescriptors[0].FindEnum("wayplatform.mbz.v1.SignalIdentifier")
+		existingEnum := fileDescriptors[0].FindEnum("wayplatform.connect.mbz.v1.SignalIdentifier")
 		if existingEnum == nil {
 			return fmt.Errorf("SignalIdentifier enum not found in signal.proto")
 		}

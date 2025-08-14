@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.6
 // 	protoc        (unknown)
-// source: wayplatform/mbz/v1/signal_enum_value.proto
+// source: wayplatform/connect/mbz/v1/signal_enum_value.proto
 
 package mbzv1
 
@@ -33,7 +33,7 @@ type SignalEnumValue struct {
 
 func (x *SignalEnumValue) Reset() {
 	*x = SignalEnumValue{}
-	mi := &file_wayplatform_mbz_v1_signal_enum_value_proto_msgTypes[0]
+	mi := &file_wayplatform_connect_mbz_v1_signal_enum_value_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -45,7 +45,7 @@ func (x *SignalEnumValue) String() string {
 func (*SignalEnumValue) ProtoMessage() {}
 
 func (x *SignalEnumValue) ProtoReflect() protoreflect.Message {
-	mi := &file_wayplatform_mbz_v1_signal_enum_value_proto_msgTypes[0]
+	mi := &file_wayplatform_connect_mbz_v1_signal_enum_value_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -134,21 +134,21 @@ func (b0 SignalEnumValue_builder) Build() *SignalEnumValue {
 	return m0
 }
 
-var File_wayplatform_mbz_v1_signal_enum_value_proto protoreflect.FileDescriptor
+var File_wayplatform_connect_mbz_v1_signal_enum_value_proto protoreflect.FileDescriptor
 
-const file_wayplatform_mbz_v1_signal_enum_value_proto_rawDesc = "" +
+const file_wayplatform_connect_mbz_v1_signal_enum_value_proto_rawDesc = "" +
 	"\n" +
-	"*wayplatform/mbz/v1/signal_enum_value.proto\x12\x12wayplatform.mbz.v1\"I\n" +
+	"2wayplatform/connect/mbz/v1/signal_enum_value.proto\x12\x1awayplatform.connect.mbz.v1\"I\n" +
 	"\x0fSignalEnumValue\x12\x14\n" +
 	"\x05value\x18\x01 \x01(\tR\x05value\x12 \n" +
-	"\vdescription\x18\x02 \x01(\tR\vdescriptionB\xde\x01\n" +
-	"\x16com.wayplatform.mbz.v1B\x14SignalEnumValueProtoP\x01ZDgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1;mbzv1\xa2\x02\x03WMX\xaa\x02\x12Wayplatform.Mbz.V1\xca\x02\x12Wayplatform\\Mbz\\V1\xe2\x02\x1eWayplatform\\Mbz\\V1\\GPBMetadata\xea\x02\x14Wayplatform::Mbz::V1b\beditionsp\xe8\a"
+	"\vdescription\x18\x02 \x01(\tR\vdescriptionB\x8f\x02\n" +
+	"\x1ecom.wayplatform.connect.mbz.v1B\x14SignalEnumValueProtoP\x01ZLgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mbz/v1;mbzv1\xa2\x02\x03WCM\xaa\x02\x1aWayplatform.Connect.Mbz.V1\xca\x02\x1aWayplatform\\Connect\\Mbz\\V1\xe2\x02&Wayplatform\\Connect\\Mbz\\V1\\GPBMetadata\xea\x02\x1dWayplatform::Connect::Mbz::V1b\beditionsp\xe8\a"
 
-var file_wayplatform_mbz_v1_signal_enum_value_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
-var file_wayplatform_mbz_v1_signal_enum_value_proto_goTypes = []any{
-	(*SignalEnumValue)(nil), // 0: wayplatform.mbz.v1.SignalEnumValue
+var file_wayplatform_connect_mbz_v1_signal_enum_value_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_wayplatform_connect_mbz_v1_signal_enum_value_proto_goTypes = []any{
+	(*SignalEnumValue)(nil), // 0: wayplatform.connect.mbz.v1.SignalEnumValue
 }
-var file_wayplatform_mbz_v1_signal_enum_value_proto_depIdxs = []int32{
+var file_wayplatform_connect_mbz_v1_signal_enum_value_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
 	0, // [0:0] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -156,26 +156,26 @@ var file_wayplatform_mbz_v1_signal_enum_value_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_wayplatform_mbz_v1_signal_enum_value_proto_init() }
-func file_wayplatform_mbz_v1_signal_enum_value_proto_init() {
-	if File_wayplatform_mbz_v1_signal_enum_value_proto != nil {
+func init() { file_wayplatform_connect_mbz_v1_signal_enum_value_proto_init() }
+func file_wayplatform_connect_mbz_v1_signal_enum_value_proto_init() {
+	if File_wayplatform_connect_mbz_v1_signal_enum_value_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_wayplatform_mbz_v1_signal_enum_value_proto_rawDesc), len(file_wayplatform_mbz_v1_signal_enum_value_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_wayplatform_connect_mbz_v1_signal_enum_value_proto_rawDesc), len(file_wayplatform_connect_mbz_v1_signal_enum_value_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   1,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_wayplatform_mbz_v1_signal_enum_value_proto_goTypes,
-		DependencyIndexes: file_wayplatform_mbz_v1_signal_enum_value_proto_depIdxs,
-		MessageInfos:      file_wayplatform_mbz_v1_signal_enum_value_proto_msgTypes,
+		GoTypes:           file_wayplatform_connect_mbz_v1_signal_enum_value_proto_goTypes,
+		DependencyIndexes: file_wayplatform_connect_mbz_v1_signal_enum_value_proto_depIdxs,
+		MessageInfos:      file_wayplatform_connect_mbz_v1_signal_enum_value_proto_msgTypes,
 	}.Build()
-	File_wayplatform_mbz_v1_signal_enum_value_proto = out.File
-	file_wayplatform_mbz_v1_signal_enum_value_proto_goTypes = nil
-	file_wayplatform_mbz_v1_signal_enum_value_proto_depIdxs = nil
+	File_wayplatform_connect_mbz_v1_signal_enum_value_proto = out.File
+	file_wayplatform_connect_mbz_v1_signal_enum_value_proto_goTypes = nil
+	file_wayplatform_connect_mbz_v1_signal_enum_value_proto_depIdxs = nil
 }

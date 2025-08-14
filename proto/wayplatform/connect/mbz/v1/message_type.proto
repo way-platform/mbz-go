@@ -1,6 +1,6 @@
 edition = "2023";
 
-package wayplatform.mbz.v1;
+package wayplatform.connect.mbz.v1;
 
 // MessageType represents the type of a message.
 enum MessageType {

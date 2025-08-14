@@ -3,9 +3,10 @@ package mbz
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 
 	"github.com/way-platform/mbz-go/api/servicesv1"
-	mbzv1 "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1"
+	mbzv1 "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mbz/v1"
 )
 
 // PushMessage represents a push message.
@@ -50,7 +51,7 @@ func (m *PushMessage) AsProto() (*mbzv1.PushMessage, error) {
 	var result mbzv1.PushMessage
 	result.SetMessageId(m.MessageID)
 	result.SetVin(m.VIN)
-	result.SetTime(unixTimestampMillisToMicros(m.Timestamp))
+	result.SetTime(time.UnixMilli(m.Timestamp).UTC().Format(time.RFC3339Nano))
 	result.SetMessageType(messageType)
 	result.SetVersion(m.Version)
 	result.SetServiceId(m.ServiceID)

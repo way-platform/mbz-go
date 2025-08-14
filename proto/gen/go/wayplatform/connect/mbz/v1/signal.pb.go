@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.6
 // 	protoc        (unknown)
-// source: wayplatform/mbz/v1/signal.proto
+// source: wayplatform/connect/mbz/v1/signal.proto
 
 package mbzv1
 
@@ -23,15 +23,15 @@ const (
 // A signal is a single value of a signal identifier.
 type Signal struct {
 	state                  protoimpl.MessageState `protogen:"opaque.v1"`
-	xxx_hidden_Id          SignalIdentifier       `protobuf:"varint,1,opt,name=id,enum=wayplatform.mbz.v1.SignalIdentifier"`
-	xxx_hidden_Time        int64                  `protobuf:"varint,2,opt,name=time"`
-	xxx_hidden_Type        SignalType             `protobuf:"varint,3,opt,name=type,enum=wayplatform.mbz.v1.SignalType"`
+	xxx_hidden_Id          SignalIdentifier       `protobuf:"varint,1,opt,name=id,enum=wayplatform.connect.mbz.v1.SignalIdentifier"`
+	xxx_hidden_Time        *string                `protobuf:"bytes,2,opt,name=time"`
+	xxx_hidden_Type        SignalType             `protobuf:"varint,3,opt,name=type,enum=wayplatform.connect.mbz.v1.SignalType"`
 	xxx_hidden_StringValue *string                `protobuf:"bytes,4,opt,name=string_value,json=stringValue"`
 	xxx_hidden_IntValue    int32                  `protobuf:"varint,5,opt,name=int_value,json=intValue"`
 	xxx_hidden_DoubleValue float64                `protobuf:"fixed64,6,opt,name=double_value,json=doubleValue"`
 	xxx_hidden_BoolValue   bool                   `protobuf:"varint,7,opt,name=bool_value,json=boolValue"`
 	xxx_hidden_EnumValue   *string                `protobuf:"bytes,8,opt,name=enum_value,json=enumValue"`
-	xxx_hidden_Unit        SignalUnit             `protobuf:"varint,9,opt,name=unit,enum=wayplatform.mbz.v1.SignalUnit"`
+	xxx_hidden_Unit        SignalUnit             `protobuf:"varint,9,opt,name=unit,enum=wayplatform.connect.mbz.v1.SignalUnit"`
 	XXX_raceDetectHookData protoimpl.RaceDetectHookData
 	XXX_presence           [1]uint32
 	unknownFields          protoimpl.UnknownFields
@@ -40,7 +40,7 @@ type Signal struct {
 
 func (x *Signal) Reset() {
 	*x = Signal{}
-	mi := &file_wayplatform_mbz_v1_signal_proto_msgTypes[0]
+	mi := &file_wayplatform_connect_mbz_v1_signal_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -52,7 +52,7 @@ func (x *Signal) String() string {
 func (*Signal) ProtoMessage() {}
 
 func (x *Signal) ProtoReflect() protoreflect.Message {
-	mi := &file_wayplatform_mbz_v1_signal_proto_msgTypes[0]
+	mi := &file_wayplatform_connect_mbz_v1_signal_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -72,11 +72,14 @@ func (x *Signal) GetId() SignalIdentifier {
 	return SignalIdentifier_SIGNAL_IDENTIFIER_UNSPECIFIED
 }
 
-func (x *Signal) GetTime() int64 {
+func (x *Signal) GetTime() string {
 	if x != nil {
-		return x.xxx_hidden_Time
+		if x.xxx_hidden_Time != nil {
+			return *x.xxx_hidden_Time
+		}
+		return ""
 	}
-	return 0
+	return ""
 }
 
 func (x *Signal) GetType() SignalType {
@@ -143,8 +146,8 @@ func (x *Signal) SetId(v SignalIdentifier) {
 	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 0, 9)
 }
 
-func (x *Signal) SetTime(v int64) {
-	x.xxx_hidden_Time = v
+func (x *Signal) SetTime(v string) {
+	x.xxx_hidden_Time = &v
 	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 1, 9)
 }
 
@@ -253,7 +256,7 @@ func (x *Signal) ClearId() {
 
 func (x *Signal) ClearTime() {
 	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 1)
-	x.xxx_hidden_Time = 0
+	x.xxx_hidden_Time = nil
 }
 
 func (x *Signal) ClearType() {
@@ -296,8 +299,8 @@ type Signal_builder struct {
 
 	// The identifier of the signal.
 	Id *SignalIdentifier
-	// The timestamp of the signal (microseconds since the Unix epoch).
-	Time *int64
+	// The timestamp of the signal (RFC3339).
+	Time *string
 	// The type of the signal.
 	Type *SignalType
 	// The string value of the signal (valid for string signals).
@@ -324,7 +327,7 @@ func (b0 Signal_builder) Build() *Signal {
 	}
 	if b.Time != nil {
 		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 1, 9)
-		x.xxx_hidden_Time = *b.Time
+		x.xxx_hidden_Time = b.Time
 	}
 	if b.Type != nil {
 		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 2, 9)
@@ -357,36 +360,36 @@ func (b0 Signal_builder) Build() *Signal {
 	return m0
 }
 
-var File_wayplatform_mbz_v1_signal_proto protoreflect.FileDescriptor
+var File_wayplatform_connect_mbz_v1_signal_proto protoreflect.FileDescriptor
 
-const file_wayplatform_mbz_v1_signal_proto_rawDesc = "" +
+const file_wayplatform_connect_mbz_v1_signal_proto_rawDesc = "" +
 	"\n" +
-	"\x1fwayplatform/mbz/v1/signal.proto\x12\x12wayplatform.mbz.v1\x1a*wayplatform/mbz/v1/signal_identifier.proto\x1a$wayplatform/mbz/v1/signal_type.proto\x1a$wayplatform/mbz/v1/signal_unit.proto\"\xdb\x02\n" +
-	"\x06Signal\x124\n" +
-	"\x02id\x18\x01 \x01(\x0e2$.wayplatform.mbz.v1.SignalIdentifierR\x02id\x12\x12\n" +
-	"\x04time\x18\x02 \x01(\x03R\x04time\x122\n" +
-	"\x04type\x18\x03 \x01(\x0e2\x1e.wayplatform.mbz.v1.SignalTypeR\x04type\x12!\n" +
+	"'wayplatform/connect/mbz/v1/signal.proto\x12\x1awayplatform.connect.mbz.v1\x1a2wayplatform/connect/mbz/v1/signal_identifier.proto\x1a,wayplatform/connect/mbz/v1/signal_type.proto\x1a,wayplatform/connect/mbz/v1/signal_unit.proto\"\xf3\x02\n" +
+	"\x06Signal\x12<\n" +
+	"\x02id\x18\x01 \x01(\x0e2,.wayplatform.connect.mbz.v1.SignalIdentifierR\x02id\x12\x12\n" +
+	"\x04time\x18\x02 \x01(\tR\x04time\x12:\n" +
+	"\x04type\x18\x03 \x01(\x0e2&.wayplatform.connect.mbz.v1.SignalTypeR\x04type\x12!\n" +
 	"\fstring_value\x18\x04 \x01(\tR\vstringValue\x12\x1b\n" +
 	"\tint_value\x18\x05 \x01(\x05R\bintValue\x12!\n" +
 	"\fdouble_value\x18\x06 \x01(\x01R\vdoubleValue\x12\x1d\n" +
 	"\n" +
 	"bool_value\x18\a \x01(\bR\tboolValue\x12\x1d\n" +
 	"\n" +
-	"enum_value\x18\b \x01(\tR\tenumValue\x122\n" +
-	"\x04unit\x18\t \x01(\x0e2\x1e.wayplatform.mbz.v1.SignalUnitR\x04unitB\xd5\x01\n" +
-	"\x16com.wayplatform.mbz.v1B\vSignalProtoP\x01ZDgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1;mbzv1\xa2\x02\x03WMX\xaa\x02\x12Wayplatform.Mbz.V1\xca\x02\x12Wayplatform\\Mbz\\V1\xe2\x02\x1eWayplatform\\Mbz\\V1\\GPBMetadata\xea\x02\x14Wayplatform::Mbz::V1b\beditionsp\xe8\a"
+	"enum_value\x18\b \x01(\tR\tenumValue\x12:\n" +
+	"\x04unit\x18\t \x01(\x0e2&.wayplatform.connect.mbz.v1.SignalUnitR\x04unitB\x86\x02\n" +
+	"\x1ecom.wayplatform.connect.mbz.v1B\vSignalProtoP\x01ZLgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mbz/v1;mbzv1\xa2\x02\x03WCM\xaa\x02\x1aWayplatform.Connect.Mbz.V1\xca\x02\x1aWayplatform\\Connect\\Mbz\\V1\xe2\x02&Wayplatform\\Connect\\Mbz\\V1\\GPBMetadata\xea\x02\x1dWayplatform::Connect::Mbz::V1b\beditionsp\xe8\a"
 
-var file_wayplatform_mbz_v1_signal_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
-var file_wayplatform_mbz_v1_signal_proto_goTypes = []any{
-	(*Signal)(nil),        // 0: wayplatform.mbz.v1.Signal
-	(SignalIdentifier)(0), // 1: wayplatform.mbz.v1.SignalIdentifier
-	(SignalType)(0),       // 2: wayplatform.mbz.v1.SignalType
-	(SignalUnit)(0),       // 3: wayplatform.mbz.v1.SignalUnit
+var file_wayplatform_connect_mbz_v1_signal_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_wayplatform_connect_mbz_v1_signal_proto_goTypes = []any{
+	(*Signal)(nil),        // 0: wayplatform.connect.mbz.v1.Signal
+	(SignalIdentifier)(0), // 1: wayplatform.connect.mbz.v1.SignalIdentifier
+	(SignalType)(0),       // 2: wayplatform.connect.mbz.v1.SignalType
+	(SignalUnit)(0),       // 3: wayplatform.connect.mbz.v1.SignalUnit
 }
-var file_wayplatform_mbz_v1_signal_proto_depIdxs = []int32{
-	1, // 0: wayplatform.mbz.v1.Signal.id:type_name -> wayplatform.mbz.v1.SignalIdentifier
-	2, // 1: wayplatform.mbz.v1.Signal.type:type_name -> wayplatform.mbz.v1.SignalType
-	3, // 2: wayplatform.mbz.v1.Signal.unit:type_name -> wayplatform.mbz.v1.SignalUnit
+var file_wayplatform_connect_mbz_v1_signal_proto_depIdxs = []int32{
+	1, // 0: wayplatform.connect.mbz.v1.Signal.id:type_name -> wayplatform.connect.mbz.v1.SignalIdentifier
+	2, // 1: wayplatform.connect.mbz.v1.Signal.type:type_name -> wayplatform.connect.mbz.v1.SignalType
+	3, // 2: wayplatform.connect.mbz.v1.Signal.unit:type_name -> wayplatform.connect.mbz.v1.SignalUnit
 	3, // [3:3] is the sub-list for method output_type
 	3, // [3:3] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name
@@ -394,29 +397,29 @@ var file_wayplatform_mbz_v1_signal_proto_depIdxs = []int32{
 	0, // [0:3] is the sub-list for field type_name
 }
 
-func init() { file_wayplatform_mbz_v1_signal_proto_init() }
-func file_wayplatform_mbz_v1_signal_proto_init() {
-	if File_wayplatform_mbz_v1_signal_proto != nil {
+func init() { file_wayplatform_connect_mbz_v1_signal_proto_init() }
+func file_wayplatform_connect_mbz_v1_signal_proto_init() {
+	if File_wayplatform_connect_mbz_v1_signal_proto != nil {
 		return
 	}
-	file_wayplatform_mbz_v1_signal_identifier_proto_init()
-	file_wayplatform_mbz_v1_signal_type_proto_init()
-	file_wayplatform_mbz_v1_signal_unit_proto_init()
+	file_wayplatform_connect_mbz_v1_signal_identifier_proto_init()
+	file_wayplatform_connect_mbz_v1_signal_type_proto_init()
+	file_wayplatform_connect_mbz_v1_signal_unit_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_wayplatform_mbz_v1_signal_proto_rawDesc), len(file_wayplatform_mbz_v1_signal_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_wayplatform_connect_mbz_v1_signal_proto_rawDesc), len(file_wayplatform_connect_mbz_v1_signal_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   1,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_wayplatform_mbz_v1_signal_proto_goTypes,
-		DependencyIndexes: file_wayplatform_mbz_v1_signal_proto_depIdxs,
-		MessageInfos:      file_wayplatform_mbz_v1_signal_proto_msgTypes,
+		GoTypes:           file_wayplatform_connect_mbz_v1_signal_proto_goTypes,
+		DependencyIndexes: file_wayplatform_connect_mbz_v1_signal_proto_depIdxs,
+		MessageInfos:      file_wayplatform_connect_mbz_v1_signal_proto_msgTypes,
 	}.Build()
-	File_wayplatform_mbz_v1_signal_proto = out.File
-	file_wayplatform_mbz_v1_signal_proto_goTypes = nil
-	file_wayplatform_mbz_v1_signal_proto_depIdxs = nil
+	File_wayplatform_connect_mbz_v1_signal_proto = out.File
+	file_wayplatform_connect_mbz_v1_signal_proto_goTypes = nil
+	file_wayplatform_connect_mbz_v1_signal_proto_depIdxs = nil
 }

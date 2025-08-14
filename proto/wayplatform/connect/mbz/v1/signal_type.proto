@@ -1,6 +1,6 @@
 edition = "2023";
 
-package wayplatform.mbz.v1;
+package wayplatform.connect.mbz.v1;
 
 // SignalType represents the type of a signal.
 enum SignalType {

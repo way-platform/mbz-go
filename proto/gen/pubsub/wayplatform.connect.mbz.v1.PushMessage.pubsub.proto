@@ -2,15 +2,15 @@ syntax = "proto2";
 message PushMessage {
   optional string message_id = 1;
   optional string vin = 2;
-  optional int64 time = 3;
+  optional string time = 3;
   optional int32 message_type = 4;
   optional string version = 5;
   optional string service_id = 6;
   optional int32 sending_behavior = 7;
-  repeated Inline_wayplatform_mbz_v1_Signal signals = 8;
-  message Inline_wayplatform_mbz_v1_Signal {
+  repeated Inline_wayplatform_connect_mbz_v1_Signal signals = 8;
+  message Inline_wayplatform_connect_mbz_v1_Signal {
     optional int32 id = 1;
-    optional int64 time = 2;
+    optional string time = 2;
     optional int32 type = 3;
     optional string string_value = 4;
     optional int32 int_value = 5;

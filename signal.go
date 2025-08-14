@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 
-	mbzv1 "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1"
+	mbzv1 "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mbz/v1"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -41,10 +42,6 @@ func signalNameToIdentifierEnum(name string) (mbzv1.SignalIdentifier, error) {
 	return mbzv1.SignalIdentifier(enumValue), nil
 }
 
-func unixTimestampMillisToMicros(timestamp int64) int64 {
-	return timestamp * 1000
-}
-
 func (s *Signal) AsProto() (*mbzv1.Signal, error) {
 	identifier, err := signalNameToIdentifierEnum(s.Name)
 	if err != nil {
@@ -52,7 +49,7 @@ func (s *Signal) AsProto() (*mbzv1.Signal, error) {
 	}
 	var result mbzv1.Signal
 	result.SetId(identifier)
-	result.SetTime(unixTimestampMillisToMicros(s.Timestamp))
+	result.SetTime(time.UnixMilli(s.Timestamp).UTC().Format(time.RFC3339Nano))
 	signalType, ok := proto.GetExtension(
 		identifier.Descriptor().Values().ByNumber(identifier.Number()).Options(),
 		mbzv1.E_SignalType,
