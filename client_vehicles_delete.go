@@ -20,7 +20,10 @@ type DeleteVehiclesRequest struct {
 type DeleteVehiclesResponse struct{}
 
 // DeleteVehicles lists the vehicles for the current account.
-func (c *Client) DeleteVehicles(ctx context.Context, request *DeleteVehiclesRequest) (_ *DeleteVehiclesResponse, err error) {
+func (c *Client) DeleteVehicles(
+	ctx context.Context,
+	request *DeleteVehiclesRequest,
+) (_ *DeleteVehiclesResponse, err error) {
 	defer func() {
 		if err != nil {
 			err = fmt.Errorf("mbz: delete vehicles: %w", err)
@@ -40,6 +43,7 @@ func (c *Client) DeleteVehicles(ctx context.Context, request *DeleteVehiclesRequ
 	if err != nil {
 		return nil, err
 	}
+	httpRequest.Header.Set("Content-Type", "application/json")
 	httpResponse, err := c.httpClient.Do(httpRequest)
 	if err != nil {
 		return nil, err
