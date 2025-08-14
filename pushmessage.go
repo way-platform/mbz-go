@@ -120,20 +120,22 @@ func messageTypeToProto(messageType string) (mbzv1.MessageType, error) {
 	switch messageType {
 	case "vehiclesignal":
 		return mbzv1.MessageType_SIGNALS, nil
+	case "vehicletrip":
+		return mbzv1.MessageType_TRIP_SUMMARY, nil
 	case "vehicle_registration_response":
 		return mbzv1.MessageType_REGISTRATION_RESPONSE, nil
 	case "vehicle_service_status_update":
 		return mbzv1.MessageType_SERVICE_STATUS_UPDATE, nil
 	case "vehicle_service_activation_pending":
 		return mbzv1.MessageType_SERVICE_ACTIVATION_PENDING, nil
-	case "vehicle_trip_summary":
-		return mbzv1.MessageType_TRIP_SUMMARY, nil
 	case "refueling_detection":
 		return mbzv1.MessageType_REFUELING_DETECTION, nil
 	case "charging_detection":
 		return mbzv1.MessageType_CHARGING_DETECTION, nil
 	case "charging_cycle_summary":
 		return mbzv1.MessageType_CHARGING_CYCLE_SUMMARY, nil
+	case "vehicle_command_response":
+		return mbzv1.MessageType_COMMAND_RESPONSE, nil
 	default:
 		return mbzv1.MessageType_MESSAGE_TYPE_UNSPECIFIED, fmt.Errorf("unknown message type: %s", messageType)
 	}

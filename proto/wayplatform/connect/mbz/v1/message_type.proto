@@ -41,4 +41,8 @@ enum MessageType {
   // A vehicle's charging cycle summary message reports signals that were computed
   // and/or aggregated while the battery was charged.
   CHARGING_CYCLE_SUMMARY = 8;
+
+  // A vehicle command response message contains the status of a command as well as meta data that provides context information.
+  // For every service and every command a separate message is sent.
+  COMMAND_RESPONSE = 9;
 }
