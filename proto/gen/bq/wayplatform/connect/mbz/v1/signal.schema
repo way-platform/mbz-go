@@ -7,9 +7,9 @@
  },
  {
   "name": "time",
-  "type": "INTEGER",
+  "type": "STRING",
   "mode": "NULLABLE",
-  "description": "The timestamp of the signal (microseconds since the Unix epoch)."
+  "description": "The timestamp of the signal (RFC3339)."
  },
  {
   "name": "type",

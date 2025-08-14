@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.6
 // 	protoc        (unknown)
-// source: wayplatform/mbz/v1/signal_unit.proto
+// source: wayplatform/connect/mbz/v1/signal_unit.proto
 
 package mbzv1
 
@@ -105,22 +105,22 @@ func (x SignalUnit) String() string {
 }
 
 func (SignalUnit) Descriptor() protoreflect.EnumDescriptor {
-	return file_wayplatform_mbz_v1_signal_unit_proto_enumTypes[0].Descriptor()
+	return file_wayplatform_connect_mbz_v1_signal_unit_proto_enumTypes[0].Descriptor()
 }
 
 func (SignalUnit) Type() protoreflect.EnumType {
-	return &file_wayplatform_mbz_v1_signal_unit_proto_enumTypes[0]
+	return &file_wayplatform_connect_mbz_v1_signal_unit_proto_enumTypes[0]
 }
 
 func (x SignalUnit) Number() protoreflect.EnumNumber {
 	return protoreflect.EnumNumber(x)
 }
 
-var File_wayplatform_mbz_v1_signal_unit_proto protoreflect.FileDescriptor
+var File_wayplatform_connect_mbz_v1_signal_unit_proto protoreflect.FileDescriptor
 
-const file_wayplatform_mbz_v1_signal_unit_proto_rawDesc = "" +
+const file_wayplatform_connect_mbz_v1_signal_unit_proto_rawDesc = "" +
 	"\n" +
-	"$wayplatform/mbz/v1/signal_unit.proto\x12\x12wayplatform.mbz.v1*\x8a\x02\n" +
+	",wayplatform/connect/mbz/v1/signal_unit.proto\x12\x1awayplatform.connect.mbz.v1*\x8a\x02\n" +
 	"\n" +
 	"SignalUnit\x12\x1b\n" +
 	"\x17SIGNAL_UNIT_UNSPECIFIED\x10\x00\x12\x16\n" +
@@ -140,14 +140,14 @@ const file_wayplatform_mbz_v1_signal_unit_proto_rawDesc = "" +
 	"\n" +
 	"\x06MINUTE\x10\f\x12\x0f\n" +
 	"\vMILLISECOND\x10\r\x12\a\n" +
-	"\x03DAY\x10\x0eB\xd9\x01\n" +
-	"\x16com.wayplatform.mbz.v1B\x0fSignalUnitProtoP\x01ZDgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1;mbzv1\xa2\x02\x03WMX\xaa\x02\x12Wayplatform.Mbz.V1\xca\x02\x12Wayplatform\\Mbz\\V1\xe2\x02\x1eWayplatform\\Mbz\\V1\\GPBMetadata\xea\x02\x14Wayplatform::Mbz::V1b\beditionsp\xe8\a"
+	"\x03DAY\x10\x0eB\x8a\x02\n" +
+	"\x1ecom.wayplatform.connect.mbz.v1B\x0fSignalUnitProtoP\x01ZLgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mbz/v1;mbzv1\xa2\x02\x03WCM\xaa\x02\x1aWayplatform.Connect.Mbz.V1\xca\x02\x1aWayplatform\\Connect\\Mbz\\V1\xe2\x02&Wayplatform\\Connect\\Mbz\\V1\\GPBMetadata\xea\x02\x1dWayplatform::Connect::Mbz::V1b\beditionsp\xe8\a"
 
-var file_wayplatform_mbz_v1_signal_unit_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_wayplatform_mbz_v1_signal_unit_proto_goTypes = []any{
-	(SignalUnit)(0), // 0: wayplatform.mbz.v1.SignalUnit
+var file_wayplatform_connect_mbz_v1_signal_unit_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_wayplatform_connect_mbz_v1_signal_unit_proto_goTypes = []any{
+	(SignalUnit)(0), // 0: wayplatform.connect.mbz.v1.SignalUnit
 }
-var file_wayplatform_mbz_v1_signal_unit_proto_depIdxs = []int32{
+var file_wayplatform_connect_mbz_v1_signal_unit_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
 	0, // [0:0] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -155,26 +155,26 @@ var file_wayplatform_mbz_v1_signal_unit_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_wayplatform_mbz_v1_signal_unit_proto_init() }
-func file_wayplatform_mbz_v1_signal_unit_proto_init() {
-	if File_wayplatform_mbz_v1_signal_unit_proto != nil {
+func init() { file_wayplatform_connect_mbz_v1_signal_unit_proto_init() }
+func file_wayplatform_connect_mbz_v1_signal_unit_proto_init() {
+	if File_wayplatform_connect_mbz_v1_signal_unit_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_wayplatform_mbz_v1_signal_unit_proto_rawDesc), len(file_wayplatform_mbz_v1_signal_unit_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_wayplatform_connect_mbz_v1_signal_unit_proto_rawDesc), len(file_wayplatform_connect_mbz_v1_signal_unit_proto_rawDesc)),
 			NumEnums:      1,
 			NumMessages:   0,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_wayplatform_mbz_v1_signal_unit_proto_goTypes,
-		DependencyIndexes: file_wayplatform_mbz_v1_signal_unit_proto_depIdxs,
-		EnumInfos:         file_wayplatform_mbz_v1_signal_unit_proto_enumTypes,
+		GoTypes:           file_wayplatform_connect_mbz_v1_signal_unit_proto_goTypes,
+		DependencyIndexes: file_wayplatform_connect_mbz_v1_signal_unit_proto_depIdxs,
+		EnumInfos:         file_wayplatform_connect_mbz_v1_signal_unit_proto_enumTypes,
 	}.Build()
-	File_wayplatform_mbz_v1_signal_unit_proto = out.File
-	file_wayplatform_mbz_v1_signal_unit_proto_goTypes = nil
-	file_wayplatform_mbz_v1_signal_unit_proto_depIdxs = nil
+	File_wayplatform_connect_mbz_v1_signal_unit_proto = out.File
+	file_wayplatform_connect_mbz_v1_signal_unit_proto_goTypes = nil
+	file_wayplatform_connect_mbz_v1_signal_unit_proto_depIdxs = nil
 }

@@ -13,9 +13,9 @@
  },
  {
   "name": "time",
-  "type": "INTEGER",
+  "type": "STRING",
   "mode": "NULLABLE",
-  "description": "Time when the message was created (in microseconds since Unix epoch)."
+  "description": "Time when the message was created (RFC3339)."
  },
  {
   "name": "message_type",
@@ -55,9 +55,9 @@
    },
    {
     "name": "time",
-    "type": "INTEGER",
+    "type": "STRING",
     "mode": "NULLABLE",
-    "description": "The timestamp of the signal (microseconds since the Unix epoch)."
+    "description": "The timestamp of the signal (RFC3339)."
    },
    {
     "name": "type",

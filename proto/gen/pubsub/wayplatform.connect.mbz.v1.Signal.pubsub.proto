@@ -1,7 +1,7 @@
 syntax = "proto2";
 message Signal {
   optional int32 id = 1;
-  optional int64 time = 2;
+  optional string time = 2;
   optional int32 type = 3;
   optional string string_value = 4;
   optional int32 int_value = 5;

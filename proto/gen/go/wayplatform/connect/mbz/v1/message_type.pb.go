@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.6
 // 	protoc        (unknown)
-// source: wayplatform/mbz/v1/message_type.proto
+// source: wayplatform/connect/mbz/v1/message_type.proto
 
 package mbzv1
 
@@ -92,22 +92,22 @@ func (x MessageType) String() string {
 }
 
 func (MessageType) Descriptor() protoreflect.EnumDescriptor {
-	return file_wayplatform_mbz_v1_message_type_proto_enumTypes[0].Descriptor()
+	return file_wayplatform_connect_mbz_v1_message_type_proto_enumTypes[0].Descriptor()
 }
 
 func (MessageType) Type() protoreflect.EnumType {
-	return &file_wayplatform_mbz_v1_message_type_proto_enumTypes[0]
+	return &file_wayplatform_connect_mbz_v1_message_type_proto_enumTypes[0]
 }
 
 func (x MessageType) Number() protoreflect.EnumNumber {
 	return protoreflect.EnumNumber(x)
 }
 
-var File_wayplatform_mbz_v1_message_type_proto protoreflect.FileDescriptor
+var File_wayplatform_connect_mbz_v1_message_type_proto protoreflect.FileDescriptor
 
-const file_wayplatform_mbz_v1_message_type_proto_rawDesc = "" +
+const file_wayplatform_connect_mbz_v1_message_type_proto_rawDesc = "" +
 	"\n" +
-	"%wayplatform/mbz/v1/message_type.proto\x12\x12wayplatform.mbz.v1*\xed\x01\n" +
+	"-wayplatform/connect/mbz/v1/message_type.proto\x12\x1awayplatform.connect.mbz.v1*\xed\x01\n" +
 	"\vMessageType\x12\x1c\n" +
 	"\x18MESSAGE_TYPE_UNSPECIFIED\x10\x00\x12\v\n" +
 	"\aSIGNALS\x10\x01\x12\x19\n" +
@@ -117,14 +117,14 @@ const file_wayplatform_mbz_v1_message_type_proto_rawDesc = "" +
 	"\fTRIP_SUMMARY\x10\x05\x12\x17\n" +
 	"\x13REFUELING_DETECTION\x10\x06\x12\x16\n" +
 	"\x12CHARGING_DETECTION\x10\a\x12\x1a\n" +
-	"\x16CHARGING_CYCLE_SUMMARY\x10\bB\xda\x01\n" +
-	"\x16com.wayplatform.mbz.v1B\x10MessageTypeProtoP\x01ZDgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/mbz/v1;mbzv1\xa2\x02\x03WMX\xaa\x02\x12Wayplatform.Mbz.V1\xca\x02\x12Wayplatform\\Mbz\\V1\xe2\x02\x1eWayplatform\\Mbz\\V1\\GPBMetadata\xea\x02\x14Wayplatform::Mbz::V1b\beditionsp\xe8\a"
+	"\x16CHARGING_CYCLE_SUMMARY\x10\bB\x8b\x02\n" +
+	"\x1ecom.wayplatform.connect.mbz.v1B\x10MessageTypeProtoP\x01ZLgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mbz/v1;mbzv1\xa2\x02\x03WCM\xaa\x02\x1aWayplatform.Connect.Mbz.V1\xca\x02\x1aWayplatform\\Connect\\Mbz\\V1\xe2\x02&Wayplatform\\Connect\\Mbz\\V1\\GPBMetadata\xea\x02\x1dWayplatform::Connect::Mbz::V1b\beditionsp\xe8\a"
 
-var file_wayplatform_mbz_v1_message_type_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_wayplatform_mbz_v1_message_type_proto_goTypes = []any{
-	(MessageType)(0), // 0: wayplatform.mbz.v1.MessageType
+var file_wayplatform_connect_mbz_v1_message_type_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_wayplatform_connect_mbz_v1_message_type_proto_goTypes = []any{
+	(MessageType)(0), // 0: wayplatform.connect.mbz.v1.MessageType
 }
-var file_wayplatform_mbz_v1_message_type_proto_depIdxs = []int32{
+var file_wayplatform_connect_mbz_v1_message_type_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
 	0, // [0:0] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -132,26 +132,26 @@ var file_wayplatform_mbz_v1_message_type_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_wayplatform_mbz_v1_message_type_proto_init() }
-func file_wayplatform_mbz_v1_message_type_proto_init() {
-	if File_wayplatform_mbz_v1_message_type_proto != nil {
+func init() { file_wayplatform_connect_mbz_v1_message_type_proto_init() }
+func file_wayplatform_connect_mbz_v1_message_type_proto_init() {
+	if File_wayplatform_connect_mbz_v1_message_type_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_wayplatform_mbz_v1_message_type_proto_rawDesc), len(file_wayplatform_mbz_v1_message_type_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_wayplatform_connect_mbz_v1_message_type_proto_rawDesc), len(file_wayplatform_connect_mbz_v1_message_type_proto_rawDesc)),
 			NumEnums:      1,
 			NumMessages:   0,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_wayplatform_mbz_v1_message_type_proto_goTypes,
-		DependencyIndexes: file_wayplatform_mbz_v1_message_type_proto_depIdxs,
-		EnumInfos:         file_wayplatform_mbz_v1_message_type_proto_enumTypes,
+		GoTypes:           file_wayplatform_connect_mbz_v1_message_type_proto_goTypes,
+		DependencyIndexes: file_wayplatform_connect_mbz_v1_message_type_proto_depIdxs,
+		EnumInfos:         file_wayplatform_connect_mbz_v1_message_type_proto_enumTypes,
 	}.Build()
-	File_wayplatform_mbz_v1_message_type_proto = out.File
-	file_wayplatform_mbz_v1_message_type_proto_goTypes = nil
-	file_wayplatform_mbz_v1_message_type_proto_depIdxs = nil
+	File_wayplatform_connect_mbz_v1_message_type_proto = out.File
+	file_wayplatform_connect_mbz_v1_message_type_proto_goTypes = nil
+	file_wayplatform_connect_mbz_v1_message_type_proto_depIdxs = nil
 }

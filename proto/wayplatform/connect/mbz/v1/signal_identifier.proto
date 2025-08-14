@@ -1,8 +1,8 @@
 edition = "2023";
 
-package wayplatform.mbz.v1;
+package wayplatform.connect.mbz.v1;
 
-import "wayplatform/mbz/v1/annotations.proto";
+import "wayplatform/connect/mbz/v1/annotations.proto";
 
 // SignalIdentifier is an enum of all known Mercedes-Benz Kafka message signal names.
 enum SignalIdentifier {

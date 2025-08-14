@@ -1,35 +1,35 @@
 edition = "2023";
 
-package wayplatform.mbz.v1;
+package wayplatform.connect.mbz.v1;
 
 import "google/protobuf/descriptor.proto";
-import "wayplatform/mbz/v1/signal_enum_value.proto";
-import "wayplatform/mbz/v1/signal_type.proto";
-import "wayplatform/mbz/v1/signal_unit.proto";
+import "wayplatform/connect/mbz/v1/signal_enum_value.proto";
+import "wayplatform/connect/mbz/v1/signal_type.proto";
+import "wayplatform/connect/mbz/v1/signal_unit.proto";
 
 extend google.protobuf.EnumValueOptions {
   // This enum options stores the exact string representation of a
   // Mercedes-Benz Kafka message signal name.
   //
   // Field number is the 28 most significant bits in the sha256 sum of
-  // `wayplatform.mbz.v1.signal_name`.
+  // `wayplatform.connect.mbz.v1.signal_name`.
   string signal_name = 128825699;
 
   // This enum options stores the type of a signal.
   //
   // Field number is the 28 most significant bits in the sha256 sum of
-  // `wayplatform.mbz.v1.signal_type`.
+  // `wayplatform.connect.mbz.v1.signal_type`.
   SignalType signal_type = 222389729;
 
   // This enum options stores the unit of a signal.
   //
   // Field number is the 28 most significant bits in the sha256 sum of
-  // `wayplatform.mbz.v1.signal_unit`.
+  // `wayplatform.connect.mbz.v1.signal_unit`.
   SignalUnit signal_unit = 56895283;
 
   // This enum options stores the values of an enum signal.
   //
   // Field number is the 28 most significant bits in the sha256 sum of
-  // `wayplatform.mbz.v1.signal_enum_value`.
+  // `wayplatform.connect.mbz.v1.signal_enum_value`.
   repeated SignalEnumValue signal_values = 46836650;
 }
