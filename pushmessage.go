@@ -44,17 +44,20 @@ func (m *PushMessage) AsProto() (*mbzv1.PushMessage, error) {
 	if err != nil {
 		return nil, err
 	}
+	var result mbzv1.PushMessage
+	result.SetMessageId(m.MessageID)
+	result.SetTime(time.UnixMilli(m.Timestamp).UTC().Format(time.RFC3339Nano))
+	result.SetVersion(m.Version)
+	if messageType != mbzv1.MessageType_SIGNALS {
+		// TODO: Handle more message types correctly.
+		return &result, nil
+	}
+	result.SetVin(m.VIN)
+	result.SetServiceId(m.ServiceID)
 	sendingBehavior, err := sendingBehaviorToProto(m.SendingBehaviour)
 	if err != nil {
 		return nil, err
 	}
-	var result mbzv1.PushMessage
-	result.SetMessageId(m.MessageID)
-	result.SetVin(m.VIN)
-	result.SetTime(time.UnixMilli(m.Timestamp).UTC().Format(time.RFC3339Nano))
-	result.SetMessageType(messageType)
-	result.SetVersion(m.Version)
-	result.SetServiceId(m.ServiceID)
 	result.SetSendingBehavior(sendingBehavior)
 	switch messageType {
 	case mbzv1.MessageType_SIGNALS:
