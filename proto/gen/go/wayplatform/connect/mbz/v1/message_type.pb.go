@@ -53,6 +53,9 @@ const (
 	// A vehicle's charging cycle summary message reports signals that were computed
 	// and/or aggregated while the battery was charged.
 	MessageType_CHARGING_CYCLE_SUMMARY MessageType = 8
+	// A vehicle command response message contains the status of a command as well as meta data that provides context information.
+	// For every service and every command a separate message is sent.
+	MessageType_COMMAND_RESPONSE MessageType = 9
 )
 
 // Enum value maps for MessageType.
@@ -67,6 +70,7 @@ var (
 		6: "REFUELING_DETECTION",
 		7: "CHARGING_DETECTION",
 		8: "CHARGING_CYCLE_SUMMARY",
+		9: "COMMAND_RESPONSE",
 	}
 	MessageType_value = map[string]int32{
 		"MESSAGE_TYPE_UNSPECIFIED":   0,
@@ -78,6 +82,7 @@ var (
 		"REFUELING_DETECTION":        6,
 		"CHARGING_DETECTION":         7,
 		"CHARGING_CYCLE_SUMMARY":     8,
+		"COMMAND_RESPONSE":           9,
 	}
 )
 
@@ -107,7 +112,7 @@ var File_wayplatform_connect_mbz_v1_message_type_proto protoreflect.FileDescript
 
 const file_wayplatform_connect_mbz_v1_message_type_proto_rawDesc = "" +
 	"\n" +
-	"-wayplatform/connect/mbz/v1/message_type.proto\x12\x1awayplatform.connect.mbz.v1*\xed\x01\n" +
+	"-wayplatform/connect/mbz/v1/message_type.proto\x12\x1awayplatform.connect.mbz.v1*\x83\x02\n" +
 	"\vMessageType\x12\x1c\n" +
 	"\x18MESSAGE_TYPE_UNSPECIFIED\x10\x00\x12\v\n" +
 	"\aSIGNALS\x10\x01\x12\x19\n" +
@@ -117,7 +122,8 @@ const file_wayplatform_connect_mbz_v1_message_type_proto_rawDesc = "" +
 	"\fTRIP_SUMMARY\x10\x05\x12\x17\n" +
 	"\x13REFUELING_DETECTION\x10\x06\x12\x16\n" +
 	"\x12CHARGING_DETECTION\x10\a\x12\x1a\n" +
-	"\x16CHARGING_CYCLE_SUMMARY\x10\bB\x8b\x02\n" +
+	"\x16CHARGING_CYCLE_SUMMARY\x10\b\x12\x14\n" +
+	"\x10COMMAND_RESPONSE\x10\tB\x8b\x02\n" +
 	"\x1ecom.wayplatform.connect.mbz.v1B\x10MessageTypeProtoP\x01ZLgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mbz/v1;mbzv1\xa2\x02\x03WCM\xaa\x02\x1aWayplatform.Connect.Mbz.V1\xca\x02\x1aWayplatform\\Connect\\Mbz\\V1\xe2\x02&Wayplatform\\Connect\\Mbz\\V1\\GPBMetadata\xea\x02\x1dWayplatform::Connect::Mbz::V1b\beditionsp\xe8\a"
 
 var file_wayplatform_connect_mbz_v1_message_type_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
