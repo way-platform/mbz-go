@@ -9,6 +9,7 @@ import (
 	"log/slog"
 	"os"
 	"os/signal"
+	"strings"
 
 	"github.com/charmbracelet/fang"
 	"github.com/charmbracelet/lipgloss/v2"
@@ -70,6 +71,7 @@ func newRootCommand() *cobra.Command {
 	cmd.AddCommand(newDeleteVehiclesCommand())
 	cmd.AddCommand(newGetVehicleCompatibilityCommand())
 	cmd.AddCommand(newGetVehicleServicesCommand())
+	cmd.AddCommand(newPostVehicleServicesCommand())
 	cmd.AddCommand(newEnableDeltaPushCommand())
 	cmd.AddCommand(newDisableDeltaPushCommand())
 	cmd.AddGroup(&cobra.Group{
@@ -222,6 +224,45 @@ func newGetVehicleServicesCommand() *cobra.Command {
 		}
 		response, err := client.GetVehicleServices(cmd.Context(), &mbz.GetVehicleServicesRequest{
 			VIN: args[0],
+		})
+		if err != nil {
+			return err
+		}
+		printJSON(response)
+		return nil
+	}
+	return cmd
+}
+
+func newPostVehicleServicesCommand() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "post-vehicle-services",
+		Short:   "Post vehicle services",
+		GroupID: "vehicles",
+		Args:    cobra.MinimumNArgs(3),
+	}
+	cmd.RunE = func(cmd *cobra.Command, args []string) error {
+		client, err := auth.NewClient()
+		if err != nil {
+			return err
+		}
+		services := make([]mbz.VehicleServices, 0)
+		for i := 1; i < len(args); i += 2 {
+			if strings.ToLower(args[i+1]) != "active" && strings.ToLower(args[i+1]) != "inactive" {
+				return fmt.Errorf("invalid desired status: %s", args[i+1])
+			}
+			services = append(services, mbz.VehicleServices{
+				ServiceID:     args[i],
+				DesiredStatus: mbz.DesiredStatus(strings.ToUpper(args[i+1])),
+			})
+		}
+		response, err := client.PostVehicleServices(cmd.Context(), &mbz.PostVehicleServicesRequest{
+			DesiredServiceStatusInput: []mbz.DesiredServiceStatusInput{
+				{
+					VIN:      args[0],
+					Services: services,
+				},
+			},
 		})
 		if err != nil {
 			return err
