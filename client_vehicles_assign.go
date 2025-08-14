@@ -20,7 +20,10 @@ type AssignVehiclesRequest struct {
 type AssignVehiclesResponse struct{}
 
 // AssignVehicles lists the vehicles for the current account.
-func (c *Client) AssignVehicles(ctx context.Context, request *AssignVehiclesRequest) (_ *AssignVehiclesResponse, err error) {
+func (c *Client) AssignVehicles(
+	ctx context.Context,
+	request *AssignVehiclesRequest,
+) (_ *AssignVehiclesResponse, err error) {
 	defer func() {
 		if err != nil {
 			err = fmt.Errorf("mbz: assign vehicles: %w", err)
@@ -36,7 +39,13 @@ func (c *Client) AssignVehicles(ctx context.Context, request *AssignVehiclesRequ
 	if err != nil {
 		return nil, err
 	}
-	httpRequest, err := c.newRequest(ctx, http.MethodPost, "/v1/accounts/vehicles", bytes.NewReader(requestBodyData))
+	httpRequest, err := c.newRequest(
+		ctx,
+		http.MethodPost,
+		"/v1/accounts/vehicles",
+		bytes.NewReader(requestBodyData),
+	)
+	httpRequest.Header.Set("Content-Type", "application/json")
 	if err != nil {
 		return nil, err
 	}
