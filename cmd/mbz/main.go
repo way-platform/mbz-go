@@ -56,13 +56,6 @@ func newRootCommand() *cobra.Command {
 		Short: "Mercedes-Benz Management API CLI",
 	}
 	cmd.AddGroup(&cobra.Group{
-		ID:    "auth",
-		Title: "Authentication",
-	})
-	authCmd := auth.NewCommand()
-	authCmd.GroupID = "auth"
-	cmd.AddCommand(authCmd)
-	cmd.AddGroup(&cobra.Group{
 		ID:    "vehicles",
 		Title: "Vehicles",
 	})
@@ -84,6 +77,13 @@ func newRootCommand() *cobra.Command {
 		Title: "Services",
 	})
 	cmd.AddCommand(newListServicesCommand())
+	cmd.AddGroup(&cobra.Group{
+		ID:    "auth",
+		Title: "Authentication",
+	})
+	authCmd := auth.NewCommand()
+	authCmd.GroupID = "auth"
+	cmd.AddCommand(authCmd)
 	cmd.AddGroup(&cobra.Group{
 		ID:    "utils",
 		Title: "Utils",
