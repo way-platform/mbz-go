@@ -2,6 +2,7 @@ edition = "2023";
 
 package wayplatform.connect.mbz.v1;
 
+import "google/protobuf/timestamp.proto";
 import "wayplatform/connect/mbz/v1/signal_identifier.proto";
 import "wayplatform/connect/mbz/v1/signal_type.proto";
 import "wayplatform/connect/mbz/v1/signal_unit.proto";
@@ -11,8 +12,8 @@ message Signal {
   // The identifier of the signal.
   SignalIdentifier id = 1;
 
-  // The timestamp of the signal (RFC3339).
-  string time = 2;
+  // The timestamp of the signal.
+  google.protobuf.Timestamp time = 2;
 
   // The type of the signal.
   SignalType type = 3;

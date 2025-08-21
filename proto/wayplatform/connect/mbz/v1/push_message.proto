@@ -2,6 +2,7 @@ edition = "2023";
 
 package wayplatform.connect.mbz.v1;
 
+import "google/protobuf/timestamp.proto";
 import "wayplatform/connect/mbz/v1/message_type.proto";
 import "wayplatform/connect/mbz/v1/sending_behavior.proto";
 import "wayplatform/connect/mbz/v1/signal.proto";
@@ -14,8 +15,8 @@ message PushMessage {
   // Vehicle identification number (VIN).
   string vin = 2;
 
-  // Time when the message was created (RFC3339).
-  string time = 3;
+  // Time when the message was created.
+  google.protobuf.Timestamp time = 3;
 
   // Message type.
   MessageType message_type = 4;

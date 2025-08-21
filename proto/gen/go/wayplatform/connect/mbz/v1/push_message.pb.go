@@ -9,6 +9,7 @@ package mbzv1
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	unsafe "unsafe"
 )
@@ -25,7 +26,7 @@ type PushMessage struct {
 	state                      protoimpl.MessageState `protogen:"opaque.v1"`
 	xxx_hidden_MessageId       *string                `protobuf:"bytes,1,opt,name=message_id,json=messageId"`
 	xxx_hidden_Vin             *string                `protobuf:"bytes,2,opt,name=vin"`
-	xxx_hidden_Time            *string                `protobuf:"bytes,3,opt,name=time"`
+	xxx_hidden_Time            *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=time"`
 	xxx_hidden_MessageType     MessageType            `protobuf:"varint,4,opt,name=message_type,json=messageType,enum=wayplatform.connect.mbz.v1.MessageType"`
 	xxx_hidden_Version         *string                `protobuf:"bytes,5,opt,name=version"`
 	xxx_hidden_ServiceId       *string                `protobuf:"bytes,6,opt,name=service_id,json=serviceId"`
@@ -82,14 +83,11 @@ func (x *PushMessage) GetVin() string {
 	return ""
 }
 
-func (x *PushMessage) GetTime() string {
+func (x *PushMessage) GetTime() *timestamppb.Timestamp {
 	if x != nil {
-		if x.xxx_hidden_Time != nil {
-			return *x.xxx_hidden_Time
-		}
-		return ""
+		return x.xxx_hidden_Time
 	}
-	return ""
+	return nil
 }
 
 func (x *PushMessage) GetMessageType() MessageType {
@@ -149,9 +147,8 @@ func (x *PushMessage) SetVin(v string) {
 	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 1, 8)
 }
 
-func (x *PushMessage) SetTime(v string) {
-	x.xxx_hidden_Time = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 2, 8)
+func (x *PushMessage) SetTime(v *timestamppb.Timestamp) {
+	x.xxx_hidden_Time = v
 }
 
 func (x *PushMessage) SetMessageType(v MessageType) {
@@ -196,7 +193,7 @@ func (x *PushMessage) HasTime() bool {
 	if x == nil {
 		return false
 	}
-	return protoimpl.X.Present(&(x.XXX_presence[0]), 2)
+	return x.xxx_hidden_Time != nil
 }
 
 func (x *PushMessage) HasMessageType() bool {
@@ -238,7 +235,6 @@ func (x *PushMessage) ClearVin() {
 }
 
 func (x *PushMessage) ClearTime() {
-	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 2)
 	x.xxx_hidden_Time = nil
 }
 
@@ -269,8 +265,8 @@ type PushMessage_builder struct {
 	MessageId *string
 	// Vehicle identification number (VIN).
 	Vin *string
-	// Time when the message was created (RFC3339).
-	Time *string
+	// Time when the message was created.
+	Time *timestamppb.Timestamp
 	// Message type.
 	MessageType *MessageType
 	// Version tag for the message.
@@ -295,10 +291,7 @@ func (b0 PushMessage_builder) Build() *PushMessage {
 		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 1, 8)
 		x.xxx_hidden_Vin = b.Vin
 	}
-	if b.Time != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 2, 8)
-		x.xxx_hidden_Time = b.Time
-	}
+	x.xxx_hidden_Time = b.Time
 	if b.MessageType != nil {
 		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 3, 8)
 		x.xxx_hidden_MessageType = *b.MessageType
@@ -323,12 +316,12 @@ var File_wayplatform_connect_mbz_v1_push_message_proto protoreflect.FileDescript
 
 const file_wayplatform_connect_mbz_v1_push_message_proto_rawDesc = "" +
 	"\n" +
-	"-wayplatform/connect/mbz/v1/push_message.proto\x12\x1awayplatform.connect.mbz.v1\x1a-wayplatform/connect/mbz/v1/message_type.proto\x1a1wayplatform/connect/mbz/v1/sending_behavior.proto\x1a'wayplatform/connect/mbz/v1/signal.proto\"\xed\x02\n" +
+	"-wayplatform/connect/mbz/v1/push_message.proto\x12\x1awayplatform.connect.mbz.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a-wayplatform/connect/mbz/v1/message_type.proto\x1a1wayplatform/connect/mbz/v1/sending_behavior.proto\x1a'wayplatform/connect/mbz/v1/signal.proto\"\x89\x03\n" +
 	"\vPushMessage\x12\x1d\n" +
 	"\n" +
 	"message_id\x18\x01 \x01(\tR\tmessageId\x12\x10\n" +
-	"\x03vin\x18\x02 \x01(\tR\x03vin\x12\x12\n" +
-	"\x04time\x18\x03 \x01(\tR\x04time\x12J\n" +
+	"\x03vin\x18\x02 \x01(\tR\x03vin\x12.\n" +
+	"\x04time\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\x04time\x12J\n" +
 	"\fmessage_type\x18\x04 \x01(\x0e2'.wayplatform.connect.mbz.v1.MessageTypeR\vmessageType\x12\x18\n" +
 	"\aversion\x18\x05 \x01(\tR\aversion\x12\x1d\n" +
 	"\n" +
@@ -339,20 +332,22 @@ const file_wayplatform_connect_mbz_v1_push_message_proto_rawDesc = "" +
 
 var file_wayplatform_connect_mbz_v1_push_message_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_wayplatform_connect_mbz_v1_push_message_proto_goTypes = []any{
-	(*PushMessage)(nil),  // 0: wayplatform.connect.mbz.v1.PushMessage
-	(MessageType)(0),     // 1: wayplatform.connect.mbz.v1.MessageType
-	(SendingBehavior)(0), // 2: wayplatform.connect.mbz.v1.SendingBehavior
-	(*Signal)(nil),       // 3: wayplatform.connect.mbz.v1.Signal
+	(*PushMessage)(nil),           // 0: wayplatform.connect.mbz.v1.PushMessage
+	(*timestamppb.Timestamp)(nil), // 1: google.protobuf.Timestamp
+	(MessageType)(0),              // 2: wayplatform.connect.mbz.v1.MessageType
+	(SendingBehavior)(0),          // 3: wayplatform.connect.mbz.v1.SendingBehavior
+	(*Signal)(nil),                // 4: wayplatform.connect.mbz.v1.Signal
 }
 var file_wayplatform_connect_mbz_v1_push_message_proto_depIdxs = []int32{
-	1, // 0: wayplatform.connect.mbz.v1.PushMessage.message_type:type_name -> wayplatform.connect.mbz.v1.MessageType
-	2, // 1: wayplatform.connect.mbz.v1.PushMessage.sending_behavior:type_name -> wayplatform.connect.mbz.v1.SendingBehavior
-	3, // 2: wayplatform.connect.mbz.v1.PushMessage.signals:type_name -> wayplatform.connect.mbz.v1.Signal
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	1, // 0: wayplatform.connect.mbz.v1.PushMessage.time:type_name -> google.protobuf.Timestamp
+	2, // 1: wayplatform.connect.mbz.v1.PushMessage.message_type:type_name -> wayplatform.connect.mbz.v1.MessageType
+	3, // 2: wayplatform.connect.mbz.v1.PushMessage.sending_behavior:type_name -> wayplatform.connect.mbz.v1.SendingBehavior
+	4, // 3: wayplatform.connect.mbz.v1.PushMessage.signals:type_name -> wayplatform.connect.mbz.v1.Signal
+	4, // [4:4] is the sub-list for method output_type
+	4, // [4:4] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_wayplatform_connect_mbz_v1_push_message_proto_init() }
