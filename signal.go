@@ -8,6 +8,7 @@ import (
 
 	mbzv1 "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mbz/v1"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type VehicleSignalData struct {
@@ -49,7 +50,7 @@ func (s *Signal) AsProto() (*mbzv1.Signal, error) {
 	}
 	var result mbzv1.Signal
 	result.SetId(identifier)
-	result.SetTime(time.UnixMilli(s.Timestamp).UTC().Format(time.RFC3339Nano))
+	result.SetTime(timestamppb.New(time.UnixMilli(s.Timestamp).UTC()))
 	signalType, ok := proto.GetExtension(
 		identifier.Descriptor().Values().ByNumber(identifier.Number()).Options(),
 		mbzv1.E_SignalType,

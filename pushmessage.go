@@ -7,6 +7,7 @@ import (
 
 	"github.com/way-platform/mbz-go/api/servicesv1"
 	mbzv1 "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mbz/v1"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 // PushMessage represents a push message.
@@ -46,7 +47,7 @@ func (m *PushMessage) AsProto() (*mbzv1.PushMessage, error) {
 	}
 	var result mbzv1.PushMessage
 	result.SetMessageId(m.MessageID)
-	result.SetTime(time.UnixMilli(m.Timestamp).UTC().Format(time.RFC3339Nano))
+	result.SetTime(timestamppb.New(time.UnixMilli(m.Timestamp).UTC()))
 	result.SetVersion(m.Version)
 	if messageType != mbzv1.MessageType_SIGNALS {
 		// TODO: Handle more message types correctly.

@@ -9,6 +9,7 @@ package mbzv1
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	unsafe "unsafe"
 )
@@ -24,7 +25,7 @@ const (
 type Signal struct {
 	state                  protoimpl.MessageState `protogen:"opaque.v1"`
 	xxx_hidden_Id          SignalIdentifier       `protobuf:"varint,1,opt,name=id,enum=wayplatform.connect.mbz.v1.SignalIdentifier"`
-	xxx_hidden_Time        *string                `protobuf:"bytes,2,opt,name=time"`
+	xxx_hidden_Time        *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=time"`
 	xxx_hidden_Type        SignalType             `protobuf:"varint,3,opt,name=type,enum=wayplatform.connect.mbz.v1.SignalType"`
 	xxx_hidden_StringValue *string                `protobuf:"bytes,4,opt,name=string_value,json=stringValue"`
 	xxx_hidden_IntValue    int32                  `protobuf:"varint,5,opt,name=int_value,json=intValue"`
@@ -72,14 +73,11 @@ func (x *Signal) GetId() SignalIdentifier {
 	return SignalIdentifier_SIGNAL_IDENTIFIER_UNSPECIFIED
 }
 
-func (x *Signal) GetTime() string {
+func (x *Signal) GetTime() *timestamppb.Timestamp {
 	if x != nil {
-		if x.xxx_hidden_Time != nil {
-			return *x.xxx_hidden_Time
-		}
-		return ""
+		return x.xxx_hidden_Time
 	}
-	return ""
+	return nil
 }
 
 func (x *Signal) GetType() SignalType {
@@ -146,9 +144,8 @@ func (x *Signal) SetId(v SignalIdentifier) {
 	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 0, 9)
 }
 
-func (x *Signal) SetTime(v string) {
-	x.xxx_hidden_Time = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 1, 9)
+func (x *Signal) SetTime(v *timestamppb.Timestamp) {
+	x.xxx_hidden_Time = v
 }
 
 func (x *Signal) SetType(v SignalType) {
@@ -197,7 +194,7 @@ func (x *Signal) HasTime() bool {
 	if x == nil {
 		return false
 	}
-	return protoimpl.X.Present(&(x.XXX_presence[0]), 1)
+	return x.xxx_hidden_Time != nil
 }
 
 func (x *Signal) HasType() bool {
@@ -255,7 +252,6 @@ func (x *Signal) ClearId() {
 }
 
 func (x *Signal) ClearTime() {
-	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 1)
 	x.xxx_hidden_Time = nil
 }
 
@@ -299,8 +295,8 @@ type Signal_builder struct {
 
 	// The identifier of the signal.
 	Id *SignalIdentifier
-	// The timestamp of the signal (RFC3339).
-	Time *string
+	// The timestamp of the signal.
+	Time *timestamppb.Timestamp
 	// The type of the signal.
 	Type *SignalType
 	// The string value of the signal (valid for string signals).
@@ -325,10 +321,7 @@ func (b0 Signal_builder) Build() *Signal {
 		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 0, 9)
 		x.xxx_hidden_Id = *b.Id
 	}
-	if b.Time != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 1, 9)
-		x.xxx_hidden_Time = b.Time
-	}
+	x.xxx_hidden_Time = b.Time
 	if b.Type != nil {
 		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 2, 9)
 		x.xxx_hidden_Type = *b.Type
@@ -364,10 +357,10 @@ var File_wayplatform_connect_mbz_v1_signal_proto protoreflect.FileDescriptor
 
 const file_wayplatform_connect_mbz_v1_signal_proto_rawDesc = "" +
 	"\n" +
-	"'wayplatform/connect/mbz/v1/signal.proto\x12\x1awayplatform.connect.mbz.v1\x1a2wayplatform/connect/mbz/v1/signal_identifier.proto\x1a,wayplatform/connect/mbz/v1/signal_type.proto\x1a,wayplatform/connect/mbz/v1/signal_unit.proto\"\xf3\x02\n" +
+	"'wayplatform/connect/mbz/v1/signal.proto\x12\x1awayplatform.connect.mbz.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a2wayplatform/connect/mbz/v1/signal_identifier.proto\x1a,wayplatform/connect/mbz/v1/signal_type.proto\x1a,wayplatform/connect/mbz/v1/signal_unit.proto\"\x8f\x03\n" +
 	"\x06Signal\x12<\n" +
-	"\x02id\x18\x01 \x01(\x0e2,.wayplatform.connect.mbz.v1.SignalIdentifierR\x02id\x12\x12\n" +
-	"\x04time\x18\x02 \x01(\tR\x04time\x12:\n" +
+	"\x02id\x18\x01 \x01(\x0e2,.wayplatform.connect.mbz.v1.SignalIdentifierR\x02id\x12.\n" +
+	"\x04time\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\x04time\x12:\n" +
 	"\x04type\x18\x03 \x01(\x0e2&.wayplatform.connect.mbz.v1.SignalTypeR\x04type\x12!\n" +
 	"\fstring_value\x18\x04 \x01(\tR\vstringValue\x12\x1b\n" +
 	"\tint_value\x18\x05 \x01(\x05R\bintValue\x12!\n" +
@@ -381,20 +374,22 @@ const file_wayplatform_connect_mbz_v1_signal_proto_rawDesc = "" +
 
 var file_wayplatform_connect_mbz_v1_signal_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_wayplatform_connect_mbz_v1_signal_proto_goTypes = []any{
-	(*Signal)(nil),        // 0: wayplatform.connect.mbz.v1.Signal
-	(SignalIdentifier)(0), // 1: wayplatform.connect.mbz.v1.SignalIdentifier
-	(SignalType)(0),       // 2: wayplatform.connect.mbz.v1.SignalType
-	(SignalUnit)(0),       // 3: wayplatform.connect.mbz.v1.SignalUnit
+	(*Signal)(nil),                // 0: wayplatform.connect.mbz.v1.Signal
+	(SignalIdentifier)(0),         // 1: wayplatform.connect.mbz.v1.SignalIdentifier
+	(*timestamppb.Timestamp)(nil), // 2: google.protobuf.Timestamp
+	(SignalType)(0),               // 3: wayplatform.connect.mbz.v1.SignalType
+	(SignalUnit)(0),               // 4: wayplatform.connect.mbz.v1.SignalUnit
 }
 var file_wayplatform_connect_mbz_v1_signal_proto_depIdxs = []int32{
 	1, // 0: wayplatform.connect.mbz.v1.Signal.id:type_name -> wayplatform.connect.mbz.v1.SignalIdentifier
-	2, // 1: wayplatform.connect.mbz.v1.Signal.type:type_name -> wayplatform.connect.mbz.v1.SignalType
-	3, // 2: wayplatform.connect.mbz.v1.Signal.unit:type_name -> wayplatform.connect.mbz.v1.SignalUnit
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	2, // 1: wayplatform.connect.mbz.v1.Signal.time:type_name -> google.protobuf.Timestamp
+	3, // 2: wayplatform.connect.mbz.v1.Signal.type:type_name -> wayplatform.connect.mbz.v1.SignalType
+	4, // 3: wayplatform.connect.mbz.v1.Signal.unit:type_name -> wayplatform.connect.mbz.v1.SignalUnit
+	4, // [4:4] is the sub-list for method output_type
+	4, // [4:4] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_wayplatform_connect_mbz_v1_signal_proto_init() }
