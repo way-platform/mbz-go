@@ -32,13 +32,16 @@ type GetVehicleCompatibilityResponse struct {
 }
 
 // GetVehicleCompatibility gets the compatibility of a vehicle.
-func (c *Client) GetVehicleCompatibility(ctx context.Context, request *GetVehicleCompatibilityRequest) (_ *GetVehicleCompatibilityResponse, err error) {
+func (c *Client) GetVehicleCompatibility(
+	ctx context.Context,
+	request *GetVehicleCompatibilityRequest,
+) (_ *GetVehicleCompatibilityResponse, err error) {
 	defer func() {
 		if err != nil {
 			err = fmt.Errorf("mbz: get vehicle compatibility: %w", err)
 		}
 	}()
-	httpRequest, err := c.newRequest(ctx, http.MethodGet, "/v1/accounts/vehicles/"+request.VIN+"/compatibilites", nil)
+	httpRequest, err := c.newRequest(ctx, http.MethodGet, "/v1/accounts/vehicles/"+request.VIN+"/compatibilities", nil)
 	if err != nil {
 		return nil, err
 	}
