@@ -1,0 +1,36 @@
+overlay: 1.0.0
+
+info:
+  title: Overlay for Mercedes-Benz Push API v1
+  version: 1.0.0
+
+actions:
+  - target: $.components.schemas
+    description: "Add Seat.Seatbelt.Front.Right.IsBuckledUp"
+    update:
+      vehiclesignalsevent:
+        properties:
+          data:
+            properties:
+              signals:
+                items:
+                  - $ref: "#/components/schemas/Seat.Seatbelt.Front.Right.IsBuckledUp"
+      Seat.Seatbelt.Front.Right.IsBuckledUp:
+        type: object
+        description: 'Seat.Seatbelt.Front.Right.IsBuckledUp
+
+          Buckled up, set "true" indicate´s that the buckle switch is closed, buckled up set "false" indicates that buckle switch is open.'
+        properties:
+          name:
+            type: string
+            const: Seat.Seatbelt.Front.Right.IsBuckledUp
+          timestamp:
+            $ref: "#/components/schemas/timestamp"
+          value:
+            type: string
+            enum:
+              - "true"
+              - "false"
+          type:
+            type: string
+            const: boolean
