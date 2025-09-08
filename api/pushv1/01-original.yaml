@@ -1,0 +1,4491 @@
+asyncapi: 2.0.0
+info:
+  title: Push API
+  version: '1.0'
+  description: 'The Push API allows you to receive vehicle signals and vehicle command
+    responses for the active services of your vehicles.
+
+    From a technical point of view, a service is used to activate or deactivate a
+    data package and/or commands for a vehicle. Each data package contains a set of
+    vehicle signals or a vehicle command response.
+
+    Some of the provided signals require optional equipment in the vehicle, such as
+    tire pressure sensors or anti theft equipment. In case equipment is not available,
+    the signals can not be sent by the vehicle.
+
+    Please note, not all services, data signals and commands are available for every
+    vehicle and all countries.
+
+    '
+servers:
+  production:
+    url: bootstrap.streaming.connect-business.net
+    protocol: kafka
+    description: Push API Broker instance
+    variables:
+      port:
+        description: Secure connection (TLS) is available through port 443.
+        default: '443'
+defaultContentType: application/json
+channels:
+  vehiclesignals.{clientId}:
+    description: Name of the topic to receive command responses and vehicle signals,
+      bundled according to the activated services.
+    parameters:
+      clientId:
+        $ref: '#/components/parameters/clientId'
+    subscribe:
+      summary: Replace the {clientId} with the client id you received during the onboarding
+        procedure. Every client has his dedicated topic. The messages are kept for
+        24 hours.
+      operationId: vehiclesignals
+      traits:
+        - $ref: '#/components/operationTraits/kafka'
+      message:
+        oneOf:
+          - $ref: '#/components/messages/vehicle_command_response'
+          - $ref: '#/components/messages/vehiclesignal'
+          - $ref: '#/components/messages/vehicle_registration_response'
+          - $ref: '#/components/messages/vehicle_service_status_update'
+          - $ref: '#/components/messages/vehicle_service_activation_pending'
+          - $ref: '#/components/messages/vehicle_trip_summary'
+          - $ref: '#/components/messages/refueling_detection'
+          - $ref: '#/components/messages/charging_detection'
+          - $ref: '#/components/messages/charging_cycle_summary'
+components:
+  messages:
+    vehicle_command_response:
+      name: vehicle_command_response
+      title: Vehicle Command Response - Message
+      summary: A vehicle command response message contains the status of a command
+        as well as meta data that provides context information. For every service
+        and every command a separate message is sent.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/vehicle_command_response'
+    vehiclesignal:
+      name: vehiclesignal
+      title: Vehiclesignal - Message
+      summary: A vehicle signal message contains the vehicle signals as well as meta
+        data providing context information. It contains the signals belonging to a
+        specific service and for every service a separate message is sent. The example
+        message in the example section is a super set and contains all supported vehicle
+        signals. It is provided for documentation purposes only. As mentioned before,
+        one message contains only vehicle signals for one service.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/vehiclesignalsevent'
+    vehicle_registration_response:
+      name: vehicle_registration_response
+      title: Vehicle Registration Response - Message
+      summary: A vehicle registration response message reports whether a vehicle has
+        been registered successfully or whether the registration has failed.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/vehicle_registration_response'
+    vehicle_service_status_update:
+      name: vehicle_service_status_update
+      title: Vehicle Service Status Update - Message
+      summary: A vehicle service status update message reports whether service status
+        has changed.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/vehicle_service_status_update'
+    vehicle_service_activation_pending:
+      name: vehicle_service_activation_pending
+      title: Vehicle Service Activation Pending - Message
+      summary: A notification message if the service status of a vehicle is in ACTIVATION_PENDING state for more than 28 days.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/vehicle_service_activation_pending'
+    vehicle_trip_summary:
+      name: vehicle_trip_summary
+      title: Vehicle Trip Summary - Message
+      summary: "A vehicle's trip summary message reports signals that were computed and/or aggregated during a trip."
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/vehicle_trip_summary"
+    refueling_detection:
+      name: refueling_detection
+      title: Vehicle Refueling Detection - Message
+      summary: "A vehicle's refueling detection message reports signals that were computed and/or aggregated after the vehicle has been refueled."
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/refueling_detection"
+    charging_detection:
+      name: charging_detection
+      title: Vehicle Recharging Detection - Message
+      summary: "A vehicle's recharging detection message reports signals that were computed and/or aggregated after the vehicle has been charging for a certain amount of time."
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/charging_detection"
+    charging_cycle_summary:
+      name: charging_cycle_summary
+      title: Vehicle Charging Cycle Summary - Message
+      summary: "A vehicle's charging cycle summary message reports signals that were computed and/or aggregated while the battery was charged."
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/charging_cycle_summary"
+  schemas:
+    vehicle_command_response:
+      type: object
+      description: This schema describes the structure of a vehicle command response
+        message.
+      required:
+        - messageId
+        - vin
+        - timestamp
+        - messageType
+        - version
+        - serviceId
+        - sendingBehaviour
+        - data
+      properties:
+        messageId:
+          type: string
+          description: A unique message identifier (UUID) to identify and track each
+            message independently.
+          minLength: 36
+          maxLength: 36
+          examples:
+            - 12876bd0-c211-49c3-ade1-ee755cfc7525
+        vin:
+          type: string
+          description: The VIN (Vehicle Identification Number) of the vehicle for
+            which an event has been pushed.
+          minLength: 17
+          maxLength: 17
+          pattern: (?<VIN>[A-HJ-NPR-Z0-9]{13}\d{4})
+          examples:
+            - WDD2130481A123456
+        timestamp:
+          $ref: '#/components/schemas/timestampEvent'
+        messageType:
+          type: string
+          description: The type of the event. Determines the structure of the "data"
+            field.
+          examples:
+            - vehicle_command_response
+        version:
+          type: string
+          description: The version of the event schema.
+          default: '1'
+        serviceId:
+          type: string
+          description: The service id of the service the response content belongs to.
+          examples:
+            - '1011'
+        sendingBehaviour:
+          type: string
+          description: Describes the sending behaviour of the event. Sending behaviour
+            is not used for command responses.
+          enum:
+            - NA
+        data:
+          type: object
+          description: The data payload of the event.
+          properties:
+            commands:
+              type: array
+              description: This array provides the commands executed on the vehicle
+                in the context of a certain service.
+              items:
+                - $ref: '#/components/schemas/CommandResponse'
+    CommandResponse:
+      type: object
+      description: 'CommandResponse
+
+
+        Current status of a command execution for a specific vehicle and service as
+        indicated by the "commandState" field.'
+      required:
+        - command
+        - commandState
+        - commandTrackingId
+        - timestamp
+      properties:
+        command:
+          type: string
+          description: The name of the command.
+          examples:
+            - doors-lock
+            - doors-unlock
+        commandState:
+          type: string
+          description: "The state of the command, registered by the system at the\
+            \ \"timestamp\" field provided below:\n * ACCEPTED - The initial state\
+            \ of a command after the basic preliminary checks succeeded and it is\
+            \ sent to the vehicle.\n * FAILED - The command execution was not successful.\
+            \ It may or may not have had an effect on the vehicle. More information\
+            \ can be found in \"errors\" field.\n * SUCCESSFUL - The command was successfully\
+            \ executed on the vehicle.\n"
+          enum:
+            - ACCEPTED
+            - FAILED
+            - SUCCESSFUL
+        commandTrackingId:
+          type: string
+          description: A unique identifier (UUID) to identify and track command executions.
+            Obtained by the command request.
+          minLength: 36
+          maxLength: 36
+          examples:
+            - f1b2f9f2-adce-48cf-aa7e-531fbdf2a96b
+        errors:
+          type: array
+          description: In case of a FAILED "commandState" contains all errors that
+            occurred during the command execution.
+          items:
+            - $ref: '#/components/schemas/CommandResponseError'
+        timestamp:
+          $ref: '#/components/schemas/timestampCommandResponse'
+    CommandResponseError:
+      type: object
+      description: 'CommandResponseError
+
+
+        Represents an error occurred during command execution, either due to the vehicle
+        or within the system.'
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          description: The system specific, functional error code.
+          examples:
+            - '4002'
+            - '500'
+        message:
+          type: string
+          description: The error detail message.
+          examples:
+            - Failed due to door is open
+            - Internal Server Error
+    timestampEvent:
+      type: integer
+      format: int64
+      description: UTC timestamp (in milliseconds) when the message was created in
+        the backend.
+      minLength: 13
+      maxLength: 13
+      examples:
+        - 1592853849159
+    timestampCommandResponse:
+      type: integer
+      format: int64
+      description: UTC timestamp (in milliseconds) when the command state was registered
+        by the system.
+      minLength: 13
+      maxLength: 13
+      examples:
+        - 1592853849159
+    vehiclesignalsevent:
+      type: object
+      description: This schema describes the structure of a vehicle signal message.
+      required:
+        - messageId
+        - vin
+        - timestamp
+        - messageType
+        - version
+        - serviceId
+        - sendingBehaviour
+        - data
+      properties:
+        messageId:
+          $ref: '#/components/schemas/messageId'
+        vin:
+          $ref: '#/components/schemas/vin'
+        timestamp:
+          $ref: '#/components/schemas/timestampEvent'
+        messageType:
+          type: string
+          description: The type of the event.
+          examples:
+            - vehiclesignal
+        version:
+          $ref: '#/components/schemas/version'
+        serviceId:
+          type: string
+          description: The service id of the service the signals belong to.
+          examples:
+            - '1001'
+            - '1002'
+            - '1003'
+            - '1004'
+            - '1005'
+            - '1006'
+            - '1007'
+            - '1009'
+            - '1010'
+            - '1013'
+            - '1014'
+            - '1015'
+            - '1017'
+            - '1018'
+            - '1019'
+        sendingBehaviour:
+          type: string
+          description: 'Describes the sending behaviour of the event. An event can
+            be triggered either if a value of an "ON_CHANGE" signal has been changed
+            or if the respective time interval of an "ON_INTERVAL_*" signal has passed.
+            
+            In case you activated the delta push behaviour for a vehicle, "ON_REFRESH" will be the 
+            default for the majority of signals that have an "ON_INTERVAL_120_SEC" behaviour without delta push.
+
+            * ON_CHANGE = The signal is published as soon as its value changes and
+            the delivery is technically possible.
+
+
+            * ON_REFRESH = The signal is published as soon as as its value or its timestamp changes (only available with delta push).
+
+
+            * ON_INTERVAL_120_SEC = The signal is published at regular intervals of
+            120 seconds, if available.
+
+
+            * ON_INTERVAL_30_SEC = The signal is published at regular intervals of
+            30 seconds, if available.
+
+
+            * ON_INTERVAL_15_SEC = The signal is published at regular intervals of
+            15 seconds, if available.
+
+
+            * ON_IGNITION_LOCK = The signal is published when the ignition lock is detected for a vehicle.
+
+
+            * ON_TRIP_END = The signal is published when the end of a trip is detected for a vehicle and all other trip-related signals have been received for said vehicle.
+
+
+            * ON_REFUELING_END = The signal is published when the refueling of a vehicle with combustion engine has finished.
+
+
+            * ON_CHARGING_CYCLE_END = The signal is published when the end of a charging cycle is detected.
+
+
+            * ON_CHARGING_DETECTION = The signal is published as soon as the charging process of the battery of an electrical or hybrid vehicle has been active for a set duration.
+            '
+          enum:
+            - ON_INTERVAL_120_SEC
+            - ON_INTERVAL_30_SEC
+            - ON_INTERVAL_15_SEC
+            - ON_CHANGE
+            - ON_REFRESH
+            - ON_IGNITION_LOCK
+            - ON_TRIP_END
+            - ON_REFUELING_END
+            - ON_CHARGING_CYCLE_END
+            - ON_CHARGING_DETECTION
+        data:
+          type: object
+          description: The data payload of the event.
+          properties:
+            signals:
+              type: array
+              description: This array provides all signals sent by the vehicle in
+                the context of a certain service.
+              items:
+                - $ref: '#/components/schemas/AntiTheftSystem.Alarm.IsActive'
+                - $ref: '#/components/schemas/AntiTheftSystem.Alarm.IsTriggered'
+                - $ref: '#/components/schemas/AntiTheftSystem.LastTheftWarning.Reason'
+                - $ref: '#/components/schemas/AntiTheftSystem.ProtectionSensors.InteriorProtection.IsActive'
+                - $ref: '#/components/schemas/AntiTheftSystem.ProtectionSensors.InteriorProtection.IsTriggered'
+                - $ref: '#/components/schemas/AntiTheftSystem.ProtectionSensors.TowProtection.IsActive'
+                - $ref: '#/components/schemas/AntiTheftSystem.ProtectionSensors.TowProtection.IsTriggered'
+                - $ref: '#/components/schemas/Brakes.Brakefluid.Warning'
+                - $ref: '#/components/schemas/Brakes.Brakepads.PreWarning'
+                - $ref: '#/components/schemas/Brakes.Brakepads.Warning'
+                - $ref: '#/components/schemas/Brakes.Parkbrake.IsEngaged'
+                - $ref: '#/components/schemas/Doors.Front.Left.IsLocked'
+                - $ref: '#/components/schemas/Doors.Front.Left.IsOpen'
+                - $ref: '#/components/schemas/Doors.Front.Right.IsLocked'
+                - $ref: '#/components/schemas/Doors.Front.Right.IsOpen'
+                - $ref: '#/components/schemas/Doors.Rear.Left.IsLocked'
+                - $ref: '#/components/schemas/Doors.Rear.Left.IsOpen'
+                - $ref: '#/components/schemas/Doors.Rear.Right.IsLocked'
+                - $ref: '#/components/schemas/Doors.Rear.Right.IsOpen'
+                - $ref: '#/components/schemas/Doors.Rooftop.IsOpen'
+                - $ref: '#/components/schemas/Doors.Sunroof.Event'
+                - $ref: '#/components/schemas/Doors.Sunroof.Status'
+                - $ref: '#/components/schemas/Doors.Tankcap.IsOpen'
+                - $ref: '#/components/schemas/Doors.Trunk.IsLocked'
+                - $ref: '#/components/schemas/Doors.Trunk.IsOpen'
+                - $ref: '#/components/schemas/Doors.Vehicle.IsLocked'
+                - $ref: '#/components/schemas/Driving.Consumption.Electrical.SinceReset'
+                - $ref: '#/components/schemas/Driving.Consumption.Electrical.SinceStart'
+                - $ref: '#/components/schemas/Driving.Consumption.Fuel.SinceReset'
+                - $ref: '#/components/schemas/Driving.Consumption.Fuel.SinceStart'
+                - $ref: '#/components/schemas/Driving.Distance.SinceReset'
+                - $ref: '#/components/schemas/Driving.Distance.SinceStart'
+                - $ref: '#/components/schemas/Driving.Distance.ZeroEmissions.SinceReset'
+                - $ref: '#/components/schemas/Driving.Distance.ZeroEmissions.SinceStart'
+                - $ref: '#/components/schemas/Driving.EcoScore.Acceleration'
+                - $ref: '#/components/schemas/Driving.EcoScore.BonusRange'
+                - $ref: '#/components/schemas/Driving.EcoScore.Constancy'
+                - $ref: '#/components/schemas/Driving.EcoScore.Freewheel'
+                - $ref: '#/components/schemas/Driving.Odometer.Lifetime'
+                - $ref: '#/components/schemas/Driving.Odometer.Lifetime.HighResolution'
+                - $ref: '#/components/schemas/Driving.Range.AdBlue'
+                - $ref: '#/components/schemas/Driving.Range.Electrical'
+                - $ref: '#/components/schemas/Driving.Range.Electrical.Max'
+                - $ref: '#/components/schemas/Driving.Range.Fuel'
+                - $ref: '#/components/schemas/Driving.Range.Fuel.Warning'
+                - $ref: '#/components/schemas/Driving.Speed.Current'
+                - $ref: '#/components/schemas/Driving.Speed.SinceReset.Average'
+                - $ref: '#/components/schemas/Driving.Speed.SinceStart.Average'
+                - $ref: '#/components/schemas/Driving.StateOfCharge.Departure'
+                - $ref: '#/components/schemas/Driving.Status'
+                - $ref: '#/components/schemas/Driving.Time.SinceReset'
+                - $ref: '#/components/schemas/Driving.Time.SinceStart'
+                - $ref: '#/components/schemas/Driving.Time.ZeroEmissions.SinceReset'
+                - $ref: '#/components/schemas/Driving.Time.ZeroEmissions.SinceStart'
+                - $ref: '#/components/schemas/Driving.Acceleration.Latitude.NegativeAccelerationOutliers'
+                - $ref: '#/components/schemas/Driving.Acceleration.Latitude.PositiveAccelerationOutliers'
+                - $ref: '#/components/schemas/Driving.Acceleration.Latitude.RegularAccelerations'
+                - $ref: '#/components/schemas/Driving.Acceleration.Longitude.NegativeAccelerationOutliers'
+                - $ref: '#/components/schemas/Driving.Acceleration.Longitude.PositiveAccelerationOutliers'
+                - $ref: '#/components/schemas/Driving.Acceleration.Longitude.RegularAccelerations'
+                - $ref: '#/components/schemas/ElectricalDrive.Charging.ACCoupler.Status'
+                - $ref: '#/components/schemas/ElectricalDrive.Charging.DCCoupler.Status'
+                - $ref: '#/components/schemas/ElectricalDrive.Charging.EndOfChargingTime'
+                - $ref: '#/components/schemas/ElectricalDrive.Charging.EndOfChargingTimeWeekday'
+                - $ref: '#/components/schemas/ElectricalDrive.Charging.IsActive'
+                - $ref: '#/components/schemas/ElectricalDrive.Charging.NextDepartureTime'
+                - $ref: '#/components/schemas/ElectricalDrive.Charging.NextDepartureTimeWeekday'
+                - $ref: '#/components/schemas/ElectricalDrive.Charging.Power'
+                - $ref: '#/components/schemas/ElectricalDrive.Charging.SmartCharging.Status'
+                - $ref: '#/components/schemas/ElectricalDrive.Charging.Status'
+                - $ref: '#/components/schemas/ElectricalDrive.Charging.SelectedChargeProgram'
+                - $ref: '#/components/schemas/ElectricalDrive.Charging.ChargeProgram.Home.MaximumStateOfCharge'
+                - $ref: '#/components/schemas/ElectricalDrive.Charging.ChargeProgram.Default.MaximumStateOfCharge'
+                - $ref: '#/components/schemas/ElectricalDrive.Charging.ChargeProgram.Work.MaximumStateOfCharge'
+                - $ref: '#/components/schemas/ElectricalDrive.HighVoltageBattery.StateOfCharge'
+                - $ref: '#/components/schemas/Ignition.Status'
+                - $ref: '#/components/schemas/Immobilizer.Keys.AllDeprovisioned'
+                - $ref: '#/components/schemas/InternalCombustionEngine.Coolant.Level.Warning'
+                - $ref: '#/components/schemas/InternalCombustionEngine.Coolant.Temperature'
+                - $ref: '#/components/schemas/InternalCombustionEngine.LimpMode.IsActive'
+                - $ref: '#/components/schemas/InternalCombustionEngine.Oil.Level'
+                - $ref: '#/components/schemas/InternalCombustionEngine.Oil.Level.Warning'
+                - $ref: '#/components/schemas/Lights.Interior.Front.IsOn'
+                - $ref: '#/components/schemas/Lights.Interior.Readinglamp.Front.Left.IsOn'
+                - $ref: '#/components/schemas/Lights.Interior.Readinglamp.Front.Right.IsOn'
+                - $ref: '#/components/schemas/Lights.Interior.Rear.IsOn'
+                - $ref: '#/components/schemas/Lights.Lightswitch.Status'
+                - $ref: '#/components/schemas/Parking.Parkevent.LastParkevent.Time'
+                - $ref: '#/components/schemas/Parking.Parkevent.Level'
+                - $ref: '#/components/schemas/Parking.Parkevent.Type'
+                - $ref: '#/components/schemas/Position.LastKnown.Heading'
+                - $ref: '#/components/schemas/Position.LastKnown.Latitude'
+                - $ref: '#/components/schemas/Position.LastKnown.Longitude'
+                - $ref: '#/components/schemas/Preconditioning.ScheduledTime'
+                - $ref: '#/components/schemas/Preconditioning.IsActive'
+                - $ref: '#/components/schemas/Preconditioning.RemainingRuntime'
+                - $ref: '#/components/schemas/Service.Interval.Distance'
+                - $ref: '#/components/schemas/Service.Interval.Time'
+                - $ref: '#/components/schemas/Service.Warning.Status'
+                - $ref: '#/components/schemas/Seat.Seatbelt.Front.Left.IsBuckledUp'
+                - $ref: '#/components/schemas/SupplyBattery.Status'
+                - $ref: '#/components/schemas/SupplyBattery.Voltage'
+                - $ref: '#/components/schemas/SupplyBattery.Warning'
+                - $ref: '#/components/schemas/Tank.AdBlue.Level'
+                - $ref: '#/components/schemas/Tank.Fuel.Level'
+                - $ref: '#/components/schemas/Tank.Fuel.Level.Absolute'
+                - $ref: '#/components/schemas/Tank.Fuel.Level.Warning'
+                - $ref: '#/components/schemas/Tank.WashWater.Level.Warning'
+                - $ref: '#/components/schemas/Tires.Front.Left.Pressure'
+                - $ref: '#/components/schemas/Tires.Front.Left.Warning'
+                - $ref: '#/components/schemas/Tires.Front.Left.Warning.Status'
+                - $ref: '#/components/schemas/Tires.Front.Right.Pressure'
+                - $ref: '#/components/schemas/Tires.Front.Right.Warning'
+                - $ref: '#/components/schemas/Tires.Front.Right.Warning.Status'
+                - $ref: '#/components/schemas/Tires.Rear.Left.Pressure'
+                - $ref: '#/components/schemas/Tires.Rear.Left.Warning'
+                - $ref: '#/components/schemas/Tires.Rear.Left.Warning.Status'
+                - $ref: '#/components/schemas/Tires.Rear.Right.Pressure'
+                - $ref: '#/components/schemas/Tires.Rear.Right.Warning'
+                - $ref: '#/components/schemas/Tires.Rear.Right.Warning.Status'
+                - $ref: '#/components/schemas/Vehicle.Clock.Time.UTC.Offset'
+                - $ref: '#/components/schemas/Windows.Front.Left.IsOpen'
+                - $ref: '#/components/schemas/Windows.Front.Right.IsOpen'
+                - $ref: '#/components/schemas/Windows.Rear.Left.IsOpen'
+                - $ref: '#/components/schemas/Windows.Rear.Right.IsOpen'
+    vehicle_registration_response:
+      type: object
+      description: This schema describes the structure of a vehicle registration response
+        message.
+      required:
+        - messageId
+        - timestamp
+        - vin
+        - messageType
+        - version
+        - data
+      properties:
+        messageId:
+          $ref: '#/components/schemas/messageId'
+        timestamp:
+          $ref: '#/components/schemas/timestampEvent'
+        vin:
+          $ref: '#/components/schemas/vin'
+        messageType:
+          type: string
+          description: The type of the event.
+          examples:
+            - vehicle_registration_response
+        version:
+          $ref: '#/components/schemas/version'
+        data:
+          type: object
+          description: The data payload of the event.
+          properties:
+            state:
+              type: string
+              description: 'A SUCCESSFUL state means that service activations are
+                now possible.
+
+                A FAILED state means that service activations are not possible.
+
+                '
+              enum:
+                - SUCCESSFUL
+                - FAILED
+              example: FAILED
+            errors:
+              type: array
+              description: "If the state is SUCCESSFUL the errors array will be empty.\
+                \ \nIf the state is FAILED the errors array will contain a single\
+                \ error object.\n"
+              items:
+                oneOf:
+                  - $ref: '#/components/schemas/VIN_REGISTRATION_NOT_POSSIBLE'
+                  - $ref: '#/components/schemas/VIN_REGISTRATION_FAILED'
+              example:
+                - code: VIN_REGISTRATION_NOT_POSSIBLE
+                  message: VIN cannot be registered
+    vehicle_service_status_update:
+      type: object
+      description: This schema describes the structure of a vehicle service status
+        update message.
+      required:
+        - messageId
+        - timestamp
+        - vin
+        - messageType
+        - version
+        - data
+      properties:
+        messageId:
+          $ref: '#/components/schemas/messageId'
+        timestamp:
+          $ref: '#/components/schemas/timestampEvent'
+        vin:
+          $ref: '#/components/schemas/vin'
+        messageType:
+          type: string
+          description: The type of the event.
+          examples:
+            - vehicle_service_status_update
+        version:
+          $ref: '#/components/schemas/version'
+        data:
+          type: object
+          description: The data payload of the event.
+          properties:
+            services:
+              type: array
+              description: This array contains all services whose status has been
+                changed.
+              items:
+                - $ref: '#/components/schemas/service_status_update'
+    vehicle_service_activation_pending:
+      type: object
+      description: This schema describes the structure of a vehicle service activation pending message.
+      required:
+        - messageId
+        - timestamp
+        - vin
+        - messageType
+        - version
+        - data
+      properties:
+        messageId:
+          $ref: '#/components/schemas/messageId'
+        timestamp:
+          $ref: '#/components/schemas/timestampEvent'
+        vin:
+          $ref: '#/components/schemas/vin'
+        messageType:
+          type: string
+          description: The type of the event.
+          examples:
+            - vehicle_service_activation_pending
+        version:
+          $ref: '#/components/schemas/version'
+        data:
+          type: object
+          description: The data payload of the event.
+          properties:
+            services:
+              type: array
+              description: This array contains all services that have been in the ACTIVATION_PENDING state for more than 28 days.
+              items:
+                - $ref: '#/components/schemas/service_activation_pending'
+    vehicle_trip_summary:
+      type: object
+      description: This schema describes the structure of a vehicle's trip summary message.
+      required:
+        - messageId
+        - timestamp
+        - vin
+        - serviceId
+        - messageType
+        - sendingBehaviour
+        - version
+        - data
+      properties:
+        messageId:
+          $ref: "#/components/schemas/messageId"
+        timestamp:
+          $ref: "#/components/schemas/timestampEvent"
+        vin:
+          $ref: "#/components/schemas/vin"
+        serviceId:
+          type: string
+          description: The service id of the service the signals belong to.
+        messageType:
+          type: string
+          description: The type of the event.
+          examples: [ "vehicletrip" ]
+        version:
+          $ref: "#/components/schemas/version"
+        sendingBehaviour:
+          type: string
+          description: Describes the sending behaviour of the event.
+          examples: [ "ON_TRIP_END" ]
+        data:
+          type: object
+          description: The data payload of the event.
+          required:
+            - tripSummary
+          properties:
+            tripSummary:
+              type: object
+              description: The trip summary payload event.
+              required:
+                - tripId
+                - tripAttributes
+              properties:
+                tripId:
+                  type: string
+                  description: A unique ID for the trip.
+                tripAttributes:
+                  type: array
+                  description: All signals related to the trip.
+                  items:
+                    - $ref: "#/components/schemas/Trip.Start.Time"
+                    - $ref: "#/components/schemas/Trip.End.Time"
+                    - $ref: "#/components/schemas/Trip.Start.Odometer"
+                    - $ref: "#/components/schemas/Trip.End.Odometer"
+                    - $ref: "#/components/schemas/Trip.Distance.Total"
+                    - $ref: "#/components/schemas/Trip.Start.Odometer.HighResolution"
+                    - $ref: "#/components/schemas/Trip.End.Odometer.HighResolution"
+                    - $ref: "#/components/schemas/Trip.Distance.Total.HighResolution"
+                    - $ref: "#/components/schemas/Trip.Start.Position.Latitude"
+                    - $ref: "#/components/schemas/Trip.Start.Position.Longitude"
+                    - $ref: "#/components/schemas/Trip.End.Position.Latitude"
+                    - $ref: "#/components/schemas/Trip.End.Position.Longitude"
+                    - $ref: "#/components/schemas/Trip.IdleTime.Total"
+            idlingSessions:
+              type: array
+              description: All information for idling sessions during a trip.
+              items:
+                type: object
+                properties:
+                  Idling.Start.Time:
+                    type: integer
+                    format: int64
+                    description: UTC timestamp (in milliseconds) when the idling session started.
+                    minLength: 13
+                    maxLength: 13
+                    examples:
+                      - 1592853849159
+                  Idling.End.Time:
+                    type: integer
+                    format: int64
+                    description: UTC timestamp (in milliseconds) when the idling session ended.
+                    minLength: 13
+                    maxLength: 13
+                    examples:
+                      - 1592853850159
+                  Idling.Duration.Milliseconds:
+                    type: integer
+                    format: int64
+                    description: Duration in milliseconds of the idling session.
+                    minLength: 0
+                    examples:
+                      - 40000
+                required:
+                  - Idling.Start.Time
+                  - Idling.End.Time
+                  - Idling.Duration.Milliseconds
+
+    refueling_detection:
+      type: object
+      description: This schema describes the structure of a vehicle's refuel detection message.
+      required:
+        - messageId
+        - timestamp
+        - vin
+        - serviceId
+        - messageType
+        - sendingBehaviour
+        - version
+        - data
+      properties:
+        messageId:
+          $ref: "#/components/schemas/messageId"
+        timestamp:
+          $ref: "#/components/schemas/timestampEvent"
+        vin:
+          $ref: "#/components/schemas/vin"
+        serviceId:
+          type: string
+          description: The service id of the service the signals belong to.
+          const: "1025"
+        messageType:
+          type: string
+          description: The type of the event.
+          const: "refueling_detection"
+        sendingBehaviour:
+          type: string
+          const: "ON_REFUELING_END"
+        version:
+          $ref: "#/components/schemas/version"
+        data:
+          type: object
+          description: The data payload of the event.
+          required:
+            - refuelingDetection
+          properties:
+            refuelingDetection:
+              type: object
+              description: The refueling detection payload event.
+              required:
+                - refuelingDetectionAttributes
+              properties:
+                refuelingDetectionAttributes:
+                  type: array
+                  description: All signals related to the refueling.
+                  items:
+                    allOf:
+                      - $ref: "#/components/schemas/Refueling.Start.Time"
+                      - $ref: "#/components/schemas/Refueling.End.Time"
+                      - $ref: "#/components/schemas/Refueling.Odometer"
+
+    charging_detection:
+      type: object
+      description: This schema describes the structure of a vehicle's charging detection message.
+      required:
+        - messageId
+        - timestamp
+        - vin
+        - serviceId
+        - messageType
+        - sendingBehaviour
+        - version
+        - data
+      properties:
+        messageId:
+          $ref: "#/components/schemas/messageId"
+        timestamp:
+          $ref: "#/components/schemas/timestampEvent"
+        vin:
+          $ref: "#/components/schemas/vin"
+        serviceId:
+          type: string
+          description: The service id of the service the signals belong to.
+          const: "1025"
+        messageType:
+          type: string
+          description: The type of the event.
+          const: "charging_detection"
+        sendingBehaviour:
+          type: string
+          const: "ON_CHARGING_DETECTION"
+        version:
+          $ref: "#/components/schemas/version"
+        data:
+          type: object
+          description: The data payload of the event.
+          required:
+            - chargingDetection
+          properties:
+            chargingDetection:
+              type: object
+              description: The recharge detection payload event.
+              required:
+                - chargingDetectionAttributes
+              properties:
+                chargingDetectionAttributes:
+                  type: array
+                  description: All signals related to the detected charging.
+                  items:
+                    allOf:
+                      - $ref: "#/components/schemas/Charging.Start.Time"
+                      - $ref: "#/components/schemas/Charging.Odometer"
+
+    charging_cycle_summary:
+      type: object
+      description: This schema describes the structure of a vehicle's charging cycle summary message.
+      required:
+        - messageId
+        - timestamp
+        - vin
+        - serviceId
+        - messageType
+        - sendingBehaviour
+        - version
+        - data
+      properties:
+        messageId:
+          $ref: "#/components/schemas/messageId"
+        timestamp:
+          $ref: "#/components/schemas/timestampEvent"
+        vin:
+          $ref: "#/components/schemas/vin"
+        serviceId:
+          type: string
+          description: The service id of the service the signals belong to.
+          const: "1028"
+        messageType:
+          type: string
+          description: The type of the event.
+          const: "charging_cycle_summary"
+        sendingBehaviour:
+          type: string
+          const: "ON_CHARGING_CYCLE_END"
+        version:
+          $ref: "#/components/schemas/version"
+        data:
+          type: object
+          description: The data payload of the event.
+          required:
+            - chargingCycleSummary
+          properties:
+            chargingCycleSummary:
+              type: object
+              description: The refueling detection payload event.
+              required:
+                - chargingCycleId
+                - chargingCycleAttributes
+              properties:
+                chargingCycleId:
+                  type: string
+                  description: A unique ID for the trip.
+                chargingCycleAttributes:
+                  type: array
+                  description: All signals related to the charging cycle.
+                  items:
+                    allOf:
+                      - $ref: "#/components/schemas/ChargingCycle.Start.Time"
+                      - $ref: "#/components/schemas/ChargingCycle.Start.HighVoltageBattery.StateOfCharge"
+                      - $ref: "#/components/schemas/ChargingCycle.End.Time"
+                      - $ref: "#/components/schemas/ChargingCycle.End.HighVoltageBattery.StateOfCharge"
+                      - $ref: "#/components/schemas/ChargingCycle.Energy.Total"
+                      - $ref: "#/components/schemas/ChargingCycle.Charging.Duration.Total"
+
+    Driving.Odometer.Lifetime:
+      type: object
+      description: 'Driving.Odometer.Lifetime
+
+
+        Lifetime odometer value of vehicle in kilometer (km).'
+      properties:
+        name:
+          type: string
+          const: Driving.Odometer.Lifetime
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '112'
+            - '54621'
+            - '320152'
+        type:
+          type: string
+          const: integer
+
+    Driving.Odometer.Lifetime.HighResolution:
+      type: object
+      description: 'Driving.Odometer.Lifetime.HighResolution
+
+
+        Lifetime odometer high resolution value of vehicle in kilometer (km). The value is provided in 0.1km resolution'
+      properties:
+        name:
+          type: string
+          const: Driving.Odometer.Lifetime.HighResolution
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples: ["112.1", "54621.3", "320152.0"]
+        type:
+          type: string
+          const: double
+    Ignition.Status:
+      type: object
+      description: 'Ignition.Status
+
+
+        Status of the ignition.
+
+        * LOCK = head unit, communication and engine are off. State is given, when
+        the vehicle door is opened after usage
+
+        * OFF = engine is off and steering wheel is unlocked
+
+        * ACCESSORY = accessories in vehicle are usable, head unit is on
+
+        * ON = all systems and the engine are on
+
+        * START = intermediate step between ACCESSORY and ON, starting the engine'
+      properties:
+        name:
+          type: string
+          const: Ignition.Status
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - LOCK
+            - 'OFF'
+            - ACCESSORY
+            - 'ON'
+            - START
+        type:
+          type: string
+          const: string
+    Immobilizer.Keys.AllDeprovisioned:
+      type: object
+      description: 'Immobilizer.Keys.AllDeprovisioned
+
+
+        Activation state of the vehicle keys. This signal is not available in AMAP
+        region.'
+      properties:
+        name:
+          type: string
+          const: Immobilizer.Keys.AllDeprovisioned
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'false'
+            - 'true'
+        type:
+          type: string
+          const: boolean
+    Driving.Consumption.Electrical.SinceReset:
+      type: object
+      description: 'Driving.Consumption.Electrical.SinceReset
+
+
+        Electric energy consumption since reset in kilowatt-hours per 100 kilometer
+        (kWh/100km). The value refers to the time a trip session was reset using the
+        vehicles board computer. Only available for electric vehicles.'
+      properties:
+        name:
+          type: string
+          const: Driving.Consumption.Electrical.SinceReset
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '512.21'
+            - '194.42'
+        type:
+          type: string
+          const: double
+    Driving.Consumption.Electrical.SinceStart:
+      type: object
+      description: 'Driving.Consumption.Electrical.SinceStart
+
+
+        Electric energy consumption from start in kilowatt-hours per 100 kilometer
+        (kWh/100km). The value refers to time the ignition is turned on. Ignition-on
+        starts a new trip session, unless the last ignition-off event took place within
+        the last 4 hours. The data is aggregated in a 4 hour interval. Only available
+        for electric vehicles.'
+      properties:
+        name:
+          type: string
+          const: Driving.Consumption.Electrical.SinceStart
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '512.21'
+            - '194.42'
+        type:
+          type: string
+          const: double
+    Driving.Consumption.Fuel.SinceReset:
+      type: object
+      description: 'Driving.Consumption.Fuel.SinceReset
+
+
+        Liquid fuel consumption from reset in liter per 100 kilometer (l/100km). The
+        value refers to the time a trip session was reset using the vehicles board
+        computer.'
+      properties:
+        name:
+          type: string
+          const: Driving.Consumption.Fuel.SinceReset
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '5.37'
+            - '12.41'
+        type:
+          type: string
+          const: double
+    Driving.Consumption.Fuel.SinceStart:
+      type: object
+      description: 'Driving.Consumption.Fuel.SinceStart
+
+
+        Liquid fuel consumption from start in liter per 100 kilometer (l/100km). The
+        value refers to the time the ignition is turned on. Ignition-on starts a new
+        trip session, unless the last ignition-off event took place within the last
+        4 hours. The data is aggregated in a 4 hour interval.'
+      properties:
+        name:
+          type: string
+          const: Driving.Consumption.Fuel.SinceStart
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '5.37'
+            - '12.41'
+        type:
+          type: string
+          const: double
+    Driving.Range.Electrical:
+      type: object
+      description: 'Driving.Range.Electrical
+
+
+        Remaining range using electric engine in kilometer (km). Only available for
+        electric & plug-in hybrid vehicles.'
+      properties:
+        name:
+          type: string
+          const: Driving.Range.Electrical
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '187'
+            - '250'
+        type:
+          type: string
+          const: integer
+    Driving.Range.Electrical.Max:
+      type: object
+      description: 'Driving.Range.Electrical.Max
+
+
+        Maximum electrical range when battery is fully charged (100% state of charge)
+        in kilometer (km). This can vary depending on the environmental situation,
+        e.g. outside temperature. Only available for electric & plug-in hybrid vehicles.'
+      properties:
+        name:
+          type: string
+          const: Driving.Range.Electrical.Max
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '187'
+            - '250'
+        type:
+          type: string
+          const: integer
+    Driving.Range.Fuel:
+      type: object
+      description: 'Driving.Range.Fuel
+
+
+        Remaining range using liquid fuel in kilometer (km).'
+      properties:
+        name:
+          type: string
+          const: Driving.Range.Fuel
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '92'
+            - '380'
+            - '420'
+        type:
+          type: string
+          const: integer
+    Driving.Range.Fuel.Warning:
+      type: object
+      description: 'Driving.Range.Fuel.Warning
+
+
+        Indicates whether the remaining range with liquid fuel is critical.'
+      properties:
+        name:
+          type: string
+          const: Driving.Range.Fuel.Warning
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'false'
+            - 'true'
+        type:
+          type: string
+          const: boolean
+    SupplyBattery.Status:
+      type: object
+      description: 'SupplyBattery.Status
+
+
+        Provides the "charging health status" of the 12V starter battery. With each
+        battery state change, the battery sends a signal update. When the battery
+        state changes from ORANGE to RED, the battery sends a last hick-up signal,
+        telling the state is RED now.
+
+
+        * GREEN = ok
+
+        * GREENYELLOW = battery partly discharged but ok
+
+        * YELLOW = battery partly discharged, battery should be charged by driving
+        the vehicle to avoid loosing functionality
+
+        * ORANGE = battery is now in saving mode, remote commands are not possible
+        anymore, battery should be charged by driving the vehicle
+
+        * RED = vehicle engine will not start anymore, battery must be charged using
+        an external system'
+      properties:
+        name:
+          type: string
+          const: SupplyBattery.Status
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - GREEN
+            - YELLOW
+            - RED
+            - ORANGE
+            - GREENYELLOW
+        type:
+          type: string
+          const: string
+    Tank.AdBlue.Level:
+      type: object
+      description: 'Tank.AdBlue.Level
+
+
+        AdBlue tank level in percent (%).'
+      properties:
+        name:
+          type: string
+          const: Tank.AdBlue.Level
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '10'
+            - '47'
+            - '75'
+        type:
+          type: string
+          const: integer
+    Tank.Fuel.Level:
+      type: object
+      description: 'Tank.Fuel.Level
+
+
+        Liquid fuel tank level in percent (%).'
+      properties:
+        name:
+          type: string
+          const: Tank.Fuel.Level
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '10'
+            - '47'
+            - '75'
+        type:
+          type: string
+          const: integer
+    Tank.Fuel.Level.Absolute:
+      type: object
+      description: 'Tank.Fuel.Level.Absolute
+
+
+        Liquid fuel tank level in liter.'
+      properties:
+        name:
+          type: string
+          const: Tank.Fuel.Level.Absolute
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '0'
+            - '42'
+            - '100'
+          minimum: 0
+          maximum: 100
+        type:
+          type: string
+          const: integer
+    Driving.Range.AdBlue:
+      type: object
+      description: 'Driving.Range.AdBlue
+
+
+        Remaining range of AdBlue in kilometer (km).'
+      properties:
+        name:
+          type: string
+          const: Driving.Range.AdBlue
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '75'
+            - '480'
+            - '868'
+        type:
+          type: string
+          const: integer
+    Tank.Fuel.Level.Warning:
+      type: object
+      description: 'Tank.Fuel.Level.Warning
+
+
+        Indicates whether a warning for the liquid fuel level is triggered.'
+      properties:
+        name:
+          type: string
+          const: Tank.Fuel.Level.Warning
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'false'
+            - 'true'
+        type:
+          type: string
+          const: boolean
+    ElectricalDrive.Charging.IsActive:
+      type: object
+      description: 'ElectricalDrive.Charging.IsActive
+
+
+        Indicates whether the charging of the high voltage battery is active.'
+      properties:
+        name:
+          type: string
+          const: ElectricalDrive.Charging.IsActive
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'false'
+            - 'true'
+        type:
+          type: string
+          const: boolean
+    ElectricalDrive.Charging.NextDepartureTime:
+      type: object
+      description: 'ElectricalDrive.Charging.NextDepartureTime
+
+
+        Scheduled time for the nextDeparture while charging in minutes from midnight
+        depending on the local time of the vehicle. Only available for electric vehicles.'
+      properties:
+        name:
+          type: string
+          const: ElectricalDrive.Charging.NextDepartureTime
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '130'
+            - '245'
+          minimum: -1
+          maximum: 1439
+        type:
+          type: string
+          const: integer
+    ElectricalDrive.Charging.NextDepartureTimeWeekday:
+      type: object
+      description: 'ElectricalDrive.Charging.NextDepartureTimeWeekday
+
+
+        Scheduled weekday for the nextDeparture while charging. Only available for electric vehicles.
+
+        * NOT_SET
+
+        * MONDAY
+
+        * TUESDAY
+
+        * WEDNESDAY
+
+        * THURSDAY
+
+        * FRIDAY
+
+        * SATURDAY
+
+        * SUNDAY'
+      properties:
+        name:
+          type: string
+          const: ElectricalDrive.Charging.NextDepartureTimeWeekday
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - NOT_SET
+            - MONDAY
+            - TUESDAY
+            - WEDNESDAY
+            - THURSDAY
+            - FRIDAY
+            - SATURDAY
+            - SUNDAY
+        type:
+          type: string
+          const: string
+    ElectricalDrive.Charging.Power:
+      type: object
+      description: 'ElectricalDrive.Charging.Power
+
+
+        Current conductive charging power in kilowatts (kW). This value is only valid
+        while charging. Only available for electric & plug-in hybrid vehicles.'
+      properties:
+        name:
+          type: string
+          const: ElectricalDrive.Charging.Power
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '122.4'
+            - '48.1'
+        type:
+          type: string
+          const: double
+    ElectricalDrive.Charging.Status:
+      type: object
+      description: 'ElectricalDrive.Charging.Status
+
+
+        Provides the charging status of the high voltage battery. Only available for
+        electric & plug-in hybrid vehicles.
+
+
+        * CHARGING = currently charging
+
+        * END = end of charging
+
+        * BREAK = charge break
+
+        * CABLE_UNPLUGGED = charge cable unplugged
+
+        * ERROR = charging error
+
+        * SLOW = slow charging
+
+        * FAST = fast charging
+
+        * DISCHARGING = discharging
+
+        * NONE = no charging
+
+        * CHARGING_FOREIGN_OBJECT = charging a forein object'
+      properties:
+        name:
+          type: string
+          const: ElectricalDrive.Charging.Status
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - CHARGING
+            - END
+            - BREAK
+            - CABLE_UNPLUGGED
+            - ERROR
+            - SLOW
+            - FAST
+            - DISCHARGING
+            - NONE
+            - CHARGING_FOREIGN_OBJECT
+        type:
+          type: string
+          const: string
+    ElectricalDrive.Charging.SelectedChargeProgram:
+      type: object
+      description: 'ElectricalDrive.Charging.SelectedChargeProgram
+      
+      
+        The charge program type selected in the vehicle. Only available for
+        electric & plug-in hybrid vehicles with charge program support.
+        
+        * DEFAULT
+        
+        * INSTANT
+        
+        * HOME
+        
+        * WORK'
+      properties:
+        name:
+          type: string
+          const: ElectricalDrive.Charging.SelectedChargeProgram
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - DEFAULT
+            - INSTANT
+            - HOME
+            - WORK
+        type:
+          type: string
+          const: string
+    ElectricalDrive.Charging.ChargeProgram.Default.MaximumStateOfCharge:
+      type: object
+      description: 'ElectricalDrive.Charging.ChargeProgram.Default.MaximumStateOfCharge
+
+
+        The maximum state of charge configured for the charge program type **Default** in the vehicle. 
+        The battery will not be charged above this value when the Default charge program is active. 
+        Only available for electric & plug-in hybrid vehicles with charge program support.'
+      properties:
+        name:
+          type: string
+          const: ElectricalDrive.Charging.ChargeProgram.Default.MaximumStateOfCharge
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '80'
+            - '90'
+        type:
+          type: string
+          const: integer
+    ElectricalDrive.Charging.ChargeProgram.Home.MaximumStateOfCharge:
+      type: object
+      description: 'ElectricalDrive.Charging.ChargeProgram.Home.MaximumStateOfCharge
+
+
+        The maximum state of charge configured for the charge program type **Home** in the vehicle. 
+        The battery will not be charged above this value when the Home charge program is active. 
+        Only available for electric & plug-in hybrid vehicles with charge program support.'
+      properties:
+        name:
+          type: string
+          const: ElectricalDrive.Charging.ChargeProgram.Home.MaximumStateOfCharge
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '80'
+            - '90'
+        type:
+          type: string
+          const: integer
+    ElectricalDrive.Charging.ChargeProgram.Work.MaximumStateOfCharge:
+      type: object
+      description: 'ElectricalDrive.Charging.ChargeProgram.Work.MaximumStateOfCharge
+
+
+        The maximum state of charge configured for the charge program type **Work** in the vehicle. 
+        The battery will not be charged above this value when the Work charge program is active. 
+        Only available for electric & plug-in hybrid vehicles with charge program support.'
+      properties:
+        name:
+          type: string
+          const: ElectricalDrive.Charging.ChargeProgram.Work.MaximumStateOfCharge
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '80'
+            - '90'
+        type:
+          type: string
+          const: integer
+    ElectricalDrive.HighVoltageBattery.StateOfCharge:
+      type: object
+      description: 'ElectricalDrive.HighVoltageBattery.StateOfCharge
+
+
+        Current state of charge of the high voltage battery in percent (%). Only available
+        for electric & plug-in hybrid vehicles.'
+      properties:
+        name:
+          type: string
+          const: ElectricalDrive.HighVoltageBattery.StateOfCharge
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '31'
+            - '45'
+        type:
+          type: string
+          const: integer
+    Driving.StateOfCharge.Departure:
+      type: object
+      description: 'Driving.StateOfCharge.Departure
+
+
+        State of charge at departure time in percent (%). Only available for electric
+        & plug-in hybrid vehicles.'
+      properties:
+        name:
+          type: string
+          const: Driving.StateOfCharge.Departure
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '31'
+            - '45'
+        type:
+          type: string
+          const: integer
+    ElectricalDrive.Charging.ACCoupler.Status:
+      type: object
+      description: 'ElectricalDrive.Charging.ACCoupler.Status
+
+
+        Status of the AC charging coupler.
+
+
+        * CABLE_PLUGGED_BOTH_SIDES = charging wire plugged on both sides
+
+        * CABLE_PLUGGED_VEHICLE_SIDE = charging wire plugged on vehicle side
+
+        * CABLE_UNPLUGGED = charging wire not plugged on vehicle side
+
+        * PLUG_STATE_UNKNOWN = plugged state unknown e.g due to defect'
+      properties:
+        name:
+          type: string
+          const: ElectricalDrive.Charging.ACCoupler.Status
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - CABLE_PLUGGED_BOTH_SIDES
+            - CABLE_PLUGGED_VEHICLE_SIDE
+            - CABLE_UNPLUGGED
+            - PLUG_STATE_UNKNOWN
+        type:
+          type: string
+          const: string
+    ElectricalDrive.Charging.DCCoupler.Status:
+      type: object
+      description: 'ElectricalDrive.Charging.DCCoupler.Status
+
+
+        Status of the DC charging coupler.
+
+
+        * CABLE_PLUGGED_BOTH_SIDES = charging wire plugged on both sides
+
+        * CABLE_PLUGGED_VEHICLE_SIDE = charging wire plugged on vehicle side
+
+        * CABLE_UNPLUGGED = charging wire not plugged on vehicle side
+
+        * PLUG_STATE_UNKNOWN = plugged state unknown e.g due to defect'
+      properties:
+        name:
+          type: string
+          const: ElectricalDrive.Charging.DCCoupler.Status
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - CABLE_PLUGGED_BOTH_SIDES
+            - CABLE_PLUGGED_VEHICLE_SIDE
+            - CABLE_UNPLUGGED
+            - PLUG_STATE_UNKNOWN
+        type:
+          type: string
+          const: string
+    ElectricalDrive.Charging.EndOfChargingTime:
+      type: object
+      description: 'ElectricalDrive.Charging.EndOfChargingTime
+
+
+        Time when the vehicle will be fully charged, counted in minutes from midnight
+        depending on the local time of the vehicle. Only available for electric &
+        plug-in hybrid vehicles.'
+      properties:
+        name:
+          type: string
+          const: ElectricalDrive.Charging.EndOfChargingTime
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '130'
+            - '245'
+        type:
+          type: string
+          const: integer
+    ElectricalDrive.Charging.EndOfChargingTimeWeekday:
+      type: object
+      description: 'ElectricalDrive.Charging.EndOfChargingTimeWeekday
+
+
+        Day when the vehicle will be fully charged. Only available for electric &
+        plug-in hybrid vehicles.
+
+        * MONDAY
+
+        * TUESDAY
+
+        * WEDNESDAY
+
+        * THURSDAY
+
+        * FRIDAY
+
+        * SATURDAY
+
+        * SUNDAY'
+      properties:
+        name:
+          type: string
+          const: ElectricalDrive.Charging.EndOfChargingTimeWeekday
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - MONDAY
+            - TUESDAY
+            - WEDNESDAY
+            - THURSDAY
+            - FRIDAY
+            - SATURDAY
+            - SUNDAY
+        type:
+          type: string
+          const: string
+    ElectricalDrive.Charging.SmartCharging.Status:
+      type: object
+      description: 'ElectricalDrive.Charging.SmartCharging.Status
+
+
+        Status of the optimized/intelligent charging. Only available for electric
+        & plug-in hybrid vehicles.
+
+
+        * WALLBOX =  wallbox or charging station is active
+
+        * SMART_CHARGE_COMMUNICATION = smart charge communication is active
+
+        * ON_OFF_PEAK = on/off-peak setting is active e.g day and night power'
+      properties:
+        name:
+          type: string
+          const: ElectricalDrive.Charging.SmartCharging.Status
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - WALLBOX
+            - SMART_CHARGE_COMMUNICATION
+            - ON_OFF_PEAK
+        type:
+          type: string
+          const: string
+    Position.LastKnown.Heading:
+      type: object
+      description: 'Position.LastKnown.Heading
+
+
+        Heading of vehicle at the last known position.'
+      properties:
+        name:
+          type: string
+          const: Position.LastKnown.Heading
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '14.12'
+            - '251.47'
+          minimum: 0.0
+          maximum: 360.0
+        type:
+          type: string
+          const: double
+    Position.LastKnown.Latitude:
+      type: object
+      description: 'Position.LastKnown.Latitude
+
+
+        Latitude in WGS84 coordinates at the last known position of the vehicle.'
+      properties:
+        name:
+          type: string
+          const: Position.LastKnown.Latitude
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '-30.12'
+            - '41.47'
+          minimum: -90.0
+          maximum: 90.0
+        type:
+          type: string
+          const: double
+    Position.LastKnown.Longitude:
+      type: object
+      description: 'Position.LastKnown.Longitude
+
+
+        Longitude in WGS84 coordinates at the last known position of the vehicle.'
+      properties:
+        name:
+          type: string
+          const: Position.LastKnown.Longitude
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '-30.12'
+            - '41.47'
+          minimum: -180.0
+          maximum: 180.0
+        type:
+          type: string
+          const: double
+    Brakes.Brakefluid.Warning:
+      type: object
+      description: 'Brakes.Brakefluid.Warning
+
+
+        Indicates whether a brake fluid warning is triggered.'
+      properties:
+        name:
+          type: string
+          const: Brakes.Brakefluid.Warning
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Brakes.Brakepads.PreWarning:
+      type: object
+      description: 'Brakes.Brakepads.PreWarning
+
+
+        Indicates whether a pre-warning for the brake pads is triggered.'
+      properties:
+        name:
+          type: string
+          const: Brakes.Brakepads.PreWarning
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Brakes.Brakepads.Warning:
+      type: object
+      description: 'Brakes.Brakepads.Warning
+
+
+        Indicates whether a warning for the brake pads is triggered.'
+      properties:
+        name:
+          type: string
+          const: Brakes.Brakepads.Warning
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    InternalCombustionEngine.Coolant.Level.Warning:
+      type: object
+      description: 'InternalCombustionEngine.Coolant.Level.Warning
+
+
+        Indicates whether a warning for the coolant level is triggered.'
+      properties:
+        name:
+          type: string
+          const: InternalCombustionEngine.Coolant.Level.Warning
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Service.Interval.Distance:
+      type: object
+      description: 'Service.Interval.Distance
+
+
+        Residual distance to service in kilometer (km). Potential negative values
+        indicate the service is overdue.'
+      properties:
+        name:
+          type: string
+          const: Service.Interval.Distance
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '-230'
+            - '112'
+          minimum: -199999
+          maximum: 199999
+        type:
+          type: string
+          const: integer
+    Service.Interval.Time:
+      type: object
+      description: 'Service.Interval.Time
+
+
+        Residual time to service in days. Potential negative values indicate the service
+        is overdue.'
+      properties:
+        name:
+          type: string
+          const: Service.Interval.Time
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '-230'
+            - '112'
+          minimum: -1198
+          maximum: 1998
+        type:
+          type: string
+          const: integer
+
+    Service.Warning.Status:
+      type: object
+      description: 'Service.Warning.Status
+
+
+        Service warning status of the vehicle.
+
+
+        * DUE_SOON = Vehicle will be due for service shortly in future
+
+        * DUE = Vehicle is currently due for service 
+
+        * OVERDUE = Vehicle is overdue for service indicating a failure of service on time  
+
+        * NONE = No service warning for the vehicle'
+      properties:
+        name:
+          type: string
+          const: Service.Warning.Status
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - DUE_SOON
+            - DUE
+            - OVERDUE
+            - NONE
+        type:
+          type: string
+          const: string
+    SupplyBattery.Voltage:
+      type: object
+      description: 'SupplyBattery.Voltage
+
+
+        Supply battery voltage in Volt (V).'
+      properties:
+        name:
+          type: string
+          const: SupplyBattery.Voltage
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '12.8'
+            - '24.4'
+        type:
+          type: string
+          const: double
+    SupplyBattery.Warning:
+      type: object
+      description: 'SupplyBattery.Warning
+
+
+        Indicates whether a warning for the supply battery is triggered.'
+      properties:
+        name:
+          type: string
+          const: SupplyBattery.Warning
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Tank.WashWater.Level.Warning:
+      type: object
+      description: 'Tank.WashWater.Level.Warning
+
+
+        Indicates whether a warning for the washwater level is triggered.'
+      properties:
+        name:
+          type: string
+          const: Tank.WashWater.Level.Warning
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    InternalCombustionEngine.Coolant.Temperature:
+      type: object
+      description: 'InternalCombustionEngine.Coolant.Temperature
+
+
+        Engine coolant temperature in degree celsius (�C).'
+      properties:
+        name:
+          type: string
+          const: InternalCombustionEngine.Coolant.Temperature
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '16'
+            - '42'
+        type:
+          type: string
+          const: integer
+    InternalCombustionEngine.LimpMode.IsActive:
+      type: object
+      description: 'InternalCombustionEngine.LimpMode.IsActive
+
+
+        Indicates whether the engine is in fail-safe mode.'
+      properties:
+        name:
+          type: string
+          const: InternalCombustionEngine.LimpMode.IsActive
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    InternalCombustionEngine.Oil.Level:
+      type: object
+      description: 'InternalCombustionEngine.Oil.Level
+
+
+        Provides the oil level as percentage (%).
+        The range of reported values has 60 as its lower limit and 115 as its upper limit.'
+      properties:
+        name:
+          type: string
+          const: InternalCombustionEngine.Oil.Level
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '105'
+            - '72'
+          minimum: 60
+          maximum: 115
+        type:
+          type: string
+          const: integer
+    InternalCombustionEngine.Oil.Level.Warning:
+      type: object
+      description: 'InternalCombustionEngine.Oil.Level.Warning
+
+
+        Indicates whether an oil level warning is triggered. Signal should be used
+        in conjunction with InternalCombustionEngine.Oil.Level to determine the current
+        oil level.
+
+
+        * True = oil level is overfilled (> 100%) or underfilled (< 75%)
+
+        * False = oil level is ok (75% - 100%)'
+      properties:
+        name:
+          type: string
+          const: InternalCombustionEngine.Oil.Level.Warning
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Tires.Front.Left.Pressure:
+      type: object
+      description: 'Tires.Front.Left.Pressure
+
+
+        Provides the front left tire pressure in kilopascal (kPa).'
+      properties:
+        name:
+          type: string
+          const: Tires.Front.Left.Pressure
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '255.1'
+            - '306.75'
+        type:
+          type: string
+          const: double
+    Tires.Front.Left.Warning:
+      type: object
+      description: 'Tires.Front.Left.Warning
+
+
+        Indicates whether a warning for the front left tire is triggered.'
+      properties:
+        name:
+          type: string
+          const: Tires.Front.Left.Warning
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Tires.Front.Right.Pressure:
+      type: object
+      description: 'Tires.Front.Right.Pressure
+
+
+        Provides the front right tire pressure in kilopascal (kPa).'
+      properties:
+        name:
+          type: string
+          const: Tires.Front.Right.Pressure
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '255.1'
+            - '306.75'
+        type:
+          type: string
+          const: double
+    Tires.Front.Right.Warning:
+      type: object
+      description: 'Tires.Front.Right.Warning
+
+
+        Indicates whether a warning for the front right tire is triggered.'
+      properties:
+        name:
+          type: string
+          const: Tires.Front.Right.Warning
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Tires.Rear.Left.Pressure:
+      type: object
+      description: 'Tires.Rear.Left.Pressure
+
+
+        Provides the rear left tire pressure in kilopascal (kPa).'
+      properties:
+        name:
+          type: string
+          const: Tires.Rear.Left.Pressure
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '255.1'
+            - '306.75'
+        type:
+          type: string
+          const: double
+    Tires.Rear.Left.Warning:
+      type: object
+      description: 'Tires.Rear.Left.Warning
+
+
+        Indicates whether a warning for the rear left tire is triggered.'
+      properties:
+        name:
+          type: string
+          const: Tires.Rear.Left.Warning
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Tires.Rear.Right.Pressure:
+      type: object
+      description: 'Tires.Rear.Right.Pressure
+
+
+        Provides the rear right tire pressure in kilopascal (kPa).'
+      properties:
+        name:
+          type: string
+          const: Tires.Rear.Right.Pressure
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '255.1'
+            - '306.75'
+        type:
+          type: string
+          const: double
+    Tires.Rear.Right.Warning:
+      type: object
+      description: 'Tires.Rear.Right.Warning
+
+
+        Indicates whether a warning for the rear right tire is triggered.'
+      properties:
+        name:
+          type: string
+          const: Tires.Rear.Right.Warning
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Tires.Front.Left.Warning.Status:
+      type: object
+      description: 'Tires.Front.Left.Warning.Status
+
+
+        Provides status of present warning for front left tire.
+
+        * NONE = no warning
+
+        * SOFT = soft warning
+
+        * LOW_PRESSURE = low pressure detected
+
+        * DEFLATION = the tire is deflated
+
+        * UNKNOWN = unknown status'
+      properties:
+        name:
+          type: string
+          const: Tires.Front.Left.Warning.Status
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - NONE
+            - SOFT
+            - LOW_PRESSURE
+            - DEFLATION
+            - UNKNOWN
+        type:
+          type: string
+          const: string
+    Tires.Front.Right.Warning.Status:
+      type: object
+      description: 'Tires.Front.Right.Warning.Status
+
+
+        Provides status of present warning for front right tire.
+
+
+        * NONE = no warning
+
+        * SOFT = soft warning
+
+        * LOW_PRESSURE = low pressure detected
+
+        * DEFLATION = the tire is deflated
+
+        * UNKNOWN = unknown status'
+      properties:
+        name:
+          type: string
+          const: Tires.Front.Right.Warning.Status
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - NONE
+            - SOFT
+            - LOW_PRESSURE
+            - DEFLATION
+            - UNKNOWN
+        type:
+          type: string
+          const: string
+    Tires.Rear.Left.Warning.Status:
+      type: object
+      description: 'Tires.Rear.Left.Warning.Status
+
+
+        Provides status of present warning for rear left tire.
+
+
+        * NONE = no warning
+
+        * SOFT = soft warning
+
+        * LOW_PRESSURE = low pressure detected
+
+        * DEFLATION = the tire is deflated
+
+        * UNKNOWN = unknown status'
+      properties:
+        name:
+          type: string
+          const: Tires.Rear.Left.Warning.Status
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - NONE
+            - SOFT
+            - LOW_PRESSURE
+            - DEFLATION
+            - UNKNOWN
+        type:
+          type: string
+          const: string
+    Tires.Rear.Right.Warning.Status:
+      type: object
+      description: 'Tires.Rear.Right.Warning.Status
+
+
+        Provides status of present warning for rear right tire.
+
+
+        * NONE = no warning
+
+        * SOFT = soft warning
+
+        * LOW_PRESSURE = low pressure detected
+
+        * DEFLATION = the tire is deflated
+
+        * UNKNOWN = unknown status'
+      properties:
+        name:
+          type: string
+          const: Tires.Rear.Right.Warning.Status
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - NONE
+            - SOFT
+            - LOW_PRESSURE
+            - DEFLATION
+            - UNKNOWN
+        type:
+          type: string
+          const: string
+    Lights.Interior.Front.IsOn:
+      type: object
+      description: 'Lights.Interior.Front.IsOn
+
+
+        Indicates whether the front interior light is on.'
+      properties:
+        name:
+          type: string
+          const: Lights.Interior.Front.IsOn
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Lights.Interior.Readinglamp.Front.Left.IsOn:
+      type: object
+      description: 'Lights.Interior.Readinglamp.Front.Left.IsOn
+
+
+        Indicates whether the front left reading lamp is on.'
+      properties:
+        name:
+          type: string
+          const: Lights.Interior.Readinglamp.Front.Left.IsOn
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Lights.Interior.Readinglamp.Front.Right.IsOn:
+      type: object
+      description: 'Lights.Interior.Readinglamp.Front.Right.IsOn
+
+
+        Indicates whether the front right reading lamp is on.'
+      properties:
+        name:
+          type: string
+          const: Lights.Interior.Readinglamp.Front.Right.IsOn
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Lights.Interior.Rear.IsOn:
+      type: object
+      description: 'Lights.Interior.Rear.IsOn
+
+
+        Indicates whether the rear interior light is on.'
+      properties:
+        name:
+          type: string
+          const: Lights.Interior.Rear.IsOn
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Lights.Lightswitch.Status:
+      type: object
+      description: 'Lights.Lightswitch.Status
+
+
+        Provides the light switch status.
+
+
+        * AUTO = light switch status is automatic
+
+        * LOWBEAM = light switch status is low beam
+
+        * PARKINGLIGHT_LEFT = light switch status is parking light left
+
+        * PARKINGLIGHT_RIGHT = light switch status is parking light right
+
+        * PARKINGLIGHT = light switch status is parking light'
+      properties:
+        name:
+          type: string
+          const: Lights.Lightswitch.Status
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - AUTO
+            - LOWBEAM
+            - PARKINGLIGHT_LEFT
+            - PARKINGLIGHT_RIGHT
+            - PARKINGLIGHT
+        type:
+          type: string
+          const: string
+    Driving.Distance.ZeroEmissions.SinceReset:
+      type: object
+      description: 'Driving.Distance.ZeroEmissions.SinceReset
+
+
+        Distance driven in kilometer (km) with electrical engine support 
+        after the last driving session was reset using the vehicles board 
+        computer. Only available for plug-in hybrid vehicles.'
+      properties:
+        name:
+          type: string
+          const: Driving.Distance.ZeroEmissions.SinceReset
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '5.37'
+            - '12.41'
+        type:
+          type: string
+          const: double
+    Driving.Distance.ZeroEmissions.SinceStart:
+      type: object
+      description: 'Driving.Distance.ZeroEmissions.SinceStart
+
+
+        Distance driven in kilometer (km) with electrical engine during a 
+        driving session. Ignition-on starts a new driving session, unless 
+        the latest ignition-off event took place within the last 4 hours. 
+        The data is aggregated in a 4 hour interval. Only available for 
+        plug-in hybrid vehicles.'
+      properties:
+        name:
+          type: string
+          const: Driving.Distance.ZeroEmissions.SinceStart
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '5.37'
+            - '12.41'
+        type:
+          type: string
+          const: double
+    Driving.Speed.Current:
+      type: object
+      description: 'Driving.Speed.Current
+
+
+        Current vehicle speed in kilometers per hour (km/h).'
+      properties:
+        name:
+          type: string
+          const: Driving.Speed.Current
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '120.8'
+            - '50.33'
+        type:
+          type: string
+          const: double
+    Driving.Speed.SinceReset.Average:
+      type: object
+      description: 'Driving.Speed.SinceReset.Average
+
+
+        Average speed since reset in kilometers per hour (km/h). The value refers
+        to the time a trip session was reset using the vehicles board computer.'
+      properties:
+        name:
+          type: string
+          const: Driving.Speed.SinceReset.Average
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '120.8'
+            - '50.33'
+        type:
+          type: string
+          const: double
+    Driving.Speed.SinceStart.Average:
+      type: object
+      description: 'Driving.Speed.SinceStart.Average
+
+
+        Average speed since start in kilometers per hour (km/h).'
+      properties:
+        name:
+          type: string
+          const: Driving.Speed.SinceStart.Average
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '120.8'
+            - '50.33'
+        type:
+          type: string
+          const: double
+    Driving.Time.SinceReset:
+      type: object
+      description: 'Driving.Time.SinceReset
+
+
+        Driven time since reset in minutes. The value refers to the time a trip session
+        was reset using the vehicles board computer.'
+      properties:
+        name:
+          type: string
+          const: Driving.Time.SinceReset
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '15'
+            - '33'
+        type:
+          type: string
+          const: integer
+    Driving.Time.SinceStart:
+      type: object
+      description: 'Driving.Time.SinceStart
+
+        Driven time since start in minutes. The value refers to the time the ignition
+        is turned on. Ignition-on starts a new trip session, unless the last ignition-off
+        event took place within the last 4 hours. The data is aggregated in a 4 hour
+        interval.'
+      properties:
+        name:
+          type: string
+          const: Driving.Time.SinceStart
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '15'
+            - '33'
+        type:
+          type: string
+          const: integer
+    Driving.Time.ZeroEmissions.SinceReset:
+      type: object
+      description: 'Driving.Time.ZeroEmissions.SinceReset
+
+
+        Driven time with electrical engine support since reset in minutes. The value
+        refers to the time a trip session was reset using the vehicles board computer.
+        Only available for plug-in hybrid vehicles.'
+      properties:
+        name:
+          type: string
+          const: Driving.Time.ZeroEmissions.SinceReset
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '15'
+            - '33'
+        type:
+          type: string
+          const: integer
+    Driving.Time.ZeroEmissions.SinceStart:
+      type: object
+      description: 'Driving.Time.ZeroEmissions.SinceStart
+
+
+        Driven time with electrical engine support since start in minutes. The value
+        refers to the time the ignition is turned on. Ignition-on starts a new trip
+        session, unless the last ignition-off event took place within the last 4 hours.
+        The data is aggregated in a 4 hour interval. Only available for plug-in hybrid
+        vehicles.'
+      properties:
+        name:
+          type: string
+          const: Driving.Time.ZeroEmissions.SinceStart
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '15'
+            - '33'
+        type:
+          type: string
+          const: integer
+    Driving.Acceleration.Latitude.NegativeAccelerationOutliers:
+      type: object
+      description: 'Driving.Acceleration.Latitude.NegativeAccelerationOutliers
+
+
+        The time that acceleration was below the threshold of -0.2g in milliseconds (ms)'
+      properties:
+        name:
+          type: string
+          const: Driving.Acceleration.Latitude.NegativeAccelerationOutliers
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '6120'
+        type:
+          type: string
+          const: integer
+    Driving.Acceleration.Latitude.PositiveAccelerationOutliers:
+      type: object
+      description: 'Driving.Acceleration.Latitude.PositiveAccelerationOutliers
+
+
+        The time that acceleration was above the threshold of +0.2g in milliseconds (ms)'
+      properties:
+        name:
+          type: string
+          const: Driving.Acceleration.Latitude.PositiveAccelerationOutliers
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '13560'
+        type:
+          type: string
+          const: integer
+    Driving.Acceleration.Latitude.RegularAccelerations:
+      type: object
+      description: 'Driving.Acceleration.Latitude.RegularAccelerations
+
+
+        The time that acceleration was withing the threshold of +/- 0.2g in milliseconds (ms)'
+      properties:
+        name:
+          type: string
+          const: Driving.Acceleration.Latitude.RegularAccelerations
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '580320'
+        type:
+          type: string
+          const: integer
+    Driving.Acceleration.Longitude.NegativeAccelerationOutliers:
+      type: object
+      description: 'Driving.Acceleration.Longitude.NegativeAccelerationOutliers
+
+
+        The time that acceleration was below the threshold of -0.2g in milliseconds (ms)'
+      properties:
+        name:
+          type: string
+          const: Driving.Acceleration.Longitude.NegativeAccelerationOutliers
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '6120'
+        type:
+          type: string
+          const: integer
+    Driving.Acceleration.Longitude.PositiveAccelerationOutliers:
+      type: object
+      description: 'Driving.Acceleration.Longitude.PositiveAccelerationOutliers
+
+
+        The time that acceleration was above the threshold of +0.2g in milliseconds (ms)'
+      properties:
+        name:
+          type: string
+          const: Driving.Acceleration.Longitude.PositiveAccelerationOutliers
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '13560'
+        type:
+          type: string
+          const: integer
+    Driving.Acceleration.Longitude.RegularAccelerations:
+      type: object
+      description: 'Driving.Acceleration.Longitude.RegularAccelerations
+
+
+        The time that acceleration was withing the threshold of +/- 0.2g in milliseconds (ms)'
+      properties:
+        name:
+          type: string
+          const: Driving.Acceleration.Longitude.RegularAccelerations
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '580320'
+        type:
+          type: string
+          const: integer
+    Driving.Distance.SinceReset:
+      type: object
+      description: 'Driving.Distance.SinceReset
+
+
+        Distance driven in kilometer (km) after the last trip session was reset.
+          
+          
+          *NOTE:* For a plug-in hybrid vehicle, the value refers to the distance 
+          driven using the liquid fuel. The corresponding electrical distance for 
+          the vehicle can be seen in ***Driving.Distance.ZeroEmissions.SinceReset***'
+      properties:
+        name:
+          type: string
+          const: Driving.Distance.SinceReset
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '15.42'
+            - '158.63'
+        type:
+          type: string
+          const: double
+    Driving.Distance.SinceStart:
+      type: object
+      description: 'Driving.Distance.SinceStart
+
+
+        Distance driven in kilometer (km) during a driving session. Ignition-on starts a new driving   session,
+        unless the latest ignition-off event took place within the last 4 hours. The
+        data is aggregated in a 4 hour interval.
+          
+          
+          
+          *NOTE:* For a plug-in hybrid vehicle, the value refers to the distance 
+          driven using the liquid fuel. The corresponding electrical distance for 
+          the vehicle can be seen in **Driving.Distance.ZeroEmissions.SinceStart**'
+      properties:
+        name:
+          type: string
+          const: Driving.Distance.SinceStart
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '15.42'
+            - '158.63'
+        type:
+          type: string
+          const: double
+    Vehicle.Clock.Time.UTC.Offset:
+      type: object
+      description: 'Vehicle.Clock.Time.UTC.Offset
+
+
+        The time difference in milliseconds of local vehicle time to the UTC time. In any given moment, 
+        adding the offset value to the time in UTC will result in the equivalent time in the vehicle. 
+        A positive offset indicates that the time in vehicle is ahead of UTC time while a negative 
+        offset denotes that the vehicle time is behind the UTC.'
+      properties:
+        name:
+          type: string
+          const: Vehicle.Clock.Time.UTC.Offset
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples: [ "3600000", "1800000", "-600000" ]
+        type:
+          type: string
+          const: "integer"
+    Windows.Front.Left.IsOpen:
+      type: object
+      description: 'Windows.Front.Left.IsOpen
+
+
+        Indicates whether the front left window is open.'
+      properties:
+        name:
+          type: string
+          const: Windows.Front.Left.IsOpen
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Windows.Front.Right.IsOpen:
+      type: object
+      description: 'Windows.Front.Right.IsOpen
+
+
+        Indicates whether the front right window is open.'
+      properties:
+        name:
+          type: string
+          const: Windows.Front.Right.IsOpen
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Windows.Rear.Left.IsOpen:
+      type: object
+      description: 'Windows.Rear.Left.IsOpen
+
+
+        Indicates whether the rear left window is open.'
+      properties:
+        name:
+          type: string
+          const: Windows.Rear.Left.IsOpen
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Windows.Rear.Right.IsOpen:
+      type: object
+      description: 'Windows.Rear.Right.IsOpen
+
+
+        Indicates whether the rear right window is open.'
+      properties:
+        name:
+          type: string
+          const: Windows.Rear.Right.IsOpen
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Doors.Front.Left.IsLocked:
+      type: object
+      description: 'Doors.Front.Left.IsLocked
+
+
+        Indicates whether the front left door is locked.'
+      properties:
+        name:
+          type: string
+          const: Doors.Front.Left.IsLocked
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Doors.Front.Left.IsOpen:
+      type: object
+      description: 'Doors.Front.Left.IsOpen
+
+
+        Indicates whether the front left door is open.'
+      properties:
+        name:
+          type: string
+          const: Doors.Front.Left.IsOpen
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Doors.Front.Right.IsLocked:
+      type: object
+      description: 'Doors.Front.Right.IsLocked
+
+
+        Indicates whether the front right door is locked.'
+      properties:
+        name:
+          type: string
+          const: Doors.Front.Right.IsLocked
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Doors.Front.Right.IsOpen:
+      type: object
+      description: 'Doors.Front.Right.IsOpen
+
+
+        Indicates whether the front right door is open.'
+      properties:
+        name:
+          type: string
+          const: Doors.Front.Right.IsOpen
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Doors.Rear.Left.IsLocked:
+      type: object
+      description: 'Doors.Rear.Left.IsLocked
+
+
+        Indicates whether the rear left door is locked.'
+      properties:
+        name:
+          type: string
+          const: Doors.Rear.Left.IsLocked
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Doors.Rear.Left.IsOpen:
+      type: object
+      description: 'Doors.Rear.Left.IsOpen
+
+
+        Indicates whether the rear left door is open.'
+      properties:
+        name:
+          type: string
+          const: Doors.Rear.Left.IsOpen
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Doors.Rear.Right.IsLocked:
+      type: object
+      description: 'Doors.Rear.Right.IsLocked
+
+
+        Indicates whether the rear right door is locked.'
+      properties:
+        name:
+          type: string
+          const: Doors.Rear.Right.IsLocked
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Doors.Rear.Right.IsOpen:
+      type: object
+      description: 'Doors.Rear.Right.IsOpen
+
+
+        Indicates whether the rear right door is open.'
+      properties:
+        name:
+          type: string
+          const: Doors.Rear.Right.IsOpen
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Doors.Trunk.IsLocked:
+      type: object
+      description: 'Doors.Trunk.IsLocked
+
+
+        Indicates whether the trunk is locked.'
+      properties:
+        name:
+          type: string
+          const: Doors.Trunk.IsLocked
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Doors.Trunk.IsOpen:
+      type: object
+      description: 'Doors.Trunk.IsOpen
+
+
+        Indicates whether the trunk is open.'
+      properties:
+        name:
+          type: string
+          const: Doors.Trunk.IsOpen
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Doors.Rooftop.IsOpen:
+      type: object
+      description: 'Doors.Rooftop.IsOpen
+
+
+        Indicates whether the rooftop is open.'
+      properties:
+        name:
+          type: string
+          const: Doors.Rooftop.IsOpen
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Doors.Sunroof.Event:
+      type: object
+      description: 'Doors.Sunroof.Event
+
+
+        Provides the characteristic of the latest sunroof event.
+
+
+        * NONE = no event
+
+        * SUNROOF_LIFTED_RAIN = sunroof in stroke position through rain
+
+        * SUNROOF_LIFTED_AUTOMATIC = sunroof in stroke position through automatic
+
+        * SUNROOF_LIFTED_TIMER = sunroof in stroke position through timer'
+      properties:
+        name:
+          type: string
+          const: Doors.Sunroof.Event
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - NONE
+            - SUNROOF_LIFTED_RAIN
+            - SUNROOF_LIFTED_AUTOMATIC
+            - SUNROOF_LIFTED_TIMER
+        type:
+          type: string
+          const: string
+    Doors.Sunroof.Status:
+      type: object
+      description: 'Doors.Sunroof.Status
+
+
+        Provides the sunroof status.
+
+
+        * TILT-SLIDE-ROOF_CLOSED = tilt/slide sunroof is closed
+
+        * TILT-SLIDE-ROOF_OPEN = tilt/slide sunroof is complete open
+
+        * LIFTING-ROOF_OPEN = lifting roof is open
+
+        * TILT-SLIDE-ROOF_RUNNING = tilt/slide sunroof is running (only available
+        if no differentiation between opening/closing possible)
+
+        * TILT-SLIDE-ROOF_ANTI-BOOMING = tilt/slide sunroof in anti-booming position
+
+        * SLIDE-ROOF_INTERMEDIATE = sliding roof in intermediate position
+
+        * LIFTING-ROOF_INTERMEDIATE = lifting roof in intermediate position
+
+        * OPENING = sunroof is opening
+
+        * CLOSING = sunroof is closing
+
+        * LIFTING-ROOF_ANTI-BOOMING = lifting anti booming
+
+        * SUNROOF_INTERMEDIATE = sunroof is in intermediate position
+
+        * LIFTING-ROOF_OPENING = lifting roof is opening
+
+        * LIFTING-ROOF_CLOSING = lifting roof is closing'
+      properties:
+        name:
+          type: string
+          const: Doors.Sunroof.Status
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - TILT-SLIDE-ROOF_CLOSED
+            - TILT-SLIDE-ROOF_OPEN
+            - LIFTING-ROOF_OPEN
+            - TILT-SLIDE-ROOF_RUNNING
+            - TILT-SLIDE-ROOF_ANTI-BOOMING
+            - SLIDE-ROOF_INTERMEDIATE
+            - LIFTING-ROOF_INTERMEDIATE
+            - OPENING
+            - CLOSING
+            - LIFTING-ROOF_ANTI-BOOMING
+            - SUNROOF_INTERMEDIATE
+            - LIFTING-ROOF_OPENING
+            - LIFTING-ROOF_CLOSING
+        type:
+          type: string
+          const: string
+    Doors.Tankcap.IsOpen:
+      type: object
+      description: 'Doors.Tankcap.IsOpen
+
+
+        Indicates whether the tankcap is open.'
+      properties:
+        name:
+          type: string
+          const: Doors.Tankcap.IsOpen
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Doors.Vehicle.IsLocked:
+      type: object
+      description: 'Doors.Vehicle.IsLocked
+
+
+        Inidcates whether the vehicle doors are locked.'
+      properties:
+        name:
+          type: string
+          const: Doors.Vehicle.IsLocked
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Brakes.Parkbrake.IsEngaged:
+      type: object
+      description: 'Brakes.Parkbrake.IsEngaged
+
+
+        Inidcates whether the park brake is engaged.'
+      properties:
+        name:
+          type: string
+          const: Brakes.Parkbrake.IsEngaged
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Parking.Parkevent.LastParkevent.Time:
+      type: object
+      description: 'Parking.Parkevent.LastParkevent.Time
+
+
+        UTC timestamp (in milliseconds) of the last park event. A park event happens
+        when the parked vehicle is bumped, e.g. by another vehicle.'
+      properties:
+        name:
+          type: string
+          const: Parking.Parkevent.LastParkevent.Time
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - 1592853849159
+        type:
+          type: string
+          const: integer
+    Parking.Parkevent.Level:
+      type: object
+      description: 'Parking.Parkevent.Level
+
+
+        Provides the severity level of the last park event. A park event happens when
+        the parked vehicle is bumped, e.g. by another vehicle.
+
+
+        * LOW
+
+        * MEDIUM
+
+        * HIGH'
+      properties:
+        name:
+          type: string
+          const: Parking.Parkevent.Level
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - LOW
+            - MEDIUM
+            - HIGH
+        type:
+          type: string
+          const: string
+    Parking.Parkevent.Type:
+      type: object
+      description: 'Parking.Parkevent.Type
+
+
+        Provides information about the location of the last park event. A park event
+        happens when the parked vehicle is bumped, e.g. by another vehicle.
+
+
+        * IDLE
+
+        * FRONT_LEFT
+
+        * FRONT_MIDDLE
+
+        * FRONT_RIGHT
+
+        * RIGHT
+
+        * REAR_RIGHT
+
+        * REAR_MIDDLE
+
+        * REAR_LEFT
+
+        * LEFT
+
+        * UNKNOWN'
+      properties:
+        name:
+          type: string
+          const: Parking.Parkevent.Type
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - IDLE
+            - FRONT_LEFT
+            - FRONT_MIDDLE
+            - FRONT_RIGHT
+            - RIGHT
+            - REAR_RIGHT
+            - REAR_MIDDLE
+            - REAR_LEFT
+            - LEFT
+            - UNKNOWN
+        type:
+          type: string
+          const: string
+    Driving.EcoScore.Acceleration:
+      type: object
+      description: 'Driving.EcoScore.Acceleration
+
+
+        Eco-score rating for acceleration in percentage (%).'
+      properties:
+        name:
+          type: string
+          const: Driving.EcoScore.Acceleration
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '63'
+            - '99'
+        type:
+          type: string
+          const: integer
+    Driving.EcoScore.BonusRange:
+      type: object
+      description: 'Driving.EcoScore.BonusRange
+
+
+        Eco-score bonus in kilometer (km). While driving eco-friendly these bonus
+        kilometers are collected.'
+      properties:
+        name:
+          type: string
+          const: Driving.EcoScore.BonusRange
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '63.1'
+            - '99.3'
+        type:
+          type: string
+          const: double
+    Driving.EcoScore.Constancy:
+      type: object
+      description: 'Driving.EcoScore.Constancy
+
+
+        Eco-score rating for constant driving in percentage (%).'
+      properties:
+        name:
+          type: string
+          const: Driving.EcoScore.Constancy
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '63'
+            - '99'
+        type:
+          type: string
+          const: integer
+    Driving.EcoScore.Freewheel:
+      type: object
+      description: 'Driving.EcoScore.Freewheel
+
+
+        Eco-score rating free wheeling in percentage (%).'
+      properties:
+        name:
+          type: string
+          const: Driving.EcoScore.Freewheel
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '63'
+            - '99'
+        type:
+          type: string
+          const: integer
+    AntiTheftSystem.Alarm.IsActive:
+      type: object
+      description: 'AntiTheftSystem.Alarm.IsActive
+
+
+        Indicates whether the anti-theft system is armed.'
+      properties:
+        name:
+          type: string
+          const: AntiTheftSystem.Alarm.IsActive
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    AntiTheftSystem.Alarm.IsTriggered:
+      type: object
+      description: 'AntiTheftSystem.Alarm.IsTriggered
+
+
+        Indicates whether the anti-theft system alarm is triggered.'
+      properties:
+        name:
+          type: string
+          const: AntiTheftSystem.Alarm.IsTriggered
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    AntiTheftSystem.ProtectionSensors.InteriorProtection.IsActive:
+      type: object
+      description: 'AntiTheftSystem.ProtectionSensors.InteriorProtection.IsActive
+
+
+        Indicates whether the interior protection sensors are active.'
+      properties:
+        name:
+          type: string
+          const: AntiTheftSystem.ProtectionSensors.InteriorProtection.IsActive
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    AntiTheftSystem.ProtectionSensors.InteriorProtection.IsTriggered:
+      type: object
+      description: 'AntiTheftSystem.ProtectionSensors.InteriorProtection.IsTriggered
+
+
+        Indicates whether the interior protection sensors are triggered.'
+      properties:
+        name:
+          type: string
+          const: AntiTheftSystem.ProtectionSensors.InteriorProtection.IsTriggered
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    AntiTheftSystem.ProtectionSensors.TowProtection.IsActive:
+      type: object
+      description: 'AntiTheftSystem.ProtectionSensors.TowProtection.IsActive
+
+
+        Indicates whether the tow protection sensors are active.'
+      properties:
+        name:
+          type: string
+          const: AntiTheftSystem.ProtectionSensors.TowProtection.IsActive
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    AntiTheftSystem.ProtectionSensors.TowProtection.IsTriggered:
+      type: object
+      description: 'AntiTheftSystem.ProtectionSensors.TowProtection.IsTriggered
+
+
+        Indicates whether the tow protection sensors are triggered.'
+      properties:
+        name:
+          type: string
+          const: AntiTheftSystem.ProtectionSensors.TowProtection.IsTriggered
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    AntiTheftSystem.LastTheftWarning.Reason:
+      type: object
+      description: 'AntiTheftSystem.LastTheftWarning.Reason
+
+
+        Provides the reason why the last theft warning has been triggered.
+
+
+        * BASIC
+
+        * DOORS_FRONT_LEFT
+
+        * DOORS_FRONT_RIGHT
+
+        * DOORS_REAR_LEFT
+
+        * DOOR_REAR_RIGHT
+
+        * HOOD
+
+        * TRUNK
+
+        * PANIC
+
+        * GLOVEBOX
+
+        * CENTERBOX
+
+        * SIREN
+
+        * NONE
+
+        * REARBOX
+
+        * REMOTE
+
+        * OTHER'
+      properties:
+        name:
+          type: string
+          const: AntiTheftSystem.LastTheftWarning.Reason
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - BASIC
+            - DOORS_FRONT_LEFT
+            - DOORS_FRONT_RIGHT
+            - DOORS_REAR_LEFT
+            - DOOR_REAR_RIGHT
+            - HOOD
+            - TRUNK
+            - PANIC
+            - GLOVEBOX
+            - CENTERBOX
+            - SIREN
+            - NONE
+            - REARBOX
+            - REMOTE
+            - OTHER
+        type:
+          type: string
+          const: string
+    Preconditioning.ScheduledTime:
+      type: object
+      description: 'Preconditioning.ScheduledTime
+
+
+        Scheduled vehicle departure time (-1 value is not set), counted in minutes
+        from midnight and depending on the time of the vehicle.'
+      properties:
+        name:
+          type: string
+          const: Preconditioning.ScheduledTime
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '144'
+            - '0'
+            - '1439'
+            - '-1'
+          minimum: 0
+          maximum: 1439
+        type:
+          type: string
+          const: integer
+    Preconditioning.IsActive:
+      type: object
+      description: 'Preconditioning.IsActive
+
+
+        Indicates whether the precondition is running.'
+      properties:
+        name:
+          type: string
+          const: Preconditioning.IsActive
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+    Preconditioning.RemainingRuntime:
+      type: object
+      description: 'Preconditioning.RemainingRuntime
+
+
+        Counter (min) showing the time until the precondition is completed. Active
+        only if the precondition is running.'
+      properties:
+        name:
+          type: string
+          const: Preconditioning.RemainingRuntime
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          examples:
+            - '1'
+            - '15'
+          minimum: 0
+        type:
+          type: string
+          const: integer
+
+
+    Trip.Start.Time:
+      type: object
+      description:
+        Trip.Start.Time
+
+
+        Unix epoch in milliseconds indicating the time at which the trip started.
+      properties:
+        name:
+          type: string
+          const: "Trip.Start.Time"
+        timestamp:
+          $ref: "#/components/schemas/timestamp"
+        value:
+          type: string
+          examples: ["1665046191000"]
+        type:
+          type: string
+          const: "integer"
+
+
+    Trip.End.Time:
+      type: object
+      description:
+        Trip.End.Time
+
+
+        Unix epoch in milliseconds indicating the time at which the trip ended.
+      properties:
+        name:
+          type: string
+          const: "Trip.End.Time"
+        timestamp:
+          $ref: "#/components/schemas/timestamp"
+        value:
+          type: string
+          examples: ["1665046191000"]
+        type:
+          type: string
+          const: "integer"
+
+
+    Trip.Start.Odometer:
+      type: object
+      description:
+        Trip.Start.Odometer
+
+
+        The value of Driving.Odometer.Lifetime (km) at the time the trip started.
+      properties:
+        name:
+          type: string
+          const: "Trip.Start.Odometer"
+        timestamp:
+          $ref: "#/components/schemas/timestamp"
+        value:
+          type: string
+          examples: ["112", "54621", "320152"]
+        type:
+          type: string
+          const: "integer"
+
+
+    Trip.End.Odometer:
+      type: object
+      description:
+        Trip.End.Odometer
+
+
+        The value of Driving.Odometer.Lifetime (km) at the time the trip ended.
+      properties:
+        name:
+          type: string
+          const: "Trip.End.Odometer"
+        timestamp:
+          $ref: "#/components/schemas/timestamp"
+        value:
+          type: string
+          examples: ["47"]
+        type:
+          type: string
+          const: "integer"
+
+
+    Trip.Distance.Total:
+      type: object
+      description:
+        Trip.Distance.Total
+
+
+        The distance travelled in km during the trip, based on Trip.End.Odometer and Trip.Start.Odometer.
+      properties:
+        name:
+          type: string
+          const: "Trip.Distance.Total"
+        timestamp:
+          $ref: "#/components/schemas/timestampEvent"
+        value:
+          type: string
+          examples: ["112", "54621", "320152"]
+        type:
+          type: string
+          const: "integer"
+
+
+    Trip.Start.Odometer.HighResolution:
+      type: object
+      description:
+        Trip.Start.Odometer.HighResolution
+
+
+        The value of Driving.Odometer.Lifetime.HighResolution (km) at the time the trip started.
+        This will only be present if the vehicle is capable of delivering the high resolution odometer signal.
+      properties:
+        name:
+          type: string
+          const: "Trip.Start.Odometer.HighResolution"
+        timestamp:
+          $ref: "#/components/schemas/timestamp"
+        value:
+          type: string
+          examples: ["112.1", "54621.3", "320152.0"]
+        type:
+          type: string
+          const: "double"
+
+
+    Trip.End.Odometer.HighResolution:
+      type: object
+      description:
+        Trip.End.Odometer.HighResolution
+
+
+        The value of Driving.Odometer.Lifetime.HighResolution (km) at the time the trip ended.
+        This will only be present if the vehicle is capable of delivering the high resolution odometer signal.
+      properties:
+        name:
+          type: string
+          const: "Trip.End.Odometer.HighResolution"
+        timestamp:
+          $ref: "#/components/schemas/timestamp"
+        value:
+          type: string
+          examples: ["47.8"]
+        type:
+          type: string
+          const: "double"
+
+
+    Trip.Distance.Total.HighResolution:
+      type: object
+      description:
+        Trip.Distance.Total.HighResolution
+
+
+        The distance travelled in km during the trip, based on Trip.End.Odometer.HighResolution and Trip.Start.Odometer.HighResolution.
+        This will only be present if the vehicle is capable of delivering the high resolution odometer signal.
+      properties:
+        name:
+          type: string
+          const: "Trip.Distance.Total.HighResolution"
+        timestamp:
+          $ref: "#/components/schemas/timestampEvent"
+        value:
+          type: string
+          examples: ["112.1", "54621.2", "320152.3"]
+        type:
+          type: string
+          const: "double"
+
+
+    Trip.Start.Position.Latitude:
+      type: object
+      description:
+        Trip.Start.Position.Latitude
+
+
+        Latitude in WGS84 coordinates at the start position of the vehicle's trip.
+      properties:
+        name:
+          type: string
+          const: "Trip.Start.Position.Latitude"
+        timestamp:
+          $ref: "#/components/schemas/timestamp"
+        value:
+          type: string
+          examples: ["-30.12", "41.47"]
+          minimum: -90.0
+          maximum: 90.0
+        type:
+          type: string
+          const: "double"
+
+
+    Trip.Start.Position.Longitude:
+      type: object
+      description:
+        Trip.Start.Position.Longitude
+
+
+        Longitude in WGS84 coordinates at the start position of the vehicle's trip.
+      properties:
+        name:
+          type: string
+          const: "Trip.Start.Position.Longitude"
+        timestamp:
+          $ref: "#/components/schemas/timestamp"
+        value:
+          type: string
+          examples: ["-30.12", "41.47"]
+          minimum: -180.0
+          maximum: 180.0
+        type:
+          type: string
+          const: "double"
+
+
+    Trip.End.Position.Latitude:
+      type: object
+      description:
+        Trip.End.Position.Latitude
+
+
+        Latitude in WGS84 coordinates at the end position of the vehicle's trip.
+      properties:
+        name:
+          type: string
+          const: "Trip.End.Position.Latitude"
+        timestamp:
+          $ref: "#/components/schemas/timestamp"
+        value:
+          type: string
+          examples: ["-30.12", "41.47"]
+          minimum: -90.0
+          maximum: 90.0
+        type:
+          type: string
+          const: "double"
+
+
+    Trip.End.Position.Longitude:
+      type: object
+      description:
+        Trip.End.Position.Longitude
+
+
+        Longitude in WGS84 coordinates at the end position of the vehicle's trip.
+      properties:
+        name:
+          type: string
+          const: "Trip.End.Position.Longitude"
+        timestamp:
+          $ref: "#/components/schemas/timestamp"
+        value:
+          type: string
+          examples: ["-30.12", "41.47"]
+          minimum: -180.0
+          maximum: 180.0
+        type:
+          type: string
+          const: "double"
+
+
+    Trip.IdleTime.Total:
+      type: object
+      description:
+        Trip.IdleTime.Total
+
+
+        Time the vehicle was idling during a trip.
+      properties:
+        name:
+          type: string
+          const: "Trip.IdleTime.Total"
+        timestamp:
+          $ref: "#/components/schemas/timestamp"
+        value:
+          type: string
+          examples: ["0", "40000"]
+          minimum: 0
+        type:
+          type: string
+          const: "integer"
+
+    Driving.Status:
+      type: object
+      description:
+        Driving.Status
+
+
+        Current driving status of the vehicle.
+      properties:
+        name:
+          type: string
+          const: "Driving.Status"
+        timestamp:
+          $ref: "#/components/schemas/timestamp"
+        value:
+          type: string
+          enum:
+            - DRIVING
+            - IDLING
+            - PARKED
+        type:
+          type: string
+          const: "string"
+
+    Seat.Seatbelt.Front.Left.IsBuckledUp:
+      type: object
+      description: 'Seat.Seatbelt.Front.Left.IsBuckledUp
+
+
+        Buckled up, set "true" indicate´s that the buckle switch is closed, buckled up set "false" indicates that buckle switch is open.'
+      properties:
+        name:
+          type: string
+          const: Seat.Seatbelt.Front.Left.IsBuckledUp
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        type:
+          type: string
+          const: boolean
+
+    Refueling.Start.Time:
+      type: object
+      description: Refueling.Start.Time
+
+
+        The epoch time in milliseconds the vehicle refueling has started.
+      properties:
+        name:
+          type: string
+          const: "Refueling.Start.Time"
+        timestamp:
+          $ref: "#/components/schemas/timestamp"
+        value:
+          type: string
+          examples: ["1726676020000"]
+        type:
+          type: string
+          const: "integer"
+
+    Refueling.End.Time:
+      type: object
+      description: Refueling.End.Time
+
+
+        The epoch time in milliseconds the vehicle refueling has ended.
+      properties:
+        name:
+          type: string
+          const: "Refueling.End.Time"
+        timestamp:
+          $ref: "#/components/schemas/timestamp"
+        value:
+          type: string
+          examples: ["1726676020000"]
+        type:
+          type: string
+          const: "integer"
+
+    Refueling.Odometer:
+      type: object
+      description: Refueling.Odometer
+
+
+        The value of Driving.Odometer.Lifetime (km) at the time the vehicle was refueled.
+      properties:
+        name:
+          type: string
+          const: "Refueling.Odometer"
+        timestamp:
+          $ref: "#/components/schemas/timestamp"
+        value:
+          type: string
+          examples: ["5657"]
+        type:
+          type: string
+          const: "integer"
+
+    Charging.Start.Time:
+      type: object
+      description: Charging.Start.Time
+
+
+        The epoch time in milliseconds the vehicle charging has started.
+      properties:
+        name:
+          type: string
+          const: "Charging.Start.Time"
+        timestamp:
+          $ref: "#/components/schemas/timestamp"
+        value:
+          type: string
+          examples: ["1726672420000"]
+        type:
+          type: string
+          const: "integer"
+
+    Charging.Odometer:
+      type: object
+      description: Charging.Odometer
+
+
+        The value of Driving.Odometer.Lifetime (km) at the time the vehicle was charged.
+      properties:
+        name:
+          type: string
+          const: "Charging.Odometer"
+        timestamp:
+          $ref: "#/components/schemas/timestamp"
+        value:
+          type: string
+          examples: ["5657"]
+        type:
+          type: string
+          const: "integer"
+
+    ChargingCycle.Start.Time:
+      type: object
+      description: ChargingCycle.Start.Time
+
+
+        The epoch time in milliseconds the vehicle charging process has started.
+      properties:
+        name:
+          type: string
+          const: "ChargingCycle.Start.Time"
+        timestamp:
+          $ref: "#/components/schemas/timestamp"
+        value:
+          type: string
+          examples: ["1726672420000"]
+        type:
+          type: string
+          const: "integer"
+
+    ChargingCycle.End.Time:
+      type: object
+      description: ChargingCycle.End.Time
+
+
+        The epoch time in milliseconds the vehicle charging process has ended.
+      properties:
+        name:
+          type: string
+          const: "ChargingCycle.End.Time"
+        timestamp:
+          $ref: "#/components/schemas/timestamp"
+        value:
+          type: string
+          examples: ["1726676020000"]
+        type:
+          type: string
+          const: "integer"
+
+    ChargingCycle.Start.HighVoltageBattery.StateOfCharge:
+      type: object
+      description: ChargingCycle.Start.HighVoltageBattery.StateOfCharge
+
+
+        The state of charge of the high voltage battery in percent (%) at the beginning 
+        of the charging process. Only available for electric & plug-in hybrid vehicles.
+      properties:
+        name:
+          type: string
+          const: "ChargingCycle.Start.HighVoltageBattery.StateOfCharge"
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          minimum: 0
+          maximum: 100
+          examples:
+            - '31'
+        type:
+          type: string
+          const: integer
+
+    ChargingCycle.End.HighVoltageBattery.StateOfCharge:
+      type: object
+      description: ChargingCycle.End.HighVoltageBattery.StateOfCharge
+
+
+        The state of charge of the high voltage battery in percent (%) at the end 
+        of the charging process. Only available for electric & plug-in hybrid vehicles.
+      properties:
+        name:
+          type: string
+          const: "ChargingCycle.End.HighVoltageBattery.StateOfCharge"
+        timestamp:
+          $ref: '#/components/schemas/timestamp'
+        value:
+          type: string
+          minimum: 0
+          maximum: 100
+          examples:
+            - '57'
+        type:
+          type: string
+          const: integer
+
+    ChargingCycle.Charging.Duration.Total:
+      type: object
+      description: ChargingCycle.Charging.Duration.Total
+
+
+        The duration in milliseconds of the charging cycle.
+      properties:
+        name:
+          type: string
+          const: "ChargingCycle.Charging.Duration.Total"
+        timestamp:
+          $ref: "#/components/schemas/timestamp"
+        value:
+          type: string
+          examples: ["3600000"]
+        type:
+          type: string
+          const: "integer"
+
+    ChargingCycle.Energy.Total:
+      type: object
+      description: ChargingCycle.Energy.Total
+
+
+        The total energy charged within the charging cycle in (kWh).
+      properties:
+        name:
+          type: string
+          const: "ChargingCycle.Energy.Total"
+        timestamp:
+          $ref: "#/components/schemas/timestamp"
+        value:
+          type: string
+          examples: ["26.7"]
+        type:
+          type: string
+          const: "double"
+
+    timestamp:
+      type: integer
+      format: int64
+      description: UTC timestamp (in milliseconds) when the signal value was measured
+        by a sensor in the vehicle.
+      minLength: 13
+      maxLength: 13
+      examples:
+        - 1592853849159
+    messageId:
+      type: string
+      description: A unique message identifier (UUID) to identify and track each message
+        independently.
+      minLength: 36
+      maxLength: 36
+      examples:
+        - 12876bd0-c211-49c3-ade1-ee755cfc7525
+    vin:
+      type: string
+      description: The VIN (Vehicle Identification Number) of the vehicle for which
+        an event has been pushed.
+      minLength: 17
+      maxLength: 17
+      pattern: (?<VIN>[A-HJ-NPR-Z0-9]{13}\d{4})
+      examples:
+        - WDD2130481A123456
+    serviceId:
+      type: string
+      description: The unique ID for a service.
+    version:
+      type: string
+      description: The version of the event schema.
+      default: '1'
+    VIN_REGISTRATION_NOT_POSSIBLE:
+      type: object
+      description: A VIN registration is generally not possible.
+      properties:
+        code:
+          type: string
+          const: VIN_REGISTRATION_NOT_POSSIBLE
+        message:
+          type: string
+          const: VIN cannot be registered
+    VIN_REGISTRATION_FAILED:
+      type: object
+      description: A VIN registration is generally possible but failed due to an error.
+      properties:
+        code:
+          type: string
+          const: VIN_REGISTRATION_FAILED
+        message:
+          type: string
+          const: VIN registration failed. Please try again later
+    service_status_update:
+      type: object
+      description: This schema describes the structure of a service status update
+        message.
+      properties:
+        serviceId:
+          type: string
+          description: The service id.
+          examples:
+            - '1001'
+            - '1002'
+            - '1003'
+            - '1004'
+            - '1005'
+            - '1006'
+            - '1007'
+            - '1009'
+            - '1010'
+            - '1013'
+            - '1014'
+            - '1015'
+            - '1017'
+            - '1018'
+            - '1019'
+        status:
+          type: string
+          description: 'Describes the state of the service.
+
+            * INACTIVE = The service is inactive.
+
+            * ACTIVE = The service is active.
+
+            * ACTIVATION_PENDING = The service activation is requested.
+
+            * NOT_AVAILABLE = The service not available.'
+          enum:
+            - INACTIVE
+            - ACTIVE
+            - ACTIVATION_PENDING
+            - NOT_AVAILABLE
+    service_activation_pending:
+      type: object
+      description: This schema describes the structure of a service activation pending
+        message.
+      properties:
+        serviceId:
+          type: string
+          description: The affected service id which is in ACTIVATION_PENDING.
+          examples:
+            - '1001'
+            - '1002'
+            - '1003'
+            - '1004'
+            - '1005'
+            - '1006'
+            - '1007'
+            - '1009'
+            - '1010'
+            - '1013'
+            - '1014'
+            - '1015'
+            - '1017'
+            - '1018'
+            - '1019'
+        timestamp:
+          type: string
+          description: 'Describes the timestamp when the services was requested to become active.'
+          examples:
+            - '1586253427224'
+  parameters:
+    clientId:
+      description: The client id, which is unique for every customer. It is provided
+        as part of the customer onboarding procedure.
+      schema:
+        type: string
+  operationTraits:
+    kafka:
+      bindings:
+        kafka:
+          clientId: clientId

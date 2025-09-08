@@ -942,4 +942,10 @@ enum SignalIdentifier {
     (signal_name) = "Windows.Rear.Right.IsOpen",
     (signal_type) = BOOLEAN
   ];
+
+  // Buckled up, set "true" indicate´s that the buckle switch is closed, buckled up set "false" indicates that buckle switch is open.
+  SEAT_SEATBELT_FRONT_RIGHT_ISBUCKLEDUP = 126 [
+    (signal_name) = "Seat.Seatbelt.Front.Right.IsBuckledUp",
+    (signal_type) = BOOLEAN
+  ];
 }

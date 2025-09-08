@@ -283,6 +283,8 @@ const (
 	SignalIdentifier_WINDOWS_REAR_LEFT_ISOPEN SignalIdentifier = 124
 	// Indicates whether the rear right window is open.
 	SignalIdentifier_WINDOWS_REAR_RIGHT_ISOPEN SignalIdentifier = 125
+	// Buckled up, set "true" indicate´s that the buckle switch is closed, buckled up set "false" indicates that buckle switch is open.
+	SignalIdentifier_SEAT_SEATBELT_FRONT_RIGHT_ISBUCKLEDUP SignalIdentifier = 126
 )
 
 // Enum value maps for SignalIdentifier.
@@ -414,6 +416,7 @@ var (
 		123: "WINDOWS_FRONT_RIGHT_ISOPEN",
 		124: "WINDOWS_REAR_LEFT_ISOPEN",
 		125: "WINDOWS_REAR_RIGHT_ISOPEN",
+		126: "SEAT_SEATBELT_FRONT_RIGHT_ISBUCKLEDUP",
 	}
 	SignalIdentifier_value = map[string]int32{
 		"SIGNAL_IDENTIFIER_UNSPECIFIED":                                       0,
@@ -542,6 +545,7 @@ var (
 		"WINDOWS_FRONT_RIGHT_ISOPEN":                                          123,
 		"WINDOWS_REAR_LEFT_ISOPEN":                                            124,
 		"WINDOWS_REAR_RIGHT_ISOPEN":                                           125,
+		"SEAT_SEATBELT_FRONT_RIGHT_ISBUCKLEDUP":                               126,
 	}
 )
 
@@ -571,7 +575,7 @@ var File_wayplatform_connect_mbz_v1_signal_identifier_proto protoreflect.FileDes
 
 const file_wayplatform_connect_mbz_v1_signal_identifier_proto_rawDesc = "" +
 	"\n" +
-	"2wayplatform/connect/mbz/v1/signal_identifier.proto\x12\x1awayplatform.connect.mbz.v1\x1a,wayplatform/connect/mbz/v1/annotations.proto*\xc6{\n" +
+	"2wayplatform/connect/mbz/v1/signal_identifier.proto\x12\x1awayplatform.connect.mbz.v1\x1a,wayplatform/connect/mbz/v1/annotations.proto*\xa4|\n" +
 	"\x10SignalIdentifier\x12!\n" +
 	"\x1dSIGNAL_IDENTIFIER_UNSPECIFIED\x10\x00\x12N\n" +
 	"\x1eANTITHEFTSYSTEM_ALARM_ISACTIVE\x10\x01\x1a*\x9a\x96\xb7\xeb\x03\x1eAntiTheftSystem.Alarm.IsActive\x88ެ\xd0\x06\x04\x12T\n" +
@@ -835,7 +839,8 @@ const file_wayplatform_connect_mbz_v1_signal_identifier_proto_rawDesc = "" +
 	"\x19WINDOWS_FRONT_LEFT_ISOPEN\x10z\x1a%\x9a\x96\xb7\xeb\x03\x19Windows.Front.Left.IsOpen\x88ެ\xd0\x06\x04\x12F\n" +
 	"\x1aWINDOWS_FRONT_RIGHT_ISOPEN\x10{\x1a&\x9a\x96\xb7\xeb\x03\x1aWindows.Front.Right.IsOpen\x88ެ\xd0\x06\x04\x12B\n" +
 	"\x18WINDOWS_REAR_LEFT_ISOPEN\x10|\x1a$\x9a\x96\xb7\xeb\x03\x18Windows.Rear.Left.IsOpen\x88ެ\xd0\x06\x04\x12D\n" +
-	"\x19WINDOWS_REAR_RIGHT_ISOPEN\x10}\x1a%\x9a\x96\xb7\xeb\x03\x19Windows.Rear.Right.IsOpen\x88ެ\xd0\x06\x04B\x90\x02\n" +
+	"\x19WINDOWS_REAR_RIGHT_ISOPEN\x10}\x1a%\x9a\x96\xb7\xeb\x03\x19Windows.Rear.Right.IsOpen\x88ެ\xd0\x06\x04\x12\\\n" +
+	"%SEAT_SEATBELT_FRONT_RIGHT_ISBUCKLEDUP\x10~\x1a1\x9a\x96\xb7\xeb\x03%Seat.Seatbelt.Front.Right.IsBuckledUp\x88ެ\xd0\x06\x04B\x90\x02\n" +
 	"\x1ecom.wayplatform.connect.mbz.v1B\x15SignalIdentifierProtoP\x01ZLgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mbz/v1;mbzv1\xa2\x02\x03WCM\xaa\x02\x1aWayplatform.Connect.Mbz.V1\xca\x02\x1aWayplatform\\Connect\\Mbz\\V1\xe2\x02&Wayplatform\\Connect\\Mbz\\V1\\GPBMetadata\xea\x02\x1dWayplatform::Connect::Mbz::V1b\beditionsp\xe8\a"
 
 var file_wayplatform_connect_mbz_v1_signal_identifier_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
