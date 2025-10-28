@@ -4,7 +4,7 @@
 [![GoReportCard](https://goreportcard.com/badge/github.com/way-platform/mbz-go)](https://goreportcard.com/report/github.com/way-platform/mbz-go)
 [![CI](https://github.com/way-platform/mbz-go/actions/workflows/release.yaml/badge.svg)](https://github.com/way-platform/mbz-go/actions/workflows/release.yaml)
 
-A Go SDK and CLI tool for the Mercedes-Benz [Connect Your Fleet APIs](https://developer.mercedes-benz.com/products/connect_your_fleet).
+A Go SDK and CLI tool for the Mercedes-Benz [Connect Your Fleet APIs](https://developer.mercedes-benz.com/products/connect_your_fleet), and [Vehicle Specification APIs](https://developer.mercedes-benz.com/products/vehicle_specification_fleet/).
 
 ## SDK
 
@@ -13,6 +13,7 @@ A Go SDK and CLI tool for the Mercedes-Benz [Connect Your Fleet APIs](https://de
 - Support for the [Vehicle Management API](https://developer.mercedes-benz.com/products/connect_your_fleet/specifications/vehicle_management_api)
 - Support for the [Services Catalog API](https://developer.mercedes-benz.com/products/connect_your_fleet/specifications/services_catalog_api)
 - Support for the [Push API](https://developer.mercedes-benz.com/products/connect_your_fleet/specifications/push_api)
+- Support for the [Vehicle Specification API](https://developer.mercedes-benz.com/products/vehicle_specification/specifications/vehicle_specification)
 
 ### Installing
 

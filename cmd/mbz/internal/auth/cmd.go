@@ -14,8 +14,8 @@ import (
 	"golang.org/x/term"
 )
 
-// NewClient creates a new Mercedes-Benz API client using the current CLI credentials.
-func NewClient() (*mbz.Client, error) {
+// NewOAuth2Client creates a new Mercedes-Benz API client using the current CLI credentials.
+func NewOAuth2Client() (*mbz.Client, error) {
 	cf, err := ReadFile()
 	if err != nil {
 		return nil, err
@@ -23,6 +23,21 @@ func NewClient() (*mbz.Client, error) {
 	return mbz.NewClient(
 		mbz.WithRegion(cf.Region),
 		mbz.WithOAuth2TokenSource(oauth2.StaticTokenSource(&cf.Credentials)),
+		mbz.WithSlogLogger(slog.Default()),
+	)
+}
+
+// NewClientWithAPIKey creates a new Mercedes-Benz API client using the API key from the CLI credentials.
+func NewClientWithAPIKey() (*mbz.Client, error) {
+	cf, err := ReadFile()
+	if err != nil {
+		return nil, err
+	}
+	if cf.APIKey == "" {
+		return nil, fmt.Errorf("no API key found, please login using `mbz auth login apikey`")
+	}
+	return mbz.NewClient(
+		mbz.WithAPIKey(cf.APIKey),
 		mbz.WithSlogLogger(slog.Default()),
 	)
 }
@@ -42,6 +57,20 @@ func newLoginCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "login",
 		Short: "Login to the Mercedes-Benz API",
+		Long:  "Login to the Mercedes-Benz API. Defaults to OAuth login if no subcommand is specified.",
+	}
+	oauthCmd := newOAuthLoginCommand()
+	cmd.AddCommand(oauthCmd)
+	cmd.AddCommand(newAPIKeyLoginCommand())
+	cmd.RunE = oauthCmd.RunE
+	cmd.Flags().AddFlagSet(oauthCmd.Flags())
+	return cmd
+}
+
+func newOAuthLoginCommand() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "oauth",
+		Short: "Login with OAuth2 credentials",
 	}
 	region := cmd.Flags().String("region", string(mbz.RegionECE), "region to use for authentication")
 	clientID := cmd.Flags().String("client-id", "-", "client ID to use for authentication")
@@ -83,6 +112,32 @@ func newLoginCommand() *cobra.Command {
 	return cmd
 }
 
+func newAPIKeyLoginCommand() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "apikey",
+		Short: "Login with API key",
+	}
+	apiKey := cmd.Flags().String("api-key", "-", "API key to use for authentication")
+	cmd.RunE = func(cmd *cobra.Command, _ []string) error {
+		if *apiKey == "-" {
+			cmd.Println("\nEnter API key:")
+			input, err := term.ReadPassword(int(os.Stdin.Fd()))
+			if err != nil {
+				return err
+			}
+			*apiKey = string(input)
+		}
+		if err := writeFile(&File{
+			APIKey: *apiKey,
+		}); err != nil {
+			return err
+		}
+		cmd.Println("Logged in with API key")
+		return nil
+	}
+	return cmd
+}
+
 func newLogoutCommand() *cobra.Command {
 	return &cobra.Command{
 		Use:   "logout",
@@ -103,10 +158,12 @@ type File struct {
 	Region mbz.Region `json:"region"`
 	// Credentials is the current stored client credentials.
 	Credentials oauth2.Token `json:"clientCredentials"`
+	// APIKey is the API key for Vehicle Specification API.
+	APIKey string `json:"apiKey,omitempty"`
 }
 
 func (cf *File) isExpired() bool {
-	return cf.Credentials.Expiry.Before(time.Now())
+	return cf.Credentials.Expiry.Before(time.Now()) && cf.APIKey == ""
 }
 
 func resolveFilepath() (string, error) {

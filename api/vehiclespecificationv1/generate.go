@@ -1,0 +1,16 @@
+package vehiclespecificationv1
+
+//go:generate echo [vehiclespecificationv1] copying original...
+//go:generate cp vehicle_specification.yaml 01-original.yaml
+
+//go:generate echo [vehiclespecificationv1] applying overlay...
+//go:generate sh -c "go tool -modfile ../../tools/go.mod openapi-overlay apply overlay.yaml 01-original.yaml > 02-overlayed.yaml"
+
+//go:generate echo [vehiclespecificationv1] pre-processing...
+//go:generate sh -c "sed -f preprocess.sed 02-overlayed.yaml > 03-preprocessed.yaml"
+
+//go:generate echo [vehiclespecificationv1] downconverting...
+//go:generate npx @apiture/openapi-down-convert@v0.14.1 --input 03-preprocessed.yaml --output 04-downconverted.yaml
+
+//go:generate echo [vehiclespecificationv1] generating code...
+//go:generate go tool -modfile ../../tools/go.mod oapi-codegen -config config.yaml 04-downconverted.yaml
