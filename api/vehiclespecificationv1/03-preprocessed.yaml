@@ -1,0 +1,685 @@
+### Vehicle Specification API
+### date 23.09.2025
+openapi: 3.0.3
+info:
+    title: Vehicle Specification
+    version: '1.8'
+    description: "Vehicle Specification provides vehicle specification information \nrelevant for online marketing purposes."
+    contact:
+        name: Mercedes-Benz /developers product team
+        url: 'https://developer.mercedes-benz.com/contact/vehicle_specification/technical_inquiry'
+servers:
+    - url: 'https://api.mercedes-benz.com/vehicle_specifications/v1'
+      description: Production server
+security:
+    - ApiKey: []
+tags:
+    - name: Specification
+      description: Get marketing information
+    - name: Equipments
+      description: Get extended equipments information
+components:
+    schemas:
+        # response schema objects
+        VehicleSpecificationResponse:
+            description: |-
+                The response object contains the vehicle specification data of the
+                requested vehicle and locale
+            type: object
+            properties:
+                vehicleData:
+                    $ref: '#/components/schemas/VehicleData'
+        VehicleEquipmentsResponse:
+            description: |-
+                The response object contains the vehicle equipments data of the
+                requested vehicle and locale
+            type: array
+            uniqueItems: true
+            minItems: 0
+            maxItems: 200
+            items:
+                $ref: '#/components/schemas/EquipmentData'
+            x-go-type-skip-optional-pointer: true
+            x-omitzero: true
+        CabinInfo:
+            type: object
+            properties:
+                cabinBase:
+                    $ref: '#/components/schemas/CodeText'
+                cabinBottom:
+                    $ref: '#/components/schemas/CodeText'
+                cabinCombined:
+                    $ref: '#/components/schemas/CodeText'
+                cabinType:
+                    $ref: '#/components/schemas/CodeText'
+                cabinWidth:
+                    $ref: '#/components/schemas/CodeText'
+        CodeText:
+            type: object
+            description: Single equipment code information
+            properties:
+                code:
+                    type: string
+                    minLength: 3
+                    maxLength: 4
+                    description: equipment or package code
+                    x-go-type-skip-optional-pointer: true
+                text:
+                    type: string
+                    maxLength: 80
+                    description: standard code description
+                    x-go-type-skip-optional-pointer: true
+        Emico:
+            type: object
+            properties:
+                approvedUsage:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                driveConcept:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                legalContext:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                rawData:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                ruleSetVersionID:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                testProcedure:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+        Emission:
+            type: object
+            properties:
+                combined:
+                    type: number
+                directive:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                in:
+                    type: number
+                out:
+                    type: number
+        Engine:
+            type: object
+            properties:
+                battery:
+                    $ref: '#/components/schemas/EngineBattery'
+                cylinderCapacity:
+                    type: integer
+                    format: int32
+                emission:
+                    $ref: '#/components/schemas/EngineEmission'
+                fuelConsumption:
+                    $ref: '#/components/schemas/EngineFuelConsumption'
+                fuelTankCapacity:
+                    type: integer
+                    format: int32
+                fuelType:
+                    $ref: '#/components/schemas/CodeText'
+                power:
+                    $ref: '#/components/schemas/EnginePower'
+                range:
+                    type: integer
+                    format: int32
+                torque:
+                    type: integer
+                    format: int32
+        EngineBattery:
+            type: object
+            properties:
+                capacity:
+                    type: integer
+                    format: int32
+                chargingTime:
+                    type: integer
+                    format: int32
+                type:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+        EngineEmission:
+            type: object
+            properties:
+                city:
+                    type: number
+                combined:
+                    type: number
+                overland:
+                    type: number
+                unit:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+        EngineFuelConsumption:
+            type: object
+            properties:
+                city:
+                    type: number
+                combined:
+                    type: number
+                overland:
+                    type: number
+                unit:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+        EnginePower:
+            type: object
+            properties:
+                kw:
+                    type: integer
+                    format: int32
+                ps:
+                    type: integer
+                    format: int32
+        FuelConsumption:
+            type: object
+            properties:
+                combined:
+                    type: number
+                in:
+                    type: number
+                out:
+                    type: number
+        LegacyEquipment:
+            type: object
+            required:
+                - code
+            properties:
+                code:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                codeType:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                description:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                group:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                type:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+        NewPrice:
+            type: object
+            properties:
+                grossprice:
+                    type: number
+                netprice:
+                    type: number
+                tax:
+                    type: number
+        OptionPackage:
+            type: object
+            properties:
+                code:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                text:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                options:
+                    type: array
+                    uniqueItems: true
+                    minItems: 1
+                    maxItems: 20
+                    items:
+                        $ref: '#/components/schemas/LegacyEquipment'
+                    x-go-type-skip-optional-pointer: true
+                    x-omitzero: true
+        PackageBasedOptions:
+            type: object
+            properties:
+                optionPackages:
+                    type: array
+                    uniqueItems: true
+                    minItems: 0
+                    maxItems: 100
+                    items:
+                        $ref: '#/components/schemas/OptionPackage'
+                    x-go-type-skip-optional-pointer: true
+                    x-omitzero: true
+                options:
+                    type: array
+                    uniqueItems: true
+                    minItems: 1
+                    maxItems: 200
+                    items:
+                        $ref: '#/components/schemas/LegacyEquipment'
+                    x-go-type-skip-optional-pointer: true
+                    x-omitzero: true
+        SalesDescription:
+            type: object
+            properties:
+                allwheel:
+                    $ref: '#/components/schemas/CodeText'
+                body:
+                    $ref: '#/components/schemas/CodeText'
+                extension:
+                    $ref: '#/components/schemas/CodeText'
+                lengthType:
+                    $ref: '#/components/schemas/CodeText'
+                line:
+                    $ref: '#/components/schemas/CodeText'
+                model:
+                    $ref: '#/components/schemas/CodeText'
+                style:
+                    $ref: '#/components/schemas/CodeText'
+                type:
+                    $ref: '#/components/schemas/CodeText'
+        TechnicalData:
+            type: object
+            properties:
+                id:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                text:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                unit:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                value:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+        TypKey:
+            type: object
+            properties:
+                hsn:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                tsn:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                vvs:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+        VehicleData:
+            type: object
+            properties:
+                allwheel:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                baumuster:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                body:
+                    $ref: '#/components/schemas/CodeText'
+                branch:
+                    type: integer
+                    format: int32
+                brand:
+                    $ref: '#/components/schemas/CodeText'
+                cabin:
+                    $ref: '#/components/schemas/CodeText'
+                cabinInfo:
+                    $ref: '#/components/schemas/CabinInfo'
+                countrynumber:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                cylindercapacity:
+                    type: integer
+                    format: int32
+                emico:
+                    $ref: '#/components/schemas/Emico'
+                emission:
+                    $ref: '#/components/schemas/Emission'
+                emissionstandard:
+                    $ref: '#/components/schemas/CodeText'
+                engineCode:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                enginetype:
+                    $ref: '#/components/schemas/CodeText'
+                fin11:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                finaldate:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                fuel:
+                    $ref: '#/components/schemas/CodeText'
+                fuelconsumption:
+                    $ref: '#/components/schemas/FuelConsumption'
+                function:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                leather:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                line:
+                    $ref: '#/components/schemas/CodeText'
+                longType:
+                    description: National sales description of the vehicle
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                longTypeTechnical:
+                    description: Language dependent technical vehicle type for Vans
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                metallic:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                model:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                modelName:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                modelYear:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                modelYearYear:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                modelrange:
+                    $ref: '#/components/schemas/CodeText'
+                newprice:
+                    $ref: '#/components/schemas/NewPrice'
+                nst:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                numberofdoors:
+                    type: integer
+                    format: int32
+                numberofseats:
+                    type: integer
+                    format: int32
+                options:
+                    type: array
+                    uniqueItems: true
+                    minItems: 1
+                    maxItems: 200
+                    items:
+                        $ref: '#/components/schemas/LegacyEquipment'
+                    x-go-type-skip-optional-pointer: true
+                    x-omitzero: true
+                packageBasedOptions:
+                    $ref: '#/components/schemas/PackageBasedOptions'
+                paint:
+                    $ref: '#/components/schemas/LegacyEquipment'
+                paint2:
+                    $ref: '#/components/schemas/LegacyEquipment'
+                poolflag:
+                    type: string
+                    enum:
+                        - P
+                        - N
+                    x-go-type-skip-optional-pointer: true
+                powerkw:
+                    type: integer
+                    format: int32
+                powerps:
+                    type: integer
+                    format: int32
+                primaryEngine:
+                    $ref: '#/components/schemas/Engine'
+                productgroup:
+                    $ref: '#/components/schemas/CodeText'
+                salesDescription:
+                    $ref: '#/components/schemas/SalesDescription'
+                secondaryEngine:
+                    $ref: '#/components/schemas/Engine'
+                shippingdate:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                shortType:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                status:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                subcategory:
+                    $ref: '#/components/schemas/CodeText'
+                suspensiontype:
+                    $ref: '#/components/schemas/CodeText'
+                technicalData:
+                    type: array
+                    uniqueItems: true
+                    minItems: 1
+                    maxItems: 100
+                    items:
+                        $ref: '#/components/schemas/TechnicalData'
+                    x-go-type-skip-optional-pointer: true
+                    x-omitzero: true
+                transmissiontype:
+                    $ref: '#/components/schemas/CodeText'
+                typeclass:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                typekey:
+                    $ref: '#/components/schemas/TypKey'
+                upholstery:
+                    $ref: '#/components/schemas/LegacyEquipment'
+                vehicleType:
+                    type: string
+                    enum:
+                        - NEW
+                        - USED
+                    x-go-type-skip-optional-pointer: true
+                vin11:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                weight:
+                    $ref: '#/components/schemas/Weight'
+                wheelbase:
+                    type: integer
+                    format: int32
+                wheelform:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+        Weight:
+            type: object
+            properties:
+                axis1:
+                    type: integer
+                    format: int32
+                axis2:
+                    type: integer
+                    format: int32
+                axis3:
+                    type: integer
+                    format: int32
+                axis4:
+                    type: integer
+                    format: int32
+                axis5:
+                    type: integer
+                    format: int32
+                axis6:
+                    type: integer
+                    format: int32
+                axislast:
+                    type: integer
+                    format: int32
+                extended:
+                    type: integer
+                    format: int32
+                payload:
+                    type: integer
+                total:
+                    type: integer
+                    format: int32
+                vehicleMassKg:
+                    type: integer
+                    format: int32
+        # equipments schema objects
+        EquipmentData:
+            type: object
+            properties:
+                code:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                highlight:
+                    type: boolean
+                mercedesMe:
+                    type: boolean
+                categoryPathEnglish:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                salesDesignationEnglish:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                entity:
+                    $ref: '#/components/schemas/EquipmentTranslation'
+        EquipmentTranslation:
+            type: object
+            properties:
+                salesDesignation:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                shortDescription:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                footnote:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                coreArgument:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                extendedDescription:
+                    type: object
+                    properties:
+                        headline:
+                            type: string
+                            x-go-type-skip-optional-pointer: true
+                        text:
+                            type: string
+                            x-go-type-skip-optional-pointer: true
+                functionText:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                components:
+                    $ref: '#/components/schemas/EquipmentComponents'
+        EquipmentComponent:
+            type: object
+            required:
+                - content
+                - components
+            properties:
+                content:
+                    type: string
+                    uniqueItems: true
+                    minItems: 0
+                    maxItems: 20
+                    x-go-type-skip-optional-pointer: true
+                components:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/EquipmentComponent'
+                    x-go-type-skip-optional-pointer: true
+                    x-omitzero: true
+        EquipmentComponents:
+            type: object
+            required:
+                - components
+            properties:
+                bulletpointsHeadline:
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                components:
+                    type: array
+                    uniqueItems: true
+                    minItems: 0
+                    maxItems: 20
+                    items:
+                        $ref: '#/components/schemas/EquipmentComponent'
+                    x-go-type-skip-optional-pointer: true
+                    x-omitzero: true
+        # common schema objects
+        Locales:
+            type: string
+            description: "Market locale for country and language used for descriptions \n(ISO 3166 countries, ISO 639 languages)."
+            example: de_DE
+            enum:
+                - ar_OM
+                - bg_BG
+                - cs_CZ
+                - da_DK
+                - de_AT
+                - de_CH
+                - de_DE
+                - de_IT
+                - el_GR
+                - en_AE
+                - en_BD
+                - en_BE
+                - en_BH
+                - en_CA
+                - en_DO
+                - en_DU
+                - en_EE
+                - en_FI
+                - en_GB
+                - en_IE
+                - en_IL
+                - en_KR
+                - en_KW
+                - en_KZ
+                - en_ID
+                - en_LK
+                - en_LT
+                - en_LV
+                - en_NL
+                - en_NO
+                - en_OM
+                - en_PH
+                - en_PL
+                - en_RO
+                - en_SL
+                - en_US
+                - en_XH
+                - es_CL
+                - es_CR
+                - es_DO
+                - es_ES
+                - es_MX
+                - es_PA
+                - es_PY
+                - et_EE
+                - fi_FI
+                - fr_CH
+                - fr_FR
+                - fr_MA
+                - he_IL
+                - hr_HR
+                - hu_HU
+                - is_IS
+                - it_CH
+                - it_IT
+                - ko_KR
+                - lt_LT
+                - lv_LV
+                - nl_NL
+                - no_NO
+                - pl_PL
+                - ro_RO
+                - ru_KZ
+                - sl_SL
+                - sr_RS
+                - sv_SE
+                - uk_UA
+            x-go-type-skip-optional-pointer: true
+        Error:
+            type: object
+            required:
+                - statusCode
+            properties:
+                statusCode:
+                    type: string
+                    minLength: 3
+                    maxLength: 3
+                    description: Error status code
+                    x-go-type-skip-optional-pointer: true
+                errorMessage:
+                    type: string
+                    maxLength: 20
+                    description: Error code message
+                    x-go-type-skip-optional-pointer: true
+                message:
+                    type: string
+                    maxLength: 100
+                    description: Error detailed description
+                    x-go-type-skip-optional-pointer: true
+            description: The error object contains detailed information about the error.

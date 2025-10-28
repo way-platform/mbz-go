@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"net/http"
 	"net/url"
 	"runtime/debug"
 
@@ -49,6 +50,12 @@ func NewClient(opts ...ClientOption) (*Client, error) {
 			Source: config.tokenSource,
 			Base:   client.httpClient.HTTPClient.Transport,
 		}
+	case config.apiKey != "":
+		client.httpClient.HTTPClient.Transport = &headerTransport{
+			key:          "x-api-key",
+			value:        config.apiKey,
+			RoundTripper: client.httpClient.HTTPClient.Transport,
+		}
 	}
 	return client, nil
 }
@@ -81,4 +88,25 @@ func getUserAgent() string {
 		userAgent += "/" + info.Main.Version
 	}
 	return userAgent
+}
+
+type headerTransport struct {
+	http.RoundTripper
+	key   string
+	value string
+}
+
+func (t *headerTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	reqBodyClosed := false
+	if req.Body != nil {
+		defer func() {
+			if !reqBodyClosed {
+				req.Body.Close()
+			}
+		}()
+	}
+	req2 := req.Clone(req.Context())
+	req2.Header.Set(t.key, t.value)
+	reqBodyClosed = true
+	return t.RoundTripper.RoundTrip(req2)
 }

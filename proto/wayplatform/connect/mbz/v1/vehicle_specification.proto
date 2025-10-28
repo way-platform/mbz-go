@@ -1,0 +1,42 @@
+edition = "2023";
+
+package wayplatform.connect.mbz.v1;
+
+// VehicleData represents the vehicle specification data from the Mercedes-Benz Vehicle Specification API.
+message VehicleSpecification {
+  // The vehicle model name.
+  string model_name = 1;
+
+  // The vehicle model year.
+  string model_year = 2;
+
+  // The brand of the vehicle.
+  string brand = 3;
+
+  // The fuel type of the vehicle.
+  string fuel_type = 4;
+
+  // The emission standard of the vehicle.
+  string emission_standard = 5;
+
+  // The primary engine details of the vehicle.
+  Engine primary_engine = 6;
+
+  // The secondary engine details of the vehicle (for hybrid vehicles).
+  Engine secondary_engine = 7;
+
+  // Total weight of the vehicle in kg.
+  int32 total_weight = 8;
+
+  // The engine details of the vehicle.
+  message Engine {
+    // The battery capacity of the engine in kWh (for electric/hybrid vehicles).
+    int32 battery_capacity_kwh = 1;
+
+    // The fuel tank capacity of the engine in liters.
+    int32 fuel_tank_capacity_l = 2;
+
+    // The fuel type of the engine.
+    string fuel_type = 3;
+  }
+}

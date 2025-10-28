@@ -12,6 +12,7 @@ type ClientConfig struct {
 	region       Region
 	clientID     string
 	clientSecret string
+	apiKey       string
 	tokenSource  oauth2.TokenSource
 	oauth2Config *clientcredentials.Config
 	logger       Logger
@@ -67,5 +68,13 @@ func WithLogger(logger Logger) ClientOption {
 func WithSlogLogger(logger *slog.Logger) ClientOption {
 	return func(cc *ClientConfig) {
 		cc.logger = slogLogger{logger: logger}
+	}
+}
+
+// WithAPIKey sets the API key for the client.
+// The API key will be added as a x-api-key Authorization Bearer token to all requests.
+func WithAPIKey(apiKey string) ClientOption {
+	return func(config *ClientConfig) {
+		config.apiKey = apiKey
 	}
 }

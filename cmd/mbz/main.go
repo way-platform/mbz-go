@@ -76,6 +76,11 @@ func newRootCommand() *cobra.Command {
 		ID:    "services",
 		Title: "Services",
 	})
+	cmd.AddGroup(&cobra.Group{
+		ID:    "vehicle-specification",
+		Title: "Vehicle Specification",
+	})
+	cmd.AddCommand(newGetVehicleSpecificationCommand())
 	cmd.AddCommand(newListServicesCommand())
 	cmd.AddGroup(&cobra.Group{
 		ID:    "auth",
@@ -100,7 +105,7 @@ func newListVehiclesCommand() *cobra.Command {
 		GroupID: "vehicles",
 	}
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
-		client, err := auth.NewClient()
+		client, err := auth.NewOAuth2Client()
 		if err != nil {
 			return err
 		}
@@ -122,7 +127,7 @@ func newAssignVehiclesCommand() *cobra.Command {
 		Args:    cobra.MinimumNArgs(1),
 	}
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
-		client, err := auth.NewClient()
+		client, err := auth.NewOAuth2Client()
 		if err != nil {
 			return err
 		}
@@ -146,7 +151,7 @@ func newDeleteVehiclesCommand() *cobra.Command {
 		Args:    cobra.MinimumNArgs(1),
 	}
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
-		client, err := auth.NewClient()
+		client, err := auth.NewOAuth2Client()
 		if err != nil {
 			return err
 		}
@@ -170,7 +175,7 @@ func newListServicesCommand() *cobra.Command {
 	}
 	details := cmd.Flags().Bool("details", false, "Include service details")
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
-		client, err := auth.NewClient()
+		client, err := auth.NewOAuth2Client()
 		if err != nil {
 			return err
 		}
@@ -194,7 +199,7 @@ func newGetVehicleCompatibilityCommand() *cobra.Command {
 		Args:    cobra.ExactArgs(1),
 	}
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
-		client, err := auth.NewClient()
+		client, err := auth.NewOAuth2Client()
 		if err != nil {
 			return err
 		}
@@ -218,7 +223,7 @@ func newGetVehicleServicesCommand() *cobra.Command {
 		Args:    cobra.ExactArgs(1),
 	}
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
-		client, err := auth.NewClient()
+		client, err := auth.NewOAuth2Client()
 		if err != nil {
 			return err
 		}
@@ -242,7 +247,7 @@ func newPostVehicleServicesCommand() *cobra.Command {
 		Args:    cobra.MinimumNArgs(3),
 	}
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
-		client, err := auth.NewClient()
+		client, err := auth.NewOAuth2Client()
 		if err != nil {
 			return err
 		}
@@ -281,7 +286,7 @@ func newEnableDeltaPushCommand() *cobra.Command {
 		Args:    cobra.MinimumNArgs(1),
 	}
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
-		client, err := auth.NewClient()
+		client, err := auth.NewOAuth2Client()
 		if err != nil {
 			return err
 		}
@@ -312,7 +317,7 @@ func newDisableDeltaPushCommand() *cobra.Command {
 		Args:    cobra.MinimumNArgs(1),
 	}
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
-		client, err := auth.NewClient()
+		client, err := auth.NewOAuth2Client()
 		if err != nil {
 			return err
 		}
@@ -326,6 +331,33 @@ func newDisableDeltaPushCommand() *cobra.Command {
 			})
 		}
 		response, err := client.PatchVehicles(cmd.Context(), &request)
+		if err != nil {
+			return err
+		}
+		printJSON(response)
+		return nil
+	}
+	return cmd
+}
+
+func newGetVehicleSpecificationCommand() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "get-vehicle-specification",
+		Short:   "Get vehicle specification",
+		GroupID: "vehicle-specification",
+	}
+	vin := cmd.Flags().String("vin", "", "Vehicle identification number (VIN)")
+	_ = cmd.MarkFlagRequired("vin")
+	cmd.RunE = func(cmd *cobra.Command, args []string) error {
+		client, err := auth.NewClientWithAPIKey()
+		if err != nil {
+			return err
+		}
+		request := &mbz.GetVehicleSpecificationRequest{
+			VehicleID: *vin,
+			Locale:    "en_US",
+		}
+		response, err := client.GetVehicleSpecification(cmd.Context(), request)
 		if err != nil {
 			return err
 		}
