@@ -35,17 +35,19 @@ type GetVehicleCompatibilityResponse struct {
 func (c *Client) GetVehicleCompatibility(
 	ctx context.Context,
 	request *GetVehicleCompatibilityRequest,
+	opts ...ClientOption,
 ) (_ *GetVehicleCompatibilityResponse, err error) {
 	defer func() {
 		if err != nil {
 			err = fmt.Errorf("mbz: get vehicle compatibility: %w", err)
 		}
 	}()
+	cfg := c.config.with(opts...)
 	httpRequest, err := c.newRequest(ctx, http.MethodGet, "/v1/accounts/vehicles/"+request.VIN+"/compatibilities", nil)
 	if err != nil {
 		return nil, err
 	}
-	httpResponse, err := c.httpClient.Do(httpRequest)
+	httpResponse, err := c.httpClient(cfg).Do(httpRequest)
 	if err != nil {
 		return nil, err
 	}

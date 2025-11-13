@@ -41,12 +41,14 @@ type PostVehicleServicesResponse struct{}
 func (c *Client) PostVehicleServices(
 	ctx context.Context,
 	request *PostVehicleServicesRequest,
+	opts ...ClientOption,
 ) (_ *PostVehicleServicesResponse, err error) {
 	defer func() {
 		if err != nil {
 			err = fmt.Errorf("mbz: post vehicle services: %w", err)
 		}
 	}()
+	cfg := c.config.with(opts...)
 	var requestBody []vehiclesv1.DesiredServiceStatusRequest
 	for _, desiredServiceStatusInput := range request.DesiredServiceStatusInput {
 		services := make([]vehiclesv1.DesiredServiceStatus, 0, len(desiredServiceStatusInput.Services))
@@ -62,7 +64,6 @@ func (c *Client) PostVehicleServices(
 		})
 	}
 	requestBodyData, err := json.Marshal(requestBody)
-	fmt.Println("requestBody", string(requestBodyData))
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +77,7 @@ func (c *Client) PostVehicleServices(
 		return nil, err
 	}
 	httpRequest.Header.Set("Content-Type", "application/json")
-	httpResponse, err := c.httpClient.Do(httpRequest)
+	httpResponse, err := c.httpClient(cfg).Do(httpRequest)
 	if err != nil {
 		return nil, err
 	}

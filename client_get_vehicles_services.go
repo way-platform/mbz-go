@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 
 	"github.com/way-platform/mbz-go/api/vehiclesv1"
@@ -26,17 +25,18 @@ type GetVehicleServicesResponse struct {
 }
 
 // GetVehicleServices gets the actual service status for a vehicle.
-func (c *Client) GetVehicleServices(ctx context.Context, request *GetVehicleServicesRequest) (_ *GetVehicleServicesResponse, err error) {
+func (c *Client) GetVehicleServices(ctx context.Context, request *GetVehicleServicesRequest, opts ...ClientOption) (_ *GetVehicleServicesResponse, err error) {
 	defer func() {
 		if err != nil {
 			err = fmt.Errorf("mbz: get vehicle services: %w", err)
 		}
 	}()
+	cfg := c.config.with(opts...)
 	httpRequest, err := c.newRequest(ctx, http.MethodGet, "/v2/accounts/vehicles/"+request.VIN+"/services", nil)
 	if err != nil {
 		return nil, err
 	}
-	httpResponse, err := c.httpClient.Do(httpRequest)
+	httpResponse, err := c.httpClient(cfg).Do(httpRequest)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +48,6 @@ func (c *Client) GetVehicleServices(ctx context.Context, request *GetVehicleServ
 	if err != nil {
 		return nil, err
 	}
-	log.Println(string(data))
 	var responseBody vehiclesv1.VehicleServiceStatus
 	if err := json.Unmarshal(data, &responseBody); err != nil {
 		return nil, err

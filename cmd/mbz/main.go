@@ -9,10 +9,9 @@ import (
 	"log/slog"
 	"os"
 	"os/signal"
-	"strings"
 
+	"charm.land/lipgloss/v2"
 	"github.com/charmbracelet/fang"
-	"github.com/charmbracelet/lipgloss/v2"
 	"github.com/spf13/cobra"
 	"github.com/twmb/franz-go/pkg/kgo"
 	"github.com/twmb/franz-go/pkg/sasl/oauth"
@@ -53,42 +52,28 @@ func main() {
 func newRootCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "mbz",
-		Short: "Mercedes-Benz Management API CLI",
+		Short: "Mercedes-Benz API CLI",
 	}
-	cmd.AddGroup(&cobra.Group{
-		ID:    "vehicles",
-		Title: "Vehicles",
-	})
+	cmd.PersistentFlags().Bool("debug", false, "Enable debug mode")
+	cmd.AddGroup(&cobra.Group{ID: "vehicles", Title: "Vehicles"})
 	cmd.AddCommand(newListVehiclesCommand())
 	cmd.AddCommand(newAssignVehiclesCommand())
 	cmd.AddCommand(newDeleteVehiclesCommand())
-	cmd.AddCommand(newGetVehicleCompatibilityCommand())
+	cmd.AddGroup(&cobra.Group{ID: "services", Title: "Data Services"})
 	cmd.AddCommand(newGetVehicleServicesCommand())
-	cmd.AddCommand(newPostVehicleServicesCommand())
+	cmd.AddCommand(newGetVehicleCompatibilityCommand())
+	cmd.AddCommand(newActivateVehicleServicesCommand())
+	cmd.AddCommand(newDeactivateVehicleServicesCommand())
+	cmd.AddGroup(&cobra.Group{ID: "delta-push", Title: "Delta Push"})
 	cmd.AddCommand(newEnableDeltaPushCommand())
 	cmd.AddCommand(newDisableDeltaPushCommand())
-	cmd.AddGroup(&cobra.Group{
-		ID:    "vehicle-signals",
-		Title: "Vehicle Signals",
-	})
-	cmd.AddCommand(newConsumeVehicleSignalsCommand())
-	cmd.AddGroup(&cobra.Group{
-		ID:    "services",
-		Title: "Services",
-	})
-	cmd.AddGroup(&cobra.Group{
-		ID:    "vehicle-specification",
-		Title: "Vehicle Specification",
-	})
+	cmd.AddGroup(&cobra.Group{ID: "vehicle-specifications", Title: "Vehicle Specifications"})
 	cmd.AddCommand(newGetVehicleSpecificationCommand())
 	cmd.AddCommand(newListServicesCommand())
-	cmd.AddGroup(&cobra.Group{
-		ID:    "auth",
-		Title: "Authentication",
-	})
-	authCmd := auth.NewCommand()
-	authCmd.GroupID = "auth"
-	cmd.AddCommand(authCmd)
+	cmd.AddGroup(&cobra.Group{ID: "kafka", Title: "Kafka"})
+	cmd.AddCommand(newConsumeVehicleSignalsCommand())
+	cmd.AddGroup(auth.NewGroup())
+	cmd.AddCommand(auth.NewCommand())
 	cmd.AddGroup(&cobra.Group{
 		ID:    "utils",
 		Title: "Utils",
@@ -100,12 +85,12 @@ func newRootCommand() *cobra.Command {
 
 func newListVehiclesCommand() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "list-vehicles",
+		Use:     "vehicles",
 		Short:   "List vehicles",
 		GroupID: "vehicles",
 	}
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
-		client, err := auth.NewOAuth2Client()
+		client, err := newOAuth2Client(cmd)
 		if err != nil {
 			return err
 		}
@@ -121,13 +106,13 @@ func newListVehiclesCommand() *cobra.Command {
 
 func newAssignVehiclesCommand() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "assign-vehicles",
+		Use:     "assign-vehicles <vin...>",
 		Short:   "Assign vehicles",
 		GroupID: "vehicles",
 		Args:    cobra.MinimumNArgs(1),
 	}
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
-		client, err := auth.NewOAuth2Client()
+		client, err := newOAuth2Client(cmd)
 		if err != nil {
 			return err
 		}
@@ -145,13 +130,13 @@ func newAssignVehiclesCommand() *cobra.Command {
 
 func newDeleteVehiclesCommand() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "delete-vehicles",
+		Use:     "delete-vehicles <vin...>",
 		Short:   "Delete vehicles",
 		GroupID: "vehicles",
 		Args:    cobra.MinimumNArgs(1),
 	}
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
-		client, err := auth.NewOAuth2Client()
+		client, err := newOAuth2Client(cmd)
 		if err != nil {
 			return err
 		}
@@ -169,13 +154,13 @@ func newDeleteVehiclesCommand() *cobra.Command {
 
 func newListServicesCommand() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "list-services",
-		Short:   "List services",
+		Use:     "services",
+		Short:   "List all available data services",
 		GroupID: "services",
 	}
 	details := cmd.Flags().Bool("details", false, "Include service details")
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
-		client, err := auth.NewOAuth2Client()
+		client, err := newOAuth2Client(cmd)
 		if err != nil {
 			return err
 		}
@@ -193,13 +178,13 @@ func newListServicesCommand() *cobra.Command {
 
 func newGetVehicleCompatibilityCommand() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "get-vehicle-compatibility",
-		Short:   "Get vehicle compatibility",
-		GroupID: "vehicles",
+		Use:     "vehicle-compatibility <vin>",
+		Short:   "Get data service compatibility for a specific vehicle",
+		GroupID: "services",
 		Args:    cobra.ExactArgs(1),
 	}
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
-		client, err := auth.NewOAuth2Client()
+		client, err := newOAuth2Client(cmd)
 		if err != nil {
 			return err
 		}
@@ -217,13 +202,13 @@ func newGetVehicleCompatibilityCommand() *cobra.Command {
 
 func newGetVehicleServicesCommand() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "get-vehicle-services",
-		Short:   "Get vehicle services",
-		GroupID: "vehicles",
+		Use:     "vehicle-services <vin>",
+		Short:   "Get data services for a specific vehicle",
+		GroupID: "services",
 		Args:    cobra.ExactArgs(1),
 	}
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
-		client, err := auth.NewOAuth2Client()
+		client, err := newOAuth2Client(cmd)
 		if err != nil {
 			return err
 		}
@@ -239,32 +224,67 @@ func newGetVehicleServicesCommand() *cobra.Command {
 	return cmd
 }
 
-func newPostVehicleServicesCommand() *cobra.Command {
+func newActivateVehicleServicesCommand() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "post-vehicle-services",
-		Short:   "Post vehicle services",
-		GroupID: "vehicles",
-		Args:    cobra.MinimumNArgs(3),
+		Use:     "activate-vehicle-services <vin> <service-id...>",
+		Short:   "Activate vehicle services",
+		GroupID: "services",
+		Args:    cobra.MinimumNArgs(2),
 	}
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
-		client, err := auth.NewOAuth2Client()
+		client, err := newOAuth2Client(cmd)
 		if err != nil {
 			return err
 		}
-		services := make([]mbz.VehicleServices, 0)
-		for i := 1; i < len(args); i += 2 {
-			if strings.ToLower(args[i+1]) != "active" && strings.ToLower(args[i+1]) != "inactive" {
-				return fmt.Errorf("invalid desired status: %s", args[i+1])
-			}
+		vin := args[0]
+		services := make([]mbz.VehicleServices, 0, len(args)-1)
+		for i := 1; i < len(args); i++ {
 			services = append(services, mbz.VehicleServices{
 				ServiceID:     args[i],
-				DesiredStatus: mbz.DesiredStatus(strings.ToUpper(args[i+1])),
+				DesiredStatus: mbz.DesiredStatusActive,
 			})
 		}
 		response, err := client.PostVehicleServices(cmd.Context(), &mbz.PostVehicleServicesRequest{
 			DesiredServiceStatusInput: []mbz.DesiredServiceStatusInput{
 				{
-					VIN:      args[0],
+					VIN:      vin,
+					Services: services,
+				},
+			},
+		})
+		if err != nil {
+			return err
+		}
+		printJSON(response)
+		return nil
+	}
+	return cmd
+}
+
+func newDeactivateVehicleServicesCommand() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "deactivate-vehicle-services <vin> <service-id...>",
+		Short:   "Deactivate vehicle services",
+		GroupID: "services",
+		Args:    cobra.MinimumNArgs(2),
+	}
+	cmd.RunE = func(cmd *cobra.Command, args []string) error {
+		client, err := newOAuth2Client(cmd)
+		if err != nil {
+			return err
+		}
+		vin := args[0]
+		services := make([]mbz.VehicleServices, 0, len(args)-1)
+		for i := 1; i < len(args); i++ {
+			services = append(services, mbz.VehicleServices{
+				ServiceID:     args[i],
+				DesiredStatus: mbz.DesiredStatusInactive,
+			})
+		}
+		response, err := client.PostVehicleServices(cmd.Context(), &mbz.PostVehicleServicesRequest{
+			DesiredServiceStatusInput: []mbz.DesiredServiceStatusInput{
+				{
+					VIN:      vin,
 					Services: services,
 				},
 			},
@@ -280,13 +300,13 @@ func newPostVehicleServicesCommand() *cobra.Command {
 
 func newEnableDeltaPushCommand() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "enable-delta-push",
+		Use:     "enable-delta-push <vin...>",
 		Short:   "Enable delta push",
-		GroupID: "vehicles",
+		GroupID: "delta-push",
 		Args:    cobra.MinimumNArgs(1),
 	}
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
-		client, err := auth.NewOAuth2Client()
+		client, err := newOAuth2Client(cmd)
 		if err != nil {
 			return err
 		}
@@ -311,13 +331,13 @@ func newEnableDeltaPushCommand() *cobra.Command {
 
 func newDisableDeltaPushCommand() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "disable-delta-push",
+		Use:     "disable-delta-push <vin...>",
 		Short:   "Disable delta push",
-		GroupID: "vehicles",
+		GroupID: "delta-push",
 		Args:    cobra.MinimumNArgs(1),
 	}
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
-		client, err := auth.NewOAuth2Client()
+		client, err := newOAuth2Client(cmd)
 		if err != nil {
 			return err
 		}
@@ -342,22 +362,20 @@ func newDisableDeltaPushCommand() *cobra.Command {
 
 func newGetVehicleSpecificationCommand() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "get-vehicle-specification",
+		Use:     "vehicle-specification <vin>",
 		Short:   "Get vehicle specification",
-		GroupID: "vehicle-specification",
+		GroupID: "vehicle-specifications",
+		Args:    cobra.ExactArgs(1),
 	}
-	vin := cmd.Flags().String("vin", "", "Vehicle identification number (VIN)")
-	_ = cmd.MarkFlagRequired("vin")
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
-		client, err := auth.NewClientWithAPIKey()
+		client, err := newClientWithAPIKey(cmd)
 		if err != nil {
 			return err
 		}
-		request := &mbz.GetVehicleSpecificationRequest{
-			VehicleID: *vin,
+		response, err := client.GetVehicleSpecification(cmd.Context(), &mbz.GetVehicleSpecificationRequest{
+			VehicleID: args[0],
 			Locale:    "en_US",
-		}
-		response, err := client.GetVehicleSpecification(cmd.Context(), request)
+		})
 		if err != nil {
 			return err
 		}
@@ -370,8 +388,8 @@ func newGetVehicleSpecificationCommand() *cobra.Command {
 func newConsumeVehicleSignalsCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "consume-vehicle-signals",
-		Short:   "Consume vehicle signals",
-		GroupID: "vehicle-signals",
+		Short:   "Consume vehicle signals from Kafka",
+		GroupID: "kafka",
 	}
 	topic := cmd.Flags().String("topic", "", "Topic")
 	_ = cmd.MarkFlagRequired("topic")
@@ -400,7 +418,7 @@ func newConsumeVehicleSignalsCommand() *cobra.Command {
 			kgo.ConsumeTopics(*topic),
 			kgo.SASL(oauth.Oauth(func(ctx context.Context) (oauth.Auth, error) {
 				return oauth.Auth{
-					Token: authFile.Credentials.AccessToken,
+					Token: authFile.Token.AccessToken,
 				}, nil
 			})),
 		}
@@ -511,4 +529,26 @@ func kgoToSlogLevel(level kgo.LogLevel) slog.Level {
 		// Using the default level for slog
 		return slog.LevelInfo
 	}
+}
+
+func newOAuth2Client(cmd *cobra.Command) (*mbz.Client, error) {
+	debug, err := cmd.Root().PersistentFlags().GetBool("debug")
+	if err != nil {
+		return nil, err
+	}
+	return auth.NewOAuth2Client(
+		cmd.Context(),
+		mbz.WithDebug(debug),
+	)
+}
+
+func newClientWithAPIKey(cmd *cobra.Command) (*mbz.Client, error) {
+	debug, err := cmd.Root().PersistentFlags().GetBool("debug")
+	if err != nil {
+		return nil, err
+	}
+	return auth.NewClientWithAPIKey(
+		cmd.Context(),
+		mbz.WithDebug(debug),
+	)
 }

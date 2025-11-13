@@ -25,12 +25,13 @@ type ListServicesResponse struct {
 }
 
 // ListServices lists the vehicles for the current account.
-func (c *Client) ListServices(ctx context.Context, request *ListServicesRequest) (_ *ListServicesResponse, err error) {
+func (c *Client) ListServices(ctx context.Context, request *ListServicesRequest, opts ...ClientOption) (_ *ListServicesResponse, err error) {
 	defer func() {
 		if err != nil {
 			err = fmt.Errorf("mbz: list vehicles: %w", err)
 		}
 	}()
+	cfg := c.config.with(opts...)
 	url := "/v2/accounts/services"
 	if request.Details {
 		url += "/v2/accounts/services/details"
@@ -39,7 +40,7 @@ func (c *Client) ListServices(ctx context.Context, request *ListServicesRequest)
 	if err != nil {
 		return nil, err
 	}
-	httpResponse, err := c.httpClient.Do(httpRequest)
+	httpResponse, err := c.httpClient(cfg).Do(httpRequest)
 	if err != nil {
 		return nil, err
 	}

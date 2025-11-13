@@ -23,12 +23,14 @@ type AssignVehiclesResponse struct{}
 func (c *Client) AssignVehicles(
 	ctx context.Context,
 	request *AssignVehiclesRequest,
+	opts ...ClientOption,
 ) (_ *AssignVehiclesResponse, err error) {
 	defer func() {
 		if err != nil {
 			err = fmt.Errorf("mbz: assign vehicles: %w", err)
 		}
 	}()
+	cfg := c.config.with(opts...)
 	requestBody := make([]vehiclesv1.Vehicle, 0, len(request.VINs))
 	for _, vin := range request.VINs {
 		requestBody = append(requestBody, vehiclesv1.Vehicle{
@@ -45,11 +47,11 @@ func (c *Client) AssignVehicles(
 		"/v1/accounts/vehicles",
 		bytes.NewReader(requestBodyData),
 	)
-	httpRequest.Header.Set("Content-Type", "application/json")
 	if err != nil {
 		return nil, err
 	}
-	httpResponse, err := c.httpClient.Do(httpRequest)
+	httpRequest.Header.Set("Content-Type", "application/json")
+	httpResponse, err := c.httpClient(cfg).Do(httpRequest)
 	if err != nil {
 		return nil, err
 	}
