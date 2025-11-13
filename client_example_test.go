@@ -12,11 +12,10 @@ func ExampleClient() {
 	ctx := context.Background()
 	// Create a Mercedes-Benz API client.
 	client, err := mbz.NewClient(
+		ctx,
 		mbz.WithRegion(mbz.RegionECE),
-		mbz.WithOAuth2(
-			os.Getenv("MBZ_CLIENT_ID"),
-			os.Getenv("MBZ_CLIENT_SECRET"),
-		),
+		mbz.WithClientID(os.Getenv("MBZ_CLIENT_ID")),
+		mbz.WithClientSecret(os.Getenv("MBZ_CLIENT_SECRET")),
 	)
 	if err != nil {
 		panic(err)

@@ -33,12 +33,14 @@ type GetVehicleSpecificationResponse struct {
 func (c *Client) GetVehicleSpecification(
 	ctx context.Context,
 	request *GetVehicleSpecificationRequest,
+	opts ...ClientOption,
 ) (_ *GetVehicleSpecificationResponse, err error) {
 	defer func() {
 		if err != nil {
 			err = fmt.Errorf("mbz: get vehicle specification: %w", err)
 		}
 	}()
+	cfg := c.config.with(opts...)
 	if request.VehicleID == "" {
 		return nil, fmt.Errorf("vehicle ID is required")
 	}
@@ -54,7 +56,7 @@ func (c *Client) GetVehicleSpecification(
 		return nil, err
 	}
 	httpRequest.Header.Set("Accept", "application/json")
-	httpResponse, err := c.httpClient.Do(httpRequest)
+	httpResponse, err := c.httpClient(cfg).Do(httpRequest)
 	if err != nil {
 		return nil, err
 	}

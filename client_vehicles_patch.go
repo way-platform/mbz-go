@@ -20,12 +20,13 @@ type PatchVehiclesRequest struct {
 type PatchVehiclesResponse struct{}
 
 // PatchVehicles patches vehicles. Only the deltaPush field is supported.
-func (c *Client) PatchVehicles(ctx context.Context, request *PatchVehiclesRequest) (_ *PatchVehiclesResponse, err error) {
+func (c *Client) PatchVehicles(ctx context.Context, request *PatchVehiclesRequest, opts ...ClientOption) (_ *PatchVehiclesResponse, err error) {
 	defer func() {
 		if err != nil {
 			err = fmt.Errorf("mbz: patch vehicles: %w", err)
 		}
 	}()
+	cfg := c.config.with(opts...)
 	requestBodyData, err := json.Marshal(request.Vehicles)
 	if err != nil {
 		return nil, fmt.Errorf("marshal request: %w", err)
@@ -36,7 +37,7 @@ func (c *Client) PatchVehicles(ctx context.Context, request *PatchVehiclesReques
 	}
 	httpRequest.Header.Set("Content-Type", "application/json")
 	httpRequest.Header.Set("Accept", "application/json")
-	httpResponse, err := c.httpClient.Do(httpRequest)
+	httpResponse, err := c.httpClient(cfg).Do(httpRequest)
 	if err != nil {
 		return nil, fmt.Errorf("do request: %w", err)
 	}

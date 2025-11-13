@@ -20,17 +20,18 @@ type ListVehiclesResponse struct {
 }
 
 // ListVehicles lists the vehicles for the current account.
-func (c *Client) ListVehicles(ctx context.Context, request *ListVehiclesRequest) (_ *ListVehiclesResponse, err error) {
+func (c *Client) ListVehicles(ctx context.Context, request *ListVehiclesRequest, opts ...ClientOption) (_ *ListVehiclesResponse, err error) {
 	defer func() {
 		if err != nil {
 			err = fmt.Errorf("mbz: list vehicles: %w", err)
 		}
 	}()
+	cfg := c.config.with(opts...)
 	httpRequest, err := c.newRequest(ctx, http.MethodGet, "/v1/accounts/vehicles", nil)
 	if err != nil {
 		return nil, err
 	}
-	httpResponse, err := c.httpClient.Do(httpRequest)
+	httpResponse, err := c.httpClient(cfg).Do(httpRequest)
 	if err != nil {
 		return nil, err
 	}
