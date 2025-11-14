@@ -30,7 +30,14 @@ type VehicleSpecification struct {
 	xxx_hidden_EmissionStandard *string                      `protobuf:"bytes,5,opt,name=emission_standard,json=emissionStandard"`
 	xxx_hidden_PrimaryEngine    *VehicleSpecification_Engine `protobuf:"bytes,6,opt,name=primary_engine,json=primaryEngine"`
 	xxx_hidden_SecondaryEngine  *VehicleSpecification_Engine `protobuf:"bytes,7,opt,name=secondary_engine,json=secondaryEngine"`
-	xxx_hidden_TotalWeightKg    int32                        `protobuf:"varint,8,opt,name=total_weight_kg,json=totalWeightKg"`
+	xxx_hidden_VehicleMassKg    int32                        `protobuf:"varint,8,opt,name=vehicle_mass_kg,json=vehicleMassKg"`
+	xxx_hidden_LongType         *string                      `protobuf:"bytes,9,opt,name=long_type,json=longType"`
+	xxx_hidden_BodyCode         *string                      `protobuf:"bytes,10,opt,name=body_code,json=bodyCode"`
+	xxx_hidden_BodyText         *string                      `protobuf:"bytes,11,opt,name=body_text,json=bodyText"`
+	xxx_hidden_DoorCount        int32                        `protobuf:"varint,12,opt,name=door_count,json=doorCount"`
+	xxx_hidden_SeatCount        int32                        `protobuf:"varint,13,opt,name=seat_count,json=seatCount"`
+	xxx_hidden_WheelbaseMm      int32                        `protobuf:"varint,14,opt,name=wheelbase_mm,json=wheelbaseMm"`
+	xxx_hidden_WheelForm        *string                      `protobuf:"bytes,15,opt,name=wheel_form,json=wheelForm"`
 	XXX_raceDetectHookData      protoimpl.RaceDetectHookData
 	XXX_presence                [1]uint32
 	unknownFields               protoimpl.UnknownFields
@@ -126,36 +133,97 @@ func (x *VehicleSpecification) GetSecondaryEngine() *VehicleSpecification_Engine
 	return nil
 }
 
-func (x *VehicleSpecification) GetTotalWeightKg() int32 {
+func (x *VehicleSpecification) GetVehicleMassKg() int32 {
 	if x != nil {
-		return x.xxx_hidden_TotalWeightKg
+		return x.xxx_hidden_VehicleMassKg
 	}
 	return 0
 }
 
+func (x *VehicleSpecification) GetLongType() string {
+	if x != nil {
+		if x.xxx_hidden_LongType != nil {
+			return *x.xxx_hidden_LongType
+		}
+		return ""
+	}
+	return ""
+}
+
+func (x *VehicleSpecification) GetBodyCode() string {
+	if x != nil {
+		if x.xxx_hidden_BodyCode != nil {
+			return *x.xxx_hidden_BodyCode
+		}
+		return ""
+	}
+	return ""
+}
+
+func (x *VehicleSpecification) GetBodyText() string {
+	if x != nil {
+		if x.xxx_hidden_BodyText != nil {
+			return *x.xxx_hidden_BodyText
+		}
+		return ""
+	}
+	return ""
+}
+
+func (x *VehicleSpecification) GetDoorCount() int32 {
+	if x != nil {
+		return x.xxx_hidden_DoorCount
+	}
+	return 0
+}
+
+func (x *VehicleSpecification) GetSeatCount() int32 {
+	if x != nil {
+		return x.xxx_hidden_SeatCount
+	}
+	return 0
+}
+
+func (x *VehicleSpecification) GetWheelbaseMm() int32 {
+	if x != nil {
+		return x.xxx_hidden_WheelbaseMm
+	}
+	return 0
+}
+
+func (x *VehicleSpecification) GetWheelForm() string {
+	if x != nil {
+		if x.xxx_hidden_WheelForm != nil {
+			return *x.xxx_hidden_WheelForm
+		}
+		return ""
+	}
+	return ""
+}
+
 func (x *VehicleSpecification) SetModelName(v string) {
 	x.xxx_hidden_ModelName = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 0, 8)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 0, 15)
 }
 
 func (x *VehicleSpecification) SetModelYear(v string) {
 	x.xxx_hidden_ModelYear = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 1, 8)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 1, 15)
 }
 
 func (x *VehicleSpecification) SetBrand(v string) {
 	x.xxx_hidden_Brand = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 2, 8)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 2, 15)
 }
 
 func (x *VehicleSpecification) SetFuelType(v string) {
 	x.xxx_hidden_FuelType = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 3, 8)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 3, 15)
 }
 
 func (x *VehicleSpecification) SetEmissionStandard(v string) {
 	x.xxx_hidden_EmissionStandard = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 4, 8)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 4, 15)
 }
 
 func (x *VehicleSpecification) SetPrimaryEngine(v *VehicleSpecification_Engine) {
@@ -166,9 +234,44 @@ func (x *VehicleSpecification) SetSecondaryEngine(v *VehicleSpecification_Engine
 	x.xxx_hidden_SecondaryEngine = v
 }
 
-func (x *VehicleSpecification) SetTotalWeightKg(v int32) {
-	x.xxx_hidden_TotalWeightKg = v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 7, 8)
+func (x *VehicleSpecification) SetVehicleMassKg(v int32) {
+	x.xxx_hidden_VehicleMassKg = v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 7, 15)
+}
+
+func (x *VehicleSpecification) SetLongType(v string) {
+	x.xxx_hidden_LongType = &v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 8, 15)
+}
+
+func (x *VehicleSpecification) SetBodyCode(v string) {
+	x.xxx_hidden_BodyCode = &v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 9, 15)
+}
+
+func (x *VehicleSpecification) SetBodyText(v string) {
+	x.xxx_hidden_BodyText = &v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 10, 15)
+}
+
+func (x *VehicleSpecification) SetDoorCount(v int32) {
+	x.xxx_hidden_DoorCount = v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 11, 15)
+}
+
+func (x *VehicleSpecification) SetSeatCount(v int32) {
+	x.xxx_hidden_SeatCount = v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 12, 15)
+}
+
+func (x *VehicleSpecification) SetWheelbaseMm(v int32) {
+	x.xxx_hidden_WheelbaseMm = v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 13, 15)
+}
+
+func (x *VehicleSpecification) SetWheelForm(v string) {
+	x.xxx_hidden_WheelForm = &v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 14, 15)
 }
 
 func (x *VehicleSpecification) HasModelName() bool {
@@ -220,11 +323,60 @@ func (x *VehicleSpecification) HasSecondaryEngine() bool {
 	return x.xxx_hidden_SecondaryEngine != nil
 }
 
-func (x *VehicleSpecification) HasTotalWeightKg() bool {
+func (x *VehicleSpecification) HasVehicleMassKg() bool {
 	if x == nil {
 		return false
 	}
 	return protoimpl.X.Present(&(x.XXX_presence[0]), 7)
+}
+
+func (x *VehicleSpecification) HasLongType() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 8)
+}
+
+func (x *VehicleSpecification) HasBodyCode() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 9)
+}
+
+func (x *VehicleSpecification) HasBodyText() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 10)
+}
+
+func (x *VehicleSpecification) HasDoorCount() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 11)
+}
+
+func (x *VehicleSpecification) HasSeatCount() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 12)
+}
+
+func (x *VehicleSpecification) HasWheelbaseMm() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 13)
+}
+
+func (x *VehicleSpecification) HasWheelForm() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 14)
 }
 
 func (x *VehicleSpecification) ClearModelName() {
@@ -260,9 +412,44 @@ func (x *VehicleSpecification) ClearSecondaryEngine() {
 	x.xxx_hidden_SecondaryEngine = nil
 }
 
-func (x *VehicleSpecification) ClearTotalWeightKg() {
+func (x *VehicleSpecification) ClearVehicleMassKg() {
 	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 7)
-	x.xxx_hidden_TotalWeightKg = 0
+	x.xxx_hidden_VehicleMassKg = 0
+}
+
+func (x *VehicleSpecification) ClearLongType() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 8)
+	x.xxx_hidden_LongType = nil
+}
+
+func (x *VehicleSpecification) ClearBodyCode() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 9)
+	x.xxx_hidden_BodyCode = nil
+}
+
+func (x *VehicleSpecification) ClearBodyText() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 10)
+	x.xxx_hidden_BodyText = nil
+}
+
+func (x *VehicleSpecification) ClearDoorCount() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 11)
+	x.xxx_hidden_DoorCount = 0
+}
+
+func (x *VehicleSpecification) ClearSeatCount() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 12)
+	x.xxx_hidden_SeatCount = 0
+}
+
+func (x *VehicleSpecification) ClearWheelbaseMm() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 13)
+	x.xxx_hidden_WheelbaseMm = 0
+}
+
+func (x *VehicleSpecification) ClearWheelForm() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 14)
+	x.xxx_hidden_WheelForm = nil
 }
 
 type VehicleSpecification_builder struct {
@@ -282,8 +469,22 @@ type VehicleSpecification_builder struct {
 	PrimaryEngine *VehicleSpecification_Engine
 	// The secondary engine details of the vehicle (for hybrid vehicles).
 	SecondaryEngine *VehicleSpecification_Engine
-	// Total weight of the vehicle in kg.
-	TotalWeightKg *int32
+	// Vehicle mass in kg.
+	VehicleMassKg *int32
+	// Long type - national sales description of the vehicle.
+	LongType *string
+	// Body type code.
+	BodyCode *string
+	// Body type text description.
+	BodyText *string
+	// Number of doors.
+	DoorCount *int32
+	// Number of seats.
+	SeatCount *int32
+	// Wheelbase in millimeters.
+	WheelbaseMm *int32
+	// Wheel form (e.g., "4x2F").
+	WheelForm *string
 }
 
 func (b0 VehicleSpecification_builder) Build() *VehicleSpecification {
@@ -291,30 +492,58 @@ func (b0 VehicleSpecification_builder) Build() *VehicleSpecification {
 	b, x := &b0, m0
 	_, _ = b, x
 	if b.ModelName != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 0, 8)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 0, 15)
 		x.xxx_hidden_ModelName = b.ModelName
 	}
 	if b.ModelYear != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 1, 8)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 1, 15)
 		x.xxx_hidden_ModelYear = b.ModelYear
 	}
 	if b.Brand != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 2, 8)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 2, 15)
 		x.xxx_hidden_Brand = b.Brand
 	}
 	if b.FuelType != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 3, 8)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 3, 15)
 		x.xxx_hidden_FuelType = b.FuelType
 	}
 	if b.EmissionStandard != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 4, 8)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 4, 15)
 		x.xxx_hidden_EmissionStandard = b.EmissionStandard
 	}
 	x.xxx_hidden_PrimaryEngine = b.PrimaryEngine
 	x.xxx_hidden_SecondaryEngine = b.SecondaryEngine
-	if b.TotalWeightKg != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 7, 8)
-		x.xxx_hidden_TotalWeightKg = *b.TotalWeightKg
+	if b.VehicleMassKg != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 7, 15)
+		x.xxx_hidden_VehicleMassKg = *b.VehicleMassKg
+	}
+	if b.LongType != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 8, 15)
+		x.xxx_hidden_LongType = b.LongType
+	}
+	if b.BodyCode != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 9, 15)
+		x.xxx_hidden_BodyCode = b.BodyCode
+	}
+	if b.BodyText != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 10, 15)
+		x.xxx_hidden_BodyText = b.BodyText
+	}
+	if b.DoorCount != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 11, 15)
+		x.xxx_hidden_DoorCount = *b.DoorCount
+	}
+	if b.SeatCount != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 12, 15)
+		x.xxx_hidden_SeatCount = *b.SeatCount
+	}
+	if b.WheelbaseMm != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 13, 15)
+		x.xxx_hidden_WheelbaseMm = *b.WheelbaseMm
+	}
+	if b.WheelForm != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 14, 15)
+		x.xxx_hidden_WheelForm = b.WheelForm
 	}
 	return m0
 }
@@ -465,7 +694,7 @@ var File_wayplatform_connect_mbz_v1_vehicle_specification_proto protoreflect.Fil
 
 const file_wayplatform_connect_mbz_v1_vehicle_specification_proto_rawDesc = "" +
 	"\n" +
-	"6wayplatform/connect/mbz/v1/vehicle_specification.proto\x12\x1awayplatform.connect.mbz.v1\"\xab\x04\n" +
+	"6wayplatform/connect/mbz/v1/vehicle_specification.proto\x12\x1awayplatform.connect.mbz.v1\"\x82\x06\n" +
 	"\x14VehicleSpecification\x12\x1d\n" +
 	"\n" +
 	"model_name\x18\x01 \x01(\tR\tmodelName\x12\x1d\n" +
@@ -476,7 +705,18 @@ const file_wayplatform_connect_mbz_v1_vehicle_specification_proto_rawDesc = "" +
 	"\x11emission_standard\x18\x05 \x01(\tR\x10emissionStandard\x12^\n" +
 	"\x0eprimary_engine\x18\x06 \x01(\v27.wayplatform.connect.mbz.v1.VehicleSpecification.EngineR\rprimaryEngine\x12b\n" +
 	"\x10secondary_engine\x18\a \x01(\v27.wayplatform.connect.mbz.v1.VehicleSpecification.EngineR\x0fsecondaryEngine\x12&\n" +
-	"\x0ftotal_weight_kg\x18\b \x01(\x05R\rtotalWeightKg\x1a\x88\x01\n" +
+	"\x0fvehicle_mass_kg\x18\b \x01(\x05R\rvehicleMassKg\x12\x1b\n" +
+	"\tlong_type\x18\t \x01(\tR\blongType\x12\x1b\n" +
+	"\tbody_code\x18\n" +
+	" \x01(\tR\bbodyCode\x12\x1b\n" +
+	"\tbody_text\x18\v \x01(\tR\bbodyText\x12\x1d\n" +
+	"\n" +
+	"door_count\x18\f \x01(\x05R\tdoorCount\x12\x1d\n" +
+	"\n" +
+	"seat_count\x18\r \x01(\x05R\tseatCount\x12!\n" +
+	"\fwheelbase_mm\x18\x0e \x01(\x05R\vwheelbaseMm\x12\x1d\n" +
+	"\n" +
+	"wheel_form\x18\x0f \x01(\tR\twheelForm\x1a\x88\x01\n" +
 	"\x06Engine\x120\n" +
 	"\x14battery_capacity_kwh\x18\x01 \x01(\x05R\x12batteryCapacityKwh\x12/\n" +
 	"\x14fuel_tank_capacity_l\x18\x02 \x01(\x05R\x11fuelTankCapacityL\x12\x1b\n" +
