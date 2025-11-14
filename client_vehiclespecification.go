@@ -101,8 +101,31 @@ func vehicleSpecificationToProto(
 	if vehicleData.Emissionstandard != nil && vehicleData.Emissionstandard.Text != "" {
 		protoSpec.SetEmissionStandard(vehicleData.Emissionstandard.Text)
 	}
-	if vehicleData.Weight != nil && vehicleData.Weight.Total != nil && *vehicleData.Weight.Total > 0 {
-		protoSpec.SetTotalWeightKg(*vehicleData.Weight.Total)
+	if vehicleData.Weight != nil && vehicleData.Weight.VehicleMassKg != nil && *vehicleData.Weight.VehicleMassKg > 0 {
+		protoSpec.SetVehicleMassKg(*vehicleData.Weight.VehicleMassKg)
+	}
+	if vehicleData.LongType != "" {
+		protoSpec.SetLongType(vehicleData.LongType)
+	}
+	if vehicleData.Body != nil {
+		if vehicleData.Body.Code != "" {
+			protoSpec.SetBodyCode(vehicleData.Body.Code)
+		}
+		if vehicleData.Body.Text != "" {
+			protoSpec.SetBodyText(vehicleData.Body.Text)
+		}
+	}
+	if vehicleData.Numberofdoors != nil && *vehicleData.Numberofdoors > 0 {
+		protoSpec.SetDoorCount(*vehicleData.Numberofdoors)
+	}
+	if vehicleData.Numberofseats != nil && *vehicleData.Numberofseats > 0 {
+		protoSpec.SetSeatCount(*vehicleData.Numberofseats)
+	}
+	if vehicleData.Wheelbase != nil && *vehicleData.Wheelbase > 0 {
+		protoSpec.SetWheelbaseMm(*vehicleData.Wheelbase)
+	}
+	if vehicleData.Wheelform != "" {
+		protoSpec.SetWheelForm(vehicleData.Wheelform)
 	}
 	if vehicleData.PrimaryEngine != nil {
 		if engine := parseEngine(vehicleData.PrimaryEngine); engine != nil {

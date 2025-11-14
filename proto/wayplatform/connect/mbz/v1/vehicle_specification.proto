@@ -25,8 +25,29 @@ message VehicleSpecification {
   // The secondary engine details of the vehicle (for hybrid vehicles).
   Engine secondary_engine = 7;
 
-  // Total weight of the vehicle in kg.
-  int32 total_weight_kg = 8;
+  // Vehicle mass in kg.
+  int32 vehicle_mass_kg = 8;
+
+  // Long type - national sales description of the vehicle.
+  string long_type = 9;
+
+  // Body type code.
+  string body_code = 10;
+
+  // Body type text description.
+  string body_text = 11;
+
+  // Number of doors.
+  int32 door_count = 12;
+
+  // Number of seats.
+  int32 seat_count = 13;
+
+  // Wheelbase in millimeters.
+  int32 wheelbase_mm = 14;
+
+  // Wheel form (e.g., "4x2F").
+  string wheel_form = 15;
 
   // The engine details of the vehicle.
   message Engine {
