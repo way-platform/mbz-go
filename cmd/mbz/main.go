@@ -373,13 +373,12 @@ func newGetVehicleSpecificationCommand() *cobra.Command {
 			return err
 		}
 		response, err := client.GetVehicleSpecification(cmd.Context(), &mbz.GetVehicleSpecificationRequest{
-			VehicleID: args[0],
-			Locale:    "en_US",
+			VIN: args[0],
 		})
 		if err != nil {
 			return err
 		}
-		printJSON(response)
+		fmt.Println(protojson.Format(response))
 		return nil
 	}
 	return cmd

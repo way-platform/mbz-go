@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 
 	"github.com/way-platform/mbz-go/api/vehiclesv1"
 )
@@ -43,10 +44,15 @@ func (c *Client) GetVehicleCompatibility(
 		}
 	}()
 	cfg := c.config.with(opts...)
-	httpRequest, err := c.newRequest(ctx, http.MethodGet, "/v1/accounts/vehicles/"+request.VIN+"/compatibilities", nil)
+	requestURL, err := url.JoinPath(c.baseURL, "/v1/accounts/vehicles", request.VIN, "compatibilities")
+	if err != nil {
+		return nil, fmt.Errorf("invalid request URL: %w", err)
+	}
+	httpRequest, err := http.NewRequestWithContext(ctx, http.MethodGet, requestURL, nil)
 	if err != nil {
 		return nil, err
 	}
+	httpRequest.Header.Set("User-Agent", getUserAgent())
 	httpResponse, err := c.httpClient(cfg).Do(httpRequest)
 	if err != nil {
 		return nil, err

@@ -26,7 +26,7 @@ message VehicleSpecification {
   Engine secondary_engine = 7;
 
   // Total weight of the vehicle in kg.
-  int32 total_weight = 8;
+  int32 total_weight_kg = 8;
 
   // The engine details of the vehicle.
   message Engine {

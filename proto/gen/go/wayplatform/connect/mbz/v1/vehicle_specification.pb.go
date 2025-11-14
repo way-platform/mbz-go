@@ -30,7 +30,7 @@ type VehicleSpecification struct {
 	xxx_hidden_EmissionStandard *string                      `protobuf:"bytes,5,opt,name=emission_standard,json=emissionStandard"`
 	xxx_hidden_PrimaryEngine    *VehicleSpecification_Engine `protobuf:"bytes,6,opt,name=primary_engine,json=primaryEngine"`
 	xxx_hidden_SecondaryEngine  *VehicleSpecification_Engine `protobuf:"bytes,7,opt,name=secondary_engine,json=secondaryEngine"`
-	xxx_hidden_TotalWeight      int32                        `protobuf:"varint,8,opt,name=total_weight,json=totalWeight"`
+	xxx_hidden_TotalWeightKg    int32                        `protobuf:"varint,8,opt,name=total_weight_kg,json=totalWeightKg"`
 	XXX_raceDetectHookData      protoimpl.RaceDetectHookData
 	XXX_presence                [1]uint32
 	unknownFields               protoimpl.UnknownFields
@@ -126,9 +126,9 @@ func (x *VehicleSpecification) GetSecondaryEngine() *VehicleSpecification_Engine
 	return nil
 }
 
-func (x *VehicleSpecification) GetTotalWeight() int32 {
+func (x *VehicleSpecification) GetTotalWeightKg() int32 {
 	if x != nil {
-		return x.xxx_hidden_TotalWeight
+		return x.xxx_hidden_TotalWeightKg
 	}
 	return 0
 }
@@ -166,8 +166,8 @@ func (x *VehicleSpecification) SetSecondaryEngine(v *VehicleSpecification_Engine
 	x.xxx_hidden_SecondaryEngine = v
 }
 
-func (x *VehicleSpecification) SetTotalWeight(v int32) {
-	x.xxx_hidden_TotalWeight = v
+func (x *VehicleSpecification) SetTotalWeightKg(v int32) {
+	x.xxx_hidden_TotalWeightKg = v
 	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 7, 8)
 }
 
@@ -220,7 +220,7 @@ func (x *VehicleSpecification) HasSecondaryEngine() bool {
 	return x.xxx_hidden_SecondaryEngine != nil
 }
 
-func (x *VehicleSpecification) HasTotalWeight() bool {
+func (x *VehicleSpecification) HasTotalWeightKg() bool {
 	if x == nil {
 		return false
 	}
@@ -260,9 +260,9 @@ func (x *VehicleSpecification) ClearSecondaryEngine() {
 	x.xxx_hidden_SecondaryEngine = nil
 }
 
-func (x *VehicleSpecification) ClearTotalWeight() {
+func (x *VehicleSpecification) ClearTotalWeightKg() {
 	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 7)
-	x.xxx_hidden_TotalWeight = 0
+	x.xxx_hidden_TotalWeightKg = 0
 }
 
 type VehicleSpecification_builder struct {
@@ -283,7 +283,7 @@ type VehicleSpecification_builder struct {
 	// The secondary engine details of the vehicle (for hybrid vehicles).
 	SecondaryEngine *VehicleSpecification_Engine
 	// Total weight of the vehicle in kg.
-	TotalWeight *int32
+	TotalWeightKg *int32
 }
 
 func (b0 VehicleSpecification_builder) Build() *VehicleSpecification {
@@ -312,9 +312,9 @@ func (b0 VehicleSpecification_builder) Build() *VehicleSpecification {
 	}
 	x.xxx_hidden_PrimaryEngine = b.PrimaryEngine
 	x.xxx_hidden_SecondaryEngine = b.SecondaryEngine
-	if b.TotalWeight != nil {
+	if b.TotalWeightKg != nil {
 		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 7, 8)
-		x.xxx_hidden_TotalWeight = *b.TotalWeight
+		x.xxx_hidden_TotalWeightKg = *b.TotalWeightKg
 	}
 	return m0
 }
@@ -465,7 +465,7 @@ var File_wayplatform_connect_mbz_v1_vehicle_specification_proto protoreflect.Fil
 
 const file_wayplatform_connect_mbz_v1_vehicle_specification_proto_rawDesc = "" +
 	"\n" +
-	"6wayplatform/connect/mbz/v1/vehicle_specification.proto\x12\x1awayplatform.connect.mbz.v1\"\xa6\x04\n" +
+	"6wayplatform/connect/mbz/v1/vehicle_specification.proto\x12\x1awayplatform.connect.mbz.v1\"\xab\x04\n" +
 	"\x14VehicleSpecification\x12\x1d\n" +
 	"\n" +
 	"model_name\x18\x01 \x01(\tR\tmodelName\x12\x1d\n" +
@@ -475,8 +475,8 @@ const file_wayplatform_connect_mbz_v1_vehicle_specification_proto_rawDesc = "" +
 	"\tfuel_type\x18\x04 \x01(\tR\bfuelType\x12+\n" +
 	"\x11emission_standard\x18\x05 \x01(\tR\x10emissionStandard\x12^\n" +
 	"\x0eprimary_engine\x18\x06 \x01(\v27.wayplatform.connect.mbz.v1.VehicleSpecification.EngineR\rprimaryEngine\x12b\n" +
-	"\x10secondary_engine\x18\a \x01(\v27.wayplatform.connect.mbz.v1.VehicleSpecification.EngineR\x0fsecondaryEngine\x12!\n" +
-	"\ftotal_weight\x18\b \x01(\x05R\vtotalWeight\x1a\x88\x01\n" +
+	"\x10secondary_engine\x18\a \x01(\v27.wayplatform.connect.mbz.v1.VehicleSpecification.EngineR\x0fsecondaryEngine\x12&\n" +
+	"\x0ftotal_weight_kg\x18\b \x01(\x05R\rtotalWeightKg\x1a\x88\x01\n" +
 	"\x06Engine\x120\n" +
 	"\x14battery_capacity_kwh\x18\x01 \x01(\x05R\x12batteryCapacityKwh\x12/\n" +
 	"\x14fuel_tank_capacity_l\x18\x02 \x01(\x05R\x11fuelTankCapacityL\x12\x1b\n" +
