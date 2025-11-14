@@ -101,7 +101,7 @@ func vehicleSpecificationToProto(
 	if vehicleData.Emissionstandard != nil && vehicleData.Emissionstandard.Text != "" {
 		protoSpec.SetEmissionStandard(vehicleData.Emissionstandard.Text)
 	}
-	if vehicleData.Weight != nil && vehicleData.Weight.Total != nil {
+	if vehicleData.Weight != nil && vehicleData.Weight.Total != nil && *vehicleData.Weight.Total > 0 {
 		protoSpec.SetTotalWeightKg(*vehicleData.Weight.Total)
 	}
 	if vehicleData.PrimaryEngine != nil {
@@ -122,10 +122,10 @@ func parseEngine(openAPIEngine *vehiclespecificationfleetv1.Engine) *mbzv1.Vehic
 		return nil
 	}
 	protoEngine := &mbzv1.VehicleSpecification_Engine{}
-	if openAPIEngine.Battery != nil && openAPIEngine.Battery.Capacity != nil {
+	if openAPIEngine.Battery != nil && openAPIEngine.Battery.Capacity != nil && *openAPIEngine.Battery.Capacity > 0 {
 		protoEngine.SetBatteryCapacityKwh(*openAPIEngine.Battery.Capacity)
 	}
-	if openAPIEngine.FuelTankCapacity != nil {
+	if openAPIEngine.FuelTankCapacity != nil && *openAPIEngine.FuelTankCapacity > 0 {
 		protoEngine.SetFuelTankCapacityL(*openAPIEngine.FuelTankCapacity)
 	}
 	if openAPIEngine.FuelType != nil && openAPIEngine.FuelType.Text != "" {
