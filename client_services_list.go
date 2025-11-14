@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 
 	"github.com/way-platform/mbz-go/api/servicesv1"
 )
@@ -32,14 +33,19 @@ func (c *Client) ListServices(ctx context.Context, request *ListServicesRequest,
 		}
 	}()
 	cfg := c.config.with(opts...)
-	url := "/v2/accounts/services"
+	path := "/v2/accounts/services"
 	if request.Details {
-		url += "/v2/accounts/services/details"
+		path = "/v2/accounts/services/details"
 	}
-	httpRequest, err := c.newRequest(ctx, http.MethodGet, url, nil)
+	requestURL, err := url.JoinPath(c.baseURL, path)
+	if err != nil {
+		return nil, fmt.Errorf("invalid request URL: %w", err)
+	}
+	httpRequest, err := http.NewRequestWithContext(ctx, http.MethodGet, requestURL, nil)
 	if err != nil {
 		return nil, err
 	}
+	httpRequest.Header.Set("User-Agent", getUserAgent())
 	httpResponse, err := c.httpClient(cfg).Do(httpRequest)
 	if err != nil {
 		return nil, err

@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/way-platform/mbz-go/api/vehiclesv1"
 )
@@ -67,15 +68,15 @@ func (c *Client) PostVehicleServices(
 	if err != nil {
 		return nil, err
 	}
-	httpRequest, err := c.newRequest(
-		ctx,
-		http.MethodPost,
-		"/v2/accounts/vehicles/services",
-		bytes.NewReader(requestBodyData),
-	)
+	requestURL, err := url.JoinPath(c.baseURL, "/v2/accounts/vehicles/services")
+	if err != nil {
+		return nil, fmt.Errorf("invalid request URL: %w", err)
+	}
+	httpRequest, err := http.NewRequestWithContext(ctx, http.MethodPost, requestURL, bytes.NewReader(requestBodyData))
 	if err != nil {
 		return nil, err
 	}
+	httpRequest.Header.Set("User-Agent", getUserAgent())
 	httpRequest.Header.Set("Content-Type", "application/json")
 	httpResponse, err := c.httpClient(cfg).Do(httpRequest)
 	if err != nil {

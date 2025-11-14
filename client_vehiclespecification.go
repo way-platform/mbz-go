@@ -8,24 +8,16 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/way-platform/mbz-go/api/vehiclespecificationv1"
+	"github.com/way-platform/mbz-go/api/vehiclespecificationfleetv1"
 	mbzv1 "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mbz/v1"
 )
 
 // GetVehicleSpecificationRequest is the request for [Client.GetVehicleSpecification].
 type GetVehicleSpecificationRequest struct {
-	// VehicleID is the FIN or VIN of the vehicle (17 characters).
-	VehicleID string
-
-	// Locale is the market locale for country and language (e.g., "en_US", "de_DE").
-	// Required parameter.
-	Locale string
-}
-
-// GetVehicleSpecificationResponse is the response for [Client.GetVehicleSpecification].
-type GetVehicleSpecificationResponse struct {
-	// VehicleSpecification contains the vehicle specification data.
-	VehicleSpecification *mbzv1.VehicleSpecification
+	// VIN is the VIN (or FIN) of the vehicle (17 characters).
+	VIN string `json:"vin"`
+	// Locale is the market locale.
+	Locale string `json:"locale"`
 }
 
 // GetVehicleSpecification gets the vehicle marketing information for a given vehicle ID.
@@ -34,27 +26,35 @@ func (c *Client) GetVehicleSpecification(
 	ctx context.Context,
 	request *GetVehicleSpecificationRequest,
 	opts ...ClientOption,
-) (_ *GetVehicleSpecificationResponse, err error) {
+) (_ *mbzv1.VehicleSpecification, err error) {
 	defer func() {
 		if err != nil {
 			err = fmt.Errorf("mbz: get vehicle specification: %w", err)
 		}
 	}()
 	cfg := c.config.with(opts...)
-	if request.VehicleID == "" {
-		return nil, fmt.Errorf("vehicle ID is required")
-	}
-	if request.Locale == "" {
-		return nil, fmt.Errorf("locale is required")
+	if request.VIN == "" {
+		return nil, fmt.Errorf("VIN is required")
 	}
 	values := url.Values{}
-	values.Set("locale", request.Locale)
-	requestURL := fmt.Sprintf("https://api.mercedes-benz.com/vehicle_specifications/v1/vehicles/%s?%s",
-		request.VehicleID, values.Encode())
-	httpRequest, err := c.newRequest(ctx, http.MethodGet, requestURL, nil)
+	if request.Locale != "" {
+		values.Set("locale", request.Locale)
+	} else {
+		values.Set("locale", string(vehiclespecificationfleetv1.LocalesEnUS))
+	}
+	// Set all optional parameters to true to maximize data retrieval
+	values.Set("additionalSpecs", "true")
+	values.Set("optionsNullDescription", "true")
+	values.Set("options", "true")
+	values.Set("technicalData", "true")
+	values.Set("payloadNullValues", "true")
+	requestURL := fmt.Sprintf("%s/vehicles/%s", vehiclespecificationfleetv1.BaseURL, request.VIN)
+	httpRequest, err := http.NewRequestWithContext(ctx, http.MethodGet, requestURL, nil)
 	if err != nil {
 		return nil, err
 	}
+	httpRequest.Header.Set("User-Agent", getUserAgent())
+	httpRequest.URL.RawQuery = values.Encode()
 	httpRequest.Header.Set("Accept", "application/json")
 	httpResponse, err := c.httpClient(cfg).Do(httpRequest)
 	if err != nil {
@@ -68,25 +68,25 @@ func (c *Client) GetVehicleSpecification(
 	if err != nil {
 		return nil, err
 	}
-	var openAPIResp vehiclespecificationv1.VehicleSpecificationResponse
+	var openAPIResp vehiclespecificationfleetv1.VehicleSpecificationResponse
 	if err := json.Unmarshal(responseData, &openAPIResp); err != nil {
 		return nil, err
 	}
-	proto := vehicleSpecificationToProto(&openAPIResp)
-	return &GetVehicleSpecificationResponse{
-		VehicleSpecification: proto,
-	}, nil
+	return vehicleSpecificationToProto(&openAPIResp), nil
 }
 
 func vehicleSpecificationToProto(
-	openAPIResp *vehiclespecificationv1.VehicleSpecificationResponse,
+	openAPIResp *vehiclespecificationfleetv1.VehicleSpecificationResponse,
 ) *mbzv1.VehicleSpecification {
 	if openAPIResp == nil || openAPIResp.VehicleData == nil {
 		return &mbzv1.VehicleSpecification{}
 	}
 	vehicleData := openAPIResp.VehicleData
 	protoSpec := &mbzv1.VehicleSpecification{}
-	if vehicleData.ModelName != "" {
+	// Use Model field first (contains "Sprinter" in example), fall back to ModelName if Model is empty
+	if vehicleData.Model != "" {
+		protoSpec.SetModelName(vehicleData.Model)
+	} else if vehicleData.ModelName != "" {
 		protoSpec.SetModelName(vehicleData.ModelName)
 	}
 	if vehicleData.ModelYear != "" {
@@ -102,7 +102,7 @@ func vehicleSpecificationToProto(
 		protoSpec.SetEmissionStandard(vehicleData.Emissionstandard.Text)
 	}
 	if vehicleData.Weight != nil && vehicleData.Weight.Total != nil {
-		protoSpec.SetTotalWeight(*vehicleData.Weight.Total)
+		protoSpec.SetTotalWeightKg(*vehicleData.Weight.Total)
 	}
 	if vehicleData.PrimaryEngine != nil {
 		if engine := parseEngine(vehicleData.PrimaryEngine); engine != nil {
@@ -117,7 +117,7 @@ func vehicleSpecificationToProto(
 	return protoSpec
 }
 
-func parseEngine(openAPIEngine *vehiclespecificationv1.Engine) *mbzv1.VehicleSpecification_Engine {
+func parseEngine(openAPIEngine *vehiclespecificationfleetv1.Engine) *mbzv1.VehicleSpecification_Engine {
 	if openAPIEngine == nil {
 		return nil
 	}

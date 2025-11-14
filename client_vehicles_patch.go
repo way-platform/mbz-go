@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/way-platform/mbz-go/api/vehiclesv1"
 )
@@ -31,10 +32,15 @@ func (c *Client) PatchVehicles(ctx context.Context, request *PatchVehiclesReques
 	if err != nil {
 		return nil, fmt.Errorf("marshal request: %w", err)
 	}
-	httpRequest, err := c.newRequest(ctx, http.MethodPatch, "/v1/accounts/vehicles", bytes.NewReader(requestBodyData))
+	requestURL, err := url.JoinPath(c.baseURL, "/v1/accounts/vehicles")
+	if err != nil {
+		return nil, fmt.Errorf("invalid request URL: %w", err)
+	}
+	httpRequest, err := http.NewRequestWithContext(ctx, http.MethodPatch, requestURL, bytes.NewReader(requestBodyData))
 	if err != nil {
 		return nil, fmt.Errorf("new request: %w", err)
 	}
+	httpRequest.Header.Set("User-Agent", getUserAgent())
 	httpRequest.Header.Set("Content-Type", "application/json")
 	httpRequest.Header.Set("Accept", "application/json")
 	httpResponse, err := c.httpClient(cfg).Do(httpRequest)

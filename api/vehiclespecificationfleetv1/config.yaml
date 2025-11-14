@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/oapi-codegen/oapi-codegen/HEAD/configuration-schema.json
-package: vehiclespecificationv1
+package: vehiclespecificationfleetv1
 
-output: vehiclespecificationv1.gen.go
+output: vehiclespecificationfleetv1.gen.go
 
 generate:
   models: true
@@ -13,6 +13,3 @@ output-options:
   skip-prune: true
   name-normalizer: ToCamelCaseWithInitialisms
   initialism-overrides: true
-  additional-initialisms:
-    - VIN
-    - FIN

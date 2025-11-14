@@ -3,9 +3,7 @@ package mbz
 import (
 	"context"
 	"fmt"
-	"io"
 	"net/http"
-	"net/url"
 	"runtime/debug"
 	"time"
 
@@ -173,28 +171,6 @@ func (c *Client) httpClient(cfg clientConfig) *http.Client {
 		Timeout:   cfg.timeout,
 		Transport: transport,
 	}
-}
-
-func (c *Client) newRequest(
-	ctx context.Context,
-	method, requestPath string,
-	body io.Reader,
-) (_ *http.Request, err error) {
-	defer func() {
-		if err != nil {
-			err = fmt.Errorf("new request: %w", err)
-		}
-	}()
-	requestURL, err := url.JoinPath(c.baseURL, requestPath)
-	if err != nil {
-		return nil, fmt.Errorf("invalid request URL: %w", err)
-	}
-	request, err := http.NewRequestWithContext(ctx, method, requestURL, body)
-	if err != nil {
-		return nil, err
-	}
-	request.Header.Set("User-Agent", getUserAgent())
-	return request, nil
 }
 
 func getUserAgent() string {

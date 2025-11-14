@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/way-platform/mbz-go/api/vehiclesv1"
 )
@@ -41,10 +42,15 @@ func (c *Client) DeleteVehicles(
 	if err != nil {
 		return nil, err
 	}
-	httpRequest, err := c.newRequest(ctx, http.MethodDelete, "/v1/accounts/vehicles", bytes.NewReader(requestBodyData))
+	requestURL, err := url.JoinPath(c.baseURL, "/v1/accounts/vehicles")
+	if err != nil {
+		return nil, fmt.Errorf("invalid request URL: %w", err)
+	}
+	httpRequest, err := http.NewRequestWithContext(ctx, http.MethodDelete, requestURL, bytes.NewReader(requestBodyData))
 	if err != nil {
 		return nil, err
 	}
+	httpRequest.Header.Set("User-Agent", getUserAgent())
 	httpRequest.Header.Set("Content-Type", "application/json")
 	httpResponse, err := c.httpClient(cfg).Do(httpRequest)
 	if err != nil {

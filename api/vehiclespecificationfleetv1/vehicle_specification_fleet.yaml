@@ -1,25 +1,25 @@
-### Vehicle Specification API
+### Vehicle Specification Fleet API
 ### date 23.09.2025
 openapi: 3.0.3
 info:
-  title: Vehicle Specification
-  version: '1.8'
+  title: Vehicle Specification Fleet
+  version: '1.2'
   description: |-
-    Vehicle Specification provides vehicle specification information 
-    relevant for online marketing purposes.
+    Vehicle Specification Fleet provides vehicle specification information 
+    relevant for fleet use cases.
   contact:
     name: Mercedes-Benz /developers product team
     url: 'https://developer.mercedes-benz.com/contact/vehicle_specification/technical_inquiry'
 servers:
-  - url: 'https://api.mercedes-benz.com/vehicle_specifications/v1'
+  - url: 'https://api.mercedes-benz.com/vehicle_specifications_fleet/v1'
     description: Production server
 security:
   - ApiKey: []
 tags:
   - name: Specification
     description: Get marketing information
-  - name: Equipments
-    description: Get extended equipments information
+  - name: Images
+    description: Get vehicle images
 paths:
   '/vehicles/{vehicleId}':
     x-monetized: true
@@ -30,7 +30,7 @@ paths:
       operationId: getVehicleSpecificationByVehicleId
       description: |-
         Get the vehicle marketing information for a given vehicleId (e.g. FIN) 
-        in the specified locale. Parameter vehicleContext has been depreciated.
+        in the specified locale. 
       parameters:
         - $ref: '#/components/parameters/vehicleId'
         - $ref: '#/components/parameters/locale'
@@ -39,9 +39,6 @@ paths:
         - $ref: '#/components/parameters/options'
         - $ref: '#/components/parameters/technicalData'
         - $ref: '#/components/parameters/payloadNullValues'
-        - $ref: '#/components/parameters/enrichTechData'
-        - $ref: '#/components/parameters/enrichOptions'
-        - $ref: '#/components/parameters/additionalOptions'
       responses:
         '200':
           $ref: '#/components/responses/VehicleSpecificationsResponse'
@@ -61,25 +58,24 @@ paths:
           $ref: '#/components/responses/500InternalServerError'
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
-  '/equipments/{vehicleId}':
+  /vehicle-images/{vehicleId}:
     x-monetized: false
     get:
       tags:
-        - Equipments
-      summary: Get extended marketing information for vehicle equipments
-      operationId: getVehicleEquipmentsByVehicleId
+        - Images
+      operationId: GetVehicleImageIdsByVehicleId
+      summary: Get Vehicle ImageIds by vehicleId
       description: |-
-        Get extended marketing information for vehicle equipments for  
-        a given vehicleId (e.g. FIN) in the specified locale. 
-        Data available for a limited number of markets only.
+        Resource provides the 2 exterior and 1 interior images id's. 
+        EXT150, EXT330: EXT150 defines a rotation of 150 degrees to the right based 
+        on the front view and so forth. INT1 defines the interior perspective.
       parameters:
         - $ref: '#/components/parameters/vehicleId'
-        - $ref: '#/components/parameters/locale'
-        - $ref: '#/components/parameters/vanTypeCode'
-        - $ref: '#/components/parameters/metadata'
+        - $ref: '#/components/parameters/background'
+        - $ref: '#/components/parameters/fileFormat'
       responses:
         '200':
-          $ref: '#/components/responses/VehicleEquipmentsResponse'
+          $ref: '#/components/responses/VehicleImagesResponse'
         '400':
           $ref: '#/components/responses/400BadRequest'
         '401':
@@ -96,6 +92,36 @@ paths:
           $ref: '#/components/responses/500InternalServerError'
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
+  /images/{imageId}:
+    x-monetized: false
+    get:
+      tags:
+        - Images
+      operationId: GetVehicleImageByImageId
+      summary: Get Vehicle Image by imageId
+      description: |-
+        Resource provides a vehicle image belonging to the given image id in the selected file format. An image Id is valid only for 24 hours.
+      parameters:
+        - $ref: '#/components/parameters/imageId'
+      responses:
+        '200':
+          $ref: '#/components/responses/VehicleImageIdResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '406':
+          $ref: '#/components/responses/406NotAcceptable'
+        '429':
+          $ref: '#/components/responses/429TooManyRequests'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'    
 components:
   parameters:
     vehicleId:
@@ -109,17 +135,6 @@ components:
         maxLength: 17
         pattern: '^(4JG|55S|8AC|ADB|LB1|LE4|VSA|XDN|W10|W11|W12|W13|W14|W1A|W1K|W1L|W1M|W1N|W1P|W1R|W1V|W1W|W1X|W1Y|W1Z|W2W|W2X|W2Y|W2Z|WC3|WCD|WD3|WD4|WDA|WDB|WDC|WDD|WDF|WDP|WDR|WDV|WDW|WDX|WDY|WDZ|WME|WMX|WYA)[a-zA-Z0-9]{14}$'
         example: W1K1771871J299999
-    vanTypeCode:
-      description: VAN type code(s) (sales codes) of the requested VAN model (could contain several codes separated by comma).
-      in: query
-      name: vanTypeCode
-      required: false
-      schema:
-        type: string
-        minLength: 3
-        maxLength: 25
-        example: 'ME4'
-        pattern: '^[0-9A-Z,]{3,25}$'
     locale:
       name: locale
       description: |-
@@ -175,48 +190,37 @@ components:
         type: boolean
         example: true
         default: true
-    additionalOptions:
-      name: additionalOptions
-      deprecated: true
-      description: 'UNSUPPORTED. With this option enabled the service enriches all VeDoc option codes not contained in internal code list'
+    imageId:
+      name: imageId
+      in: path
+      description: imageId representing a vehicle image.
+      required: true
+      schema:
+        type: string
+        format: uuid
+    background:
+      name: background
       in: query
+      description: This optional property defines the images background. The default value is 'no background' (transparent). 
+        It is also possible to set the parameter explicitly to true to retrieve 
+        the images with a high level of detail and realistic reflections and light incidence.
       required: false
       schema:
         type: boolean
-        example: false
         default: false
-    enrichOptions:
-      name: enrichOptions
-      deprecated: true
-      description: |-
-        UNSUPPORTED. With this option enabled the service tries to enrich the group und codeType attributes of each options
-        object item if current value is null for the requested locale
+    fileFormat:
+      name: fileFormat
       in: query
+      description: This optional property defines the images format either png, jpeg or webp.
+        The default value is the efficient file format webp.
       required: false
       schema:
-        type: boolean
-        example: false
-        default: false
-    enrichTechData:
-      name: enrichTechData
-      deprecated: true
-      description: 'UNSUPPORTED. With this option enabled the service tries to enrich the technicalData object if no data is available for the requested locale.'
-      in: query
-      required: false
-      schema:
-        type: boolean
-        example: false
-        default: false
-    metadata:
-      name: metadata
-      deprecated: true
-      description: 'UNSUPPORTED. Adds the code=META entry to the response payload.'
-      in: query
-      required: false
-      schema:
-        type: boolean
-        example: false
-        default: false
+        type: string
+        default: webp
+        enum:
+          - png
+          - jpeg
+          - webp
   responses:
     VehicleSpecificationsResponse:
       description: Successful response (OK) containing all relevant marketing information of the requested vehicle.
@@ -233,21 +237,43 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/VehicleSpecificationResponse'
-    VehicleEquipmentsResponse:
-      description: Successful response (OK) containing all relevant equipment information of the requested vehicle.
+    VehicleImagesResponse:
+      description: 
+        Successful response (OK) containing all available imageID's for the requested vehicle images package. 
+        The response contains 2 exterior (EXT150, EXT330) and 1 interior (INT1) perspectives.
       headers:
         X-Request-ID:
-          description: |-
-            Returns a randomly generated (unique) request id that was assigned
-            to the request for internal tracing and logging. Provide this
-            request id for troubleshooting in a support case.
+          description: Returns a randomly generated (unique) request id that was
+            assigned to the request for internal tracing and logging. Provide
+            this request id for troubleshooting in a support case.
           schema:
             type: string
-            format: uuid
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/VehicleEquipmentsResponse'
+            $ref: '#/components/schemas/VehicleImagesResponse'
+    VehicleImageIdResponse:
+      description: Successful response (OK) containing the image in the requested format.
+      headers:
+        X-Request-ID:
+          description: Returns a randomly generated (unique) request id that was
+            assigned to the request for internal tracing and logging. Provide
+            this request id for troubleshooting in a support case.
+          schema:
+            type: string
+      content:
+        image/png:
+          schema:
+            type: string
+            format: binary
+        image/jpeg:
+          schema:
+            type: string
+            format: binary
+        image/webp:
+          schema:
+            type: string
+            format: binary
     400BadRequest:
       description: |-
         One of the provided parameters was invalid (BAD_REQUEST). 
@@ -274,7 +300,6 @@ components:
           Possible Reasons:
           * Missing or invalid API-Key
           * Invalid URI resource
-          * Exceeded subscription quota
       headers:
         X-Request-ID:
           description: |-
@@ -293,8 +318,7 @@ components:
         Access to vehicle refused (FORBIDDEN). Inspect the global error object
         in the response for further information.
           Possible Reasons:
-          * Failed to access the requested URI resource
-          * URI resource doesn't exists
+          * Exceeded subscription quota
       headers:
         X-Request-ID:
           description: |-
@@ -334,6 +358,8 @@ components:
     406NotAcceptable:
       description: |-
         The request and given header values could not be accepted and processing is denied.
+          Possible Reasons:
+          * Incorrect content negotiation headers
       headers:
         X-Request-ID:
           description: Returns a randomly generated (unique) request id that was
@@ -352,7 +378,7 @@ components:
         (TOO_MANY_REQUESTS). Verify your calling behaviour and inspect the
         global error object in the response for further information.
           Possible Reasons:
-          * EXCEEDED_CALL_AMOUNTS
+          * Exceeded subscription rate limit
       headers:
         X-Request-ID:
           description: |-
@@ -408,16 +434,16 @@ components:
       properties:
         vehicleData:
           $ref: '#/components/schemas/VehicleData'
-    VehicleEquipmentsResponse:
-      description: |-
-        The response object contains the vehicle equipments data of the
-        requested vehicle and locale
-      type: array
-      uniqueItems: true
-      minItems: 0
-      maxItems: 200
-      items:
-        $ref: '#/components/schemas/EquipmentData'
+    VehicleImagesResponse:
+      type: object
+      properties:
+        EXT150:
+          $ref: '#/components/schemas/ImageId'
+        EXT330:
+          $ref: '#/components/schemas/ImageId'
+        INT1:
+          $ref: '#/components/schemas/ImageId'
+      description: The response object contains the image ids of all available perspectives.
     # specifications schema objects
     AdditionalSpecs:
       type: object
@@ -850,73 +876,11 @@ components:
         vehicleMassKg:
           type: integer
           format: int32
-    # equipments schema objects
-    EquipmentData:
-      type: object
-      properties:
-        code:
-          type: string
-        highlight:
-          type: boolean
-        mercedesMe:
-          type: boolean
-        categoryPathEnglish:
-          type: string
-        salesDesignationEnglish:
-          type: string
-        entity:
-          $ref: '#/components/schemas/EquipmentTranslation'
-    EquipmentTranslation:
-      type: object
-      properties:
-        salesDesignation:
-          type: string
-        shortDescription:
-          type: string
-        footnote:
-          type: string
-        coreArgument:
-          type: string
-        extendedDescription:
-          type: object
-          properties:
-            headline:
-              type: string
-            text:
-              type: string
-        functionText:
-          type: string
-        components:
-          $ref: '#/components/schemas/EquipmentComponents'
-    EquipmentComponent:
-      type: object
-      required:
-        - content
-        - components
-      properties:
-        content:
-          type: string
-          uniqueItems: true
-          minItems: 0
-          maxItems: 20
-        components:
-          type: array
-          items:
-            $ref: '#/components/schemas/EquipmentComponent'
-    EquipmentComponents:
-      type: object
-      required:
-        - components
-      properties:
-        bulletpointsHeadline:
-          type: string
-        components:
-          type: array
-          uniqueItems: true
-          minItems: 0
-          maxItems: 20
-          items:
-            $ref: '#/components/schemas/EquipmentComponent'
+    # images schema objects
+    ImageId:
+      type: string
+      format: uuid
+      description: String representing the image id.    
     # common schema objects
     Locales:
       type: string

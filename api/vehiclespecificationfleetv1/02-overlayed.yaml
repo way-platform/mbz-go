@@ -1,23 +1,23 @@
-### Vehicle Specification API
+### Vehicle Specification Fleet API
 ### date 23.09.2025
 openapi: 3.0.3
 info:
-    title: Vehicle Specification
-    version: '1.8'
-    description: "Vehicle Specification provides vehicle specification information \nrelevant for online marketing purposes."
+    title: Vehicle Specification Fleet
+    version: '1.2'
+    description: "Vehicle Specification Fleet provides vehicle specification information \nrelevant for fleet use cases."
     contact:
         name: Mercedes-Benz /developers product team
         url: 'https://developer.mercedes-benz.com/contact/vehicle_specification/technical_inquiry'
 servers:
-    - url: 'https://api.mercedes-benz.com/vehicle_specifications/v1'
+    - url: 'https://api.mercedes-benz.com/vehicle_specifications_fleet/v1'
       description: Production server
 security:
     - ApiKey: []
 tags:
     - name: Specification
       description: Get marketing information
-    - name: Equipments
-      description: Get extended equipments information
+    - name: Images
+      description: Get vehicle images
 components:
     schemas:
         # response schema objects
@@ -29,18 +29,16 @@ components:
             properties:
                 vehicleData:
                     $ref: '#/components/schemas/VehicleData'
-        VehicleEquipmentsResponse:
-            description: |-
-                The response object contains the vehicle equipments data of the
-                requested vehicle and locale
-            type: array
-            uniqueItems: true
-            minItems: 0
-            maxItems: 200
-            items:
-                $ref: '#/components/schemas/EquipmentData'
-            x-go-type-skip-optional-pointer: true
-            x-omitzero: true
+        VehicleImagesResponse:
+            type: object
+            properties:
+                EXT150:
+                    $ref: '#/components/schemas/ImageId'
+                EXT330:
+                    $ref: '#/components/schemas/ImageId'
+                INT1:
+                    $ref: '#/components/schemas/ImageId'
+            description: The response object contains the image ids of all available perspectives.
         CabinInfo:
             type: object
             properties:
@@ -504,89 +502,11 @@ components:
                 vehicleMassKg:
                     type: integer
                     format: int32
-        # equipments schema objects
-        EquipmentData:
-            type: object
-            properties:
-                code:
-                    type: string
-                    x-go-type-skip-optional-pointer: true
-                highlight:
-                    type: boolean
-                mercedesMe:
-                    type: boolean
-                categoryPathEnglish:
-                    type: string
-                    x-go-type-skip-optional-pointer: true
-                salesDesignationEnglish:
-                    type: string
-                    x-go-type-skip-optional-pointer: true
-                entity:
-                    $ref: '#/components/schemas/EquipmentTranslation'
-        EquipmentTranslation:
-            type: object
-            properties:
-                salesDesignation:
-                    type: string
-                    x-go-type-skip-optional-pointer: true
-                shortDescription:
-                    type: string
-                    x-go-type-skip-optional-pointer: true
-                footnote:
-                    type: string
-                    x-go-type-skip-optional-pointer: true
-                coreArgument:
-                    type: string
-                    x-go-type-skip-optional-pointer: true
-                extendedDescription:
-                    type: object
-                    properties:
-                        headline:
-                            type: string
-                            x-go-type-skip-optional-pointer: true
-                        text:
-                            type: string
-                            x-go-type-skip-optional-pointer: true
-                functionText:
-                    type: string
-                    x-go-type-skip-optional-pointer: true
-                components:
-                    $ref: '#/components/schemas/EquipmentComponents'
-        EquipmentComponent:
-            type: object
-            required:
-                - content
-                - components
-            properties:
-                content:
-                    type: string
-                    uniqueItems: true
-                    minItems: 0
-                    maxItems: 20
-                    x-go-type-skip-optional-pointer: true
-                components:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/EquipmentComponent'
-                    x-go-type-skip-optional-pointer: true
-                    x-omitzero: true
-        EquipmentComponents:
-            type: object
-            required:
-                - components
-            properties:
-                bulletpointsHeadline:
-                    type: string
-                    x-go-type-skip-optional-pointer: true
-                components:
-                    type: array
-                    uniqueItems: true
-                    minItems: 0
-                    maxItems: 20
-                    items:
-                        $ref: '#/components/schemas/EquipmentComponent'
-                    x-go-type-skip-optional-pointer: true
-                    x-omitzero: true
+        # images schema objects
+        ImageId:
+            type: string
+            description: String representing the image id.
+            x-go-type-skip-optional-pointer: true
         # common schema objects
         Locales:
             type: string
