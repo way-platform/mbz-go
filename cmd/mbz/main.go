@@ -69,6 +69,8 @@ func newRootCommand() *cobra.Command {
 	cmd.AddCommand(newDisableDeltaPushCommand())
 	cmd.AddGroup(&cobra.Group{ID: "vehicle-specifications", Title: "Vehicle Specifications"})
 	cmd.AddCommand(newGetVehicleSpecificationCommand())
+	cmd.AddCommand(newGetVehicleImagesCommand())
+	cmd.AddCommand(newGetVehicleImageCommand())
 	cmd.AddCommand(newListServicesCommand())
 	cmd.AddGroup(&cobra.Group{ID: "kafka", Title: "Kafka"})
 	cmd.AddCommand(newConsumeVehicleSignalsCommand())
@@ -382,6 +384,83 @@ func newGetVehicleSpecificationCommand() *cobra.Command {
 		return nil
 	}
 	return cmd
+}
+
+func newGetVehicleImagesCommand() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "vehicle-images <vin>",
+		Short:   "Get vehicle image IDs and URLs",
+		GroupID: "vehicle-specifications",
+		Args:    cobra.ExactArgs(1),
+	}
+	background := cmd.Flags().Bool("background", false, "Include background in images (high detail with realistic reflections)")
+	fileFormat := cmd.Flags().String("file-format", "webp", "Image file format (png, jpeg, webp)")
+	cmd.RunE = func(cmd *cobra.Command, args []string) error {
+		client, err := newClientWithAPIKey(cmd)
+		if err != nil {
+			return err
+		}
+		response, err := client.GetVehicleImageIds(cmd.Context(), &mbz.GetVehicleImageIdsRequest{
+			VIN:        args[0],
+			Background: *background,
+			FileFormat: *fileFormat,
+		})
+		if err != nil {
+			return err
+		}
+		fmt.Println(protojson.Format(response))
+		return nil
+	}
+	return cmd
+}
+
+func newGetVehicleImageCommand() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "image <image-id>",
+		Short:   "Download vehicle image by image ID",
+		GroupID: "vehicle-specifications",
+		Args:    cobra.ExactArgs(1),
+	}
+	outputFile := cmd.Flags().StringP("output", "o", "", "Output file path (default: <image-id>.<extension>)")
+	cmd.RunE = func(cmd *cobra.Command, args []string) error {
+		client, err := newClientWithAPIKey(cmd)
+		if err != nil {
+			return err
+		}
+		imageID := args[0]
+		response, err := client.GetImage(cmd.Context(), &mbz.GetImageRequest{
+			ImageID: imageID,
+		})
+		if err != nil {
+			return err
+		}
+		// Determine output filename
+		outputPath := *outputFile
+		if outputPath == "" {
+			ext := getExtensionFromContentType(response.ContentType)
+			outputPath = imageID + ext
+		}
+		if err := os.WriteFile(outputPath, response.Data, 0o644); err != nil {
+			return fmt.Errorf("failed to write image to file: %w", err)
+		}
+		cmd.Printf("Image downloaded to %s (%s)\n", outputPath, response.ContentType)
+		return nil
+	}
+	return cmd
+}
+
+func getExtensionFromContentType(contentType string) string {
+	switch contentType {
+	case "image/png":
+		return ".png"
+	case "image/jpeg", "image/jpg":
+		return ".jpg"
+	case "image/webp":
+		return ".webp"
+	default:
+		// Default to .bin if content type is unknown
+		return ".bin"
+	}
 }
 
 func newConsumeVehicleSignalsCommand() *cobra.Command {
