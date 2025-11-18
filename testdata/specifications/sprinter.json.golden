@@ -1,0 +1,1215 @@
+{
+  "model": "TestModel",
+  "modelYear": "YR1",
+  "longType": "TestModel 315 TDI PRO Long",
+  "longTypeTechnical": "315  FG   4X2   4325",
+  "shortType": "TestModel 315 TDI",
+  "engineCode": "ENG1",
+  "fin11": "TEST123456789",
+  "vin11": "TEST987654321",
+  "baumuster": "123456",
+  "countrynumber": "000",
+  "finaldate": "20200101",
+  "allwheel": "0",
+  "metallic": "0",
+  "leather": "0",
+  "poolflag": "N",
+  "brand": {
+    "code": "001",
+    "text": "TestBrand"
+  },
+  "fuel": {
+    "code": "D",
+    "text": "Diesel"
+  },
+  "emissionstandard": {
+    "code": "6",
+    "text": "EU6"
+  },
+  "body": {
+    "code": "5000",
+    "text": "Chassis"
+  },
+  "enginetype": {
+    "code": "1",
+    "text": "Diesel"
+  },
+  "transmissiontype": {
+    "code": "A",
+    "text": "automatic transmission"
+  },
+  "branch": 7,
+  "cylinderCapacityCc": 1950,
+  "powerKw": 110,
+  "powerPs": 150,
+  "doorCount": 2,
+  "seatCount": 3,
+  "wheelbaseMm": 4325,
+  "wheelForm": "4x2R",
+  "weight": {
+    "totalKg": 3500,
+    "axis1Kg": 1650,
+    "axis2Kg": 2250
+  },
+  "primaryEngine": {
+    "cylinderCapacityCc": 1950,
+    "fuelTankCapacityL": 71,
+    "fuelType": {
+      "code": "D",
+      "text": "Diesel"
+    },
+    "power": {
+      "kw": 110,
+      "ps": 150
+    },
+    "torqueNm": 340
+  },
+  "emission": {
+    "directive": "715/2007*2023/443EA"
+  },
+  "salesDescription": {
+    "lengthType": {
+      "code": "L02",
+      "text": "Long"
+    },
+    "line": {
+      "code": "L25",
+      "text": "PRO"
+    },
+    "model": {
+      "code": "M06",
+      "text": "TestModel"
+    },
+    "style": {
+      "code": "S02",
+      "text": "TDI"
+    },
+    "type": {
+      "code": "T68",
+      "text": "315"
+    }
+  },
+  "typeKey": {
+    "hsn": "1111",
+    "tsn": "000",
+    "vvs": "00000"
+  },
+  "paint": {
+    "code": "0001",
+    "codeType": "LU",
+    "description": "test white",
+    "group": "W",
+    "type": "UNI"
+  },
+  "upholstery": {
+    "code": "VF7",
+    "codeType": "AU",
+    "description": "Fabric TestFabric black",
+    "group": "S",
+    "type": "FABRIC"
+  },
+  "options": [
+    {
+      "code": "H12",
+      "codeType": "XX",
+      "description": "Diesel-powered auxiliary  air heater",
+      "group": "SHZ",
+      "type": "F"
+    },
+    {
+      "code": "WB9",
+      "codeType": "XX",
+      "type": "F"
+    },
+    {
+      "code": "F68",
+      "codeType": "XX",
+      "description": "Exterior mirror heated and electr. adjustable",
+      "group": "OEX",
+      "type": "F"
+    },
+    {
+      "code": "IL5",
+      "codeType": "XX",
+      "description": "Left-hand drive",
+      "type": "F"
+    },
+    {
+      "code": "FF5",
+      "codeType": "XX",
+      "description": "Shelf above windscreen",
+      "group": "OIN",
+      "type": "F"
+    },
+    {
+      "code": "FJ1",
+      "codeType": "XX",
+      "description": "Hinged lid for stowage compartment",
+      "group": "OIN",
+      "type": "F"
+    },
+    {
+      "code": "CB7",
+      "codeType": "XX",
+      "description": "Stabilisation level I",
+      "type": "F"
+    },
+    {
+      "code": "JS2",
+      "codeType": "XX",
+      "description": "Intelligent Speed Assistant",
+      "type": "F"
+    },
+    {
+      "code": "XM4",
+      "codeType": "XX",
+      "description": "Acoustic package",
+      "group": "OKO",
+      "type": "F"
+    },
+    {
+      "code": "SA5",
+      "codeType": "XX",
+      "description": "Airbag, front driver's seat",
+      "group": "AIB",
+      "type": "F"
+    },
+    {
+      "code": "EY5",
+      "codeType": "XX",
+      "description": "TestBrand emergency call system",
+      "group": "OSH",
+      "type": "F"
+    },
+    {
+      "code": "M72",
+      "codeType": "XX",
+      "description": "Vehicle HVO-capable",
+      "type": "F"
+    },
+    {
+      "code": "H21",
+      "codeType": "XX",
+      "description": "Heat-insulating glass w.band filter on windscreen",
+      "group": "WDG",
+      "type": "F"
+    },
+    {
+      "code": "XQ1",
+      "codeType": "XX",
+      "description": "VIN encoded test data with check digit",
+      "type": "F"
+    },
+    {
+      "code": "ES0",
+      "codeType": "XX",
+      "description": "Starting aid contact",
+      "group": "OSO",
+      "type": "F"
+    },
+    {
+      "code": "E36",
+      "codeType": "XX",
+      "description": "Disconnecting relais if auxiliary battery",
+      "group": "OSO",
+      "type": "F"
+    },
+    {
+      "code": "X99",
+      "codeType": "XX",
+      "type": "F"
+    },
+    {
+      "code": "IG5",
+      "codeType": "XX",
+      "description": "Basic",
+      "type": "F"
+    },
+    {
+      "code": "Z0G",
+      "codeType": "XX",
+      "type": "F"
+    },
+    {
+      "code": "E1U",
+      "codeType": "XX",
+      "description": "USB socket, 5 V",
+      "group": "OMM",
+      "type": "F"
+    },
+    {
+      "code": "E7B",
+      "codeType": "XX",
+      "description": "Digital Extra: Pre-installation for Navigation",
+      "type": "F"
+    },
+    {
+      "code": "R87",
+      "codeType": "XX",
+      "description": "Spare wheel",
+      "group": "ORF",
+      "type": "F"
+    },
+    {
+      "code": "EK1",
+      "codeType": "XX",
+      "description": "Terminal strip for electrical connection",
+      "type": "F"
+    },
+    {
+      "code": "C6L",
+      "codeType": "XX",
+      "description": "Multifunction steering wheel",
+      "group": "OIN",
+      "type": "F"
+    },
+    {
+      "code": "AI1",
+      "codeType": "XX",
+      "description": "Rear axle, crown wheel 215",
+      "type": "F"
+    },
+    {
+      "code": "CK8",
+      "codeType": "XX",
+      "description": "Steering wheel heating",
+      "group": "MLR",
+      "type": "F"
+    },
+    {
+      "code": "805",
+      "codeType": "XX",
+      "description": "CY X4/1",
+      "type": "F"
+    },
+    {
+      "code": "L94",
+      "codeType": "XX",
+      "description": "Omission parking lamp",
+      "type": "F"
+    },
+    {
+      "code": "IH1",
+      "codeType": "XX",
+      "description": "Headunit for test region",
+      "group": "OIN",
+      "type": "F"
+    },
+    {
+      "code": "LX5",
+      "codeType": "XX",
+      "description": "Europe",
+      "type": "F"
+    },
+    {
+      "code": "FJ4",
+      "codeType": "XX",
+      "description": "Stowage compartment underneath cockpit",
+      "group": "OIN",
+      "type": "F"
+    },
+    {
+      "code": "EY6",
+      "codeType": "XX",
+      "description": "Breakdown management",
+      "group": "OSH",
+      "type": "F"
+    },
+    {
+      "code": "IE0",
+      "codeType": "XX",
+      "description": "Model series C123 VS99 RWD",
+      "group": "RWD",
+      "type": "F"
+    },
+    {
+      "code": "KP7",
+      "codeType": "XX",
+      "description": "4th generation SCR emission control system",
+      "group": "ARA",
+      "type": "F"
+    },
+    {
+      "code": "Z74",
+      "codeType": "XX",
+      "type": "F"
+    },
+    {
+      "code": "CL1",
+      "codeType": "XX",
+      "description": "Height and rake adjustable steering wheel",
+      "group": "OIN",
+      "type": "F"
+    },
+    {
+      "code": "RS3",
+      "codeType": "XX",
+      "description": "Steel wheels 6.5 J x 16",
+      "group": "ORF",
+      "type": "F"
+    },
+    {
+      "code": "E2I",
+      "codeType": "XX",
+      "description": "Additional battery f. retrofit consumers, interior",
+      "type": "F"
+    },
+    {
+      "code": "BK1",
+      "codeType": "XX",
+      "type": "F"
+    },
+    {
+      "code": "EV3",
+      "codeType": "XX",
+      "description": "Electrical preinstallation for loading tailgate",
+      "group": "OEX",
+      "type": "F"
+    },
+    {
+      "code": "BA3",
+      "codeType": "XX",
+      "description": "Active Brake Assist",
+      "group": "BAS",
+      "type": "F"
+    },
+    {
+      "code": "XV0",
+      "codeType": "XX",
+      "description": "Control code - reference mass check",
+      "type": "F"
+    },
+    {
+      "code": "LC4",
+      "codeType": "XX",
+      "description": "Comfort overhead control panel",
+      "group": "OIN",
+      "type": "F"
+    },
+    {
+      "code": "JH3",
+      "codeType": "XX",
+      "description": "Communication module (LTE) for digital services",
+      "group": "OMM",
+      "type": "F"
+    },
+    {
+      "code": "H16",
+      "codeType": "XX",
+      "description": "Heated seat for driver",
+      "group": "SHI",
+      "type": "F"
+    },
+    {
+      "code": "BH1",
+      "codeType": "XX",
+      "description": "Test hold function",
+      "group": "OSH",
+      "type": "F"
+    },
+    {
+      "code": "RH2",
+      "codeType": "XX",
+      "description": "Tyres 235/65 R16 C",
+      "group": "ORF",
+      "type": "F"
+    },
+    {
+      "code": "JB4",
+      "codeType": "XX",
+      "description": "Active Lane Keeping Assist",
+      "group": "SHA",
+      "type": "F"
+    },
+    {
+      "code": "R65",
+      "codeType": "XX",
+      "description": "Spare wheel bracket below frame end",
+      "group": "ORF",
+      "type": "F"
+    },
+    {
+      "code": "P47",
+      "codeType": "XX",
+      "description": "Front mud flaps",
+      "type": "F"
+    },
+    {
+      "code": "RM7",
+      "codeType": "XX",
+      "description": "Summer tyres",
+      "group": "ORF",
+      "type": "F"
+    },
+    {
+      "code": "XJ4",
+      "codeType": "XX",
+      "description": "Change year G4-I",
+      "type": "F"
+    },
+    {
+      "code": "JI7",
+      "codeType": "XX",
+      "type": "F"
+    },
+    {
+      "code": "ZQ0",
+      "codeType": "XX",
+      "description": "Contr. code for reg. doc. - add. weight specified",
+      "type": "F"
+    },
+    {
+      "code": "FS2",
+      "codeType": "XX",
+      "description": "Extra-long mirror bracket",
+      "group": "OEX",
+      "type": "F"
+    },
+    {
+      "code": "Z0Z",
+      "codeType": "XX",
+      "type": "F"
+    },
+    {
+      "code": "S22",
+      "codeType": "XX",
+      "description": "Armrest for driver's seat",
+      "group": "OIN",
+      "type": "F"
+    },
+    {
+      "code": "ES5",
+      "codeType": "XX",
+      "description": "Charging package, dashboard",
+      "group": "OSO",
+      "type": "F"
+    },
+    {
+      "code": "JF1",
+      "codeType": "XX",
+      "description": "Rain sensor",
+      "group": "RES",
+      "type": "F"
+    },
+    {
+      "code": "WM4",
+      "codeType": "XX",
+      "description": "Control code for plant 065",
+      "type": "F"
+    },
+    {
+      "code": "J65",
+      "codeType": "XX",
+      "description": "Temperature indicator",
+      "group": "OSO",
+      "type": "F"
+    },
+    {
+      "code": "SB1",
+      "codeType": "XX",
+      "description": "Comfort driver's seat",
+      "group": "OKO",
+      "type": "F"
+    },
+    {
+      "code": "XO5",
+      "codeType": "XX",
+      "description": "Digital Owner's Manual",
+      "group": "OSO",
+      "type": "F"
+    },
+    {
+      "code": "IL2",
+      "codeType": "XX",
+      "description": "Export code",
+      "type": "F"
+    },
+    {
+      "code": "LE1",
+      "codeType": "XX",
+      "description": "Adaptive brake light",
+      "group": "OSH",
+      "type": "F"
+    },
+    {
+      "code": "HI1",
+      "codeType": "XX",
+      "description": "Climate zone 1 (cold/comfort)",
+      "group": "OKO",
+      "type": "F"
+    },
+    {
+      "code": "JW8",
+      "codeType": "XX",
+      "description": "Test Assist System",
+      "group": "OSH",
+      "type": "F"
+    },
+    {
+      "code": "ENG1",
+      "codeType": "XX",
+      "description": "Engine TEST ENG 20 LA 110 kW (150 hp)",
+      "group": "MOT",
+      "type": "F"
+    },
+    {
+      "code": "XM1",
+      "codeType": "XX",
+      "description": "Noise reduction",
+      "group": "XGS",
+      "type": "F"
+    },
+    {
+      "code": "MT5",
+      "codeType": "XX",
+      "description": "Emissions category Euro 6e test standard N1 GR.III/N2",
+      "type": "F"
+    },
+    {
+      "code": "RY2",
+      "codeType": "XX",
+      "description": "Tyre pressure monitoring front/rear, wireless",
+      "group": "ORF",
+      "type": "F"
+    },
+    {
+      "code": "IK0",
+      "codeType": "XX",
+      "description": "Complete vehicle",
+      "type": "F"
+    },
+    {
+      "code": "Z4W",
+      "codeType": "XX",
+      "description": "Production in test location",
+      "type": "F"
+    },
+    {
+      "code": "RF1",
+      "codeType": "XX",
+      "description": "Make of tyres TestBrand (10)",
+      "type": "F"
+    },
+    {
+      "code": "XW9",
+      "codeType": "XX",
+      "description": "Control code, changeover test standard",
+      "type": "F"
+    },
+    {
+      "code": "Y43",
+      "codeType": "XX",
+      "description": "Hydraulic Jack",
+      "group": "OSO",
+      "type": "F"
+    },
+    {
+      "code": "XG7",
+      "codeType": "XX",
+      "description": "without load uprating/derating 3500 kg",
+      "type": "F"
+    },
+    {
+      "code": "E07",
+      "codeType": "XX",
+      "description": "Hill-Start Assist",
+      "group": "ORF",
+      "type": "F"
+    },
+    {
+      "code": "J10",
+      "codeType": "XX",
+      "description": "Speedometer, km/h",
+      "group": "OSO",
+      "type": "F"
+    },
+    {
+      "code": "BH8",
+      "codeType": "XX",
+      "type": "F"
+    },
+    {
+      "code": "EE5",
+      "codeType": "XX",
+      "type": "F"
+    },
+    {
+      "code": "MJ8",
+      "codeType": "XX",
+      "description": "ECO start/stop function",
+      "group": "OMG",
+      "type": "F"
+    },
+    {
+      "code": "V07",
+      "codeType": "XX",
+      "description": "Rear cab wall lining",
+      "group": "OIN",
+      "type": "F"
+    },
+    {
+      "code": "Z75",
+      "codeType": "XX",
+      "description": "Bodyshell, additional measures",
+      "type": "F"
+    },
+    {
+      "code": "RX5",
+      "codeType": "XX",
+      "type": "F"
+    },
+    {
+      "code": "P3Z",
+      "codeType": "XX",
+      "type": "F"
+    },
+    {
+      "code": "S23",
+      "codeType": "XX",
+      "description": "Co-driver's seat double seat",
+      "group": "SMS",
+      "type": "F"
+    },
+    {
+      "code": "FY7",
+      "codeType": "XX",
+      "description": "Multi-button remote control",
+      "group": "ZVR",
+      "type": "F"
+    },
+    {
+      "code": "XO9",
+      "codeType": "XX",
+      "description": "TestBrand service package w. DSB and anti-perf wrty.",
+      "type": "F"
+    },
+    {
+      "code": "SK2",
+      "codeType": "XX",
+      "type": "F"
+    },
+    {
+      "code": "X47",
+      "codeType": "XX",
+      "description": "Plates / booklets TestCountry",
+      "type": "F"
+    },
+    {
+      "code": "ED4",
+      "codeType": "XX",
+      "description": "heavy-duty battery",
+      "group": "OSO",
+      "type": "F"
+    },
+    {
+      "code": "M60",
+      "codeType": "XX",
+      "description": "Alternator 14 V / 250 A",
+      "type": "F"
+    },
+    {
+      "code": "HH2",
+      "codeType": "XX",
+      "description": "Electrically powered hot-air auxiliary heater",
+      "group": "OKO",
+      "type": "F"
+    },
+    {
+      "code": "L72",
+      "codeType": "XX",
+      "description": "Electric system for non-DB body",
+      "type": "F"
+    },
+    {
+      "code": "MD5",
+      "codeType": "XX",
+      "description": "Linear speed limiter 100 km/h EG",
+      "type": "F"
+    },
+    {
+      "code": "Z3K",
+      "codeType": "XX",
+      "description": "PRO",
+      "group": "LINE",
+      "type": "F"
+    },
+    {
+      "code": "Q11",
+      "codeType": "XX",
+      "description": "Longitudinal member reinforcement",
+      "type": "F"
+    },
+    {
+      "code": "FR7",
+      "codeType": "XX",
+      "description": "Provision, electrics, reversing aid",
+      "group": "OSH",
+      "type": "F"
+    },
+    {
+      "code": "Z2E",
+      "codeType": "XX",
+      "description": "National version for test region",
+      "type": "F"
+    },
+    {
+      "code": "IC1",
+      "codeType": "XX",
+      "description": "Model series C123 / C124 TestModel",
+      "type": "F"
+    },
+    {
+      "code": "YR1",
+      "codeType": "XX",
+      "description": "Model generation 1",
+      "group": "OSO",
+      "type": "F"
+    },
+    {
+      "code": "S28",
+      "codeType": "XX",
+      "description": "Armrest, driver's and co-driver's door",
+      "group": "OIN",
+      "type": "F"
+    },
+    {
+      "code": "T75",
+      "codeType": "XX",
+      "description": "Grab handles for driver's and co-driver's doors",
+      "group": "OIN",
+      "type": "F"
+    },
+    {
+      "code": "G43",
+      "codeType": "XX",
+      "description": "Test transmission",
+      "group": "ATG",
+      "type": "F"
+    },
+    {
+      "code": "J58",
+      "codeType": "XX",
+      "description": "Seat belt warning for driver's seat",
+      "group": "OSH",
+      "type": "F"
+    },
+    {
+      "code": "ED8",
+      "codeType": "XX",
+      "description": "Preinstallations electrical system, PSM",
+      "type": "F"
+    },
+    {
+      "code": "K13",
+      "codeType": "XX",
+      "description": "Main tank 71 litres",
+      "group": "OMG",
+      "type": "F"
+    },
+    {
+      "code": "RR0",
+      "codeType": "XX",
+      "description": "Tyres, resistance-optimised",
+      "group": "ORF",
+      "type": "F"
+    },
+    {
+      "code": "E7M",
+      "codeType": "XX",
+      "description": "Test multimedia system",
+      "group": "MUX",
+      "type": "F"
+    },
+    {
+      "code": "FM3",
+      "codeType": "XX",
+      "description": "WET WIPER SYSTEM",
+      "group": "OSO",
+      "type": "F"
+    },
+    {
+      "code": "X96",
+      "codeType": "XX",
+      "type": "F"
+    },
+    {
+      "code": "E1D",
+      "codeType": "XX",
+      "description": "Digital radio (DAB)",
+      "group": "RAD",
+      "type": "F"
+    },
+    {
+      "code": "H15",
+      "codeType": "XX",
+      "description": "Seat heating for co-driver",
+      "group": "SHI",
+      "type": "F"
+    },
+    {
+      "code": "502",
+      "codeType": "XX",
+      "description": "Digital Extra: Intell. Speed Assistant Updates",
+      "type": "F"
+    },
+    {
+      "code": "LA2",
+      "codeType": "XX",
+      "description": "Headlight assistant",
+      "group": "OSH",
+      "type": "F"
+    },
+    {
+      "code": "XC1",
+      "codeType": "XX",
+      "description": "WARNING COC incomplete",
+      "type": "F"
+    },
+    {
+      "code": "IF3",
+      "codeType": "XX",
+      "description": "Chassis with cab",
+      "group": "OSO",
+      "type": "F"
+    },
+    {
+      "code": "EW6",
+      "codeType": "XX",
+      "description": "Digital Extra: Remote Services Plus",
+      "group": "OMM",
+      "type": "F"
+    },
+    {
+      "code": "XY5",
+      "codeType": "XX",
+      "description": "Model year 5",
+      "group": "OSO",
+      "type": "F"
+    },
+    {
+      "code": "JA8",
+      "codeType": "XX",
+      "description": "Crosswind Assist",
+      "group": "OSH",
+      "type": "F"
+    },
+    {
+      "code": "C71",
+      "codeType": "XX",
+      "description": "Rear underride protection EEC",
+      "group": "ORF",
+      "type": "F"
+    },
+    {
+      "code": "VF7",
+      "codeType": "XX",
+      "description": "Fabric TestFabric black",
+      "group": "OIN",
+      "type": "F"
+    },
+    {
+      "code": "AR2",
+      "codeType": "XX",
+      "description": "Axle ratio i = 3,923",
+      "group": "ORF",
+      "type": "F"
+    },
+    {
+      "code": "J1V",
+      "codeType": "XX",
+      "description": "Pre-installation, Blind Spot Assist, bodybuilder",
+      "group": "OSH",
+      "type": "F"
+    },
+    {
+      "code": "CL3",
+      "codeType": "XX",
+      "description": "Leather steering wheel",
+      "group": "LHL",
+      "type": "F"
+    },
+    {
+      "code": "MS1",
+      "codeType": "XX",
+      "description": "Cruise control",
+      "group": "TEM",
+      "type": "F"
+    },
+    {
+      "code": "HH9",
+      "codeType": "XX",
+      "description": "Air con., semi-autom. controlled, test system",
+      "group": "KAL",
+      "type": "F"
+    },
+    {
+      "code": "Z1N",
+      "codeType": "XX",
+      "description": "Qualification N1",
+      "group": "OSO",
+      "type": "F"
+    },
+    {
+      "code": "LB2",
+      "codeType": "XX",
+      "description": "Preparation for side marker lights",
+      "group": "OEX",
+      "type": "F"
+    },
+    {
+      "code": "SA6",
+      "codeType": "XX",
+      "description": "Airbag, co-driver",
+      "group": "AIB",
+      "type": "F"
+    },
+    {
+      "code": "H04",
+      "codeType": "XX",
+      "description": "Heat insulation",
+      "group": "OKO",
+      "type": "F"
+    },
+    {
+      "code": "JK5",
+      "codeType": "XX",
+      "description": "Instrument cluster with colour display",
+      "group": "OIN",
+      "type": "F"
+    },
+    {
+      "code": "J55",
+      "codeType": "XX",
+      "description": "Seat belt reminder for co-driver seat",
+      "group": "OSH",
+      "type": "F"
+    }
+  ],
+  "technicalData": [
+    {
+      "id": "206W",
+      "text": "fcEHGas",
+      "unit": "m3/100km"
+    },
+    {
+      "id": "208W",
+      "text": "fcLGas",
+      "unit": "m3/100km"
+    },
+    {
+      "id": "188W",
+      "text": "perCity",
+      "unit": "km"
+    },
+    {
+      "id": "221W",
+      "text": "co2ExtraurbanGas",
+      "unit": "g/km"
+    },
+    {
+      "id": "243W",
+      "text": "er",
+      "unit": "km"
+    },
+    {
+      "id": "28W",
+      "text": "tm",
+      "unit": "kg",
+      "value": "2207.0"
+    },
+    {
+      "id": "223W",
+      "text": "co2UrbanGas",
+      "unit": "g/km"
+    },
+    {
+      "id": "245W",
+      "text": "fcExtraUrban",
+      "unit": "l/100km"
+    },
+    {
+      "id": "26W",
+      "text": "f2",
+      "unit": "N/kph^2",
+      "value": "0.094167"
+    },
+    {
+      "id": "247W",
+      "text": "fcWeighted247W",
+      "unit": "l/100km"
+    },
+    {
+      "id": "24W",
+      "text": "f0",
+      "unit": "N",
+      "value": "226.83314"
+    },
+    {
+      "id": "249W",
+      "text": "fcExtraurban249W",
+      "unit": "kg/100km"
+    },
+    {
+      "id": "88W",
+      "text": "fcL",
+      "unit": "l/100km",
+      "value": "9.2"
+    },
+    {
+      "id": "86W",
+      "text": "fcEH",
+      "unit": "l/100km",
+      "value": "9.3"
+    },
+    {
+      "id": "84W",
+      "text": "co2M",
+      "unit": "g/km",
+      "value": "211.0"
+    },
+    {
+      "id": "184W",
+      "text": "ecH184W",
+      "unit": "Wh/km"
+    },
+    {
+      "id": "82W",
+      "text": "co2H",
+      "unit": "g/km",
+      "value": "212.0"
+    },
+    {
+      "id": "142W",
+      "text": "co2TestCycle",
+      "unit": "g/km"
+    },
+    {
+      "id": "186W",
+      "text": "ecM186W",
+      "unit": "Wh/km"
+    },
+    {
+      "id": "90W",
+      "text": "fcWLTC",
+      "unit": "l/100km",
+      "value": "8.6"
+    },
+    {
+      "id": "207W",
+      "text": "fcHGas",
+      "unit": "m3/100km"
+    },
+    {
+      "id": "209W",
+      "text": "fcMGas",
+      "unit": "m3/100km"
+    },
+    {
+      "id": "143W",
+      "text": "co2Urban",
+      "unit": "g/km"
+    },
+    {
+      "id": "187W",
+      "text": "ecWLTC187W",
+      "unit": "Wh/km"
+    },
+    {
+      "id": "242W",
+      "text": "ecWeighted",
+      "unit": "Wh/km"
+    },
+    {
+      "id": "210W",
+      "text": "fcWLTCGas",
+      "unit": "m3/100km"
+    },
+    {
+      "id": "222W",
+      "text": "co2TestCycleGas",
+      "unit": "g/km"
+    },
+    {
+      "id": "244W",
+      "text": "fcCombined",
+      "unit": "l/100km"
+    },
+    {
+      "id": "246W",
+      "text": "fcUrban",
+      "unit": "l/100km"
+    },
+    {
+      "id": "25W",
+      "text": "f1",
+      "unit": "N/kph",
+      "value": "0.0"
+    },
+    {
+      "id": "248W",
+      "text": "fcCombined248W",
+      "unit": "kg/100km"
+    },
+    {
+      "id": "89W",
+      "text": "fcM",
+      "unit": "l/100km",
+      "value": "8.1"
+    },
+    {
+      "id": "21W",
+      "text": "a",
+      "unit": "m^2",
+      "value": "4.282"
+    },
+    {
+      "id": "87W",
+      "text": "fcH",
+      "unit": "l/100km",
+      "value": "8.1"
+    },
+    {
+      "id": "85W",
+      "text": "co2WLTC",
+      "unit": "g/km",
+      "value": "226.0"
+    },
+    {
+      "id": "193W",
+      "text": "perWLTC",
+      "unit": "km"
+    },
+    {
+      "id": "183W",
+      "text": "ecEH183W",
+      "unit": "Wh/km"
+    },
+    {
+      "id": "83W",
+      "text": "co2L",
+      "unit": "g/km",
+      "value": "241.0"
+    },
+    {
+      "id": "250W",
+      "text": "fcUrban250W",
+      "unit": "kg/100km"
+    },
+    {
+      "id": "141W",
+      "text": "co2Extraurban",
+      "unit": "g/km"
+    },
+    {
+      "id": "185W",
+      "text": "ecL185W",
+      "unit": "Wh/km"
+    },
+    {
+      "id": "81W",
+      "text": "co2EH",
+      "unit": "g/km",
+      "value": "243.0"
+    }
+  ]
+}
