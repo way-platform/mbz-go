@@ -1,0 +1,13 @@
+edition = "2023";
+
+package wayplatform.connect.mbz.v1;
+
+// VehicleImages represents the vehicle image IDs from the Mercedes-Benz Vehicle Specification API.
+message VehicleImages {
+  // Exterior image ID at 150 degrees rotation (UUID).
+  string ext150 = 1;
+  // Exterior image ID at 330 degrees rotation (UUID).
+  string ext330 = 2;
+  // Interior image ID (UUID).
+  string int1 = 3;
+}
