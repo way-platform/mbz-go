@@ -2,62 +2,368 @@ edition = "2023";
 
 package wayplatform.connect.mbz.v1;
 
-// VehicleData represents the vehicle specification data from the Mercedes-Benz Vehicle Specification API.
+// VehicleSpecification represents the vehicle specification data from the Mercedes-Benz Vehicle Specification API.
 message VehicleSpecification {
-  // The vehicle model name.
-  string model_name = 1;
+  // Basic vehicle identification fields
+  // Model name (e.g., "Sprinter").
+  string model = 1;
+  // Model name alternative field.
+  string model_name = 2;
+  // Model year code (e.g., "XZ1").
+  string model_year = 3;
+  // Model year as a year value.
+  string model_year_year = 4;
+  // National sales description of the vehicle (e.g., "Sprinter 315 CDI PRO Long").
+  string long_type = 5;
+  // Language dependent technical vehicle type for Vans (e.g., "315  FG   4X2   4325").
+  string long_type_technical = 6;
+  // Short type description (e.g., "Sprinter 315 CDI").
+  string short_type = 7;
+  // Engine code (e.g., "MU3").
+  string engine_code = 8;
+  // First 11 characters of FIN (Fahrzeug-Identifizierungsnummer).
+  string fin11 = 9;
+  // First 11 characters of VIN (Vehicle Identification Number).
+  string vin11 = 10;
+  // Baumuster (model designation code, e.g., "907135").
+  string baumuster = 11;
+  // Country number code.
+  string countrynumber = 12;
+  // Vehicle function code.
+  string function = 13;
+  // Vehicle status.
+  string status = 14;
+  // Final date (format: YYYYMMDD, e.g., "20241023").
+  string finaldate = 15;
+  // Shipping date.
+  string shippingdate = 16;
+  // NST code.
+  string nst = 17;
+  // Type class.
+  string typeclass = 18;
+  // All-wheel drive indicator (e.g., "0").
+  string allwheel = 19;
+  // Metallic paint indicator (e.g., "0").
+  string metallic = 20;
+  // Leather interior indicator (e.g., "0").
+  string leather = 21;
 
-  // The vehicle model year.
-  string model_year = 2;
+  // Vehicle type enum (NEW or USED).
+  string vehicle_type = 22;
+  // Pool flag (P for pool, N for non-pool).
+  string poolflag = 23;
 
-  // The brand of the vehicle.
-  string brand = 3;
+  // CodeText fields (code/text pairs)
+  // Brand code/text (e.g., code: "095", text: "Mercedes-Benz").
+  CodeText brand = 24;
+  // Fuel type code/text (e.g., code: "D", text: "Diesel").
+  CodeText fuel = 25;
+  // Emission standard code/text (e.g., code: "6", text: "EU6").
+  CodeText emissionstandard = 26;
+  // Body type code/text (e.g., code: "5000", text: "Chassis").
+  CodeText body = 27;
+  // Cabin code/text.
+  CodeText cabin = 28;
+  // Engine type code/text (e.g., code: "1", text: "Diesel").
+  CodeText enginetype = 29;
+  // Line code/text.
+  CodeText line = 30;
+  // Model range code/text.
+  CodeText modelrange = 31;
+  // Product group code/text.
+  CodeText productgroup = 32;
+  // Subcategory code/text.
+  CodeText subcategory = 33;
+  // Suspension type code/text.
+  CodeText suspensiontype = 34;
+  // Transmission type code/text (e.g., code: "A", text: "automatic transmission").
+  CodeText transmissiontype = 35;
 
-  // The fuel type of the vehicle.
-  string fuel_type = 4;
+  // Numeric fields with unit suffixes
+  // Branch code.
+  int32 branch = 36;
+  // Cylinder capacity in cubic centimeters (e.g., 1950).
+  int32 cylinder_capacity_cc = 37;
+  // Power in kilowatts (e.g., 110).
+  int32 power_kw = 38;
+  // Power in metric horsepower PS (e.g., 150).
+  int32 power_ps = 39;
+  // Number of doors (e.g., 2).
+  int32 door_count = 40;
+  // Number of seats (e.g., 3).
+  int32 seat_count = 41;
+  // Wheelbase in millimeters (e.g., 4325).
+  int32 wheelbase_mm = 42;
+  // Wheel form (e.g., "4x2R").
+  string wheel_form = 43;
 
-  // The emission standard of the vehicle.
-  string emission_standard = 5;
+  // Complex nested structures
+  // Vehicle weight information including axis weights.
+  Weight weight = 44;
+  // Primary engine details (for conventional or primary engine in hybrid vehicles).
+  Engine primary_engine = 45;
+  // Secondary engine details (for hybrid vehicles).
+  Engine secondary_engine = 46;
+  // Cabin information for commercial vehicles.
+  CabinInfo cabin_info = 47;
+  // EMICO (European Motor Industry CO2) information.
+  Emico emico = 48;
+  // Vehicle emission information.
+  Emission emission = 49;
+  // Vehicle fuel consumption information.
+  FuelConsumption fuel_consumption = 50;
+  // New vehicle price information.
+  NewPrice new_price = 51;
+  // Sales description details.
+  SalesDescription sales_description = 52;
+  // Package-based options structure.
+  PackageBasedOptions package_based_options = 53;
+  // Type key information (HSN/TSN/VVS).
+  TypKey type_key = 54;
+  // Primary paint/color information.
+  LegacyEquipment paint = 55;
+  // Secondary paint/color information.
+  LegacyEquipment paint2 = 56;
+  // Upholstery information.
+  LegacyEquipment upholstery = 57;
 
-  // The primary engine details of the vehicle.
-  Engine primary_engine = 6;
+  // Arrays
+  // List of vehicle options/equipment codes.
+  repeated LegacyEquipment options = 58;
+  // Technical data entries with various measurements and values.
+  repeated TechnicalData technical_data = 59;
 
-  // The secondary engine details of the vehicle (for hybrid vehicles).
-  Engine secondary_engine = 7;
+  // CodeText represents a code/text pair used throughout the API.
+  message CodeText {
+    // Equipment or package code (3-4 characters).
+    string code = 1;
+    // Standard code description (up to 80 characters).
+    string text = 2;
+  }
 
-  // Vehicle mass in kg.
-  int32 vehicle_mass_kg = 8;
+  // Weight represents vehicle weight information.
+  message Weight {
+    // Vehicle mass in kg.
+    int32 vehicle_mass_kg = 1;
+    // Total weight in kg.
+    int32 total_kg = 2;
+    // Payload weight in kg.
+    int32 payload_kg = 3;
+    // Extended weight in kg.
+    int32 extended_kg = 4;
+    // Weight on axis 1 in kg.
+    int32 axis1_kg = 5;
+    // Weight on axis 2 in kg.
+    int32 axis2_kg = 6;
+    // Weight on axis 3 in kg.
+    int32 axis3_kg = 7;
+    // Weight on axis 4 in kg.
+    int32 axis4_kg = 8;
+    // Weight on axis 5 in kg.
+    int32 axis5_kg = 9;
+    // Weight on axis 6 in kg.
+    int32 axis6_kg = 10;
+    // Weight on last axis in kg.
+    int32 axis_last_kg = 11;
+  }
 
-  // Long type - national sales description of the vehicle.
-  string long_type = 9;
-
-  // Body type code.
-  string body_code = 10;
-
-  // Body type text description.
-  string body_text = 11;
-
-  // Number of doors.
-  int32 door_count = 12;
-
-  // Number of seats.
-  int32 seat_count = 13;
-
-  // Wheelbase in millimeters.
-  int32 wheelbase_mm = 14;
-
-  // Wheel form (e.g., "4x2F").
-  string wheel_form = 15;
-
-  // The engine details of the vehicle.
+  // Engine represents engine details.
   message Engine {
-    // The battery capacity of the engine in kWh (for electric/hybrid vehicles).
-    int32 battery_capacity_kwh = 1;
+    // Battery information for electric/hybrid vehicles.
+    Battery battery = 1;
+    // Cylinder capacity in cubic centimeters.
+    int32 cylinder_capacity_cc = 2;
+    // Engine emission information.
+    EngineEmission emission = 3;
+    // Fuel consumption information.
+    EngineFuelConsumption fuel_consumption = 4;
+    // Fuel tank capacity in liters.
+    int32 fuel_tank_capacity_l = 5;
+    // Fuel type code/text pair.
+    CodeText fuel_type = 6;
+    // Power information.
+    Power power = 7;
+    // Electric range in kilometers.
+    int32 range_km = 8;
+    // Torque in Newton-meters.
+    int32 torque_nm = 9;
 
-    // The fuel tank capacity of the engine in liters.
-    int32 fuel_tank_capacity_l = 2;
+    // Battery represents battery information for electric/hybrid vehicles.
+    message Battery {
+      // Battery capacity in kilowatt-hours (kWh).
+      int32 capacity_kwh = 1;
+      // Charging time in minutes.
+      int32 charging_time_min = 2;
+      // Battery type identifier.
+      string type = 3;
+    }
 
-    // The fuel type of the engine.
-    string fuel_type = 3;
+    // EngineEmission represents engine emission data.
+    message EngineEmission {
+      // City emission value (in unit specified by unit field).
+      float city = 1;
+      // Combined emission value (in unit specified by unit field).
+      float combined = 2;
+      // Overland emission value (in unit specified by unit field).
+      float overland = 3;
+      // Unit of measurement (e.g., "g/km").
+      string unit = 4;
+    }
+
+    // EngineFuelConsumption represents fuel consumption data.
+    message EngineFuelConsumption {
+      // City consumption value (in unit specified by unit field).
+      float city = 1;
+      // Combined consumption value (in unit specified by unit field).
+      float combined = 2;
+      // Overland consumption value (in unit specified by unit field).
+      float overland = 3;
+      // Unit of measurement (e.g., "l/100km").
+      string unit = 4;
+    }
+
+    // Power represents engine power information.
+    message Power {
+      // Power in kilowatts (e.g., 110).
+      int32 kw = 1;
+      // Power in metric horsepower PS (e.g., 150).
+      int32 ps = 2;
+    }
+  }
+
+  // CabinInfo represents cabin information for commercial vehicles.
+  message CabinInfo {
+    // Cabin base code/text pair.
+    CodeText cabin_base = 1;
+    // Cabin bottom code/text pair.
+    CodeText cabin_bottom = 2;
+    // Cabin combined code/text pair.
+    CodeText cabin_combined = 3;
+    // Cabin type code/text pair.
+    CodeText cabin_type = 4;
+    // Cabin width code/text pair.
+    CodeText cabin_width = 5;
+  }
+
+  // Emico represents EMICO (European Motor Industry CO2) information.
+  message Emico {
+    // Approved usage.
+    string approved_usage = 1;
+    // Drive concept.
+    string drive_concept = 2;
+    // Legal context.
+    string legal_context = 3;
+    // Raw data.
+    string raw_data = 4;
+    // Rule set version ID.
+    string rule_set_version_id = 5;
+    // Test procedure.
+    string test_procedure = 6;
+  }
+
+  // Emission represents vehicle emission information.
+  message Emission {
+    // Combined emission value.
+    float combined = 1;
+    // Directive.
+    string directive = 2;
+    // In emission value.
+    float in = 3;
+    // Out emission value.
+    float out = 4;
+  }
+
+  // FuelConsumption represents vehicle fuel consumption information.
+  message FuelConsumption {
+    // Combined consumption value.
+    float combined = 1;
+    // In consumption value.
+    float in = 2;
+    // Out consumption value.
+    float out = 3;
+  }
+
+  // NewPrice represents new vehicle price information.
+  message NewPrice {
+    // Gross price.
+    float gross_price = 1;
+    // Net price.
+    float net_price = 2;
+    // Tax amount.
+    float tax = 3;
+  }
+
+  // SalesDescription represents sales description details.
+  message SalesDescription {
+    // All-wheel drive code/text pair.
+    CodeText allwheel = 1;
+    // Body code/text pair.
+    CodeText body = 2;
+    // Extension code/text pair.
+    CodeText extension = 3;
+    // Length type code/text pair.
+    CodeText length_type = 4;
+    // Line code/text pair.
+    CodeText line = 5;
+    // Model code/text pair.
+    CodeText model = 6;
+    // Style code/text pair.
+    CodeText style = 7;
+    // Type code/text pair.
+    CodeText type = 8;
+  }
+
+  // PackageBasedOptions represents package-based options structure.
+  message PackageBasedOptions {
+    // Option packages.
+    repeated OptionPackage option_packages = 1;
+    // Individual options.
+    repeated LegacyEquipment options = 2;
+  }
+
+  // OptionPackage represents an option package.
+  message OptionPackage {
+    // Package code.
+    string code = 1;
+    // Package text description.
+    string text = 2;
+    // Options in this package.
+    repeated LegacyEquipment options = 3;
+  }
+
+  // TechnicalData represents technical data entries.
+  message TechnicalData {
+    // Technical data ID.
+    string id = 1;
+    // Technical data text description.
+    string text = 2;
+    // Unit of measurement.
+    string unit = 3;
+    // Technical data value.
+    string value = 4;
+  }
+
+  // TypKey represents type key information.
+  message TypKey {
+    // HSN (Hersteller-Schlüsselnummer, manufacturer key number, e.g., "2222").
+    string hsn = 1;
+    // TSN (Typschlüsselnummer, type key number, e.g., "000").
+    string tsn = 2;
+    // VVS (variant key, e.g., "00000").
+    string vvs = 3;
+  }
+
+  // LegacyEquipment represents legacy equipment/option information.
+  message LegacyEquipment {
+    // Equipment code (required).
+    string code = 1;
+    // Code type.
+    string code_type = 2;
+    // Description.
+    string description = 3;
+    // Group.
+    string group = 4;
+    // Type.
+    string type = 5;
   }
 }
