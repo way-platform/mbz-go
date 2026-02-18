@@ -1,0 +1,751 @@
+openapi: 3.0.1
+info:
+    title: Remote Maintenance Support API
+    description: The Remote Maintenance Support API will provide the possibility for 3rd party applications (e.g. ADAC, ATU, etc.) to access vehicle maintenance data remotely on behalf of the Mercedes-Benz customer. To use the endpoints you need a valid vin/fin (vehicleId).
+    contact:
+        name: The open API platform by Mercedes-Benz
+    version: "3.0.0"
+servers:
+    - url: https://api.mercedes-benz.com/remotemaintenance/v3
+security:
+    - OAuth2:
+        - mb:vehicle:rms:reader
+tags:
+    - name: Resource Readouts
+      description: Remote Maintenance Support service for view all resources.
+    - name: Value Readouts
+      description: Remote Maintenance Support service for view all resources.
+    - name: Vehicle Data Readout Refresh
+      description: Remote Maintenance Support service to refresh the vehicle data readout
+    - name: Warning Indicator Readouts
+      description: Remote Maintenance Support service to view warning indicators.
+components:
+    schemas:
+        ErrorResponse:
+            type: object
+            properties:
+                errorCode:
+                    type: string
+                    description: Error Code
+                    x-go-type-skip-optional-pointer: true
+                errorMessage:
+                    type: string
+                    description: Error Message
+                    x-go-type-skip-optional-pointer: true
+        CommonType:
+            required:
+                - asyncStatus
+                - id
+                - messageTimestamp
+                - vehicleId
+            type: object
+            properties:
+                id:
+                    type: string
+                    description: Id unique for this readout.
+                    x-go-type-skip-optional-pointer: true
+                asyncStatus:
+                    type: string
+                    description: Reflects the status of the readouts
+                    enum:
+                        - Pending
+                        - InProgress
+                        - Complete
+                        - Fail
+                    x-go-type-skip-optional-pointer: true
+                messageTimestamp:
+                    type: string
+                    description: Timestamp when this message was created.
+                    format: date-time
+                    example: 2018-01-01T00:00:00Z
+                    x-go-type-skip-optional-pointer: true
+                    x-omitzero: true
+                receivedTimestamp:
+                    type: string
+                    description: Timestamp when the data in the message was received by the ExVe backend from the vehicle.
+                    format: date-time
+                    example: 2018-01-01T00:00:20Z
+                    x-go-type-skip-optional-pointer: true
+                    x-omitzero: true
+                vehicleId:
+                    type: string
+                    description: The vehicle identifier of the extended vehicle, e.g VIN
+                    x-go-type-skip-optional-pointer: true
+        CommonTypeNoReceivedTimestamp:
+            required:
+                - asyncStatus
+                - id
+                - messageTimestamp
+                - vehicleId
+            type: object
+            properties:
+                id:
+                    type: string
+                    description: Id unique for this readout.
+                    x-go-type-skip-optional-pointer: true
+                asyncStatus:
+                    type: string
+                    description: Reflects the status of the readouts
+                    enum:
+                        - Pending
+                        - InProgress
+                        - Complete
+                        - Fail
+                    x-go-type-skip-optional-pointer: true
+                messageTimestamp:
+                    type: string
+                    description: Timestamp when this message was created.
+                    format: date-time
+                    example: 2018-01-01T00:00:00Z
+                    x-go-type-skip-optional-pointer: true
+                    x-omitzero: true
+                vehicleId:
+                    type: string
+                    description: The vehicle identifier of the extended vehicle, e.g VIN
+                    x-go-type-skip-optional-pointer: true
+        ResourceDataContainer:
+            type: object
+            properties:
+                resourceReadout:
+                    $ref: '#/components/schemas/ResourceDataType'
+        ResourceDataType:
+            allOf:
+                - $ref: '#/components/schemas/CommonType'
+                - type: object
+                  properties:
+                    resources:
+                        type: array
+                        description: List of resources.
+                        items:
+                            $ref: '#/components/schemas/ResourceDataItem'
+                        x-go-type-skip-optional-pointer: true
+                        x-omitzero: true
+        ResourceDataItem:
+            required:
+                - api
+                - name
+                - version
+            type: object
+            properties:
+                name:
+                    type: string
+                    description: Name of resource
+                    x-go-type-skip-optional-pointer: true
+                version:
+                    type: string
+                    description: Version of resource in API
+                    x-go-type-skip-optional-pointer: true
+                api:
+                    type: string
+                    description: URI to API exposing resource
+                    x-go-type-skip-optional-pointer: true
+        ValueDataContainer:
+            type: object
+            properties:
+                valueReadout:
+                    $ref: '#/components/schemas/ValueDataType'
+        ValueDataType:
+            allOf:
+                - $ref: '#/components/schemas/CommonType'
+                - type: object
+                  properties:
+                    maintenanceData:
+                        type: array
+                        description: List of values.
+                        items:
+                            $ref: '#/components/schemas/ValueDataItem'
+                        x-go-type-skip-optional-pointer: true
+                        x-omitzero: true
+        ValueDataItem:
+            type: object
+            properties:
+                odometervalue:
+                    type: string
+                    description: Odometer Value of the vehicle, only for PC and VAN
+                    x-go-type-skip-optional-pointer: true
+                servicecode:
+                    type: string
+                    description: Servicecode of the vehicle, only for PC
+                    x-go-type-skip-optional-pointer: true
+                workshopcode:
+                    type: string
+                    description: Version of resource in API
+                    x-go-type-skip-optional-pointer: true
+                distanceToService:
+                    type: string
+                    description: Distance to next service, only for PC and VAN
+                    x-go-type-skip-optional-pointer: true
+                timeToService:
+                    type: string
+                    description: Estimated time to next service, only for PC and VAN
+                    x-go-type-skip-optional-pointer: true
+                maintenanceData:
+                    $ref: '#/components/schemas/MaintenanceDataTable'
+        warningIndicatorReadoutDataContainer:
+            type: object
+            properties:
+                malfunctionIndicatorReadout:
+                    $ref: '#/components/schemas/warningIndicatorReadoutDataType'
+        warningIndicatorReadoutDataType:
+            allOf:
+                - $ref: '#/components/schemas/CommonType'
+                - type: object
+                  properties:
+                    warningIndicators:
+                        type: array
+                        description: Message of Vehicle Data Readout Refresh.
+                        items:
+                            $ref: '#/components/schemas/warningIndicatorReadoutDataItem'
+                        x-go-type-skip-optional-pointer: true
+                        x-omitzero: true
+        warningIndicatorReadoutDataItem:
+            type: object
+            properties:
+                status:
+                    type: string
+                    description: Warning Indicator Readout Status
+                    example: STATUS_ACTIVE
+                    enum:
+                        - STATUS_NOT_ACTIVE
+                        - STATUS_ACTIVE
+                        - STATUS_ACTIVE_AND_BLINKING
+                        - STATUS_UNDEFINED
+                        - STATUS_UNKNOWN
+                    x-go-type-skip-optional-pointer: true
+                originalOdometerValue:
+                    type: string
+                    description: Warning Indicator Readout Original Odometer Value
+                    example: 624.0 km
+                    x-go-type-skip-optional-pointer: true
+                mostRecentOdometerValue:
+                    type: string
+                    description: Warning Indicator Readout most recent Odometer Value
+                    example: 624.0 km
+                    x-go-type-skip-optional-pointer: true
+                frequencyCounter:
+                    type: string
+                    description: How frequent this warning indicater has been recorded.
+                    example: "2"
+                    x-go-type-skip-optional-pointer: true
+                ignitionCycleCounter:
+                    type: string
+                    description: How often the ignition has been started since first ocurrence.
+                    example: "255"
+                    x-go-type-skip-optional-pointer: true
+                text:
+                    type: object
+                    properties:
+                        symptomText:
+                            type: string
+                            description: Text of Symptom
+                            example: Der Meldungsspeicher ist defekt.
+                            x-go-type-skip-optional-pointer: true
+                        descriptionText:
+                            type: string
+                            description: Description text of symptom
+                            example: Aufgrund eines Defekts im Meldungsspeicher liegen keine Daten zu Display-Meldungen und Warn- und Kontrollleuchten vor.
+                            x-go-type-skip-optional-pointer: true
+                    description: Contains Symptom and/or description text.
+                icon:
+                    type: string
+                    description: Base64 encoded icon file
+                    example: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAM0AAAD NCAMAAAAsYgRbAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5c cllPAAAABJQTFRF3NSmzMewPxIG//ncJEJsldTou1jHgAAAARBJREFUeNrs2EEK gCAQBVDLuv+v30dENbMY831wKz4Y/VHb/5RGQ0NDQ0NDQ0NDQ0NDQ0NDQ 0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0PzMWtyaGhoaGhoaGhoaGhoaGhoxtb0QGho aGhoaGhoaGhoaGhoaMbRLEvv50VTQ9OTQ5OpyZ01GpM2g0bfmDQaL7S+ofFC6x v3ZpxJiywakzbvd9r3RWPS9I2+MWk0+kbf0Hih9Y17U0nTHibrDDQ0NDQ0NDQ0 NDQ0NDQ0NTXbRSL/AK72o6GhoaGhoRlL8951vwsNDQ0NDQ1NDc0WyHtDTEhD Q0NDQ0NTS5MdGhoaGhoaGhoaGhoaGhoaGhoaGhoaGposzSHAAErMwwQ2HwRQ AAAAAElFTkSuQmCC
+                    x-go-type-skip-optional-pointer: true
+        MaintenanceDataTable:
+            type: array
+            items:
+                $ref: '#/components/schemas/maintenanceTable'
+            x-go-type-skip-optional-pointer: true
+            x-omitzero: true
+        maintenanceTable:
+            type: object
+            properties:
+                type:
+                    type: string
+                    example: Faellige Wartugnsdaten
+                    x-go-type-skip-optional-pointer: true
+                name:
+                    type: string
+                    description: Encoded text expression. To be resolved using VDC localizer textmessage service.
+                    example: Due Maintenance Channels
+                    x-go-type-skip-optional-pointer: true
+                line:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/maintenanceLine'
+                    x-go-type-skip-optional-pointer: true
+                    x-omitzero: true
+        maintenanceLine:
+            type: object
+            properties:
+                type:
+                    type: string
+                    example: Zeitwartung
+                    x-go-type-skip-optional-pointer: true
+                name:
+                    type: string
+                    description: Encoded text expression. To be resolved using VDC localizer textmessage service.
+                    example: time-based servicing
+                    x-go-type-skip-optional-pointer: true
+                data:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            type:
+                                type: string
+                                example: LDVL
+                                x-go-type-skip-optional-pointer: true
+                            name:
+                                type: string
+                                example: left
+                                x-go-type-skip-optional-pointer: true
+                            value:
+                                type: object
+                                properties:
+                                    textvalue:
+                                        type: string
+                                        example: Signal NICHT VORHANDEN
+                                        x-go-type-skip-optional-pointer: true
+                                    doublevalue:
+                                        type: string
+                                        example: 980.5
+                                        x-go-type-skip-optional-pointer: true
+                                    unit:
+                                        type: string
+                                        example: m
+                                        x-go-type-skip-optional-pointer: true
+                                    prefix:
+                                        type: string
+                                        example: k
+                                        x-go-type-skip-optional-pointer: true
+                    x-go-type-skip-optional-pointer: true
+                    x-omitzero: true
+        VehicleDataReadoutRefreshDataContainer:
+            type: object
+            properties:
+                vehicleDataReadoutRefresh:
+                    $ref: '#/components/schemas/VehicleDataReadoutRefreshDataType'
+        VehicleDataReadoutRefreshDataType:
+            allOf:
+                - $ref: '#/components/schemas/CommonTypeNoReceivedTimestamp'
+                - type: object
+                  properties:
+                    message:
+                        type: array
+                        description: Message of Vehicle Data Readout Refresh.
+                        items:
+                            $ref: '#/components/schemas/VehicleDataReadoutRefreshDataItem'
+                        x-go-type-skip-optional-pointer: true
+                        x-omitzero: true
+        VehicleDataReadoutRefreshDataItem:
+            required:
+                - message
+            type: object
+            properties:
+                message:
+                    type: string
+                    description: Specifies the exception message.
+                    x-go-type-skip-optional-pointer: true
+    examples:
+        valueReadoutCar:
+            value:
+                valuereadout:
+                    id: exvs5719578132647805
+                    asyncStatus: "true"
+                    messageTimestamp: "2020-07-01T14:14:07+00:00"
+                    receivedTimestamp: "2020-07-01T14:14:07+00:00"
+                    vehicleId: WDD2132231A710874
+                    maintenanceData:
+                        - odometerValue: 12153.0 km
+                          serviceCode: A
+                          workshopCode: "505"
+                          timeToService: -101.0 d
+                          distanceToService: 13091.0 km
+                          maintenanceData:
+                            - type: Reifendruecke
+                              name: Tirepressures
+                              line:
+                                - type: TirePressureFrontLeft
+                                  value:
+                                    doublevalue: 2.7
+                                    unit: "bar"
+                                - type: TirePressureFrontRight
+                                  value:
+                                    doublevalue: 2.7
+                                    unit: "bar"
+                                - type: TirePressureRearLeft
+                                  value:
+                                    doublevalue: 2.7
+                                    unit: "bar"
+                                - type: TirePressureRearRight
+                                  value:
+                                    doublevalue: 2.6
+                                    unit: "bar"
+        valueReadoutVan:
+            value:
+                valuereadout:
+                    id: exvs5719578132647805
+                    asyncStatus: "true"
+                    messageTimestamp: "2020-07-01T14:14:07+00:00"
+                    receivedTimestamp: "2020-07-01T14:14:07+00:00"
+                    vehicleId: WDB9077331P001616
+                    maintenanceData:
+                        - odometerValue: 12153.0 km
+                          serviceCode: A
+                          workshopCode: "505"
+                          timeToService: -101.0 d
+                          distanceToService: 13091.0 km
+                          maintenanceData:
+                            - type: Reifendruecke
+                              name: Tirepressures
+                              line:
+                                - type: TirePressureFrontLeft
+                                  value:
+                                    doublevalue: 2.7
+                                    unit: "bar"
+                                - type: TirePressureFrontRight
+                                  value:
+                                    doublevalue: 2.7
+                                    unit: "bar"
+                                - type: TirePressureRearLeft
+                                  value:
+                                    doublevalue: 2.7
+                                    unit: "bar"
+                                - type: TirePressureRearRight
+                                  value:
+                                    doublevalue: 2.6
+                                    unit: "bar"
+        valueReadoutTruck:
+            value:
+                valuereadout:
+                    id: exvs1479723908628241
+                    asyncStatus: Complete
+                    messageTimestamp: "2020-07-01T14:14:07+00:00"
+                    receivedTimestamp: "2020-07-01T14:14:07+00:00"
+                    vehicleId: WDD111111LKW01000
+                    maintenanceData:
+                        - odometerValue: 12153.0 km
+                          maintenanceData:
+                            - type: Wartungsdaten
+                              name: Maintenance data
+                              line:
+                                - type: Motor
+                                  name: Engine
+                                  data:
+                                    - type: WartungsIntervall
+                                      name: Maintenance interval
+                                      value:
+                                        physicalvalue:
+                                            doublevalue: 1
+                                    - type: LDV
+                                      name: Life cycle consumption
+                                      value:
+                                        physicalvalue:
+                                            doublevalue: 490.2
+                                            unit: "%"
+                                    - type: StreckeBisService
+                                      name: Driving distance until next service
+                                      value:
+                                        physicalvalue:
+                                            doublevalue: -5.4
+                                            unit: m
+                                            prefix: k
+                                    - type: GesamtzeitBisService
+                                      name: Days until next service date
+                                      value:
+                                        physicalvalue:
+                                            doublevalue: 6.2
+                                    - type: BetriebszeitBisService
+                                      name: Operating time till next service
+                                      value:
+                                        physicalvalue:
+                                            doublevalue: 147.7
+                                            unit: "h"
+                                    - type: Getriebe
+                                      name: Days until next service date
+                                      value:
+                                        physicalvalue:
+                                            doublevalue: 6.2
+                            - type: Reifendruecke
+                              name: Tirepressures
+                              line:
+                                - type: Axle 1 Left Inside
+                                  value:
+                                    doublevalue: 10
+                                    unit: bar
+                                - type: Axle 1 Right Inside
+                                  value:
+                                    doublevalue: 10
+                                    unit: bar
+                                - type: Axle 3 Left Outside
+                                  value:
+                                    doublevalue: 7.9
+                                    unit: bar
+                                - type: Axle 3 Left Inside
+                                  value:
+                                    doublevalue: 8.1
+                                    unit: bar
+                                - type: Axle 3 Right Inside
+                                  value:
+                                    doublevalue: 8
+                                    unit: bar
+                                - type: Axle 3 Right Outside
+                                  value:
+                                    doublevalue: 8.1
+                                    unit: bar
+                            - type: Verschleissdaten
+                              name: Wear values
+                              line:
+                                - type: Verschleiss_VA1
+                                  name: Brakes at front axle 1
+                                  data:
+                                    - type: LDVL
+                                      name: Left
+                                      value:
+                                        physicalvalue:
+                                            textvalue: Signal NICHT VORHANDEN
+                                    - type: LDVR
+                                      name: Right
+                                      value:
+                                        physicalvalue:
+                                            textvalue: Signal NICHT VORHANDEN
+                                - type: Verschleiss_HA1
+                                  name: Brakes at rear axle 1
+                                  data:
+                                    - type: LDVL
+                                      name: Left
+                                      value:
+                                        physicalvalue:
+                                            textvalue: Signal NICHT VORHANDEN
+                                    - type: LDVR
+                                      name: Right
+                                      value:
+                                        physicalvalue:
+                                            textvalue: Signal NICHT VORHANDEN
+        valueReadoutBus:
+            value:
+                valueReadout:
+                    id: exvs1479723908628241
+                    asyncStatus: "true"
+                    messageTimestamp: "2020-07-01T14:14:07+00:00"
+                    receivedTimestamp: "2020-07-01T14:14:07+00:00"
+                    vehicleId: WDD111111BUS1000
+                    maintenanceData:
+                        - odometerValue: 12153.0 km
+                          maintenanceData:
+                            - type: Reifendruecke
+                              name: Tirepressures
+                              line:
+                                - type: Axle 1 Left Inside
+                                  value:
+                                    doublevalue: 10
+                                    unit: bar
+                                - type: Axle 1 Right Inside
+                                  value:
+                                    doublevalue: 10
+                                    unit: bar
+                                - type: Axle 3 Left Outside
+                                  value:
+                                    doublevalue: 7.9
+                                    unit: bar
+                                - type: Axle 3 Left Inside
+                                  value:
+                                    doublevalue: 8.1
+                                    unit: bar
+                                - type: Axle 3 Right Inside
+                                  value:
+                                    doublevalue: 8
+                                    unit: bar
+                                - type: Axle 3 Right Outside
+                                  value:
+                                    doublevalue: 8.1
+                                    unit: bar
+                            - type: Bremsen Verschleissdaten
+                              name: Brake wear values
+                              line:
+                                - type: Verschleiss_VA1
+                                  name: Brakes at front axle 1
+                                  data:
+                                    - type: LDVL
+                                      name: Left
+                                      value:
+                                        physicalvalue:
+                                            textvalue: Signal NICHT VORHANDEN
+                                    - type: LDVR
+                                      name: Right
+                                      value:
+                                        physicalvalue:
+                                            textvalue: Signal NICHT VORHANDEN
+                                - type: Verschleiss_HA1
+                                  name: Brakes at rear axle 1
+                                  data:
+                                    - type: LDVL
+                                      name: Left
+                                      value:
+                                        physicalvalue:
+                                            textvalue: Signal NICHT VORHANDEN
+                                    - type: LDVR
+                                      name: Right
+                                      value:
+                                        physicalvalue:
+                                            textvalue: Signal NICHT VORHANDEN
+                                - type: Verschleiss_HA2
+                                  name: Brakes at rear axle 2
+                                  data:
+                                    - type: LDVL
+                                      name: Left
+                                      value:
+                                        physicalvalue:
+                                            textvalue: Signal NICHT VORHANDEN
+                                    - type: LDVR
+                                      name: Right
+                                      value:
+                                        physicalvalue:
+                                            textvalue: Signal NICHT VORHANDEN
+        ResourceReadoutCar:
+            value:
+                resourceReadout:
+                    id: exvs1479723908628241
+                    asyncStatus: Complete
+                    receivedTimestamp: "2020-06-29T10:38:14+02:00"
+                    messageTimestamp: "2020-07-02T09:23:22+00:00"
+                    vehicleId: WDD111111PKW01000
+                    resource:
+                        - name: Value Readout
+                          version: 1.0.0.0
+                          api: https://api.mercedes-benz.com/remotemaintenance/v3/vehicles/WDD111111PKW01000/valueReadouts
+                        - name: Warning Indicator Readout
+                          version: 1.0.0.0
+                          api: https://api.mercedes-benz.com/remotemaintenance/v3/vehicles/WDD111111PKW01000/language/{language}/warningIndicatorReadouts
+                        - name: Vehicle Data Readout Refresh
+                          version: 1.0.0.0
+                          api: https://api.mercedes-benz.com/remotemaintenance/v3/vehicles/WDD111111PKW01000/vehicleDataReadoutRefresh
+        ResourceReadoutVan:
+            value:
+                resourceReadout:
+                    id: exvs1479723908628241
+                    asyncStatus: Complete
+                    receivedTimestamp: "2020-06-29T10:38:14+02:00"
+                    messageTimestamp: "2020-07-02T09:23:22+00:00"
+                    vehicleId: WDD111111VAN01000
+                    resource:
+                        - name: Value Readout
+                          version: 1.0.0.0
+                          api: https://api.mercedes-benz.com/remotemaintenance/v3/vehicles/WDD111111VAN01000/valueReadouts
+                        - name: Warning Indicator Readout
+                          version: 1.0.0.0
+                          api: https://api.mercedes-benz.com/remotemaintenance/v3/vehicles/WDD111111VAN01000/language/{language}/warningIndicatorReadouts
+                        - name: Vehicle Data Readout Refresh
+                          version: 1.0.0.0
+                          api: https://api.mercedes-benz.com/remotemaintenance/v3/vehicles/WDD111111VAN01000/vehicleDataReadoutRefresh
+        ResourceReadoutBus:
+            value:
+                resourceReadout:
+                    id: exvs1479723908628241
+                    asyncStatus: Complete
+                    receivedTimestamp: "2020-06-29T10:38:14+02:00"
+                    messageTimestamp: "2020-07-02T09:23:22+00:00"
+                    vehicleId: WDD111111BUS01000
+                    resource:
+                        - name: Value Readout
+                          version: 1.0.0.0
+                          api: https://api.mercedes-benz.com/remotemaintenance/v3/vehicles/WDD111111BUS01000/valueReadouts
+                        - name: Vehicle Data Readout Refresh
+                          version: 1.0.0.0
+                          api: https://api.mercedes-benz.com/remotemaintenance/v3/vehicles/WDD111111BUS01000/vehicleDataReadoutRefresh
+        ResourceReadoutTruck:
+            value:
+                resourceReadout:
+                    id: exvs1479723908628241
+                    asyncStatus: Complete
+                    receivedTimestamp: "2020-06-29T10:38:14+02:00"
+                    messageTimestamp: "2020-07-02T09:23:22+00:00"
+                    vehicleId: WDD111111LKW01000
+                    resource:
+                        - name: Value Readout
+                          version: 1.0.0.0
+                          api: https://api.mercedes-benz.com/remotemaintenance/v3/vehicles/WDD111111LKW01000/valueReadouts
+                        - name: Vehicle Data Readout Refresh
+                          version: 1.0.0.0
+                          api: https://api.mercedes-benz.com/remotemaintenance/v3/vehicles/WDD111111LKW01000/vehicleDataReadoutRefresh
+        WarningIndicatorReadoutCar:
+            value:
+                warningIndicatorReadout:
+                    id: exvs1479723908628241
+                    asyncStatus: Complete
+                    messageTimestamp: "2020-07-01T14:14:07+00:00"
+                    receivedTimestamp: "2020-07-01T14:14:07+00:00"
+                    vehicleId: WDD111111PKW01000
+                    warningIndicators:
+                        - status: STATUS_NOT_ACTIVE
+                          originalOdometerValue: 13680.0 km
+                          mostRecentOdometerValue: 13744.0 km
+                          frequencyCounter: 6
+                          ignitionCycleCounter: 83
+                          text:
+                            symptomText: Example:Left dipped beam
+                            descriptionText: The corresponding light source is defective.    Consult a qualified specialist workshop.  or  Check whether you are permitted to replace the light source yourself.   LED light bulbs the display message for the corresponding lamp only appears when all the light-emitting diodes in the lamp have failed.
+                          icon: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAOCAYAAAAxDQxDAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAERSURBVHjavJThDYIwEIVP4gBE+G+dQDcQJlAnME6gTiBOoE5gnEA3QCeQDXQAjWyA78wjMfwpCtrkC225vuP1LjQ8r3URkZ38dowFieIsy6QMiHVBAEzZMzwXO7ZP8X2vB4ZczkAMLtjb832g2HScErYN2EJMk7TBlbjYi5jY2ESatoDb7X6AYILpioJazxT0X3cv0kHMtQ5HOlyg1xPma4iP6CwoI+BY6rMHGaYLkEA8LYScwEBjwKOKoyVd7N7qkNKJ8PpOjAm/rhEcJHRmcoeFRjB0eqxcI7b2GWzoRmsyBV0w167LW71S11F8ot3HxBHdRlx38BjW0d5Hy3u9ynUdjopjzXb/aDT+9VN9CjAAzwyR9Nzh5ssAAAAASUVORK5CYII=
+        WarningIndicatorReadoutVan:
+            value:
+                warningIndicatorReadout:
+                    id: exvs1479723908628241
+                    asyncStatus: Complete
+                    messageTimestamp: "2020-07-01T14:14:07+00:00"
+                    receivedTimestamp: "2020-07-01T14:14:07+00:00"
+                    vehicleId: WDD111111VAN01000
+                    warningIndicators:
+                        - status: ACTIVE
+                          originalOdometerValue: 13680.0 km
+                          mostRecentOdometerValue: 13744.0 km
+                          frequencyCounter: 60
+                          ignitionCycleCounter: 8
+                          text:
+                            symptomText: Example:Left dipped beam
+                            descriptionText: The corresponding light source is defective.    Consult a qualified specialist workshop.  or  Check whether you are permitted to replace the light source yourself.   LED light bulbs the display message for the corresponding lamp only appears when all the light-emitting diodes in the lamp have failed.
+                            icon: data:image/png;base64      ,iVBORw0KGgoAAAANSUhEUgAAABoAAAAOCAYAAAAxDQxDAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAERSURBVHjavJThDYIwEIVP4gBE+G+dQDcQJlAnME6gTiBOoE5gnEA3QCeQDXQAjWyA78wjMfwpCtrkC225vuP1LjQ8r3URkZ38dowFieIsy6QMiHVBAEzZMzwXO7ZP8X2vB4ZczkAMLtjb832g2HScErYN2EJMk7TBlbjYi5jY2ESatoDb7X6AYILpioJazxT0X3cv0kHMtQ5HOlyg1xPma4iP6CwoI+BY6rMHGaYLkEA8LYScwEBjwKOKoyVd7N7qkNKJ8PpOjAm/rhEcJHRmcoeFRjB0eqxcI7b2GWzoRmsyBV0w167LW71S11F8ot3HxBHdRlx38BjW0d5Hy3u9ynUdjopjzXb/aDT+9VN9CjAAzwyR9Nzh5ssAAAAASUVORK5CYII=
+        WarningIndicatorReadoutBus:
+            value:
+                errorCode: 501
+                message: This vehicle division is not supported
+        WarningIndicatorReadoutTruck:
+            value:
+                errorCode: 501
+                message: This vehicle division is not supported
+        VdrrCar:
+            value:
+                vehicleDataReadoutRefresh:
+                    id: exvs1479723908628241
+                    asyncStatus: Complete
+                    messageTimestamp: "2020-07-01T14:14:07+00:00"
+                    vehicleId: WDD111111PKW01000
+                    message:
+                        - message: Request to refresh the vehicle data readout was successful
+        VdrrVan:
+            value:
+                vehicleDataReadoutRefresh:
+                    id: exvs1479723908628241
+                    asyncStatus: Complete
+                    messageTimestamp: "2020-07-01T14:14:07+00:00"
+                    vehicleId: WDD111111VAN01000
+                    message:
+                        - message: Request to refresh the vehicle data readout was successful
+        VdrrBus:
+            value:
+                vehicleDataReadoutRefresh:
+                    id: exvs1479723908628241
+                    asyncStatus: Complete
+                    messageTimestamp: "2020-07-01T14:14:07+00:00"
+                    vehicleId: WDD111111BUS01000
+                    message:
+                        - message: Request to refresh the vehicle data readout was successful
+        VdrrTruck:
+            value:
+                vehicleDataReadoutRefresh:
+                    id: exvs1479723908628241
+                    asyncStatus: Complete
+                    messageTimestamp: "2020-07-01T14:14:07+00:00"
+                    vehicleId: WDD111111LKW01000
+                    message:
+                        - message: Request to refresh the vehicle data readout was successful
