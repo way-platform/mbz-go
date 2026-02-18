@@ -93,7 +93,11 @@ func Test_vehicleDataToProto_golden(t *testing.T) {
 			}
 
 			if string(actualNormalized) != string(expectedNormalized) {
-				t.Errorf("conversion result differs from golden file\n\nActual:\n%s\n\nExpected:\n%s", string(actualNormalized), string(expectedNormalized))
+				t.Errorf(
+					"conversion result differs from golden file\n\nActual:\n%s\n\nExpected:\n%s",
+					string(actualNormalized),
+					string(expectedNormalized),
+				)
 			}
 		})
 		return nil

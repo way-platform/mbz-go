@@ -8,7 +8,10 @@ import (
 )
 
 // NewOAuth2Config creates a new OAuth2 [clientcredentials.Config] for the given region.
-func NewOAuth2Config(region Region, clientID, clientSecret string) (clientcredentials.Config, error) {
+func NewOAuth2Config(
+	region Region,
+	clientID, clientSecret string,
+) (clientcredentials.Config, error) {
 	config := clientcredentials.Config{
 		ClientID:     clientID,
 		ClientSecret: clientSecret,

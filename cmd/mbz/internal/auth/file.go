@@ -52,7 +52,9 @@ func NewClientWithAPIKey(ctx context.Context, opts ...mbz.ClientOption) (*mbz.Cl
 		return nil, err
 	}
 	if cf.APIKey == "" {
-		return nil, fmt.Errorf("no API key found, please login using `mbz auth login --api-key <api-key>`")
+		return nil, fmt.Errorf(
+			"no API key found, please login using `mbz auth login --api-key <api-key>`",
+		)
 	}
 	return mbz.NewClient(
 		ctx,

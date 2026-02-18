@@ -65,7 +65,9 @@ func main() {
 		if err := yaml.Unmarshal(asyncAPIFileData, &schema); err != nil {
 			return fmt.Errorf("failed to unmarshal asyncAPI file: %w", err)
 		}
-		signalIdentifierProtoData, err := os.ReadFile(filepath.Join(*protoDir, signalIdentifierProtoPath))
+		signalIdentifierProtoData, err := os.ReadFile(
+			filepath.Join(*protoDir, signalIdentifierProtoPath),
+		)
 		if err != nil {
 			return fmt.Errorf("failed to read signal_identifier.proto file: %w", err)
 		}
@@ -81,7 +83,9 @@ func main() {
 		if err != nil {
 			return fmt.Errorf("failed to read signal_unit.proto file: %w", err)
 		}
-		signalEnumValueProtoData, err := os.ReadFile(filepath.Join(*protoDir, signalEnumValueProtoPath))
+		signalEnumValueProtoData, err := os.ReadFile(
+			filepath.Join(*protoDir, signalEnumValueProtoPath),
+		)
 		if err != nil {
 			return fmt.Errorf("failed to read signal_enum_value.proto file: %w", err)
 		}
@@ -178,7 +182,9 @@ func main() {
 			comment := strings.TrimSpace(signalSchema.Description)
 			comment = strings.TrimPrefix(comment, signalName)
 			comment = strings.TrimSpace(comment)
-			enumBuilder.AddValue(newEnumValue(enumName, maxNumber, signalName, signalType, "", comment))
+			enumBuilder.AddValue(
+				newEnumValue(enumName, maxNumber, signalName, signalType, "", comment),
+			)
 			addedSignalNames[signalName] = true
 		}
 		fb.AddEnum(enumBuilder)
@@ -278,7 +284,11 @@ func trimEnumSignalValues(comment string) string {
 	return result.String()
 }
 
-func newEnumValue(name string, number int32, stringName, signalType, signalUnit, comment string) *builder.EnumValueBuilder {
+func newEnumValue(
+	name string,
+	number int32,
+	stringName, signalType, signalUnit, comment string,
+) *builder.EnumValueBuilder {
 	result := builder.NewEnumValue(name).SetNumber(number)
 	if isEnumSignal(signalType, comment) {
 		signalType = "ENUM"
@@ -316,7 +326,9 @@ func newEnumValue(name string, number int32, stringName, signalType, signalUnit,
 				},
 			}
 			if description != "" {
-				option.AggregateValue = proto.String(fmt.Sprintf(`value: "%s", description: "%s"`, value, description))
+				option.AggregateValue = proto.String(
+					fmt.Sprintf(`value: "%s", description: "%s"`, value, description),
+				)
 			} else {
 				option.AggregateValue = proto.String(fmt.Sprintf(`value: "%s"`, value))
 			}
@@ -331,15 +343,18 @@ func newEnumValue(name string, number int32, stringName, signalType, signalUnit,
 		signalUnit = tryInferSignalUnit(comment)
 	}
 	if signalUnit != "" {
-		options.UninterpretedOption = append(options.UninterpretedOption, &descriptorpb.UninterpretedOption{
-			Name: []*descriptorpb.UninterpretedOption_NamePart{
-				{
-					NamePart:    proto.String("signal_unit"),
-					IsExtension: proto.Bool(true),
+		options.UninterpretedOption = append(
+			options.UninterpretedOption,
+			&descriptorpb.UninterpretedOption{
+				Name: []*descriptorpb.UninterpretedOption_NamePart{
+					{
+						NamePart:    proto.String("signal_unit"),
+						IsExtension: proto.Bool(true),
+					},
 				},
+				IdentifierValue: proto.String(signalUnit),
 			},
-			IdentifierValue: proto.String(signalUnit),
-		})
+		)
 	}
 	result.SetOptions(options)
 	return result

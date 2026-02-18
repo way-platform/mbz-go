@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 
@@ -46,7 +47,12 @@ func (c *Client) DeleteVehicles(
 	if err != nil {
 		return nil, fmt.Errorf("invalid request URL: %w", err)
 	}
-	httpRequest, err := http.NewRequestWithContext(ctx, http.MethodDelete, requestURL, bytes.NewReader(requestBodyData))
+	httpRequest, err := http.NewRequestWithContext(
+		ctx,
+		http.MethodDelete,
+		requestURL,
+		bytes.NewReader(requestBodyData),
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +62,11 @@ func (c *Client) DeleteVehicles(
 	if err != nil {
 		return nil, err
 	}
-	defer httpResponse.Body.Close()
+	defer func() {
+		if closeErr := httpResponse.Body.Close(); closeErr != nil {
+			log.Printf("mbz: failed to close response body: %v", closeErr)
+		}
+	}()
 	if httpResponse.StatusCode != http.StatusOK {
 		return nil, newResponseError(httpResponse)
 	}

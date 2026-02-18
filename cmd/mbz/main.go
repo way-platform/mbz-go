@@ -190,9 +190,12 @@ func newGetVehicleCompatibilityCommand() *cobra.Command {
 		if err != nil {
 			return err
 		}
-		response, err := client.GetVehicleCompatibility(cmd.Context(), &mbz.GetVehicleCompatibilityRequest{
-			VIN: args[0],
-		})
+		response, err := client.GetVehicleCompatibility(
+			cmd.Context(),
+			&mbz.GetVehicleCompatibilityRequest{
+				VIN: args[0],
+			},
+		)
 		if err != nil {
 			return err
 		}
@@ -374,9 +377,12 @@ func newGetVehicleSpecificationCommand() *cobra.Command {
 		if err != nil {
 			return err
 		}
-		response, err := client.GetVehicleSpecification(cmd.Context(), &mbz.GetVehicleSpecificationRequest{
-			VIN: args[0],
-		})
+		response, err := client.GetVehicleSpecification(
+			cmd.Context(),
+			&mbz.GetVehicleSpecificationRequest{
+				VIN: args[0],
+			},
+		)
 		if err != nil {
 			return err
 		}
@@ -393,7 +399,8 @@ func newGetVehicleImagesCommand() *cobra.Command {
 		GroupID: "vehicle-specifications",
 		Args:    cobra.ExactArgs(1),
 	}
-	background := cmd.Flags().Bool("background", false, "Include background in images (high detail with realistic reflections)")
+	background := cmd.Flags().
+		Bool("background", false, "Include background in images (high detail with realistic reflections)")
 	fileFormat := cmd.Flags().String("file-format", "webp", "Image file format (png, jpeg, webp)")
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
 		client, err := newClientWithAPIKey(cmd)
@@ -421,7 +428,8 @@ func newGetVehicleImageCommand() *cobra.Command {
 		GroupID: "vehicle-specifications",
 		Args:    cobra.ExactArgs(1),
 	}
-	outputFile := cmd.Flags().StringP("output", "o", "", "Output file path (default: <image-id>.<extension>)")
+	outputFile := cmd.Flags().
+		StringP("output", "o", "", "Output file path (default: <image-id>.<extension>)")
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
 		client, err := newClientWithAPIKey(cmd)
 		if err != nil {

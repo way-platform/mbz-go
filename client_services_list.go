@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 
@@ -26,7 +27,11 @@ type ListServicesResponse struct {
 }
 
 // ListServices lists the vehicles for the current account.
-func (c *Client) ListServices(ctx context.Context, request *ListServicesRequest, opts ...ClientOption) (_ *ListServicesResponse, err error) {
+func (c *Client) ListServices(
+	ctx context.Context,
+	request *ListServicesRequest,
+	opts ...ClientOption,
+) (_ *ListServicesResponse, err error) {
 	defer func() {
 		if err != nil {
 			err = fmt.Errorf("mbz: list vehicles: %w", err)
@@ -50,7 +55,11 @@ func (c *Client) ListServices(ctx context.Context, request *ListServicesRequest,
 	if err != nil {
 		return nil, err
 	}
-	defer httpResponse.Body.Close()
+	defer func() {
+		if closeErr := httpResponse.Body.Close(); closeErr != nil {
+			log.Printf("mbz: failed to close response body: %v", closeErr)
+		}
+	}()
 	if httpResponse.StatusCode != http.StatusOK {
 		return nil, newResponseError(httpResponse)
 	}

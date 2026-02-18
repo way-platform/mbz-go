@@ -38,7 +38,11 @@ func signalNameToIdentifierEnum(name string) (mbzv1.SignalIdentifier, error) {
 	id := signalNameToIdentifier(name)
 	enumValue, ok := mbzv1.SignalIdentifier_value[id]
 	if !ok {
-		return mbzv1.SignalIdentifier_SIGNAL_IDENTIFIER_UNSPECIFIED, fmt.Errorf("unknown signal name: %s (id: %s)", name, id)
+		return mbzv1.SignalIdentifier_SIGNAL_IDENTIFIER_UNSPECIFIED, fmt.Errorf(
+			"unknown signal name: %s (id: %s)",
+			name,
+			id,
+		)
 	}
 	return mbzv1.SignalIdentifier(enumValue), nil
 }

@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 
@@ -52,7 +53,11 @@ func (c *Client) PostVehicleServices(
 	cfg := c.config.with(opts...)
 	var requestBody []vehiclesv1.DesiredServiceStatusRequest
 	for _, desiredServiceStatusInput := range request.DesiredServiceStatusInput {
-		services := make([]vehiclesv1.DesiredServiceStatus, 0, len(desiredServiceStatusInput.Services))
+		services := make(
+			[]vehiclesv1.DesiredServiceStatus,
+			0,
+			len(desiredServiceStatusInput.Services),
+		)
 		for _, service := range desiredServiceStatusInput.Services {
 			services = append(services, vehiclesv1.DesiredServiceStatus{
 				ServiceID:     service.ServiceID,
@@ -72,7 +77,12 @@ func (c *Client) PostVehicleServices(
 	if err != nil {
 		return nil, fmt.Errorf("invalid request URL: %w", err)
 	}
-	httpRequest, err := http.NewRequestWithContext(ctx, http.MethodPost, requestURL, bytes.NewReader(requestBodyData))
+	httpRequest, err := http.NewRequestWithContext(
+		ctx,
+		http.MethodPost,
+		requestURL,
+		bytes.NewReader(requestBodyData),
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -82,7 +92,11 @@ func (c *Client) PostVehicleServices(
 	if err != nil {
 		return nil, err
 	}
-	defer httpResponse.Body.Close()
+	defer func() {
+		if closeErr := httpResponse.Body.Close(); closeErr != nil {
+			log.Printf("mbz: failed to close response body: %v", closeErr)
+		}
+	}()
 	if httpResponse.StatusCode != http.StatusAccepted {
 		return nil, newResponseError(httpResponse)
 	}

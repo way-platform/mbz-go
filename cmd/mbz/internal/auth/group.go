@@ -9,4 +9,3 @@ func NewGroup() *cobra.Group {
 		Title: "Authentication",
 	}
 }
-
