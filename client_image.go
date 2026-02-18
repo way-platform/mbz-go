@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 
 	"github.com/way-platform/mbz-go/api/vehiclespecificationfleetv1"
@@ -51,7 +52,11 @@ func (c *Client) GetImage(
 	if err != nil {
 		return nil, err
 	}
-	defer httpResponse.Body.Close()
+	defer func() {
+		if closeErr := httpResponse.Body.Close(); closeErr != nil {
+			log.Printf("mbz: failed to close response body: %v", closeErr)
+		}
+	}()
 	if httpResponse.StatusCode != http.StatusOK {
 		return nil, newResponseError(httpResponse)
 	}
@@ -68,4 +73,3 @@ func (c *Client) GetImage(
 		ContentType: contentType,
 	}, nil
 }
-

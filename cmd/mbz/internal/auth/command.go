@@ -26,9 +26,12 @@ func newLoginCommand() *cobra.Command {
 		Short: "Login to the Mercedes-Benz API",
 	}
 	apiKey := cmd.Flags().String("api-key", "", "API key to use for authentication")
-	region := cmd.Flags().String("region", string(mbz.RegionECE), "region to use for authentication (OAuth2 only)")
-	clientID := cmd.Flags().String("client-id", "-", "client ID to use for authentication (OAuth2 only)")
-	clientSecret := cmd.Flags().String("client-secret", "-", "client secret to use for authentication (OAuth2 only)")
+	region := cmd.Flags().
+		String("region", string(mbz.RegionECE), "region to use for authentication (OAuth2 only)")
+	clientID := cmd.Flags().
+		String("client-id", "-", "client ID to use for authentication (OAuth2 only)")
+	clientSecret := cmd.Flags().
+		String("client-secret", "-", "client secret to use for authentication (OAuth2 only)")
 	cmd.RunE = func(cmd *cobra.Command, _ []string) error {
 		if *apiKey == "-" {
 			cmd.Print("Enter API key: ")

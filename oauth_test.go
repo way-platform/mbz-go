@@ -64,7 +64,11 @@ func TestNewOAuth2Config(t *testing.T) {
 				t.Errorf("Expected TokenURL %q, got %q", tt.expectedTokenURL, config.TokenURL)
 			}
 			if config.AuthStyle != oauth2.AuthStyleInParams {
-				t.Errorf("Expected AuthStyle %v, got %v", oauth2.AuthStyleInParams, config.AuthStyle)
+				t.Errorf(
+					"Expected AuthStyle %v, got %v",
+					oauth2.AuthStyleInParams,
+					config.AuthStyle,
+				)
 			}
 			if len(config.Scopes) != len(tt.expectedScopes) {
 				t.Errorf("Expected %d scopes, got %d", len(tt.expectedScopes), len(config.Scopes))

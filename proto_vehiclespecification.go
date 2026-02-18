@@ -204,7 +204,11 @@ func vehicleDataToProto(
 		}
 	}
 	if len(vehicleData.TechnicalData) > 0 {
-		technicalData := make([]*mbzv1.VehicleSpecification_TechnicalData, 0, len(vehicleData.TechnicalData))
+		technicalData := make(
+			[]*mbzv1.VehicleSpecification_TechnicalData,
+			0,
+			len(vehicleData.TechnicalData),
+		)
 		for _, td := range vehicleData.TechnicalData {
 			if t := convertTechnicalData(&td); t != nil {
 				technicalData = append(technicalData, t)
@@ -218,7 +222,9 @@ func vehicleDataToProto(
 	return output
 }
 
-func convertCodeText(ct *vehiclespecificationfleetv1.CodeText) *mbzv1.VehicleSpecification_CodeText {
+func convertCodeText(
+	ct *vehiclespecificationfleetv1.CodeText,
+) *mbzv1.VehicleSpecification_CodeText {
 	if ct == nil {
 		return nil
 	}
@@ -340,7 +346,9 @@ func convertEngine(e *vehiclespecificationfleetv1.Engine) *mbzv1.VehicleSpecific
 	return proto
 }
 
-func convertEngineBattery(b *vehiclespecificationfleetv1.EngineBattery) *mbzv1.VehicleSpecification_Engine_Battery {
+func convertEngineBattery(
+	b *vehiclespecificationfleetv1.EngineBattery,
+) *mbzv1.VehicleSpecification_Engine_Battery {
 	if b == nil {
 		return nil
 	}
@@ -364,7 +372,9 @@ func convertEngineBattery(b *vehiclespecificationfleetv1.EngineBattery) *mbzv1.V
 	return proto
 }
 
-func convertEngineEmission(e *vehiclespecificationfleetv1.EngineEmission) *mbzv1.VehicleSpecification_Engine_EngineEmission {
+func convertEngineEmission(
+	e *vehiclespecificationfleetv1.EngineEmission,
+) *mbzv1.VehicleSpecification_Engine_EngineEmission {
 	if e == nil {
 		return nil
 	}
@@ -392,7 +402,9 @@ func convertEngineEmission(e *vehiclespecificationfleetv1.EngineEmission) *mbzv1
 	return proto
 }
 
-func convertEngineFuelConsumption(fc *vehiclespecificationfleetv1.EngineFuelConsumption) *mbzv1.VehicleSpecification_Engine_EngineFuelConsumption {
+func convertEngineFuelConsumption(
+	fc *vehiclespecificationfleetv1.EngineFuelConsumption,
+) *mbzv1.VehicleSpecification_Engine_EngineFuelConsumption {
 	if fc == nil {
 		return nil
 	}
@@ -420,7 +432,9 @@ func convertEngineFuelConsumption(fc *vehiclespecificationfleetv1.EngineFuelCons
 	return proto
 }
 
-func convertEnginePower(p *vehiclespecificationfleetv1.EnginePower) *mbzv1.VehicleSpecification_Engine_Power {
+func convertEnginePower(
+	p *vehiclespecificationfleetv1.EnginePower,
+) *mbzv1.VehicleSpecification_Engine_Power {
 	if p == nil {
 		return nil
 	}
@@ -440,7 +454,9 @@ func convertEnginePower(p *vehiclespecificationfleetv1.EnginePower) *mbzv1.Vehic
 	return proto
 }
 
-func convertCabinInfo(ci *vehiclespecificationfleetv1.CabinInfo) *mbzv1.VehicleSpecification_CabinInfo {
+func convertCabinInfo(
+	ci *vehiclespecificationfleetv1.CabinInfo,
+) *mbzv1.VehicleSpecification_CabinInfo {
 	if ci == nil {
 		return nil
 	}
@@ -536,7 +552,9 @@ func convertEmission(e *vehiclespecificationfleetv1.Emission) *mbzv1.VehicleSpec
 	return proto
 }
 
-func convertFuelConsumption(fc *vehiclespecificationfleetv1.FuelConsumption) *mbzv1.VehicleSpecification_FuelConsumption {
+func convertFuelConsumption(
+	fc *vehiclespecificationfleetv1.FuelConsumption,
+) *mbzv1.VehicleSpecification_FuelConsumption {
 	if fc == nil {
 		return nil
 	}
@@ -560,7 +578,9 @@ func convertFuelConsumption(fc *vehiclespecificationfleetv1.FuelConsumption) *mb
 	return proto
 }
 
-func convertNewPrice(np *vehiclespecificationfleetv1.NewPrice) *mbzv1.VehicleSpecification_NewPrice {
+func convertNewPrice(
+	np *vehiclespecificationfleetv1.NewPrice,
+) *mbzv1.VehicleSpecification_NewPrice {
 	if np == nil {
 		return nil
 	}
@@ -584,7 +604,9 @@ func convertNewPrice(np *vehiclespecificationfleetv1.NewPrice) *mbzv1.VehicleSpe
 	return proto
 }
 
-func convertSalesDescription(sd *vehiclespecificationfleetv1.SalesDescription) *mbzv1.VehicleSpecification_SalesDescription {
+func convertSalesDescription(
+	sd *vehiclespecificationfleetv1.SalesDescription,
+) *mbzv1.VehicleSpecification_SalesDescription {
 	if sd == nil {
 		return nil
 	}
@@ -628,7 +650,9 @@ func convertSalesDescription(sd *vehiclespecificationfleetv1.SalesDescription) *
 	return proto
 }
 
-func convertPackageBasedOptions(pbo *vehiclespecificationfleetv1.PackageBasedOptions) *mbzv1.VehicleSpecification_PackageBasedOptions {
+func convertPackageBasedOptions(
+	pbo *vehiclespecificationfleetv1.PackageBasedOptions,
+) *mbzv1.VehicleSpecification_PackageBasedOptions {
 	if pbo == nil {
 		return nil
 	}
@@ -664,7 +688,9 @@ func convertPackageBasedOptions(pbo *vehiclespecificationfleetv1.PackageBasedOpt
 	return proto
 }
 
-func convertOptionPackage(op *vehiclespecificationfleetv1.OptionPackage) *mbzv1.VehicleSpecification_OptionPackage {
+func convertOptionPackage(
+	op *vehiclespecificationfleetv1.OptionPackage,
+) *mbzv1.VehicleSpecification_OptionPackage {
 	if op == nil {
 		return nil
 	}
@@ -696,7 +722,9 @@ func convertOptionPackage(op *vehiclespecificationfleetv1.OptionPackage) *mbzv1.
 	return proto
 }
 
-func convertTechnicalData(td *vehiclespecificationfleetv1.TechnicalData) *mbzv1.VehicleSpecification_TechnicalData {
+func convertTechnicalData(
+	td *vehiclespecificationfleetv1.TechnicalData,
+) *mbzv1.VehicleSpecification_TechnicalData {
 	if td == nil {
 		return nil
 	}
@@ -748,7 +776,9 @@ func convertTypKey(tk *vehiclespecificationfleetv1.TypKey) *mbzv1.VehicleSpecifi
 	return proto
 }
 
-func convertLegacyEquipment(le *vehiclespecificationfleetv1.LegacyEquipment) *mbzv1.VehicleSpecification_LegacyEquipment {
+func convertLegacyEquipment(
+	le *vehiclespecificationfleetv1.LegacyEquipment,
+) *mbzv1.VehicleSpecification_LegacyEquipment {
 	if le == nil {
 		return nil
 	}

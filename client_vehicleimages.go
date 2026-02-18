@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 
@@ -48,7 +49,11 @@ func (c *Client) GetVehicleImageIds(
 	if request.FileFormat != "" {
 		values.Set("fileFormat", request.FileFormat)
 	}
-	requestURL := fmt.Sprintf("%s/vehicle-images/%s", vehiclespecificationfleetv1.BaseURL, request.VIN)
+	requestURL := fmt.Sprintf(
+		"%s/vehicle-images/%s",
+		vehiclespecificationfleetv1.BaseURL,
+		request.VIN,
+	)
 	httpRequest, err := http.NewRequestWithContext(ctx, http.MethodGet, requestURL, nil)
 	if err != nil {
 		return nil, err
@@ -60,7 +65,11 @@ func (c *Client) GetVehicleImageIds(
 	if err != nil {
 		return nil, err
 	}
-	defer httpResponse.Body.Close()
+	defer func() {
+		if closeErr := httpResponse.Body.Close(); closeErr != nil {
+			log.Printf("mbz: failed to close response body: %v", closeErr)
+		}
+	}()
 	if httpResponse.StatusCode != http.StatusOK {
 		return nil, newResponseError(httpResponse)
 	}

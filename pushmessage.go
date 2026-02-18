@@ -78,7 +78,9 @@ func (m *PushMessage) AsProto() (*mbzv1.PushMessage, error) {
 	return &result, nil
 }
 
-func sendingBehaviorToProto(sendingBehavior servicesv1.SignalSendingBehaviour) (mbzv1.SendingBehavior, error) {
+func sendingBehaviorToProto(
+	sendingBehavior servicesv1.SignalSendingBehaviour,
+) (mbzv1.SendingBehavior, error) {
 	switch sendingBehavior {
 	case servicesv1.SignalSendingBehaviourONCHANGE:
 		return mbzv1.SendingBehavior_ON_CHANGE, nil
@@ -113,7 +115,10 @@ func sendingBehaviorToProto(sendingBehavior servicesv1.SignalSendingBehaviour) (
 	case servicesv1.SignalSendingBehaviourONREFRESH:
 		return mbzv1.SendingBehavior_ON_REFRESH, nil
 	default:
-		return mbzv1.SendingBehavior_SENDING_BEHAVIOR_UNSPECIFIED, fmt.Errorf("unknown sending behavior: %s", sendingBehavior)
+		return mbzv1.SendingBehavior_SENDING_BEHAVIOR_UNSPECIFIED, fmt.Errorf(
+			"unknown sending behavior: %s",
+			sendingBehavior,
+		)
 	}
 }
 
@@ -138,6 +143,9 @@ func messageTypeToProto(messageType string) (mbzv1.MessageType, error) {
 	case "vehicle_command_response":
 		return mbzv1.MessageType_COMMAND_RESPONSE, nil
 	default:
-		return mbzv1.MessageType_MESSAGE_TYPE_UNSPECIFIED, fmt.Errorf("unknown message type: %s", messageType)
+		return mbzv1.MessageType_MESSAGE_TYPE_UNSPECIFIED, fmt.Errorf(
+			"unknown message type: %s",
+			messageType,
+		)
 	}
 }

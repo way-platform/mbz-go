@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 
@@ -21,7 +22,11 @@ type PatchVehiclesRequest struct {
 type PatchVehiclesResponse struct{}
 
 // PatchVehicles patches vehicles. Only the deltaPush field is supported.
-func (c *Client) PatchVehicles(ctx context.Context, request *PatchVehiclesRequest, opts ...ClientOption) (_ *PatchVehiclesResponse, err error) {
+func (c *Client) PatchVehicles(
+	ctx context.Context,
+	request *PatchVehiclesRequest,
+	opts ...ClientOption,
+) (_ *PatchVehiclesResponse, err error) {
 	defer func() {
 		if err != nil {
 			err = fmt.Errorf("mbz: patch vehicles: %w", err)
@@ -36,7 +41,12 @@ func (c *Client) PatchVehicles(ctx context.Context, request *PatchVehiclesReques
 	if err != nil {
 		return nil, fmt.Errorf("invalid request URL: %w", err)
 	}
-	httpRequest, err := http.NewRequestWithContext(ctx, http.MethodPatch, requestURL, bytes.NewReader(requestBodyData))
+	httpRequest, err := http.NewRequestWithContext(
+		ctx,
+		http.MethodPatch,
+		requestURL,
+		bytes.NewReader(requestBodyData),
+	)
 	if err != nil {
 		return nil, fmt.Errorf("new request: %w", err)
 	}
@@ -47,7 +57,11 @@ func (c *Client) PatchVehicles(ctx context.Context, request *PatchVehiclesReques
 	if err != nil {
 		return nil, fmt.Errorf("do request: %w", err)
 	}
-	defer httpResponse.Body.Close()
+	defer func() {
+		if closeErr := httpResponse.Body.Close(); closeErr != nil {
+			log.Printf("mbz: failed to close response body: %v", closeErr)
+		}
+	}()
 	if httpResponse.StatusCode != http.StatusOK {
 		return nil, newResponseError(httpResponse)
 	}

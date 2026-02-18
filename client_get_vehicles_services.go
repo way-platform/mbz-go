@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 
@@ -26,7 +27,11 @@ type GetVehicleServicesResponse struct {
 }
 
 // GetVehicleServices gets the actual service status for a vehicle.
-func (c *Client) GetVehicleServices(ctx context.Context, request *GetVehicleServicesRequest, opts ...ClientOption) (_ *GetVehicleServicesResponse, err error) {
+func (c *Client) GetVehicleServices(
+	ctx context.Context,
+	request *GetVehicleServicesRequest,
+	opts ...ClientOption,
+) (_ *GetVehicleServicesResponse, err error) {
 	defer func() {
 		if err != nil {
 			err = fmt.Errorf("mbz: get vehicle services: %w", err)
@@ -46,7 +51,11 @@ func (c *Client) GetVehicleServices(ctx context.Context, request *GetVehicleServ
 	if err != nil {
 		return nil, err
 	}
-	defer httpResponse.Body.Close()
+	defer func() {
+		if closeErr := httpResponse.Body.Close(); closeErr != nil {
+			log.Printf("mbz: failed to close response body: %v", closeErr)
+		}
+	}()
 	if httpResponse.StatusCode != http.StatusOK {
 		return nil, newResponseError(httpResponse)
 	}

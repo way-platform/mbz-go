@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 
@@ -44,7 +45,12 @@ func (c *Client) GetVehicleCompatibility(
 		}
 	}()
 	cfg := c.config.with(opts...)
-	requestURL, err := url.JoinPath(c.baseURL, "/v1/accounts/vehicles", request.VIN, "compatibilities")
+	requestURL, err := url.JoinPath(
+		c.baseURL,
+		"/v1/accounts/vehicles",
+		request.VIN,
+		"compatibilities",
+	)
 	if err != nil {
 		return nil, fmt.Errorf("invalid request URL: %w", err)
 	}
@@ -57,7 +63,11 @@ func (c *Client) GetVehicleCompatibility(
 	if err != nil {
 		return nil, err
 	}
-	defer httpResponse.Body.Close()
+	defer func() {
+		if closeErr := httpResponse.Body.Close(); closeErr != nil {
+			log.Printf("mbz: failed to close response body: %v", closeErr)
+		}
+	}()
 	if httpResponse.StatusCode != http.StatusOK {
 		return nil, newResponseError(httpResponse)
 	}
