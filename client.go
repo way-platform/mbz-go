@@ -51,7 +51,7 @@ type clientConfig struct {
 	clientSecret string
 	apiKey       string
 	tokenSource  oauth2.TokenSource
-	debug        bool
+	httpClient   *http.Client
 	retryCount   int
 	timeout      time.Duration
 	interceptors []func(http.RoundTripper) http.RoundTripper
@@ -110,10 +110,11 @@ func WithAPIKey(apiKey string) ClientOption {
 	}
 }
 
-// WithDebug toggles debug mode (request/response dumps to stderr).
-func WithDebug(debug bool) ClientOption {
+// WithHTTPClient sets a custom [http.Client] for the SDK client.
+// The client's transport is used as the base transport in the middleware chain.
+func WithHTTPClient(httpClient *http.Client) ClientOption {
 	return func(config *clientConfig) {
-		config.debug = debug
+		config.httpClient = httpClient
 	}
 }
 
@@ -140,8 +141,8 @@ func WithInterceptor(interceptor func(http.RoundTripper) http.RoundTripper) Clie
 
 func (c *Client) httpClient(cfg clientConfig) *http.Client {
 	transport := http.DefaultTransport
-	if cfg.debug {
-		transport = &debugTransport{next: transport}
+	if cfg.httpClient != nil && cfg.httpClient.Transport != nil {
+		transport = cfg.httpClient.Transport
 	}
 	if cfg.tokenSource != nil {
 		transport = &oauth2.Transport{
