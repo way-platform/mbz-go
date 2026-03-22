@@ -31,7 +31,6 @@ func NewCommand(opts ...Option) *cobra.Command {
 		Use:   "mbz",
 		Short: "Mercedes-Benz API CLI",
 	}
-	cmd.PersistentFlags().Bool("debug", false, "Enable debug mode")
 	cmd.AddGroup(&cobra.Group{ID: "vehicles", Title: "Vehicles"})
 	cmd.AddCommand(newListVehiclesCommand(&cfg))
 	cmd.AddCommand(newAssignVehiclesCommand(&cfg))
@@ -681,10 +680,6 @@ func newConsumeVehicleSignalsCommand(cfg *config) *cobra.Command {
 // Client constructors.
 
 func newOAuth2Client(cmd *cobra.Command, cfg *config) (*mbz.Client, error) {
-	debug, err := cmd.Root().PersistentFlags().GetBool("debug")
-	if err != nil {
-		return nil, err
-	}
 	var creds Credentials
 	if cfg.credentialStore != nil {
 		if err := cfg.credentialStore.Read(&creds); err != nil && !errors.Is(err, fs.ErrNotExist) {
@@ -703,19 +698,17 @@ func newOAuth2Client(cmd *cobra.Command, cfg *config) (*mbz.Client, error) {
 	if token.Expiry.Before(time.Now()) {
 		return nil, fmt.Errorf("invalid token, please login using `mbz auth login`")
 	}
-	return mbz.NewClient(
-		cmd.Context(),
-		mbz.WithDebug(debug),
+	opts := []mbz.ClientOption{
 		mbz.WithRegion(mbz.Region(creds.Region)),
 		mbz.WithOAuth2TokenSource(oauth2.StaticTokenSource(&token)),
-	)
+	}
+	if cfg.httpClient != nil {
+		opts = append(opts, mbz.WithHTTPClient(cfg.httpClient))
+	}
+	return mbz.NewClient(cmd.Context(), opts...)
 }
 
 func newClientWithAPIKey(cmd *cobra.Command, cfg *config) (*mbz.Client, error) {
-	debug, err := cmd.Root().PersistentFlags().GetBool("debug")
-	if err != nil {
-		return nil, err
-	}
 	var creds Credentials
 	if cfg.credentialStore != nil {
 		if err := cfg.credentialStore.Read(&creds); err != nil {
@@ -732,11 +725,13 @@ func newClientWithAPIKey(cmd *cobra.Command, cfg *config) (*mbz.Client, error) {
 			"no API key found, please login using `mbz auth login --api-key <api-key>`",
 		)
 	}
-	return mbz.NewClient(
-		cmd.Context(),
-		mbz.WithDebug(debug),
+	opts := []mbz.ClientOption{
 		mbz.WithAPIKey(creds.APIKey),
-	)
+	}
+	if cfg.httpClient != nil {
+		opts = append(opts, mbz.WithHTTPClient(cfg.httpClient))
+	}
+	return mbz.NewClient(cmd.Context(), opts...)
 }
 
 // Helpers.

@@ -3,21 +3,28 @@ package main
 import (
 	"context"
 	"image/color"
+	"net/http"
 	"os"
 
 	"charm.land/fang/v2"
 	"charm.land/lipgloss/v2"
 	"github.com/adrg/xdg"
+	"github.com/way-platform/mbz-go"
 	"github.com/way-platform/mbz-go/cli"
 )
 
 func main() {
 	credPath, _ := xdg.ConfigFile("mbz-go/credentials.json")
 	tokenPath, _ := xdg.ConfigFile("mbz-go/token.json")
+	var debug bool
 	cmd := cli.NewCommand(
 		cli.WithCredentialStore(cli.NewFileStore(credPath)),
 		cli.WithTokenStore(cli.NewFileStore(tokenPath)),
+		cli.WithHTTPClient(&http.Client{
+			Transport: &mbz.DebugTransport{Enabled: &debug},
+		}),
 	)
+	cmd.PersistentFlags().BoolVar(&debug, "debug", false, "Enable debug mode")
 	if err := fang.Execute(
 		context.Background(),
 		cmd,

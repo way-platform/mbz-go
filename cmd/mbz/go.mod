@@ -7,6 +7,7 @@ require (
 	charm.land/lipgloss/v2 v2.0.2
 	github.com/adrg/xdg v0.5.3
 	github.com/way-platform/mbz-go v0.0.0-00010101000000-000000000000
+	github.com/way-platform/mbz-go/cli v0.0.0-00010101000000-000000000000
 )
 
 require (
@@ -44,4 +45,7 @@ require (
 	google.golang.org/protobuf v1.36.10 // indirect
 )
 
-replace github.com/way-platform/mbz-go => ../..
+replace (
+	github.com/way-platform/mbz-go => ../..
+	github.com/way-platform/mbz-go/cli => ../../cli
+)
