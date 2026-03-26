@@ -2,6 +2,7 @@ package cli
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -9,6 +10,7 @@ import (
 	"log/slog"
 	"os"
 	"os/signal"
+	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -112,7 +114,7 @@ func newLoginCommand(cfg *config) *cobra.Command {
 			creds.Region = string(mbz.RegionECE)
 		}
 		// Prompt for API key if not provided.
-		if creds.APIKey == "" {
+		if shouldPromptAPIKey(creds) {
 			val, err := promptSecret(cmd, "Enter API key (leave empty to skip): ")
 			if err != nil {
 				return err
@@ -600,8 +602,12 @@ func newConsumeVehicleSignalsCommand(cfg *config) *cobra.Command {
 				return fmt.Errorf("read token: %w", err)
 			}
 		}
+		region, err := resolveOAuth2Region(creds, token)
+		if err != nil {
+			return err
+		}
 		var bootstrapServer string
-		switch mbz.Region(creds.Region) {
+		switch region {
 		case mbz.RegionECE:
 			bootstrapServer = mbz.KafkaBootstrapServerECE
 		case mbz.RegionAMAPNA:
@@ -698,8 +704,12 @@ func newOAuth2Client(cmd *cobra.Command, cfg *config) (*mbz.Client, error) {
 	if token.Expiry.Before(time.Now()) {
 		return nil, fmt.Errorf("invalid token, please login using `mbz auth login`")
 	}
+	region, err := resolveOAuth2Region(creds, token)
+	if err != nil {
+		return nil, err
+	}
 	opts := []mbz.ClientOption{
-		mbz.WithRegion(mbz.Region(creds.Region)),
+		mbz.WithRegion(region),
 		mbz.WithOAuth2TokenSource(oauth2.StaticTokenSource(&token)),
 	}
 	if cfg.httpClient != nil {
@@ -744,6 +754,45 @@ func promptSecret(cmd *cobra.Command, prompt string) (string, error) {
 	}
 	cmd.Println()
 	return string(input), nil
+}
+
+func shouldPromptAPIKey(creds Credentials) bool {
+	return creds.APIKey == "" && creds.ClientID == "" && creds.ClientSecret == ""
+}
+
+func resolveOAuth2Region(creds Credentials, token oauth2.Token) (mbz.Region, error) {
+	if creds.Region != "" {
+		return mbz.Region(creds.Region), nil
+	}
+	return inferRegionFromAccessToken(token.AccessToken)
+}
+
+func inferRegionFromAccessToken(accessToken string) (mbz.Region, error) {
+	if accessToken == "" {
+		return "", fmt.Errorf("missing region and access token")
+	}
+	parts := strings.Split(accessToken, ".")
+	if len(parts) < 2 {
+		return "", fmt.Errorf("infer region from token: invalid jwt")
+	}
+	payload, err := base64.RawURLEncoding.DecodeString(parts[1])
+	if err != nil {
+		return "", fmt.Errorf("infer region from token payload: %w", err)
+	}
+	var claims struct {
+		Iss string `json:"iss"`
+	}
+	if err := json.Unmarshal(payload, &claims); err != nil {
+		return "", fmt.Errorf("infer region from token claims: %w", err)
+	}
+	switch claims.Iss {
+	case "https://ssoalpha.dvb.corpinter.net/v1":
+		return mbz.RegionECE, nil
+	case "https://ssoalpha.am.dvb.corpinter.net/v1":
+		return mbz.RegionAMAPNA, nil
+	default:
+		return "", fmt.Errorf("infer region from token issuer: unknown issuer %q", claims.Iss)
+	}
 }
 
 func getExtensionFromContentType(contentType string) string {
