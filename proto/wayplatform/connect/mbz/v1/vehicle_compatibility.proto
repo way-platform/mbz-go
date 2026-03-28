@@ -1,0 +1,30 @@
+edition = "2023";
+
+package wayplatform.connect.mbz.v1;
+
+// Vehicle compatibility from the Mercedes-Benz Vehicles API.
+message VehicleCompatibility {
+  // VIN of the requested vehicle.
+  string vin = 1;
+
+  // The type of the requested vehicle.
+  string vehicle_type = 2;
+
+  // Base compatibility to data-services for the requested vehicle.
+  bool vehicle_provides_connectivity = 3;
+
+  // Services with their availability.
+  repeated Service services = 4;
+
+  // A service's compatibility details for a vehicle.
+  message Service {
+    // Whether the service is available.
+    bool available = 1;
+
+    // The service identifier.
+    string service_id = 2;
+
+    // The service name.
+    string service_name = 3;
+  }
+}
