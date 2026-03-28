@@ -308,7 +308,7 @@ func newGetVehicleCompatibilityCommand(cfg *config) *cobra.Command {
 		if err != nil {
 			return err
 		}
-		printJSON(response)
+		fmt.Println(protojson.Format(response))
 		return nil
 	}
 	return cmd
