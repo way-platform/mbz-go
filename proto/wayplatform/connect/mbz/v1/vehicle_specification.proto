@@ -2,6 +2,8 @@ edition = "2023";
 
 package wayplatform.connect.mbz.v1;
 
+import "google/protobuf/struct.proto";
+
 // VehicleSpecification represents the vehicle specification data from the Mercedes-Benz Vehicle Specification API.
 message VehicleSpecification {
   // Basic vehicle identification fields
@@ -132,6 +134,10 @@ message VehicleSpecification {
   repeated LegacyEquipment options = 58;
   // Technical data entries with various measurements and values.
   repeated TechnicalData technical_data = 59;
+
+  // Raw upstream JSON from the Vehicle Specification API,
+  // before conversion to typed fields.
+  google.protobuf.Struct raw = 60;
 
   // CodeText represents a code/text pair used throughout the API.
   message CodeText {

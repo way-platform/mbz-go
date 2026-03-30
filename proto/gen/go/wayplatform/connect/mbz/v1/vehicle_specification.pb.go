@@ -9,6 +9,7 @@ package mbzv1
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	structpb "google.golang.org/protobuf/types/known/structpb"
 	reflect "reflect"
 	unsafe "unsafe"
 )
@@ -82,6 +83,7 @@ type VehicleSpecification struct {
 	xxx_hidden_Upholstery          *VehicleSpecification_LegacyEquipment     `protobuf:"bytes,57,opt,name=upholstery"`
 	xxx_hidden_Options             *[]*VehicleSpecification_LegacyEquipment  `protobuf:"bytes,58,rep,name=options"`
 	xxx_hidden_TechnicalData       *[]*VehicleSpecification_TechnicalData    `protobuf:"bytes,59,rep,name=technical_data,json=technicalData"`
+	xxx_hidden_Raw                 *structpb.Struct                          `protobuf:"bytes,60,opt,name=raw"`
 	XXX_raceDetectHookData         protoimpl.RaceDetectHookData
 	XXX_presence                   [2]uint32
 	unknownFields                  protoimpl.UnknownFields
@@ -602,119 +604,126 @@ func (x *VehicleSpecification) GetTechnicalData() []*VehicleSpecification_Techni
 	return nil
 }
 
+func (x *VehicleSpecification) GetRaw() *structpb.Struct {
+	if x != nil {
+		return x.xxx_hidden_Raw
+	}
+	return nil
+}
+
 func (x *VehicleSpecification) SetModel(v string) {
 	x.xxx_hidden_Model = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 0, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 0, 60)
 }
 
 func (x *VehicleSpecification) SetModelName(v string) {
 	x.xxx_hidden_ModelName = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 1, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 1, 60)
 }
 
 func (x *VehicleSpecification) SetModelYear(v string) {
 	x.xxx_hidden_ModelYear = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 2, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 2, 60)
 }
 
 func (x *VehicleSpecification) SetModelYearYear(v string) {
 	x.xxx_hidden_ModelYearYear = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 3, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 3, 60)
 }
 
 func (x *VehicleSpecification) SetLongType(v string) {
 	x.xxx_hidden_LongType = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 4, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 4, 60)
 }
 
 func (x *VehicleSpecification) SetLongTypeTechnical(v string) {
 	x.xxx_hidden_LongTypeTechnical = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 5, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 5, 60)
 }
 
 func (x *VehicleSpecification) SetShortType(v string) {
 	x.xxx_hidden_ShortType = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 6, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 6, 60)
 }
 
 func (x *VehicleSpecification) SetEngineCode(v string) {
 	x.xxx_hidden_EngineCode = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 7, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 7, 60)
 }
 
 func (x *VehicleSpecification) SetFin11(v string) {
 	x.xxx_hidden_Fin11 = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 8, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 8, 60)
 }
 
 func (x *VehicleSpecification) SetVin11(v string) {
 	x.xxx_hidden_Vin11 = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 9, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 9, 60)
 }
 
 func (x *VehicleSpecification) SetBaumuster(v string) {
 	x.xxx_hidden_Baumuster = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 10, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 10, 60)
 }
 
 func (x *VehicleSpecification) SetCountrynumber(v string) {
 	x.xxx_hidden_Countrynumber = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 11, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 11, 60)
 }
 
 func (x *VehicleSpecification) SetFunction(v string) {
 	x.xxx_hidden_Function = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 12, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 12, 60)
 }
 
 func (x *VehicleSpecification) SetStatus(v string) {
 	x.xxx_hidden_Status = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 13, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 13, 60)
 }
 
 func (x *VehicleSpecification) SetFinaldate(v string) {
 	x.xxx_hidden_Finaldate = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 14, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 14, 60)
 }
 
 func (x *VehicleSpecification) SetShippingdate(v string) {
 	x.xxx_hidden_Shippingdate = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 15, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 15, 60)
 }
 
 func (x *VehicleSpecification) SetNst(v string) {
 	x.xxx_hidden_Nst = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 16, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 16, 60)
 }
 
 func (x *VehicleSpecification) SetTypeclass(v string) {
 	x.xxx_hidden_Typeclass = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 17, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 17, 60)
 }
 
 func (x *VehicleSpecification) SetAllwheel(v string) {
 	x.xxx_hidden_Allwheel = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 18, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 18, 60)
 }
 
 func (x *VehicleSpecification) SetMetallic(v string) {
 	x.xxx_hidden_Metallic = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 19, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 19, 60)
 }
 
 func (x *VehicleSpecification) SetLeather(v string) {
 	x.xxx_hidden_Leather = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 20, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 20, 60)
 }
 
 func (x *VehicleSpecification) SetVehicleType(v string) {
 	x.xxx_hidden_VehicleType = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 21, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 21, 60)
 }
 
 func (x *VehicleSpecification) SetPoolflag(v string) {
 	x.xxx_hidden_Poolflag = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 22, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 22, 60)
 }
 
 func (x *VehicleSpecification) SetBrand(v *VehicleSpecification_CodeText) {
@@ -767,42 +776,42 @@ func (x *VehicleSpecification) SetTransmissiontype(v *VehicleSpecification_CodeT
 
 func (x *VehicleSpecification) SetBranch(v int32) {
 	x.xxx_hidden_Branch = v
-	protoimpl.X.SetPresent(&(x.XXX_presence[1]), 35, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[1]), 35, 60)
 }
 
 func (x *VehicleSpecification) SetCylinderCapacityCc(v int32) {
 	x.xxx_hidden_CylinderCapacityCc = v
-	protoimpl.X.SetPresent(&(x.XXX_presence[1]), 36, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[1]), 36, 60)
 }
 
 func (x *VehicleSpecification) SetPowerKw(v int32) {
 	x.xxx_hidden_PowerKw = v
-	protoimpl.X.SetPresent(&(x.XXX_presence[1]), 37, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[1]), 37, 60)
 }
 
 func (x *VehicleSpecification) SetPowerPs(v int32) {
 	x.xxx_hidden_PowerPs = v
-	protoimpl.X.SetPresent(&(x.XXX_presence[1]), 38, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[1]), 38, 60)
 }
 
 func (x *VehicleSpecification) SetDoorCount(v int32) {
 	x.xxx_hidden_DoorCount = v
-	protoimpl.X.SetPresent(&(x.XXX_presence[1]), 39, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[1]), 39, 60)
 }
 
 func (x *VehicleSpecification) SetSeatCount(v int32) {
 	x.xxx_hidden_SeatCount = v
-	protoimpl.X.SetPresent(&(x.XXX_presence[1]), 40, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[1]), 40, 60)
 }
 
 func (x *VehicleSpecification) SetWheelbaseMm(v int32) {
 	x.xxx_hidden_WheelbaseMm = v
-	protoimpl.X.SetPresent(&(x.XXX_presence[1]), 41, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[1]), 41, 60)
 }
 
 func (x *VehicleSpecification) SetWheelForm(v string) {
 	x.xxx_hidden_WheelForm = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[1]), 42, 59)
+	protoimpl.X.SetPresent(&(x.XXX_presence[1]), 42, 60)
 }
 
 func (x *VehicleSpecification) SetWeight(v *VehicleSpecification_Weight) {
@@ -867,6 +876,10 @@ func (x *VehicleSpecification) SetOptions(v []*VehicleSpecification_LegacyEquipm
 
 func (x *VehicleSpecification) SetTechnicalData(v []*VehicleSpecification_TechnicalData) {
 	x.xxx_hidden_TechnicalData = &v
+}
+
+func (x *VehicleSpecification) SetRaw(v *structpb.Struct) {
+	x.xxx_hidden_Raw = v
 }
 
 func (x *VehicleSpecification) HasModel() bool {
@@ -1268,6 +1281,13 @@ func (x *VehicleSpecification) HasUpholstery() bool {
 	return x.xxx_hidden_Upholstery != nil
 }
 
+func (x *VehicleSpecification) HasRaw() bool {
+	if x == nil {
+		return false
+	}
+	return x.xxx_hidden_Raw != nil
+}
+
 func (x *VehicleSpecification) ClearModel() {
 	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 0)
 	x.xxx_hidden_Model = nil
@@ -1527,6 +1547,10 @@ func (x *VehicleSpecification) ClearUpholstery() {
 	x.xxx_hidden_Upholstery = nil
 }
 
+func (x *VehicleSpecification) ClearRaw() {
+	x.xxx_hidden_Raw = nil
+}
+
 type VehicleSpecification_builder struct {
 	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
 
@@ -1653,6 +1677,9 @@ type VehicleSpecification_builder struct {
 	Options []*VehicleSpecification_LegacyEquipment
 	// Technical data entries with various measurements and values.
 	TechnicalData []*VehicleSpecification_TechnicalData
+	// Raw upstream JSON from the Vehicle Specification API,
+	// before conversion to typed fields.
+	Raw *structpb.Struct
 }
 
 func (b0 VehicleSpecification_builder) Build() *VehicleSpecification {
@@ -1660,95 +1687,95 @@ func (b0 VehicleSpecification_builder) Build() *VehicleSpecification {
 	b, x := &b0, m0
 	_, _ = b, x
 	if b.Model != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 0, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 0, 60)
 		x.xxx_hidden_Model = b.Model
 	}
 	if b.ModelName != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 1, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 1, 60)
 		x.xxx_hidden_ModelName = b.ModelName
 	}
 	if b.ModelYear != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 2, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 2, 60)
 		x.xxx_hidden_ModelYear = b.ModelYear
 	}
 	if b.ModelYearYear != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 3, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 3, 60)
 		x.xxx_hidden_ModelYearYear = b.ModelYearYear
 	}
 	if b.LongType != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 4, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 4, 60)
 		x.xxx_hidden_LongType = b.LongType
 	}
 	if b.LongTypeTechnical != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 5, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 5, 60)
 		x.xxx_hidden_LongTypeTechnical = b.LongTypeTechnical
 	}
 	if b.ShortType != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 6, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 6, 60)
 		x.xxx_hidden_ShortType = b.ShortType
 	}
 	if b.EngineCode != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 7, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 7, 60)
 		x.xxx_hidden_EngineCode = b.EngineCode
 	}
 	if b.Fin11 != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 8, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 8, 60)
 		x.xxx_hidden_Fin11 = b.Fin11
 	}
 	if b.Vin11 != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 9, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 9, 60)
 		x.xxx_hidden_Vin11 = b.Vin11
 	}
 	if b.Baumuster != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 10, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 10, 60)
 		x.xxx_hidden_Baumuster = b.Baumuster
 	}
 	if b.Countrynumber != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 11, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 11, 60)
 		x.xxx_hidden_Countrynumber = b.Countrynumber
 	}
 	if b.Function != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 12, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 12, 60)
 		x.xxx_hidden_Function = b.Function
 	}
 	if b.Status != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 13, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 13, 60)
 		x.xxx_hidden_Status = b.Status
 	}
 	if b.Finaldate != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 14, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 14, 60)
 		x.xxx_hidden_Finaldate = b.Finaldate
 	}
 	if b.Shippingdate != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 15, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 15, 60)
 		x.xxx_hidden_Shippingdate = b.Shippingdate
 	}
 	if b.Nst != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 16, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 16, 60)
 		x.xxx_hidden_Nst = b.Nst
 	}
 	if b.Typeclass != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 17, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 17, 60)
 		x.xxx_hidden_Typeclass = b.Typeclass
 	}
 	if b.Allwheel != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 18, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 18, 60)
 		x.xxx_hidden_Allwheel = b.Allwheel
 	}
 	if b.Metallic != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 19, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 19, 60)
 		x.xxx_hidden_Metallic = b.Metallic
 	}
 	if b.Leather != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 20, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 20, 60)
 		x.xxx_hidden_Leather = b.Leather
 	}
 	if b.VehicleType != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 21, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 21, 60)
 		x.xxx_hidden_VehicleType = b.VehicleType
 	}
 	if b.Poolflag != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 22, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 22, 60)
 		x.xxx_hidden_Poolflag = b.Poolflag
 	}
 	x.xxx_hidden_Brand = b.Brand
@@ -1764,35 +1791,35 @@ func (b0 VehicleSpecification_builder) Build() *VehicleSpecification {
 	x.xxx_hidden_Suspensiontype = b.Suspensiontype
 	x.xxx_hidden_Transmissiontype = b.Transmissiontype
 	if b.Branch != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[1]), 35, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[1]), 35, 60)
 		x.xxx_hidden_Branch = *b.Branch
 	}
 	if b.CylinderCapacityCc != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[1]), 36, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[1]), 36, 60)
 		x.xxx_hidden_CylinderCapacityCc = *b.CylinderCapacityCc
 	}
 	if b.PowerKw != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[1]), 37, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[1]), 37, 60)
 		x.xxx_hidden_PowerKw = *b.PowerKw
 	}
 	if b.PowerPs != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[1]), 38, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[1]), 38, 60)
 		x.xxx_hidden_PowerPs = *b.PowerPs
 	}
 	if b.DoorCount != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[1]), 39, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[1]), 39, 60)
 		x.xxx_hidden_DoorCount = *b.DoorCount
 	}
 	if b.SeatCount != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[1]), 40, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[1]), 40, 60)
 		x.xxx_hidden_SeatCount = *b.SeatCount
 	}
 	if b.WheelbaseMm != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[1]), 41, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[1]), 41, 60)
 		x.xxx_hidden_WheelbaseMm = *b.WheelbaseMm
 	}
 	if b.WheelForm != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[1]), 42, 59)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[1]), 42, 60)
 		x.xxx_hidden_WheelForm = b.WheelForm
 	}
 	x.xxx_hidden_Weight = b.Weight
@@ -1811,6 +1838,7 @@ func (b0 VehicleSpecification_builder) Build() *VehicleSpecification {
 	x.xxx_hidden_Upholstery = b.Upholstery
 	x.xxx_hidden_Options = &b.Options
 	x.xxx_hidden_TechnicalData = &b.TechnicalData
+	x.xxx_hidden_Raw = b.Raw
 	return m0
 }
 
@@ -5097,7 +5125,7 @@ var File_wayplatform_connect_mbz_v1_vehicle_specification_proto protoreflect.Fil
 
 const file_wayplatform_connect_mbz_v1_vehicle_specification_proto_rawDesc = "" +
 	"\n" +
-	"6wayplatform/connect/mbz/v1/vehicle_specification.proto\x12\x1awayplatform.connect.mbz.v1\"\xad9\n" +
+	"6wayplatform/connect/mbz/v1/vehicle_specification.proto\x12\x1awayplatform.connect.mbz.v1\x1a\x1cgoogle/protobuf/struct.proto\"\xd89\n" +
 	"\x14VehicleSpecification\x12\x14\n" +
 	"\x05model\x18\x01 \x01(\tR\x05model\x12\x1d\n" +
 	"\n" +
@@ -5172,7 +5200,8 @@ const file_wayplatform_connect_mbz_v1_vehicle_specification_proto_rawDesc = "" +
 	"upholstery\x189 \x01(\v2@.wayplatform.connect.mbz.v1.VehicleSpecification.LegacyEquipmentR\n" +
 	"upholstery\x12Z\n" +
 	"\aoptions\x18: \x03(\v2@.wayplatform.connect.mbz.v1.VehicleSpecification.LegacyEquipmentR\aoptions\x12e\n" +
-	"\x0etechnical_data\x18; \x03(\v2>.wayplatform.connect.mbz.v1.VehicleSpecification.TechnicalDataR\rtechnicalData\x1a2\n" +
+	"\x0etechnical_data\x18; \x03(\v2>.wayplatform.connect.mbz.v1.VehicleSpecification.TechnicalDataR\rtechnicalData\x12)\n" +
+	"\x03raw\x18< \x01(\v2\x17.google.protobuf.StructR\x03raw\x1a2\n" +
 	"\bCodeText\x12\x12\n" +
 	"\x04code\x18\x01 \x01(\tR\x04code\x12\x12\n" +
 	"\x04text\x18\x02 \x01(\tR\x04text\x1a\xcf\x02\n" +
@@ -5304,6 +5333,7 @@ var file_wayplatform_connect_mbz_v1_vehicle_specification_proto_goTypes = []any{
 	(*VehicleSpecification_Engine_EngineEmission)(nil),        // 16: wayplatform.connect.mbz.v1.VehicleSpecification.Engine.EngineEmission
 	(*VehicleSpecification_Engine_EngineFuelConsumption)(nil), // 17: wayplatform.connect.mbz.v1.VehicleSpecification.Engine.EngineFuelConsumption
 	(*VehicleSpecification_Engine_Power)(nil),                 // 18: wayplatform.connect.mbz.v1.VehicleSpecification.Engine.Power
+	(*structpb.Struct)(nil),                                   // 19: google.protobuf.Struct
 }
 var file_wayplatform_connect_mbz_v1_vehicle_specification_proto_depIdxs = []int32{
 	1,  // 0: wayplatform.connect.mbz.v1.VehicleSpecification.brand:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
@@ -5334,32 +5364,33 @@ var file_wayplatform_connect_mbz_v1_vehicle_specification_proto_depIdxs = []int3
 	14, // 25: wayplatform.connect.mbz.v1.VehicleSpecification.upholstery:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.LegacyEquipment
 	14, // 26: wayplatform.connect.mbz.v1.VehicleSpecification.options:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.LegacyEquipment
 	12, // 27: wayplatform.connect.mbz.v1.VehicleSpecification.technical_data:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.TechnicalData
-	15, // 28: wayplatform.connect.mbz.v1.VehicleSpecification.Engine.battery:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.Engine.Battery
-	16, // 29: wayplatform.connect.mbz.v1.VehicleSpecification.Engine.emission:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.Engine.EngineEmission
-	17, // 30: wayplatform.connect.mbz.v1.VehicleSpecification.Engine.fuel_consumption:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.Engine.EngineFuelConsumption
-	1,  // 31: wayplatform.connect.mbz.v1.VehicleSpecification.Engine.fuel_type:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
-	18, // 32: wayplatform.connect.mbz.v1.VehicleSpecification.Engine.power:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.Engine.Power
-	1,  // 33: wayplatform.connect.mbz.v1.VehicleSpecification.CabinInfo.cabin_base:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
-	1,  // 34: wayplatform.connect.mbz.v1.VehicleSpecification.CabinInfo.cabin_bottom:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
-	1,  // 35: wayplatform.connect.mbz.v1.VehicleSpecification.CabinInfo.cabin_combined:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
-	1,  // 36: wayplatform.connect.mbz.v1.VehicleSpecification.CabinInfo.cabin_type:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
-	1,  // 37: wayplatform.connect.mbz.v1.VehicleSpecification.CabinInfo.cabin_width:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
-	1,  // 38: wayplatform.connect.mbz.v1.VehicleSpecification.SalesDescription.allwheel:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
-	1,  // 39: wayplatform.connect.mbz.v1.VehicleSpecification.SalesDescription.body:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
-	1,  // 40: wayplatform.connect.mbz.v1.VehicleSpecification.SalesDescription.extension:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
-	1,  // 41: wayplatform.connect.mbz.v1.VehicleSpecification.SalesDescription.length_type:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
-	1,  // 42: wayplatform.connect.mbz.v1.VehicleSpecification.SalesDescription.line:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
-	1,  // 43: wayplatform.connect.mbz.v1.VehicleSpecification.SalesDescription.model:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
-	1,  // 44: wayplatform.connect.mbz.v1.VehicleSpecification.SalesDescription.style:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
-	1,  // 45: wayplatform.connect.mbz.v1.VehicleSpecification.SalesDescription.type:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
-	11, // 46: wayplatform.connect.mbz.v1.VehicleSpecification.PackageBasedOptions.option_packages:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.OptionPackage
-	14, // 47: wayplatform.connect.mbz.v1.VehicleSpecification.PackageBasedOptions.options:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.LegacyEquipment
-	14, // 48: wayplatform.connect.mbz.v1.VehicleSpecification.OptionPackage.options:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.LegacyEquipment
-	49, // [49:49] is the sub-list for method output_type
-	49, // [49:49] is the sub-list for method input_type
-	49, // [49:49] is the sub-list for extension type_name
-	49, // [49:49] is the sub-list for extension extendee
-	0,  // [0:49] is the sub-list for field type_name
+	19, // 28: wayplatform.connect.mbz.v1.VehicleSpecification.raw:type_name -> google.protobuf.Struct
+	15, // 29: wayplatform.connect.mbz.v1.VehicleSpecification.Engine.battery:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.Engine.Battery
+	16, // 30: wayplatform.connect.mbz.v1.VehicleSpecification.Engine.emission:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.Engine.EngineEmission
+	17, // 31: wayplatform.connect.mbz.v1.VehicleSpecification.Engine.fuel_consumption:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.Engine.EngineFuelConsumption
+	1,  // 32: wayplatform.connect.mbz.v1.VehicleSpecification.Engine.fuel_type:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
+	18, // 33: wayplatform.connect.mbz.v1.VehicleSpecification.Engine.power:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.Engine.Power
+	1,  // 34: wayplatform.connect.mbz.v1.VehicleSpecification.CabinInfo.cabin_base:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
+	1,  // 35: wayplatform.connect.mbz.v1.VehicleSpecification.CabinInfo.cabin_bottom:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
+	1,  // 36: wayplatform.connect.mbz.v1.VehicleSpecification.CabinInfo.cabin_combined:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
+	1,  // 37: wayplatform.connect.mbz.v1.VehicleSpecification.CabinInfo.cabin_type:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
+	1,  // 38: wayplatform.connect.mbz.v1.VehicleSpecification.CabinInfo.cabin_width:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
+	1,  // 39: wayplatform.connect.mbz.v1.VehicleSpecification.SalesDescription.allwheel:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
+	1,  // 40: wayplatform.connect.mbz.v1.VehicleSpecification.SalesDescription.body:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
+	1,  // 41: wayplatform.connect.mbz.v1.VehicleSpecification.SalesDescription.extension:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
+	1,  // 42: wayplatform.connect.mbz.v1.VehicleSpecification.SalesDescription.length_type:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
+	1,  // 43: wayplatform.connect.mbz.v1.VehicleSpecification.SalesDescription.line:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
+	1,  // 44: wayplatform.connect.mbz.v1.VehicleSpecification.SalesDescription.model:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
+	1,  // 45: wayplatform.connect.mbz.v1.VehicleSpecification.SalesDescription.style:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
+	1,  // 46: wayplatform.connect.mbz.v1.VehicleSpecification.SalesDescription.type:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.CodeText
+	11, // 47: wayplatform.connect.mbz.v1.VehicleSpecification.PackageBasedOptions.option_packages:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.OptionPackage
+	14, // 48: wayplatform.connect.mbz.v1.VehicleSpecification.PackageBasedOptions.options:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.LegacyEquipment
+	14, // 49: wayplatform.connect.mbz.v1.VehicleSpecification.OptionPackage.options:type_name -> wayplatform.connect.mbz.v1.VehicleSpecification.LegacyEquipment
+	50, // [50:50] is the sub-list for method output_type
+	50, // [50:50] is the sub-list for method input_type
+	50, // [50:50] is the sub-list for extension type_name
+	50, // [50:50] is the sub-list for extension extendee
+	0,  // [0:50] is the sub-list for field type_name
 }
 
 func init() { file_wayplatform_connect_mbz_v1_vehicle_specification_proto_init() }

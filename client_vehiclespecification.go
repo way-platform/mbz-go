@@ -77,5 +77,9 @@ func (c *Client) GetVehicleSpecification(
 	if err := json.Unmarshal(responseData, &openAPIResp); err != nil {
 		return nil, err
 	}
-	return vehicleDataToProto(openAPIResp.VehicleData), nil
+	spec := vehicleDataToProto(openAPIResp.VehicleData)
+	if rawStruct, err := vehicleDataRawStruct(responseData); err == nil {
+		spec.SetRaw(rawStruct)
+	}
+	return spec, nil
 }
