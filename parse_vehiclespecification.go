@@ -9,11 +9,11 @@ import (
 	"google.golang.org/protobuf/types/known/structpb"
 )
 
-// ParseVehicleSpecificationFromRaw reconstructs a [mbzv1.VehicleSpecification]
+// ParseRawVehicleSpecification reconstructs a [mbzv1.VehicleSpecification]
 // from a raw [structpb.Struct] previously captured by [Client.GetVehicleSpecification].
 // This enables round-tripping: store the raw struct, then re-parse it later
 // through the same conversion pipeline used by the live API call.
-func ParseVehicleSpecificationFromRaw(raw *structpb.Struct) (*mbzv1.VehicleSpecification, error) {
+func ParseRawVehicleSpecification(raw *structpb.Struct) (*mbzv1.VehicleSpecification, error) {
 	if raw == nil {
 		return nil, fmt.Errorf("mbz: parse vehicle specification from raw: nil struct")
 	}

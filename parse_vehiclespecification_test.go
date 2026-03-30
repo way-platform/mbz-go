@@ -12,7 +12,7 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-func TestParseVehicleSpecificationFromRaw_roundTrip(t *testing.T) {
+func TestParseRawVehicleSpecification_roundTrip(t *testing.T) {
 	testdataDir := "testdata/specifications"
 	err := filepath.WalkDir(testdataDir, func(path string, d os.DirEntry, err error) error {
 		if err != nil {
@@ -45,9 +45,9 @@ func TestParseVehicleSpecificationFromRaw_roundTrip(t *testing.T) {
 			}
 
 			// Round-trip: raw struct -> parsed proto
-			roundTripped, err := ParseVehicleSpecificationFromRaw(rawStruct)
+			roundTripped, err := ParseRawVehicleSpecification(rawStruct)
 			if err != nil {
-				t.Fatalf("ParseVehicleSpecificationFromRaw: %v", err)
+				t.Fatalf("ParseRawVehicleSpecification: %v", err)
 			}
 
 			// Clear the raw field on original before comparison (round-tripped won't have it)
