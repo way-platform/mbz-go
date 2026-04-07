@@ -65,5 +65,9 @@ func (c *Client) GetVehicleCompatibility(
 	if err := json.Unmarshal(data, &responseBody); err != nil {
 		return nil, err
 	}
-	return compatibilityResponseToProto(request.VIN, &responseBody), nil
+	result := compatibilityResponseToProto(request.VIN, &responseBody)
+	if rawStruct, err := compatibilityRawStruct(data); err == nil {
+		result.SetRaw(rawStruct)
+	}
+	return result, nil
 }
