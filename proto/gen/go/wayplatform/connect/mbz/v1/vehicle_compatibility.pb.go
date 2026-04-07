@@ -9,6 +9,7 @@ package mbzv1
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	structpb "google.golang.org/protobuf/types/known/structpb"
 	reflect "reflect"
 	unsafe "unsafe"
 )
@@ -27,6 +28,7 @@ type VehicleCompatibility struct {
 	xxx_hidden_VehicleType                 *string                          `protobuf:"bytes,2,opt,name=vehicle_type,json=vehicleType"`
 	xxx_hidden_VehicleProvidesConnectivity bool                             `protobuf:"varint,3,opt,name=vehicle_provides_connectivity,json=vehicleProvidesConnectivity"`
 	xxx_hidden_Services                    *[]*VehicleCompatibility_Service `protobuf:"bytes,4,rep,name=services"`
+	xxx_hidden_Raw                         *structpb.Struct                 `protobuf:"bytes,5,opt,name=raw"`
 	XXX_raceDetectHookData                 protoimpl.RaceDetectHookData
 	XXX_presence                           [1]uint32
 	unknownFields                          protoimpl.UnknownFields
@@ -94,23 +96,34 @@ func (x *VehicleCompatibility) GetServices() []*VehicleCompatibility_Service {
 	return nil
 }
 
+func (x *VehicleCompatibility) GetRaw() *structpb.Struct {
+	if x != nil {
+		return x.xxx_hidden_Raw
+	}
+	return nil
+}
+
 func (x *VehicleCompatibility) SetVin(v string) {
 	x.xxx_hidden_Vin = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 0, 4)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 0, 5)
 }
 
 func (x *VehicleCompatibility) SetVehicleType(v string) {
 	x.xxx_hidden_VehicleType = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 1, 4)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 1, 5)
 }
 
 func (x *VehicleCompatibility) SetVehicleProvidesConnectivity(v bool) {
 	x.xxx_hidden_VehicleProvidesConnectivity = v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 2, 4)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 2, 5)
 }
 
 func (x *VehicleCompatibility) SetServices(v []*VehicleCompatibility_Service) {
 	x.xxx_hidden_Services = &v
+}
+
+func (x *VehicleCompatibility) SetRaw(v *structpb.Struct) {
+	x.xxx_hidden_Raw = v
 }
 
 func (x *VehicleCompatibility) HasVin() bool {
@@ -134,6 +147,13 @@ func (x *VehicleCompatibility) HasVehicleProvidesConnectivity() bool {
 	return protoimpl.X.Present(&(x.XXX_presence[0]), 2)
 }
 
+func (x *VehicleCompatibility) HasRaw() bool {
+	if x == nil {
+		return false
+	}
+	return x.xxx_hidden_Raw != nil
+}
+
 func (x *VehicleCompatibility) ClearVin() {
 	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 0)
 	x.xxx_hidden_Vin = nil
@@ -149,6 +169,10 @@ func (x *VehicleCompatibility) ClearVehicleProvidesConnectivity() {
 	x.xxx_hidden_VehicleProvidesConnectivity = false
 }
 
+func (x *VehicleCompatibility) ClearRaw() {
+	x.xxx_hidden_Raw = nil
+}
+
 type VehicleCompatibility_builder struct {
 	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
 
@@ -160,6 +184,8 @@ type VehicleCompatibility_builder struct {
 	VehicleProvidesConnectivity *bool
 	// Services with their availability.
 	Services []*VehicleCompatibility_Service
+	// Raw upstream JSON response from Mercedes-Benz Vehicles API.
+	Raw *structpb.Struct
 }
 
 func (b0 VehicleCompatibility_builder) Build() *VehicleCompatibility {
@@ -167,18 +193,19 @@ func (b0 VehicleCompatibility_builder) Build() *VehicleCompatibility {
 	b, x := &b0, m0
 	_, _ = b, x
 	if b.Vin != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 0, 4)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 0, 5)
 		x.xxx_hidden_Vin = b.Vin
 	}
 	if b.VehicleType != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 1, 4)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 1, 5)
 		x.xxx_hidden_VehicleType = b.VehicleType
 	}
 	if b.VehicleProvidesConnectivity != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 2, 4)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 2, 5)
 		x.xxx_hidden_VehicleProvidesConnectivity = *b.VehicleProvidesConnectivity
 	}
 	x.xxx_hidden_Services = &b.Services
+	x.xxx_hidden_Raw = b.Raw
 	return m0
 }
 
@@ -331,12 +358,13 @@ var File_wayplatform_connect_mbz_v1_vehicle_compatibility_proto protoreflect.Fil
 
 const file_wayplatform_connect_mbz_v1_vehicle_compatibility_proto_rawDesc = "" +
 	"\n" +
-	"6wayplatform/connect/mbz/v1/vehicle_compatibility.proto\x12\x1awayplatform.connect.mbz.v1\"\xd0\x02\n" +
+	"6wayplatform/connect/mbz/v1/vehicle_compatibility.proto\x12\x1awayplatform.connect.mbz.v1\x1a\x1cgoogle/protobuf/struct.proto\"\xfb\x02\n" +
 	"\x14VehicleCompatibility\x12\x10\n" +
 	"\x03vin\x18\x01 \x01(\tR\x03vin\x12!\n" +
 	"\fvehicle_type\x18\x02 \x01(\tR\vvehicleType\x12B\n" +
 	"\x1dvehicle_provides_connectivity\x18\x03 \x01(\bR\x1bvehicleProvidesConnectivity\x12T\n" +
-	"\bservices\x18\x04 \x03(\v28.wayplatform.connect.mbz.v1.VehicleCompatibility.ServiceR\bservices\x1ai\n" +
+	"\bservices\x18\x04 \x03(\v28.wayplatform.connect.mbz.v1.VehicleCompatibility.ServiceR\bservices\x12)\n" +
+	"\x03raw\x18\x05 \x01(\v2\x17.google.protobuf.StructR\x03raw\x1ai\n" +
 	"\aService\x12\x1c\n" +
 	"\tavailable\x18\x01 \x01(\bR\tavailable\x12\x1d\n" +
 	"\n" +
@@ -348,14 +376,16 @@ var file_wayplatform_connect_mbz_v1_vehicle_compatibility_proto_msgTypes = make(
 var file_wayplatform_connect_mbz_v1_vehicle_compatibility_proto_goTypes = []any{
 	(*VehicleCompatibility)(nil),         // 0: wayplatform.connect.mbz.v1.VehicleCompatibility
 	(*VehicleCompatibility_Service)(nil), // 1: wayplatform.connect.mbz.v1.VehicleCompatibility.Service
+	(*structpb.Struct)(nil),              // 2: google.protobuf.Struct
 }
 var file_wayplatform_connect_mbz_v1_vehicle_compatibility_proto_depIdxs = []int32{
 	1, // 0: wayplatform.connect.mbz.v1.VehicleCompatibility.services:type_name -> wayplatform.connect.mbz.v1.VehicleCompatibility.Service
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	2, // 1: wayplatform.connect.mbz.v1.VehicleCompatibility.raw:type_name -> google.protobuf.Struct
+	2, // [2:2] is the sub-list for method output_type
+	2, // [2:2] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_wayplatform_connect_mbz_v1_vehicle_compatibility_proto_init() }

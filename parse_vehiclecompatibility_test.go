@@ -7,13 +7,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/way-platform/mbz-go/api/vehiclespecificationfleetv1"
+	"github.com/way-platform/mbz-go/api/vehiclesv1"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 )
 
-func TestParseRawVehicleSpecification_roundTrip(t *testing.T) {
-	testdataDir := "testdata/specifications"
+func TestParseRawVehicleCompatibility_roundTrip(t *testing.T) {
+	testdataDir := "testdata/compatibilities"
 	err := filepath.WalkDir(testdataDir, func(path string, d os.DirEntry, err error) error {
 		if err != nil {
 			return err
@@ -32,27 +32,29 @@ func TestParseRawVehicleSpecification_roundTrip(t *testing.T) {
 			}
 
 			// Normal path: JSON -> OpenAPI -> proto
-			var openAPIResp vehiclespecificationfleetv1.VehicleSpecificationResponse
-			if err := json.Unmarshal(inputData, &openAPIResp); err != nil {
+			var resp vehiclesv1.CompatibilityResponse
+			if err := json.Unmarshal(inputData, &resp); err != nil {
 				t.Fatalf("unmarshal input: %v", err)
 			}
-			original := vehicleDataToProto(openAPIResp.VehicleData)
+			original := compatibilityResponseToProto(resp.VIN, &resp)
 
-			// Extract raw struct from the response body (same as GetVehicleSpecification does)
-			rawStruct, err := vehicleDataRawStruct(inputData)
+			// Extract raw struct from the response body
+			rawStruct, err := compatibilityRawStruct(inputData)
 			if err != nil {
-				t.Fatalf("vehicleDataRawStruct: %v", err)
+				t.Fatalf("compatibilityRawStruct: %v", err)
 			}
 
 			// Round-trip: raw struct -> parsed proto
-			roundTripped, err := ParseRawVehicleSpecification(rawStruct)
+			roundTripped, err := ParseRawVehicleCompatibility(rawStruct)
 			if err != nil {
-				t.Fatalf("ParseRawVehicleSpecification: %v", err)
+				t.Fatalf("ParseRawVehicleCompatibility: %v", err)
 			}
 
-			// Clear the raw field on original before comparison (round-tripped won't have it)
+			// Clear the raw field on original before comparison (round-tripped won't have it).
+			// Also set VIN on round-tripped since ParseRaw passes empty VIN.
 			original.ClearRaw()
 			roundTripped.ClearRaw()
+			roundTripped.SetVin(original.GetVin())
 
 			if !proto.Equal(original, roundTripped) {
 				origJSON, _ := protojson.Marshal(original)

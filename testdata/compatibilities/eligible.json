@@ -1,0 +1,17 @@
+{
+  "vin": "WDBXXXXXXXXX000001",
+  "vehicleType": "VAN",
+  "vehicleProvidesConnectivity": true,
+  "services": [
+    {
+      "available": true,
+      "serviceId": "FUEL_STATUS",
+      "serviceName": "Fuel Status"
+    },
+    {
+      "available": false,
+      "serviceId": "SPEED_ALERT",
+      "serviceName": "Speed Alert"
+    }
+  ]
+}
