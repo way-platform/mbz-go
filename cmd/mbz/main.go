@@ -14,11 +14,13 @@ import (
 )
 
 func main() {
-	credPath, _ := xdg.ConfigFile("mbz-go/credentials.json")
+	fleetCredPath, _ := xdg.ConfigFile("mbz-go/fleet-credentials.json")
+	vspecCredPath, _ := xdg.ConfigFile("mbz-go/vehicle-spec-credentials.json")
 	tokenPath, _ := xdg.ConfigFile("mbz-go/token.json")
 	var debug bool
 	cmd := cli.NewCommand(
-		cli.WithCredentialStore(cli.NewFileStore(credPath)),
+		cli.WithFleetCredentialStore(cli.NewFileStore(fleetCredPath)),
+		cli.WithVehicleSpecCredentialStore(cli.NewFileStore(vspecCredPath)),
 		cli.WithTokenStore(cli.NewFileStore(tokenPath)),
 		cli.WithHTTPClient(&http.Client{
 			Transport: &mbz.DebugTransport{Enabled: &debug},
