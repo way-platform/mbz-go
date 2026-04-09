@@ -18,6 +18,7 @@ import (
 	"github.com/twmb/franz-go/pkg/sasl/oauth"
 	"github.com/way-platform/mbz-go"
 	"github.com/way-platform/mbz-go/api/vehiclesv1"
+	mbzpb "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mbz/v1"
 	"golang.org/x/oauth2"
 	"golang.org/x/term"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -87,10 +88,10 @@ func newLoginCommand(cfg *config) *cobra.Command {
 		String("client-secret", "", "client secret for authentication (OAuth2 only)")
 	cmd.RunE = func(cmd *cobra.Command, _ []string) error {
 		// Try loading stored credentials first.
-		var creds Credentials
+		creds := &mbzpb.Credentials{}
 		if cfg.credentialStore != nil {
 			if err := cfg.credentialStore.Read(
-				&creds,
+				creds,
 			); err != nil &&
 				!errors.Is(err, fs.ErrNotExist) {
 				return fmt.Errorf("read credentials: %w", err)
@@ -98,20 +99,20 @@ func newLoginCommand(cfg *config) *cobra.Command {
 		}
 		// Override with flags.
 		if *apiKey != "" {
-			creds.APIKey = *apiKey
+			creds.SetApiKey(*apiKey)
 		}
 		if *region != "" {
-			creds.Region = *region
+			creds.SetRegion(*region)
 		}
 		if *clientID != "" {
-			creds.ClientID = *clientID
+			creds.SetClientId(*clientID)
 		}
 		if *clientSecret != "" {
-			creds.ClientSecret = *clientSecret
+			creds.SetClientSecret(*clientSecret)
 		}
 		// Default region.
-		if creds.Region == "" {
-			creds.Region = string(mbz.RegionECE)
+		if creds.GetRegion() == "" {
+			creds.SetRegion(string(mbz.RegionECE))
 		}
 		// Prompt for API key if not provided.
 		if shouldPromptAPIKey(creds) {
@@ -119,35 +120,35 @@ func newLoginCommand(cfg *config) *cobra.Command {
 			if err != nil {
 				return err
 			}
-			creds.APIKey = val
+			creds.SetApiKey(val)
 		}
 		// Prompt for OAuth2 credentials if no API key was provided.
-		if creds.ClientID == "" && creds.APIKey == "" {
+		if creds.GetClientId() == "" && creds.GetApiKey() == "" {
 			val, err := promptSecret(cmd, "Enter OAuth2 client ID: ")
 			if err != nil {
 				return err
 			}
-			creds.ClientID = val
+			creds.SetClientId(val)
 		}
-		if creds.ClientSecret == "" && creds.APIKey == "" {
+		if creds.GetClientSecret() == "" && creds.GetApiKey() == "" {
 			val, err := promptSecret(cmd, "Enter OAuth2 client secret: ")
 			if err != nil {
 				return err
 			}
-			creds.ClientSecret = val
+			creds.SetClientSecret(val)
 		}
 		// Persist credentials.
 		if cfg.credentialStore != nil {
-			if err := cfg.credentialStore.Write(&creds); err != nil {
+			if err := cfg.credentialStore.Write(creds); err != nil {
 				return fmt.Errorf("write credentials: %w", err)
 			}
 		}
 		// Run OAuth2 flow if client credentials are provided.
-		if creds.ClientID != "" && creds.ClientSecret != "" {
+		if creds.GetClientId() != "" && creds.GetClientSecret() != "" {
 			oauth2Config, err := mbz.NewOAuth2Config(
-				mbz.Region(creds.Region),
-				creds.ClientID,
-				creds.ClientSecret,
+				mbz.Region(creds.GetRegion()),
+				creds.GetClientId(),
+				creds.GetClientSecret(),
 			)
 			if err != nil {
 				return err
@@ -163,7 +164,7 @@ func newLoginCommand(cfg *config) *cobra.Command {
 				}
 			}
 		}
-		cmd.Printf("Logged in to %s.\n", creds.Region)
+		cmd.Printf("Logged in to %s.\n", creds.GetRegion())
 		return nil
 	}
 	return cmd
@@ -584,9 +585,9 @@ func newConsumeVehicleSignalsCommand(cfg *config) *cobra.Command {
 	enableDebug := cmd.Flags().Bool("debug", false, "Enable debug logging")
 	format := cmd.Flags().String("format", "json", "Format to use for output")
 	cmd.RunE = func(cmd *cobra.Command, _ []string) error {
-		var creds Credentials
+		creds := &mbzpb.Credentials{}
 		if cfg.credentialStore != nil {
-			if err := cfg.credentialStore.Read(&creds); err != nil {
+			if err := cfg.credentialStore.Read(creds); err != nil {
 				if errors.Is(err, fs.ErrNotExist) {
 					return fmt.Errorf("no credentials found, please login using `mbz auth login`")
 				}
@@ -613,7 +614,7 @@ func newConsumeVehicleSignalsCommand(cfg *config) *cobra.Command {
 		case mbz.RegionAMAPNA:
 			bootstrapServer = mbz.KafkaBootstrapServerAMAPNA
 		default:
-			return fmt.Errorf("invalid region: %s", creds.Region)
+			return fmt.Errorf("invalid region: %s", creds.GetRegion())
 		}
 		opts := []kgo.Opt{
 			kgo.DialTLS(),
@@ -686,9 +687,9 @@ func newConsumeVehicleSignalsCommand(cfg *config) *cobra.Command {
 // Client constructors.
 
 func newOAuth2Client(cmd *cobra.Command, cfg *config) (*mbz.Client, error) {
-	var creds Credentials
+	creds := &mbzpb.Credentials{}
 	if cfg.credentialStore != nil {
-		if err := cfg.credentialStore.Read(&creds); err != nil && !errors.Is(err, fs.ErrNotExist) {
+		if err := cfg.credentialStore.Read(creds); err != nil && !errors.Is(err, fs.ErrNotExist) {
 			return nil, fmt.Errorf("read credentials: %w", err)
 		}
 	}
@@ -719,9 +720,9 @@ func newOAuth2Client(cmd *cobra.Command, cfg *config) (*mbz.Client, error) {
 }
 
 func newClientWithAPIKey(cmd *cobra.Command, cfg *config) (*mbz.Client, error) {
-	var creds Credentials
+	creds := &mbzpb.Credentials{}
 	if cfg.credentialStore != nil {
-		if err := cfg.credentialStore.Read(&creds); err != nil {
+		if err := cfg.credentialStore.Read(creds); err != nil {
 			if errors.Is(err, fs.ErrNotExist) {
 				return nil, fmt.Errorf(
 					"no credentials found, please login using `mbz auth login --api-key <api-key>`",
@@ -730,13 +731,13 @@ func newClientWithAPIKey(cmd *cobra.Command, cfg *config) (*mbz.Client, error) {
 			return nil, fmt.Errorf("read credentials: %w", err)
 		}
 	}
-	if creds.APIKey == "" {
+	if creds.GetApiKey() == "" {
 		return nil, fmt.Errorf(
 			"no API key found, please login using `mbz auth login --api-key <api-key>`",
 		)
 	}
 	opts := []mbz.ClientOption{
-		mbz.WithAPIKey(creds.APIKey),
+		mbz.WithAPIKey(creds.GetApiKey()),
 	}
 	if cfg.httpClient != nil {
 		opts = append(opts, mbz.WithHTTPClient(cfg.httpClient))
@@ -756,13 +757,13 @@ func promptSecret(cmd *cobra.Command, prompt string) (string, error) {
 	return string(input), nil
 }
 
-func shouldPromptAPIKey(creds Credentials) bool {
-	return creds.APIKey == "" && creds.ClientID == "" && creds.ClientSecret == ""
+func shouldPromptAPIKey(creds *mbzpb.Credentials) bool {
+	return creds.GetApiKey() == "" && creds.GetClientId() == "" && creds.GetClientSecret() == ""
 }
 
-func resolveOAuth2Region(creds Credentials, token oauth2.Token) (mbz.Region, error) {
-	if creds.Region != "" {
-		return mbz.Region(creds.Region), nil
+func resolveOAuth2Region(creds *mbzpb.Credentials, token oauth2.Token) (mbz.Region, error) {
+	if creds.GetRegion() != "" {
+		return mbz.Region(creds.GetRegion()), nil
 	}
 	return inferRegionFromAccessToken(token.AccessToken)
 }
