@@ -18,18 +18,41 @@ type Store interface {
 	Clear() error
 }
 
+// FleetCredentials holds OAuth2 + Kafka credentials for the Mercedes-Benz Fleet API.
+type FleetCredentials struct {
+	ClientID           string `json:"clientId"`
+	ClientSecret       string `json:"clientSecret"`
+	Region             string `json:"region"`
+	KafkaConsumerGroup string `json:"kafkaConsumerGroup"`
+	KafkaInputTopic    string `json:"kafkaInputTopic"`
+}
+
+// VehicleSpecCredentials holds API key credentials for the Mercedes-Benz Vehicle Specification API.
+type VehicleSpecCredentials struct {
+	APIKey string `json:"apiKey"`
+}
+
 // Option configures the CLI command tree.
 type Option func(*config)
 
 type config struct {
-	credentialStore Store
-	tokenStore      Store
-	httpClient      *http.Client
+	fleetCredentialStore       Store
+	vehicleSpecCredentialStore Store
+	tokenStore                 Store
+	httpClient                 *http.Client
+
+	fleetCredentialProvider       func() (*FleetCredentials, error)
+	vehicleSpecCredentialProvider func() (*VehicleSpecCredentials, error)
 }
 
-// WithCredentialStore sets the credential store.
-func WithCredentialStore(s Store) Option {
-	return func(c *config) { c.credentialStore = s }
+// WithFleetCredentialStore sets the credential store for Mercedes-Benz Fleet API (OAuth2 + Kafka).
+func WithFleetCredentialStore(s Store) Option {
+	return func(c *config) { c.fleetCredentialStore = s }
+}
+
+// WithVehicleSpecCredentialStore sets the credential store for Mercedes-Benz Vehicle Specification API.
+func WithVehicleSpecCredentialStore(s Store) Option {
+	return func(c *config) { c.vehicleSpecCredentialStore = s }
 }
 
 // WithTokenStore sets the token store.
@@ -42,7 +65,20 @@ func WithHTTPClient(httpClient *http.Client) Option {
 	return func(c *config) { c.httpClient = httpClient }
 }
 
-// FileStore is a JSON file-backed store.
+// WithFleetCredentialProvider sets a provider function for fleet credentials.
+// When set, the provider is called instead of reading from the credential store.
+func WithFleetCredentialProvider(fn func() (*FleetCredentials, error)) Option {
+	return func(c *config) { c.fleetCredentialProvider = fn }
+}
+
+// WithVehicleSpecCredentialProvider sets a provider function for vehicle spec credentials.
+// When set, the provider is called instead of reading from the credential store.
+func WithVehicleSpecCredentialProvider(fn func() (*VehicleSpecCredentials, error)) Option {
+	return func(c *config) { c.vehicleSpecCredentialProvider = fn }
+}
+
+// FileStore is a file-backed store that uses protojson for proto messages
+// and encoding/json for other types.
 type FileStore struct {
 	path string
 }
