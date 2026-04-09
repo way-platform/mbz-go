@@ -6,6 +6,9 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
 )
 
 // Store reads and writes JSON-serializable data.
@@ -13,14 +16,6 @@ type Store interface {
 	Read(target any) error
 	Write(data any) error
 	Clear() error
-}
-
-// Credentials for Mercedes-Benz API authentication.
-type Credentials struct {
-	Region       string `json:"region"`
-	ClientID     string `json:"clientId,omitempty"`
-	ClientSecret string `json:"clientSecret,omitempty"`
-	APIKey       string `json:"apiKey,omitempty"`
 }
 
 // Option configures the CLI command tree.
@@ -58,10 +53,17 @@ func NewFileStore(path string) *FileStore {
 }
 
 // Read unmarshals the file contents into target.
+// If target implements [proto.Message], protojson is used for unmarshaling.
 func (s *FileStore) Read(target any) error {
 	data, err := os.ReadFile(s.path)
 	if err != nil {
 		return fmt.Errorf("read store: %w", err)
+	}
+	if msg, ok := target.(proto.Message); ok {
+		if err := protojson.Unmarshal(data, msg); err != nil {
+			return fmt.Errorf("unmarshal store: %w", err)
+		}
+		return nil
 	}
 	if err := json.Unmarshal(data, target); err != nil {
 		return fmt.Errorf("unmarshal store: %w", err)
@@ -70,10 +72,24 @@ func (s *FileStore) Read(target any) error {
 }
 
 // Write marshals data and writes it to the file.
+// If data implements [proto.Message], protojson is used for marshaling.
 func (s *FileStore) Write(data any) error {
-	bytes, err := json.MarshalIndent(data, "", "  ")
-	if err != nil {
-		return fmt.Errorf("marshal store: %w", err)
+	var bytes []byte
+	if msg, ok := data.(proto.Message); ok {
+		var err error
+		bytes, err = protojson.MarshalOptions{
+			Multiline: true,
+			Indent:    "  ",
+		}.Marshal(msg)
+		if err != nil {
+			return fmt.Errorf("marshal store: %w", err)
+		}
+	} else {
+		var err error
+		bytes, err = json.MarshalIndent(data, "", "  ")
+		if err != nil {
+			return fmt.Errorf("marshal store: %w", err)
+		}
 	}
 	if err := os.MkdirAll(filepath.Dir(s.path), 0o700); err != nil {
 		return fmt.Errorf("create store dir: %w", err)

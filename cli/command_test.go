@@ -6,22 +6,29 @@ import (
 	"testing"
 
 	"github.com/way-platform/mbz-go"
+	mbzpb "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mbz/v1"
 	"golang.org/x/oauth2"
 )
 
 func TestShouldPromptAPIKey(t *testing.T) {
 	t.Parallel()
 
-	if !shouldPromptAPIKey(Credentials{}) {
+	if !shouldPromptAPIKey(&mbzpb.Credentials{}) {
 		t.Fatal("expected prompt when no credentials are present")
 	}
-	if shouldPromptAPIKey(Credentials{ClientID: "client-id"}) {
+	creds := &mbzpb.Credentials{}
+	creds.SetClientId("client-id")
+	if shouldPromptAPIKey(creds) {
 		t.Fatal("did not expect prompt when oauth client id is present")
 	}
-	if shouldPromptAPIKey(Credentials{ClientSecret: "client-secret"}) {
+	creds = &mbzpb.Credentials{}
+	creds.SetClientSecret("client-secret")
+	if shouldPromptAPIKey(creds) {
 		t.Fatal("did not expect prompt when oauth client secret is present")
 	}
-	if shouldPromptAPIKey(Credentials{APIKey: "api-key"}) {
+	creds = &mbzpb.Credentials{}
+	creds.SetApiKey("api-key")
+	if shouldPromptAPIKey(creds) {
 		t.Fatal("did not expect prompt when api key is present")
 	}
 }
@@ -29,8 +36,10 @@ func TestShouldPromptAPIKey(t *testing.T) {
 func TestResolveOAuth2RegionUsesStoredRegionFirst(t *testing.T) {
 	t.Parallel()
 
+	creds := &mbzpb.Credentials{}
+	creds.SetRegion(string(mbz.RegionAMAPNA))
 	region, err := resolveOAuth2Region(
-		Credentials{Region: string(mbz.RegionAMAPNA)},
+		creds,
 		oauth2.Token{AccessToken: testJWT("https://ssoalpha.dvb.corpinter.net/v1")},
 	)
 	if err != nil {
@@ -57,7 +66,7 @@ func TestResolveOAuth2RegionInfersFromTokenIssuer(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			region, err := resolveOAuth2Region(Credentials{}, oauth2.Token{
+			region, err := resolveOAuth2Region(&mbzpb.Credentials{}, oauth2.Token{
 				AccessToken: testJWT(tt.iss),
 			})
 			if err != nil {
