@@ -22,14 +22,20 @@ type Store interface {
 type Option func(*config)
 
 type config struct {
-	credentialStore Store
-	tokenStore      Store
-	httpClient      *http.Client
+	fleetCredentialStore       Store
+	vehicleSpecCredentialStore Store
+	tokenStore                 Store
+	httpClient                 *http.Client
 }
 
-// WithCredentialStore sets the credential store.
-func WithCredentialStore(s Store) Option {
-	return func(c *config) { c.credentialStore = s }
+// WithFleetCredentialStore sets the credential store for Mercedes-Benz Fleet API (OAuth2 + Kafka).
+func WithFleetCredentialStore(s Store) Option {
+	return func(c *config) { c.fleetCredentialStore = s }
+}
+
+// WithVehicleSpecCredentialStore sets the credential store for Mercedes-Benz Vehicle Specification API.
+func WithVehicleSpecCredentialStore(s Store) Option {
+	return func(c *config) { c.vehicleSpecCredentialStore = s }
 }
 
 // WithTokenStore sets the token store.
@@ -42,7 +48,8 @@ func WithHTTPClient(httpClient *http.Client) Option {
 	return func(c *config) { c.httpClient = httpClient }
 }
 
-// FileStore is a JSON file-backed store.
+// FileStore is a file-backed store that uses protojson for proto messages
+// and encoding/json for other types.
 type FileStore struct {
 	path string
 }
