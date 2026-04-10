@@ -18,8 +18,6 @@ import (
 	"github.com/twmb/franz-go/pkg/sasl/oauth"
 	"github.com/way-platform/mbz-go"
 	"github.com/way-platform/mbz-go/api/vehiclesv1"
-	fleetcreds "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mercedesbenz/fleet/v1"
-	vspeccreds "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mercedesbenz/vehiclespec/v1"
 	"golang.org/x/oauth2"
 	"golang.org/x/term"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -94,52 +92,54 @@ func newLoginFleetCommand(cfg *config) *cobra.Command {
 	clientID := cmd.Flags().String("client-id", "", "OAuth2 client ID")
 	clientSecret := cmd.Flags().String("client-secret", "", "OAuth2 client secret")
 	cmd.RunE = func(cmd *cobra.Command, _ []string) error {
-		creds := &fleetcreds.Credentials{}
+		creds := &FleetCredentials{}
 		if cfg.fleetCredentialStore != nil {
-			if err := cfg.fleetCredentialStore.Read(creds); err != nil && !errors.Is(err, fs.ErrNotExist) {
+			if loaded, err := cfg.fleetCredentialStore.Load(); err == nil {
+				creds = loaded
+			} else if !errors.Is(err, fs.ErrNotExist) {
 				return fmt.Errorf("read credentials: %w", err)
 			}
 		}
 		// Override with flags.
 		if *region != "" {
-			creds.SetRegion(*region)
+			creds.Region = *region
 		}
 		if *clientID != "" {
-			creds.SetClientId(*clientID)
+			creds.ClientID = *clientID
 		}
 		if *clientSecret != "" {
-			creds.SetClientSecret(*clientSecret)
+			creds.ClientSecret = *clientSecret
 		}
 		// Default region.
-		if creds.GetRegion() == "" {
-			creds.SetRegion(string(mbz.RegionECE))
+		if creds.Region == "" {
+			creds.Region = string(mbz.RegionECE)
 		}
 		// Prompt for missing fields.
-		if creds.GetClientId() == "" {
+		if creds.ClientID == "" {
 			val, err := promptSecret(cmd, "Enter OAuth2 client ID: ")
 			if err != nil {
 				return err
 			}
-			creds.SetClientId(val)
+			creds.ClientID = val
 		}
-		if creds.GetClientSecret() == "" {
+		if creds.ClientSecret == "" {
 			val, err := promptSecret(cmd, "Enter OAuth2 client secret: ")
 			if err != nil {
 				return err
 			}
-			creds.SetClientSecret(val)
+			creds.ClientSecret = val
 		}
 		// Persist credentials.
 		if cfg.fleetCredentialStore != nil {
-			if err := cfg.fleetCredentialStore.Write(creds); err != nil {
+			if err := cfg.fleetCredentialStore.Save(creds); err != nil {
 				return fmt.Errorf("write credentials: %w", err)
 			}
 		}
 		// Run OAuth2 flow.
 		oauth2Config, err := mbz.NewOAuth2Config(
-			mbz.Region(creds.GetRegion()),
-			creds.GetClientId(),
-			creds.GetClientSecret(),
+			mbz.Region(creds.Region),
+			creds.ClientID,
+			creds.ClientSecret,
 		)
 		if err != nil {
 			return err
@@ -153,7 +153,7 @@ func newLoginFleetCommand(cfg *config) *cobra.Command {
 				return fmt.Errorf("write token: %w", err)
 			}
 		}
-		cmd.Printf("Logged in to %s.\n", creds.GetRegion())
+		cmd.Printf("Logged in to %s.\n", creds.Region)
 		return nil
 	}
 	return cmd
@@ -166,24 +166,26 @@ func newLoginVehicleSpecCommand(cfg *config) *cobra.Command {
 	}
 	apiKey := cmd.Flags().String("api-key", "", "API key")
 	cmd.RunE = func(cmd *cobra.Command, _ []string) error {
-		creds := &vspeccreds.Credentials{}
+		creds := &VehicleSpecCredentials{}
 		if cfg.vehicleSpecCredentialStore != nil {
-			if err := cfg.vehicleSpecCredentialStore.Read(creds); err != nil && !errors.Is(err, fs.ErrNotExist) {
+			if loaded, err := cfg.vehicleSpecCredentialStore.Load(); err == nil {
+				creds = loaded
+			} else if !errors.Is(err, fs.ErrNotExist) {
 				return fmt.Errorf("read credentials: %w", err)
 			}
 		}
 		if *apiKey != "" {
-			creds.SetApiKey(*apiKey)
+			creds.APIKey = *apiKey
 		}
-		if creds.GetApiKey() == "" {
+		if creds.APIKey == "" {
 			val, err := promptSecret(cmd, "Enter API key: ")
 			if err != nil {
 				return err
 			}
-			creds.SetApiKey(val)
+			creds.APIKey = val
 		}
 		if cfg.vehicleSpecCredentialStore != nil {
-			if err := cfg.vehicleSpecCredentialStore.Write(creds); err != nil {
+			if err := cfg.vehicleSpecCredentialStore.Save(creds); err != nil {
 				return fmt.Errorf("write credentials: %w", err)
 			}
 		}
@@ -611,14 +613,9 @@ func newConsumeVehicleSignalsCommand(cfg *config) *cobra.Command {
 	enableDebug := cmd.Flags().Bool("debug", false, "Enable debug logging")
 	format := cmd.Flags().String("format", "json", "Format to use for output")
 	cmd.RunE = func(cmd *cobra.Command, _ []string) error {
-		creds := &fleetcreds.Credentials{}
-		if cfg.fleetCredentialStore != nil {
-			if err := cfg.fleetCredentialStore.Read(creds); err != nil {
-				if errors.Is(err, fs.ErrNotExist) {
-					return fmt.Errorf("no credentials found, please login using `mbz auth login fleet`")
-				}
-				return fmt.Errorf("read credentials: %w", err)
-			}
+		creds, err := resolveFleetCredentials(cfg)
+		if err != nil {
+			return err
 		}
 		var token oauth2.Token
 		if cfg.tokenStore != nil {
@@ -634,14 +631,14 @@ func newConsumeVehicleSignalsCommand(cfg *config) *cobra.Command {
 			return err
 		}
 		// Resolve topic and consumer group from credentials, with flag overrides.
-		topic := creds.GetKafkaInputTopic()
+		topic := creds.KafkaInputTopic
 		if *topicFlag != "" {
 			topic = *topicFlag
 		}
 		if topic == "" {
 			return fmt.Errorf("topic is required: set via --topic or store in fleet credentials")
 		}
-		consumerGroup := creds.GetKafkaConsumerGroup()
+		consumerGroup := creds.KafkaConsumerGroup
 		if *consumerGroupFlag != "" {
 			consumerGroup = *consumerGroupFlag
 		}
@@ -657,7 +654,7 @@ func newConsumeVehicleSignalsCommand(cfg *config) *cobra.Command {
 		case mbz.RegionAMAPNA:
 			bootstrapServer = mbz.KafkaBootstrapServerAMAPNA
 		default:
-			return fmt.Errorf("invalid region: %s", creds.GetRegion())
+			return fmt.Errorf("invalid region: %s", creds.Region)
 		}
 		opts := []kgo.Opt{
 			kgo.DialTLS(),
@@ -729,12 +726,40 @@ func newConsumeVehicleSignalsCommand(cfg *config) *cobra.Command {
 
 // Client constructors.
 
-func newOAuth2Client(cmd *cobra.Command, cfg *config) (*mbz.Client, error) {
-	creds := &fleetcreds.Credentials{}
-	if cfg.fleetCredentialStore != nil {
-		if err := cfg.fleetCredentialStore.Read(creds); err != nil && !errors.Is(err, fs.ErrNotExist) {
-			return nil, fmt.Errorf("read credentials: %w", err)
+func resolveFleetCredentials(cfg *config) (*FleetCredentials, error) {
+	if cfg.fleetCredentialStore == nil {
+		return nil, fmt.Errorf("no fleet credentials configured")
+	}
+	creds, err := cfg.fleetCredentialStore.Load()
+	if err != nil {
+		if errors.Is(err, fs.ErrNotExist) {
+			return nil, fmt.Errorf("no credentials found, please login using `mbz auth login fleet`")
 		}
+		return nil, fmt.Errorf("read credentials: %w", err)
+	}
+	return creds, nil
+}
+
+func resolveVehicleSpecCredentials(cfg *config) (*VehicleSpecCredentials, error) {
+	if cfg.vehicleSpecCredentialStore == nil {
+		return nil, fmt.Errorf("no vehicle spec credentials configured")
+	}
+	creds, err := cfg.vehicleSpecCredentialStore.Load()
+	if err != nil {
+		if errors.Is(err, fs.ErrNotExist) {
+			return nil, fmt.Errorf(
+				"no credentials found, please login using `mbz auth login vehicle-spec --api-key <key>`",
+			)
+		}
+		return nil, fmt.Errorf("read credentials: %w", err)
+	}
+	return creds, nil
+}
+
+func newOAuth2Client(cmd *cobra.Command, cfg *config) (*mbz.Client, error) {
+	creds, err := resolveFleetCredentials(cfg)
+	if err != nil {
+		return nil, err
 	}
 	var token oauth2.Token
 	if cfg.tokenStore != nil {
@@ -763,24 +788,17 @@ func newOAuth2Client(cmd *cobra.Command, cfg *config) (*mbz.Client, error) {
 }
 
 func newClientWithAPIKey(cmd *cobra.Command, cfg *config) (*mbz.Client, error) {
-	creds := &vspeccreds.Credentials{}
-	if cfg.vehicleSpecCredentialStore != nil {
-		if err := cfg.vehicleSpecCredentialStore.Read(creds); err != nil {
-			if errors.Is(err, fs.ErrNotExist) {
-				return nil, fmt.Errorf(
-					"no credentials found, please login using `mbz auth login vehicle-spec --api-key <key>`",
-				)
-			}
-			return nil, fmt.Errorf("read credentials: %w", err)
-		}
+	creds, err := resolveVehicleSpecCredentials(cfg)
+	if err != nil {
+		return nil, err
 	}
-	if creds.GetApiKey() == "" {
+	if creds.APIKey == "" {
 		return nil, fmt.Errorf(
 			"no API key found, please login using `mbz auth login vehicle-spec --api-key <key>`",
 		)
 	}
 	opts := []mbz.ClientOption{
-		mbz.WithAPIKey(creds.GetApiKey()),
+		mbz.WithAPIKey(creds.APIKey),
 	}
 	if cfg.httpClient != nil {
 		opts = append(opts, mbz.WithHTTPClient(cfg.httpClient))
@@ -800,9 +818,9 @@ func promptSecret(cmd *cobra.Command, prompt string) (string, error) {
 	return string(input), nil
 }
 
-func resolveOAuth2Region(creds *fleetcreds.Credentials, token oauth2.Token) (mbz.Region, error) {
-	if creds.GetRegion() != "" {
-		return mbz.Region(creds.GetRegion()), nil
+func resolveOAuth2Region(creds *FleetCredentials, token oauth2.Token) (mbz.Region, error) {
+	if creds.Region != "" {
+		return mbz.Region(creds.Region), nil
 	}
 	return inferRegionFromAccessToken(token.AccessToken)
 }
