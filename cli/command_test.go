@@ -6,15 +6,15 @@ import (
 	"testing"
 
 	"github.com/way-platform/mbz-go"
-	fleetcreds "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mercedesbenz/fleet/v1"
 	"golang.org/x/oauth2"
 )
 
 func TestResolveOAuth2RegionUsesStoredRegionFirst(t *testing.T) {
 	t.Parallel()
 
-	creds := &fleetcreds.Credentials{}
-	creds.SetRegion(string(mbz.RegionAMAPNA))
+	creds := &FleetCredentials{
+		Region: string(mbz.RegionAMAPNA),
+	}
 	region, err := resolveOAuth2Region(
 		creds,
 		oauth2.Token{AccessToken: testJWT("https://ssoalpha.dvb.corpinter.net/v1")},
@@ -43,7 +43,7 @@ func TestResolveOAuth2RegionInfersFromTokenIssuer(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			region, err := resolveOAuth2Region(&fleetcreds.Credentials{}, oauth2.Token{
+			region, err := resolveOAuth2Region(&FleetCredentials{}, oauth2.Token{
 				AccessToken: testJWT(tt.iss),
 			})
 			if err != nil {

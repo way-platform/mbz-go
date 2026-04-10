@@ -19,8 +19,8 @@ func main() {
 	tokenPath, _ := xdg.ConfigFile("mbz-go/token.json")
 	var debug bool
 	cmd := cli.NewCommand(
-		cli.WithFleetCredentialStore(cli.NewFileStore(fleetCredPath)),
-		cli.WithVehicleSpecCredentialStore(cli.NewFileStore(vspecCredPath)),
+		cli.WithFleetCredentialStore(cli.NewFleetCredentialFileStore(fleetCredPath)),
+		cli.WithVehicleSpecCredentialStore(cli.NewVehicleSpecCredentialFileStore(vspecCredPath)),
 		cli.WithTokenStore(cli.NewFileStore(tokenPath)),
 		cli.WithHTTPClient(&http.Client{
 			Transport: &mbz.DebugTransport{Enabled: &debug},
