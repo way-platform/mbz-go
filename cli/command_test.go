@@ -17,7 +17,7 @@ func TestResolveOAuth2RegionUsesStoredRegionFirst(t *testing.T) {
 	}
 	region, err := resolveOAuth2Region(
 		creds,
-		oauth2.Token{AccessToken: testJWT("https://ssoalpha.dvb.corpinter.net/v1")},
+		&oauth2.Token{AccessToken: testJWT("https://ssoalpha.dvb.corpinter.net/v1")},
 	)
 	if err != nil {
 		t.Fatalf("resolve region: %v", err)
@@ -43,7 +43,7 @@ func TestResolveOAuth2RegionInfersFromTokenIssuer(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			region, err := resolveOAuth2Region(&FleetCredentials{}, oauth2.Token{
+			region, err := resolveOAuth2Region(&FleetCredentials{}, &oauth2.Token{
 				AccessToken: testJWT(tt.iss),
 			})
 			if err != nil {

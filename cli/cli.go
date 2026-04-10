@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+
+	"golang.org/x/oauth2"
 )
 
 // FleetCredentials holds Mercedes-Benz Fleet API credentials (OAuth2 + Kafka).
@@ -36,10 +38,10 @@ type VehicleSpecCredentialStore interface {
 	Clear() error
 }
 
-// Store reads and writes JSON-serializable data.
-type Store interface {
-	Read(target any) error
-	Write(data any) error
+// TokenStore reads and writes OAuth2 tokens.
+type TokenStore interface {
+	Load() (*oauth2.Token, error)
+	Save(*oauth2.Token) error
 	Clear() error
 }
 
@@ -49,7 +51,7 @@ type Option func(*config)
 type config struct {
 	fleetCredentialStore       FleetCredentialStore
 	vehicleSpecCredentialStore VehicleSpecCredentialStore
-	tokenStore                 Store
+	tokenStore                 TokenStore
 	httpClient                 *http.Client
 }
 
@@ -64,7 +66,7 @@ func WithVehicleSpecCredentialStore(s VehicleSpecCredentialStore) Option {
 }
 
 // WithTokenStore sets the token store.
-func WithTokenStore(s Store) Option {
+func WithTokenStore(s TokenStore) Option {
 	return func(c *config) { c.tokenStore = s }
 }
 
@@ -122,45 +124,7 @@ func NewVehicleSpecCredentialFileStore(path string) VehicleSpecCredentialStore {
 	return &fileStore[VehicleSpecCredentials]{path: path}
 }
 
-// FileStore is a file-backed store that uses encoding/json.
-type FileStore struct {
-	path string
-}
-
-// NewFileStore creates a new file-backed store at the given path.
-func NewFileStore(path string) *FileStore {
-	return &FileStore{path: path}
-}
-
-// Read unmarshals the file contents into target.
-func (s *FileStore) Read(target any) error {
-	data, err := os.ReadFile(s.path)
-	if err != nil {
-		return fmt.Errorf("read store: %w", err)
-	}
-	if err := json.Unmarshal(data, target); err != nil {
-		return fmt.Errorf("unmarshal store: %w", err)
-	}
-	return nil
-}
-
-// Write marshals data and writes it to the file.
-func (s *FileStore) Write(data any) error {
-	bytes, err := json.MarshalIndent(data, "", "  ")
-	if err != nil {
-		return fmt.Errorf("marshal store: %w", err)
-	}
-	if err := os.MkdirAll(filepath.Dir(s.path), 0o700); err != nil {
-		return fmt.Errorf("create store dir: %w", err)
-	}
-	return os.WriteFile(s.path, bytes, 0o600)
-}
-
-// Clear removes the file.
-func (s *FileStore) Clear() error {
-	err := os.Remove(s.path)
-	if err != nil && os.IsNotExist(err) {
-		return nil
-	}
-	return err
+// NewTokenFileStore creates a file-backed token store.
+func NewTokenFileStore(path string) TokenStore {
+	return &fileStore[oauth2.Token]{path: path}
 }
