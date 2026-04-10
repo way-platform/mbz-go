@@ -21,7 +21,7 @@ func main() {
 	cmd := cli.NewCommand(
 		cli.WithFleetCredentialStore(cli.NewFleetCredentialFileStore(fleetCredPath)),
 		cli.WithVehicleSpecCredentialStore(cli.NewVehicleSpecCredentialFileStore(vspecCredPath)),
-		cli.WithTokenStore(cli.NewFileStore(tokenPath)),
+		cli.WithTokenStore(cli.NewTokenFileStore(tokenPath)),
 		cli.WithHTTPClient(&http.Client{
 			Transport: &mbz.DebugTransport{Enabled: &debug},
 		}),

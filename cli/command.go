@@ -149,7 +149,7 @@ func newLoginFleetCommand(cfg *config) *cobra.Command {
 			return err
 		}
 		if cfg.tokenStore != nil {
-			if err := cfg.tokenStore.Write(token); err != nil {
+			if err := cfg.tokenStore.Save(token); err != nil {
 				return fmt.Errorf("write token: %w", err)
 			}
 		}
@@ -617,9 +617,10 @@ func newConsumeVehicleSignalsCommand(cfg *config) *cobra.Command {
 		if err != nil {
 			return err
 		}
-		var token oauth2.Token
+		var token *oauth2.Token
 		if cfg.tokenStore != nil {
-			if err := cfg.tokenStore.Read(&token); err != nil {
+			token, err = cfg.tokenStore.Load()
+			if err != nil {
 				if errors.Is(err, fs.ErrNotExist) {
 					return fmt.Errorf("no credentials found, please login using `mbz auth login fleet`")
 				}
@@ -662,8 +663,12 @@ func newConsumeVehicleSignalsCommand(cfg *config) *cobra.Command {
 			kgo.ConsumerGroup(consumerGroup),
 			kgo.ConsumeTopics(topic),
 			kgo.SASL(oauth.Oauth(func(_ context.Context) (oauth.Auth, error) {
+				var accessToken string
+				if token != nil {
+					accessToken = token.AccessToken
+				}
 				return oauth.Auth{
-					Token: token.AccessToken,
+					Token: accessToken,
 				}, nil
 			})),
 		}
@@ -761,16 +766,17 @@ func newOAuth2Client(cmd *cobra.Command, cfg *config) (*mbz.Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	var token oauth2.Token
+	var token *oauth2.Token
 	if cfg.tokenStore != nil {
-		if err := cfg.tokenStore.Read(&token); err != nil {
+		token, err = cfg.tokenStore.Load()
+		if err != nil {
 			if errors.Is(err, fs.ErrNotExist) {
 				return nil, fmt.Errorf("no credentials found, please login using `mbz auth login fleet`")
 			}
 			return nil, fmt.Errorf("read token: %w", err)
 		}
 	}
-	if token.Expiry.Before(time.Now()) {
+	if token == nil || token.Expiry.Before(time.Now()) {
 		return nil, fmt.Errorf("invalid token, please login using `mbz auth login fleet`")
 	}
 	region, err := resolveOAuth2Region(creds, token)
@@ -779,7 +785,7 @@ func newOAuth2Client(cmd *cobra.Command, cfg *config) (*mbz.Client, error) {
 	}
 	opts := []mbz.ClientOption{
 		mbz.WithRegion(region),
-		mbz.WithOAuth2TokenSource(oauth2.StaticTokenSource(&token)),
+		mbz.WithOAuth2TokenSource(oauth2.StaticTokenSource(token)),
 	}
 	if cfg.httpClient != nil {
 		opts = append(opts, mbz.WithHTTPClient(cfg.httpClient))
@@ -818,9 +824,12 @@ func promptSecret(cmd *cobra.Command, prompt string) (string, error) {
 	return string(input), nil
 }
 
-func resolveOAuth2Region(creds *FleetCredentials, token oauth2.Token) (mbz.Region, error) {
+func resolveOAuth2Region(creds *FleetCredentials, token *oauth2.Token) (mbz.Region, error) {
 	if creds.Region != "" {
 		return mbz.Region(creds.Region), nil
+	}
+	if token == nil {
+		return "", fmt.Errorf("missing region and token")
 	}
 	return inferRegionFromAccessToken(token.AccessToken)
 }
