@@ -10,30 +10,29 @@ import (
 	"net/url"
 
 	"github.com/way-platform/mbz-go/api/vehiclesv1"
+	fleetv1 "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mercedesbenz/fleet/v1"
 )
 
-// PatchVehiclesRequest is the request for [Client.PatchVehicles].
-type PatchVehiclesRequest struct {
-	// Vehicles is the list of vehicles to patch.
-	Vehicles []vehiclesv1.Vehicle `json:"vehicles"`
-}
-
-// PatchVehiclesResponse is the response for [Client.PatchVehicles].
-type PatchVehiclesResponse struct{}
-
-// PatchVehicles patches vehicles. Only the deltaPush field is supported.
+// PatchVehicles patches vehicles. Only the delta_push field is supported.
 func (c *Client) PatchVehicles(
 	ctx context.Context,
-	request *PatchVehiclesRequest,
-	opts ...ClientOption,
-) (_ *PatchVehiclesResponse, err error) {
+	request *fleetv1.PatchVehiclesRequest,
+) (_ *fleetv1.PatchVehiclesResponse, err error) {
 	defer func() {
 		if err != nil {
 			err = fmt.Errorf("mbz: patch vehicles: %w", err)
 		}
 	}()
-	cfg := c.config.with(opts...)
-	requestBodyData, err := json.Marshal(request.Vehicles)
+	apiVehicles := make([]vehiclesv1.Vehicle, 0, len(request.GetVehicles()))
+	for _, v := range request.GetVehicles() {
+		av := vehiclesv1.Vehicle{VIN: v.GetVin()}
+		if v.HasDeltaPush() {
+			dp := v.GetDeltaPush()
+			av.DeltaPush = &dp
+		}
+		apiVehicles = append(apiVehicles, av)
+	}
+	requestBodyData, err := json.Marshal(apiVehicles)
 	if err != nil {
 		return nil, fmt.Errorf("marshal request: %w", err)
 	}
@@ -53,7 +52,7 @@ func (c *Client) PatchVehicles(
 	httpRequest.Header.Set("User-Agent", getUserAgent())
 	httpRequest.Header.Set("Content-Type", "application/json")
 	httpRequest.Header.Set("Accept", "application/json")
-	httpResponse, err := c.httpClient(cfg).Do(httpRequest)
+	httpResponse, err := c.httpClient(c.config).Do(httpRequest)
 	if err != nil {
 		return nil, fmt.Errorf("do request: %w", err)
 	}
@@ -65,5 +64,5 @@ func (c *Client) PatchVehicles(
 	if httpResponse.StatusCode != http.StatusOK {
 		return nil, newResponseError(httpResponse)
 	}
-	return &PatchVehiclesResponse{}, nil
+	return &fleetv1.PatchVehiclesResponse{}, nil
 }

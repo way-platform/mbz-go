@@ -10,36 +10,21 @@ import (
 	"net/url"
 
 	"github.com/way-platform/mbz-go/api/servicesv1"
+	fleetv1 "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mercedesbenz/fleet/v1"
 )
 
-// ListServicesRequest is the request for [Client.ListServices].
-type ListServicesRequest struct {
-	// Details is a flag to include service details in the response.
-	Details bool `json:"details"`
-}
-
-// ListServicesResponse is the response for [Client.ListServices].
-type ListServicesResponse struct {
-	// Services is the list of services returned by the API.
-	Services []servicesv1.Service `json:"services"`
-	// Version is the version of the services spec.
-	Version string `json:"version,omitempty"`
-}
-
-// ListServices lists the vehicles for the current account.
+// ListServices lists the available data services for the account.
 func (c *Client) ListServices(
 	ctx context.Context,
-	request *ListServicesRequest,
-	opts ...ClientOption,
-) (_ *ListServicesResponse, err error) {
+	request *fleetv1.ListServicesRequest,
+) (_ *fleetv1.ListServicesResponse, err error) {
 	defer func() {
 		if err != nil {
-			err = fmt.Errorf("mbz: list vehicles: %w", err)
+			err = fmt.Errorf("mbz: list services: %w", err)
 		}
 	}()
-	cfg := c.config.with(opts...)
 	path := "/v2/accounts/services"
-	if request.Details {
+	if request.GetDetails() {
 		path = "/v2/accounts/services/details"
 	}
 	requestURL, err := url.JoinPath(c.baseURL, path)
@@ -51,7 +36,7 @@ func (c *Client) ListServices(
 		return nil, err
 	}
 	httpRequest.Header.Set("User-Agent", getUserAgent())
-	httpResponse, err := c.httpClient(cfg).Do(httpRequest)
+	httpResponse, err := c.httpClient(c.config).Do(httpRequest)
 	if err != nil {
 		return nil, err
 	}
@@ -71,8 +56,52 @@ func (c *Client) ListServices(
 	if err := json.Unmarshal(data, &responseBody); err != nil {
 		return nil, err
 	}
-	return &ListServicesResponse{
-		Services: responseBody.Services,
-		Version:  responseBody.Version,
-	}, nil
+	services := make([]*fleetv1.Service, 0, len(responseBody.Services))
+	for _, s := range responseBody.Services {
+		ps := &fleetv1.Service{}
+		ps.SetId(s.ID)
+		ps.SetName(s.Name)
+		ps.SetCiamScope(s.CIAMScope)
+		ps.SetConsent(string(s.Consent))
+		if s.CountryCode != "" {
+			ps.SetCountryCode(s.CountryCode)
+		}
+		roles := make([]string, 0, len(s.Roles))
+		for _, r := range s.Roles {
+			roles = append(roles, string(r))
+		}
+		ps.SetRoles(roles)
+		signals := make([]*fleetv1.ServiceSignal, 0, len(s.Signals))
+		for _, sig := range s.Signals {
+			psig := &fleetv1.ServiceSignal{}
+			psig.SetName(sig.Name)
+			psig.SetDataType(string(sig.DataType))
+			psig.SetMandatory(sig.Mandatory)
+			if sig.Unit != "" {
+				psig.SetUnit(string(sig.Unit))
+			}
+			behaviours := make([]string, 0, len(sig.SendingBehaviour))
+			for _, b := range sig.SendingBehaviour {
+				behaviours = append(behaviours, string(b))
+			}
+			psig.SetSendingBehaviour(behaviours)
+			signals = append(signals, psig)
+		}
+		ps.SetSignals(signals)
+		commands := make([]*fleetv1.ServiceCommand, 0, len(s.Commands))
+		for _, cmd := range s.Commands {
+			pcmd := &fleetv1.ServiceCommand{}
+			pcmd.SetName(cmd.Name)
+			pcmd.SetMandatory(cmd.Mandatory)
+			commands = append(commands, pcmd)
+		}
+		ps.SetCommands(commands)
+		services = append(services, ps)
+	}
+	resp := &fleetv1.ListServicesResponse{}
+	resp.SetServices(services)
+	if responseBody.Version != "" {
+		resp.SetVersion(responseBody.Version)
+	}
+	return resp, nil
 }

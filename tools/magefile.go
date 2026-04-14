@@ -47,7 +47,8 @@ func Format() error {
 func Lint() error {
 	log.Println("linting and fixing code")
 	return forEachGoMod(func(dir string) error {
-		return tool(
+		return toolWith(
+			map[string]string{"GOFLAGS": "-mod=mod"},
 			dir,
 			"golangci-lint",
 			"run",

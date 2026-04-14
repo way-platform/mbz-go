@@ -10,29 +10,19 @@ import (
 	"net/url"
 
 	"github.com/way-platform/mbz-go/api/vehiclesv1"
+	fleetv1 "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mercedesbenz/fleet/v1"
 )
-
-// ListVehiclesRequest is the request for [Client.ListVehicles].
-type ListVehiclesRequest struct{}
-
-// ListVehiclesResponse is the response for [Client.ListVehicles].
-type ListVehiclesResponse struct {
-	// Vehicles is the list of vehicles returned by the API.
-	Vehicles []vehiclesv1.Vehicle `json:"vehicles"`
-}
 
 // ListVehicles lists the vehicles for the current account.
 func (c *Client) ListVehicles(
 	ctx context.Context,
-	request *ListVehiclesRequest,
-	opts ...ClientOption,
-) (_ *ListVehiclesResponse, err error) {
+	request *fleetv1.ListVehiclesRequest,
+) (_ *fleetv1.ListVehiclesResponse, err error) {
 	defer func() {
 		if err != nil {
 			err = fmt.Errorf("mbz: list vehicles: %w", err)
 		}
 	}()
-	cfg := c.config.with(opts...)
 	requestURL, err := url.JoinPath(c.baseURL, "/v1/accounts/vehicles")
 	if err != nil {
 		return nil, fmt.Errorf("invalid request URL: %w", err)
@@ -42,7 +32,7 @@ func (c *Client) ListVehicles(
 		return nil, err
 	}
 	httpRequest.Header.Set("User-Agent", getUserAgent())
-	httpResponse, err := c.httpClient(cfg).Do(httpRequest)
+	httpResponse, err := c.httpClient(c.config).Do(httpRequest)
 	if err != nil {
 		return nil, err
 	}
@@ -58,11 +48,20 @@ func (c *Client) ListVehicles(
 	if err != nil {
 		return nil, err
 	}
-	var vehicles []vehiclesv1.Vehicle
-	if err := json.Unmarshal(data, &vehicles); err != nil {
+	var apiVehicles []vehiclesv1.Vehicle
+	if err := json.Unmarshal(data, &apiVehicles); err != nil {
 		return nil, err
 	}
-	return &ListVehiclesResponse{
-		Vehicles: vehicles,
-	}, nil
+	vehicles := make([]*fleetv1.Vehicle, 0, len(apiVehicles))
+	for _, v := range apiVehicles {
+		pv := &fleetv1.Vehicle{}
+		pv.SetVin(v.VIN)
+		if v.DeltaPush != nil {
+			pv.SetDeltaPush(*v.DeltaPush)
+		}
+		vehicles = append(vehicles, pv)
+	}
+	resp := &fleetv1.ListVehiclesResponse{}
+	resp.SetVehicles(vehicles)
+	return resp, nil
 }

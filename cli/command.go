@@ -17,7 +17,8 @@ import (
 	"github.com/twmb/franz-go/pkg/kgo"
 	"github.com/twmb/franz-go/pkg/sasl/oauth"
 	"github.com/way-platform/mbz-go"
-	"github.com/way-platform/mbz-go/api/vehiclesv1"
+	fleetv1 "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mercedesbenz/fleet/v1"
+	vehiclespecv1 "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mercedesbenz/vehiclespec/v1"
 	"golang.org/x/oauth2"
 	"golang.org/x/term"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -234,7 +235,7 @@ func newListVehiclesCommand(cfg *config) *cobra.Command {
 		if err != nil {
 			return err
 		}
-		response, err := client.ListVehicles(cmd.Context(), &mbz.ListVehiclesRequest{})
+		response, err := client.ListVehicles(cmd.Context(), &fleetv1.ListVehiclesRequest{})
 		if err != nil {
 			return err
 		}
@@ -256,9 +257,9 @@ func newAssignVehiclesCommand(cfg *config) *cobra.Command {
 		if err != nil {
 			return err
 		}
-		response, err := client.AssignVehicles(cmd.Context(), &mbz.AssignVehiclesRequest{
-			VINs: args,
-		})
+		req := &fleetv1.AssignVehiclesRequest{}
+		req.SetVins(args)
+		response, err := client.AssignVehicles(cmd.Context(), req)
 		if err != nil {
 			return err
 		}
@@ -280,9 +281,9 @@ func newDeleteVehiclesCommand(cfg *config) *cobra.Command {
 		if err != nil {
 			return err
 		}
-		response, err := client.DeleteVehicles(cmd.Context(), &mbz.DeleteVehiclesRequest{
-			VINs: args,
-		})
+		req := &fleetv1.DeleteVehiclesRequest{}
+		req.SetVins(args)
+		response, err := client.DeleteVehicles(cmd.Context(), req)
 		if err != nil {
 			return err
 		}
@@ -306,9 +307,9 @@ func newListServicesCommand(cfg *config) *cobra.Command {
 		if err != nil {
 			return err
 		}
-		response, err := client.ListServices(cmd.Context(), &mbz.ListServicesRequest{
-			Details: *details,
-		})
+		req := &fleetv1.ListServicesRequest{}
+		req.SetDetails(*details)
+		response, err := client.ListServices(cmd.Context(), req)
 		if err != nil {
 			return err
 		}
@@ -330,16 +331,13 @@ func newGetVehicleCompatibilityCommand(cfg *config) *cobra.Command {
 		if err != nil {
 			return err
 		}
-		response, err := client.GetVehicleCompatibility(
-			cmd.Context(),
-			&mbz.GetVehicleCompatibilityRequest{
-				VIN: args[0],
-			},
-		)
+		req := &fleetv1.GetVehicleCompatibilityRequest{}
+		req.SetVin(args[0])
+		response, err := client.GetVehicleCompatibility(cmd.Context(), req)
 		if err != nil {
 			return err
 		}
-		fmt.Println(protojson.Format(response))
+		fmt.Println(protojson.Format(response.GetVehicleCompatibility()))
 		return nil
 	}
 	return cmd
@@ -357,9 +355,9 @@ func newGetVehicleServicesCommand(cfg *config) *cobra.Command {
 		if err != nil {
 			return err
 		}
-		response, err := client.GetVehicleServices(cmd.Context(), &mbz.GetVehicleServicesRequest{
-			VIN: args[0],
-		})
+		req := &fleetv1.GetVehicleServicesRequest{}
+		req.SetVin(args[0])
+		response, err := client.GetVehicleServices(cmd.Context(), req)
 		if err != nil {
 			return err
 		}
@@ -382,21 +380,19 @@ func newActivateVehicleServicesCommand(cfg *config) *cobra.Command {
 			return err
 		}
 		vin := args[0]
-		services := make([]mbz.VehicleServices, 0, len(args)-1)
+		services := make([]*fleetv1.VehicleServiceDesiredStatus, 0, len(args)-1)
 		for i := 1; i < len(args); i++ {
-			services = append(services, mbz.VehicleServices{
-				ServiceID:     args[i],
-				DesiredStatus: mbz.DesiredStatusActive,
-			})
+			svc := &fleetv1.VehicleServiceDesiredStatus{}
+			svc.SetServiceId(args[i])
+			svc.SetDesiredStatus("ACTIVE")
+			services = append(services, svc)
 		}
-		response, err := client.PostVehicleServices(cmd.Context(), &mbz.PostVehicleServicesRequest{
-			DesiredServiceStatusInput: []mbz.DesiredServiceStatusInput{
-				{
-					VIN:      vin,
-					Services: services,
-				},
-			},
-		})
+		input := &fleetv1.VehicleServiceInput{}
+		input.SetVin(vin)
+		input.SetServices(services)
+		req := &fleetv1.PostVehicleServicesRequest{}
+		req.SetVehicleServiceInputs([]*fleetv1.VehicleServiceInput{input})
+		response, err := client.PostVehicleServices(cmd.Context(), req)
 		if err != nil {
 			return err
 		}
@@ -419,21 +415,19 @@ func newDeactivateVehicleServicesCommand(cfg *config) *cobra.Command {
 			return err
 		}
 		vin := args[0]
-		services := make([]mbz.VehicleServices, 0, len(args)-1)
+		services := make([]*fleetv1.VehicleServiceDesiredStatus, 0, len(args)-1)
 		for i := 1; i < len(args); i++ {
-			services = append(services, mbz.VehicleServices{
-				ServiceID:     args[i],
-				DesiredStatus: mbz.DesiredStatusInactive,
-			})
+			svc := &fleetv1.VehicleServiceDesiredStatus{}
+			svc.SetServiceId(args[i])
+			svc.SetDesiredStatus("INACTIVE")
+			services = append(services, svc)
 		}
-		response, err := client.PostVehicleServices(cmd.Context(), &mbz.PostVehicleServicesRequest{
-			DesiredServiceStatusInput: []mbz.DesiredServiceStatusInput{
-				{
-					VIN:      vin,
-					Services: services,
-				},
-			},
-		})
+		input := &fleetv1.VehicleServiceInput{}
+		input.SetVin(vin)
+		input.SetServices(services)
+		req := &fleetv1.PostVehicleServicesRequest{}
+		req.SetVehicleServiceInputs([]*fleetv1.VehicleServiceInput{input})
+		response, err := client.PostVehicleServices(cmd.Context(), req)
 		if err != nil {
 			return err
 		}
@@ -457,16 +451,16 @@ func newEnableDeltaPushCommand(cfg *config) *cobra.Command {
 		if err != nil {
 			return err
 		}
-		request := mbz.PatchVehiclesRequest{
-			Vehicles: make([]vehiclesv1.Vehicle, 0, len(args)),
-		}
+		vehicles := make([]*fleetv1.Vehicle, 0, len(args))
 		for _, vin := range args {
-			request.Vehicles = append(request.Vehicles, vehiclesv1.Vehicle{
-				VIN:       vin,
-				DeltaPush: ptr(true),
-			})
+			v := &fleetv1.Vehicle{}
+			v.SetVin(vin)
+			v.SetDeltaPush(true)
+			vehicles = append(vehicles, v)
 		}
-		response, err := client.PatchVehicles(cmd.Context(), &request)
+		req := &fleetv1.PatchVehiclesRequest{}
+		req.SetVehicles(vehicles)
+		response, err := client.PatchVehicles(cmd.Context(), req)
 		if err != nil {
 			return err
 		}
@@ -488,16 +482,16 @@ func newDisableDeltaPushCommand(cfg *config) *cobra.Command {
 		if err != nil {
 			return err
 		}
-		request := mbz.PatchVehiclesRequest{
-			Vehicles: make([]vehiclesv1.Vehicle, 0, len(args)),
-		}
+		vehicles := make([]*fleetv1.Vehicle, 0, len(args))
 		for _, vin := range args {
-			request.Vehicles = append(request.Vehicles, vehiclesv1.Vehicle{
-				VIN:       vin,
-				DeltaPush: ptr(false),
-			})
+			v := &fleetv1.Vehicle{}
+			v.SetVin(vin)
+			v.SetDeltaPush(false)
+			vehicles = append(vehicles, v)
 		}
-		response, err := client.PatchVehicles(cmd.Context(), &request)
+		req := &fleetv1.PatchVehiclesRequest{}
+		req.SetVehicles(vehicles)
+		response, err := client.PatchVehicles(cmd.Context(), req)
 		if err != nil {
 			return err
 		}
@@ -521,16 +515,13 @@ func newGetVehicleSpecificationCommand(cfg *config) *cobra.Command {
 		if err != nil {
 			return err
 		}
-		response, err := client.GetVehicleSpecification(
-			cmd.Context(),
-			&mbz.GetVehicleSpecificationRequest{
-				VIN: args[0],
-			},
-		)
+		req := &vehiclespecv1.GetVehicleSpecificationRequest{}
+		req.SetVin(args[0])
+		response, err := client.GetVehicleSpecification(cmd.Context(), req)
 		if err != nil {
 			return err
 		}
-		fmt.Println(protojson.Format(response))
+		fmt.Println(protojson.Format(response.GetVehicleSpecification()))
 		return nil
 	}
 	return cmd
@@ -551,15 +542,15 @@ func newGetVehicleImagesCommand(cfg *config) *cobra.Command {
 		if err != nil {
 			return err
 		}
-		response, err := client.GetVehicleImageIds(cmd.Context(), &mbz.GetVehicleImageIdsRequest{
-			VIN:        args[0],
-			Background: *background,
-			FileFormat: *fileFormat,
-		})
+		req := &vehiclespecv1.GetVehicleImageIdsRequest{}
+		req.SetVin(args[0])
+		req.SetBackground(*background)
+		req.SetFileFormat(*fileFormat)
+		response, err := client.GetVehicleImageIds(cmd.Context(), req)
 		if err != nil {
 			return err
 		}
-		fmt.Println(protojson.Format(response))
+		fmt.Println(protojson.Format(response.GetVehicleImages()))
 		return nil
 	}
 	return cmd
@@ -580,21 +571,21 @@ func newGetVehicleImageCommand(cfg *config) *cobra.Command {
 			return err
 		}
 		imageID := args[0]
-		response, err := client.GetImage(cmd.Context(), &mbz.GetImageRequest{
-			ImageID: imageID,
-		})
+		req := &vehiclespecv1.GetImageRequest{}
+		req.SetImageId(imageID)
+		response, err := client.GetImage(cmd.Context(), req)
 		if err != nil {
 			return err
 		}
 		outputPath := *outputFile
 		if outputPath == "" {
-			ext := getExtensionFromContentType(response.ContentType)
+			ext := getExtensionFromContentType(response.GetContentType())
 			outputPath = imageID + ext
 		}
-		if err := os.WriteFile(outputPath, response.Data, 0o644); err != nil {
+		if err := os.WriteFile(outputPath, response.GetData(), 0o644); err != nil {
 			return fmt.Errorf("failed to write image to file: %w", err)
 		}
-		cmd.Printf("Image downloaded to %s (%s)\n", outputPath, response.ContentType)
+		cmd.Printf("Image downloaded to %s (%s)\n", outputPath, response.GetContentType())
 		return nil
 	}
 	return cmd
@@ -881,10 +872,6 @@ func printJSON(msg any) {
 		slog.Error("failed to marshal JSON", "error", err)
 	}
 	fmt.Println(string(data))
-}
-
-func ptr[T any](v T) *T {
-	return &v
 }
 
 type kgoLogger struct {

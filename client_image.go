@@ -8,47 +8,32 @@ import (
 	"net/http"
 
 	"github.com/way-platform/mbz-go/api/vehiclespecificationfleetv1"
+	vehiclespecv1 "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mercedesbenz/vehiclespec/v1"
 )
-
-// GetImageRequest is the request for [Client.GetImage].
-type GetImageRequest struct {
-	// ImageID is the UUID of the image to download.
-	ImageID string `json:"imageId"`
-}
-
-// GetImageResponse is the response for [Client.GetImage].
-type GetImageResponse struct {
-	// Data is the binary image data.
-	Data []byte
-	// ContentType is the MIME type of the image (e.g., "image/png", "image/jpeg", "image/webp").
-	ContentType string
-}
 
 // GetImage downloads the vehicle image for a given image ID.
 // This method requires API key authentication via [WithAPIKey].
 func (c *Client) GetImage(
 	ctx context.Context,
-	request *GetImageRequest,
-	opts ...ClientOption,
-) (_ *GetImageResponse, err error) {
+	request *vehiclespecv1.GetImageRequest,
+) (_ *vehiclespecv1.GetImageResponse, err error) {
 	defer func() {
 		if err != nil {
 			err = fmt.Errorf("mbz: get image: %w", err)
 		}
 	}()
-	cfg := c.config.with(opts...)
-	if request.ImageID == "" {
+	if request.GetImageId() == "" {
 		return nil, fmt.Errorf("image ID is required")
 	}
-	requestURL := fmt.Sprintf("%s/images/%s", vehiclespecificationfleetv1.BaseURL, request.ImageID)
+	requestURL := fmt.Sprintf("%s/images/%s", vehiclespecificationfleetv1.BaseURL, request.GetImageId())
 	httpRequest, err := http.NewRequestWithContext(ctx, http.MethodGet, requestURL, nil)
 	if err != nil {
 		return nil, err
 	}
 	httpRequest.Header.Set("User-Agent", getUserAgent())
-	// Accept any image format
+	// Accept any image format.
 	httpRequest.Header.Set("Accept", "image/png,image/jpeg,image/webp,*/*")
-	httpResponse, err := c.httpClient(cfg).Do(httpRequest)
+	httpResponse, err := c.httpClient(c.config).Do(httpRequest)
 	if err != nil {
 		return nil, err
 	}
@@ -68,8 +53,8 @@ func (c *Client) GetImage(
 	if contentType == "" {
 		contentType = "application/octet-stream"
 	}
-	return &GetImageResponse{
-		Data:        imageData,
-		ContentType: contentType,
-	}, nil
+	resp := &vehiclespecv1.GetImageResponse{}
+	resp.SetData(imageData)
+	resp.SetContentType(contentType)
+	return resp, nil
 }

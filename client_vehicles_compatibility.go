@@ -10,31 +10,23 @@ import (
 	"net/url"
 
 	"github.com/way-platform/mbz-go/api/vehiclesv1"
-	mbzv1 "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mbz/v1"
+	fleetv1 "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mercedesbenz/fleet/v1"
 )
 
-// GetVehicleCompatibilityRequest is the request for [Client.GetVehicleCompatibility].
-type GetVehicleCompatibilityRequest struct {
-	// VIN of the vehicle to get the compatibility for.
-	VIN string `json:"vin"`
-}
-
-// GetVehicleCompatibility gets the compatibility of a vehicle.
+// GetVehicleCompatibility gets the data service compatibility for a specific vehicle.
 func (c *Client) GetVehicleCompatibility(
 	ctx context.Context,
-	request *GetVehicleCompatibilityRequest,
-	opts ...ClientOption,
-) (_ *mbzv1.VehicleCompatibility, err error) {
+	request *fleetv1.GetVehicleCompatibilityRequest,
+) (_ *fleetv1.GetVehicleCompatibilityResponse, err error) {
 	defer func() {
 		if err != nil {
 			err = fmt.Errorf("mbz: get vehicle compatibility: %w", err)
 		}
 	}()
-	cfg := c.config.with(opts...)
 	requestURL, err := url.JoinPath(
 		c.baseURL,
 		"/v1/accounts/vehicles",
-		request.VIN,
+		request.GetVin(),
 		"compatibilities",
 	)
 	if err != nil {
@@ -45,7 +37,7 @@ func (c *Client) GetVehicleCompatibility(
 		return nil, err
 	}
 	httpRequest.Header.Set("User-Agent", getUserAgent())
-	httpResponse, err := c.httpClient(cfg).Do(httpRequest)
+	httpResponse, err := c.httpClient(c.config).Do(httpRequest)
 	if err != nil {
 		return nil, err
 	}
@@ -65,9 +57,11 @@ func (c *Client) GetVehicleCompatibility(
 	if err := json.Unmarshal(data, &responseBody); err != nil {
 		return nil, err
 	}
-	result := compatibilityResponseToProto(request.VIN, &responseBody)
+	result := compatibilityResponseToProto(request.GetVin(), &responseBody)
 	if rawStruct, err := compatibilityRawStruct(data); err == nil {
 		result.SetRaw(rawStruct)
 	}
-	return result, nil
+	resp := &fleetv1.GetVehicleCompatibilityResponse{}
+	resp.SetVehicleCompatibility(result)
+	return resp, nil
 }

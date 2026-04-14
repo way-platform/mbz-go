@@ -1,0 +1,215 @@
+edition = "2023";
+
+package wayplatform.connect.mercedesbenz.fleet.v1;
+
+import "wayplatform/connect/mbz/v1/vehicle_compatibility.proto";
+
+// MercedesBenzFleetApi is the interface definition for the Mercedes-Benz Fleet APIs (OAuth2).
+service MercedesBenzFleetApi {
+  // ListVehicles lists the vehicles assigned to the current account.
+  rpc ListVehicles(ListVehiclesRequest) returns (ListVehiclesResponse);
+
+  // AssignVehicles assigns vehicles to the current account.
+  rpc AssignVehicles(AssignVehiclesRequest) returns (AssignVehiclesResponse);
+
+  // DeleteVehicles deletes vehicles from the current account.
+  rpc DeleteVehicles(DeleteVehiclesRequest) returns (DeleteVehiclesResponse);
+
+  // PatchVehicles patches vehicle settings (e.g. delta push).
+  rpc PatchVehicles(PatchVehiclesRequest) returns (PatchVehiclesResponse);
+
+  // GetVehicleServices gets the actual service status for a vehicle.
+  rpc GetVehicleServices(GetVehicleServicesRequest) returns (GetVehicleServicesResponse);
+
+  // ListServices lists all available data services for the account.
+  rpc ListServices(ListServicesRequest) returns (ListServicesResponse);
+
+  // PostVehicleServices activates or deactivates data services for vehicles.
+  rpc PostVehicleServices(PostVehicleServicesRequest) returns (PostVehicleServicesResponse);
+
+  // GetVehicleCompatibility gets the data service compatibility for a specific vehicle.
+  rpc GetVehicleCompatibility(GetVehicleCompatibilityRequest) returns (GetVehicleCompatibilityResponse);
+}
+
+// ListVehiclesRequest is the request for ListVehicles.
+message ListVehiclesRequest {}
+
+// ListVehiclesResponse is the response for ListVehicles.
+message ListVehiclesResponse {
+  // The vehicles assigned to the account.
+  repeated Vehicle vehicles = 1;
+}
+
+// AssignVehiclesRequest is the request for AssignVehicles.
+message AssignVehiclesRequest {
+  // VINs of vehicles to assign to the account.
+  repeated string vins = 1;
+}
+
+// AssignVehiclesResponse is the response for AssignVehicles.
+message AssignVehiclesResponse {}
+
+// DeleteVehiclesRequest is the request for DeleteVehicles.
+message DeleteVehiclesRequest {
+  // VINs of vehicles to delete from the account.
+  repeated string vins = 1;
+}
+
+// DeleteVehiclesResponse is the response for DeleteVehicles.
+message DeleteVehiclesResponse {}
+
+// PatchVehiclesRequest is the request for PatchVehicles.
+message PatchVehiclesRequest {
+  // Vehicles to patch.
+  repeated Vehicle vehicles = 1;
+}
+
+// PatchVehiclesResponse is the response for PatchVehicles.
+message PatchVehiclesResponse {}
+
+// GetVehicleServicesRequest is the request for GetVehicleServices.
+message GetVehicleServicesRequest {
+  // VIN of the vehicle to get services for.
+  string vin = 1;
+}
+
+// GetVehicleServicesResponse is the response for GetVehicleServices.
+message GetVehicleServicesResponse {
+  // Whether delta push is enabled for the vehicle.
+  bool delta_push = 1;
+
+  // The data services and their status for the vehicle.
+  repeated ServiceStatus services = 2;
+}
+
+// ListServicesRequest is the request for ListServices.
+message ListServicesRequest {
+  // Whether to include detailed service information (signals, commands).
+  bool details = 1;
+}
+
+// ListServicesResponse is the response for ListServices.
+message ListServicesResponse {
+  // The available data services.
+  repeated Service services = 1;
+
+  // The version of the services specification.
+  string version = 2;
+}
+
+// PostVehicleServicesRequest is the request for PostVehicleServices.
+message PostVehicleServicesRequest {
+  // Desired service status changes per vehicle.
+  repeated VehicleServiceInput vehicle_service_inputs = 1;
+}
+
+// PostVehicleServicesResponse is the response for PostVehicleServices.
+message PostVehicleServicesResponse {}
+
+// GetVehicleCompatibilityRequest is the request for GetVehicleCompatibility.
+message GetVehicleCompatibilityRequest {
+  // VIN of the vehicle to check compatibility for.
+  string vin = 1;
+}
+
+// GetVehicleCompatibilityResponse is the response for GetVehicleCompatibility.
+message GetVehicleCompatibilityResponse {
+  // The vehicle compatibility information.
+  wayplatform.connect.mbz.v1.VehicleCompatibility vehicle_compatibility = 1;
+}
+
+// Vehicle represents a Mercedes-Benz vehicle.
+message Vehicle {
+  // Vehicle Identification Number.
+  string vin = 1;
+
+  // Whether delta push is enabled for this vehicle.
+  bool delta_push = 2;
+}
+
+// ServiceStatus represents the status of a data service for a vehicle.
+message ServiceStatus {
+  // The service identifier.
+  string service_id = 1;
+
+  // The actual service status (e.g. "ACTIVE", "INACTIVE", "ACTIVATION_PENDING").
+  string status = 2;
+
+  // The desired service status.
+  string desired_status = 3;
+
+  // Time when this service was ordered by the client (epoch milliseconds).
+  int64 order_time = 4;
+}
+
+// Service represents a Mercedes-Benz data service.
+message Service {
+  // The service identifier.
+  string id = 1;
+
+  // The service name.
+  string name = 2;
+
+  // The required CIAM scope.
+  string ciam_scope = 3;
+
+  // The required consent model.
+  string consent = 4;
+
+  // The regional accessibility code.
+  string country_code = 5;
+
+  // The required access roles.
+  repeated string roles = 6;
+
+  // The signals included in this service.
+  repeated ServiceSignal signals = 7;
+
+  // The commands included in this service.
+  repeated ServiceCommand commands = 8;
+}
+
+// ServiceSignal represents a signal in a data service.
+message ServiceSignal {
+  // The signal name.
+  string name = 1;
+
+  // The signal data type.
+  string data_type = 2;
+
+  // Whether this signal is mandatory for the service.
+  bool mandatory = 3;
+
+  // The sending behaviour(s) for this signal.
+  repeated string sending_behaviour = 4;
+
+  // The signal unit.
+  string unit = 5;
+}
+
+// ServiceCommand represents a command in a data service.
+message ServiceCommand {
+  // The command name.
+  string name = 1;
+
+  // Whether this command is mandatory for the service.
+  bool mandatory = 2;
+}
+
+// VehicleServiceInput is the desired service status change for a vehicle.
+message VehicleServiceInput {
+  // VIN of the vehicle.
+  string vin = 1;
+
+  // Service status changes for this vehicle.
+  repeated VehicleServiceDesiredStatus services = 2;
+}
+
+// VehicleServiceDesiredStatus represents the desired status for a service.
+message VehicleServiceDesiredStatus {
+  // The service identifier.
+  string service_id = 1;
+
+  // The desired status ("ACTIVE" or "INACTIVE").
+  string desired_status = 2;
+}

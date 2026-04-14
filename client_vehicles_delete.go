@@ -10,31 +10,21 @@ import (
 	"net/url"
 
 	"github.com/way-platform/mbz-go/api/vehiclesv1"
+	fleetv1 "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mercedesbenz/fleet/v1"
 )
 
-// DeleteVehiclesRequest is the request for [Client.DeleteVehicles].
-type DeleteVehiclesRequest struct {
-	// VINs is the list of VINs to delete from your account.
-	VINs []string `json:"vins"`
-}
-
-// DeleteVehiclesResponse is the response for [Client.DeleteVehicles].
-type DeleteVehiclesResponse struct{}
-
-// DeleteVehicles lists the vehicles for the current account.
+// DeleteVehicles deletes vehicles from the current account.
 func (c *Client) DeleteVehicles(
 	ctx context.Context,
-	request *DeleteVehiclesRequest,
-	opts ...ClientOption,
-) (_ *DeleteVehiclesResponse, err error) {
+	request *fleetv1.DeleteVehiclesRequest,
+) (_ *fleetv1.DeleteVehiclesResponse, err error) {
 	defer func() {
 		if err != nil {
 			err = fmt.Errorf("mbz: delete vehicles: %w", err)
 		}
 	}()
-	cfg := c.config.with(opts...)
-	requestBody := make([]vehiclesv1.Vehicle, 0, len(request.VINs))
-	for _, vin := range request.VINs {
+	requestBody := make([]vehiclesv1.Vehicle, 0, len(request.GetVins()))
+	for _, vin := range request.GetVins() {
 		requestBody = append(requestBody, vehiclesv1.Vehicle{
 			VIN: vin,
 		})
@@ -58,7 +48,7 @@ func (c *Client) DeleteVehicles(
 	}
 	httpRequest.Header.Set("User-Agent", getUserAgent())
 	httpRequest.Header.Set("Content-Type", "application/json")
-	httpResponse, err := c.httpClient(cfg).Do(httpRequest)
+	httpResponse, err := c.httpClient(c.config).Do(httpRequest)
 	if err != nil {
 		return nil, err
 	}
@@ -70,5 +60,5 @@ func (c *Client) DeleteVehicles(
 	if httpResponse.StatusCode != http.StatusOK {
 		return nil, newResponseError(httpResponse)
 	}
-	return &DeleteVehiclesResponse{}, nil
+	return &fleetv1.DeleteVehiclesResponse{}, nil
 }
