@@ -7,7 +7,14 @@ import (
 	"runtime/debug"
 	"time"
 
+	fleetv1connect "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mercedesbenz/fleet/v1/fleetv1connect"
+	vehiclespecv1connect "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mercedesbenz/vehiclespec/v1/vehiclespecv1connect"
 	"golang.org/x/oauth2"
+)
+
+var (
+	_ fleetv1connect.MercedesBenzFleetApiClient             = (*Client)(nil)
+	_ vehiclespecv1connect.MercedesBenzVehicleSpecApiClient = (*Client)(nil)
 )
 
 // Client to the Mercedes-Benz management APIs.
@@ -63,13 +70,6 @@ func newClientConfig() clientConfig {
 		retryCount: 3,
 		timeout:    30 * time.Second,
 	}
-}
-
-func (cc clientConfig) with(opts ...ClientOption) clientConfig {
-	for _, opt := range opts {
-		opt(&cc)
-	}
-	return cc
 }
 
 // ClientOption is a configuration option for a [Client].

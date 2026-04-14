@@ -1,6 +1,6 @@
 module github.com/way-platform/mbz-go/cmd/mbz
 
-go 1.25.0
+go 1.26.0
 
 require (
 	charm.land/fang/v2 v2.0.1
@@ -11,6 +11,7 @@ require (
 )
 
 require (
+	connectrpc.com/connect v1.19.1 // indirect
 	github.com/charmbracelet/colorprofile v0.4.2 // indirect
 	github.com/charmbracelet/ultraviolet v0.0.0-20260205113103-524a6607adb8 // indirect
 	github.com/charmbracelet/x/ansi v0.11.6 // indirect

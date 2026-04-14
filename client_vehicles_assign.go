@@ -10,31 +10,21 @@ import (
 	"net/url"
 
 	"github.com/way-platform/mbz-go/api/vehiclesv1"
+	fleetv1 "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mercedesbenz/fleet/v1"
 )
 
-// AssignVehiclesRequest is the request for [Client.AssignVehicles].
-type AssignVehiclesRequest struct {
-	// VINs is the list of VINs to assign to your account.
-	VINs []string `json:"vins"`
-}
-
-// AssignVehiclesResponse is the response for [Client.AssignVehicles].
-type AssignVehiclesResponse struct{}
-
-// AssignVehicles lists the vehicles for the current account.
+// AssignVehicles assigns vehicles to the current account.
 func (c *Client) AssignVehicles(
 	ctx context.Context,
-	request *AssignVehiclesRequest,
-	opts ...ClientOption,
-) (_ *AssignVehiclesResponse, err error) {
+	request *fleetv1.AssignVehiclesRequest,
+) (_ *fleetv1.AssignVehiclesResponse, err error) {
 	defer func() {
 		if err != nil {
 			err = fmt.Errorf("mbz: assign vehicles: %w", err)
 		}
 	}()
-	cfg := c.config.with(opts...)
-	requestBody := make([]vehiclesv1.Vehicle, 0, len(request.VINs))
-	for _, vin := range request.VINs {
+	requestBody := make([]vehiclesv1.Vehicle, 0, len(request.GetVins()))
+	for _, vin := range request.GetVins() {
 		requestBody = append(requestBody, vehiclesv1.Vehicle{
 			VIN: vin,
 		})
@@ -58,7 +48,7 @@ func (c *Client) AssignVehicles(
 	}
 	httpRequest.Header.Set("User-Agent", getUserAgent())
 	httpRequest.Header.Set("Content-Type", "application/json")
-	httpResponse, err := c.httpClient(cfg).Do(httpRequest)
+	httpResponse, err := c.httpClient(c.config).Do(httpRequest)
 	if err != nil {
 		return nil, err
 	}
@@ -70,5 +60,5 @@ func (c *Client) AssignVehicles(
 	if httpResponse.StatusCode != http.StatusCreated {
 		return nil, newResponseError(httpResponse)
 	}
-	return &AssignVehiclesResponse{}, nil
+	return &fleetv1.AssignVehiclesResponse{}, nil
 }

@@ -1,0 +1,67 @@
+edition = "2023";
+
+package wayplatform.connect.mercedesbenz.vehiclespec.v1;
+
+import "wayplatform/connect/mbz/v1/vehicle_images.proto";
+import "wayplatform/connect/mbz/v1/vehicle_specification.proto";
+
+// MercedesBenzVehicleSpecApi is the interface definition for the Mercedes-Benz Vehicle Specification APIs (API key).
+service MercedesBenzVehicleSpecApi {
+  // GetVehicleImageIds gets the vehicle image IDs for a given VIN.
+  rpc GetVehicleImageIds(GetVehicleImageIdsRequest) returns (GetVehicleImageIdsResponse);
+
+  // GetImage downloads the vehicle image for a given image ID.
+  rpc GetImage(GetImageRequest) returns (GetImageResponse);
+
+  // GetVehicleSpecification gets the vehicle specification for a given VIN.
+  rpc GetVehicleSpecification(GetVehicleSpecificationRequest) returns (GetVehicleSpecificationResponse);
+}
+
+// GetVehicleImageIdsRequest is the request for GetVehicleImageIds.
+message GetVehicleImageIdsRequest {
+  // VIN (or FIN) of the vehicle (17 characters).
+  string vin = 1;
+
+  // Whether to include background in images.
+  // Set to true for high detail with realistic reflections and light incidence.
+  bool background = 2;
+
+  // Image file format. Valid values: png, jpeg, webp. Default is webp.
+  string file_format = 3;
+}
+
+// GetVehicleImageIdsResponse is the response for GetVehicleImageIds.
+message GetVehicleImageIdsResponse {
+  // The vehicle image IDs.
+  wayplatform.connect.mbz.v1.VehicleImages vehicle_images = 1;
+}
+
+// GetImageRequest is the request for GetImage.
+message GetImageRequest {
+  // UUID of the image to download.
+  string image_id = 1;
+}
+
+// GetImageResponse is the response for GetImage.
+message GetImageResponse {
+  // The binary image data.
+  bytes data = 1;
+
+  // The MIME type of the image (e.g. "image/png", "image/jpeg", "image/webp").
+  string content_type = 2;
+}
+
+// GetVehicleSpecificationRequest is the request for GetVehicleSpecification.
+message GetVehicleSpecificationRequest {
+  // VIN (or FIN) of the vehicle (17 characters).
+  string vin = 1;
+
+  // Market locale (e.g. "en_US"). Defaults to "en_US".
+  string locale = 2;
+}
+
+// GetVehicleSpecificationResponse is the response for GetVehicleSpecification.
+message GetVehicleSpecificationResponse {
+  // The vehicle specification.
+  wayplatform.connect.mbz.v1.VehicleSpecification vehicle_specification = 1;
+}

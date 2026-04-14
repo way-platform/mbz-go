@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/way-platform/mbz-go"
+	fleetv1 "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mercedesbenz/fleet/v1"
 )
 
 func ExampleClient() {
@@ -21,12 +22,12 @@ func ExampleClient() {
 		panic(err)
 	}
 	// List vehicles in the account.
-	response, err := client.ListVehicles(ctx, &mbz.ListVehiclesRequest{})
+	response, err := client.ListVehicles(ctx, &fleetv1.ListVehiclesRequest{})
 	if err != nil {
 		panic(err)
 	}
-	for _, vehicle := range response.Vehicles {
-		fmt.Println(vehicle.VIN)
+	for _, vehicle := range response.GetVehicles() {
+		fmt.Println(vehicle.GetVin())
 	}
 	// For all available methods, see the API documentation.
 }

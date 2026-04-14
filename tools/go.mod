@@ -5,6 +5,7 @@ go 1.25.0
 toolchain go1.26.0
 
 tool (
+	connectrpc.com/connect/cmd/protoc-gen-connect-go
 	github.com/bufbuild/buf/cmd/buf
 	github.com/charmbracelet/vhs
 	github.com/golangci/golangci-lint/v2/cmd/golangci-lint
@@ -19,7 +20,7 @@ require (
 	github.com/jhump/protoreflect v1.17.1-0.20240913204751-8f5fd1dcb3c5
 	github.com/magefile/mage v1.15.0
 	github.com/spf13/cobra v1.10.2
-	google.golang.org/protobuf v1.36.8
+	google.golang.org/protobuf v1.36.9
 )
 
 require (
@@ -40,7 +41,7 @@ require (
 	cel.dev/expr v0.24.0 // indirect
 	codeberg.org/chavacava/garif v0.2.0 // indirect
 	codeberg.org/polyfloyd/go-errorlint v1.9.0 // indirect
-	connectrpc.com/connect v1.18.1 // indirect
+	connectrpc.com/connect v1.19.1 // indirect
 	connectrpc.com/otelconnect v0.7.2 // indirect
 	dev.gaijin.team/go/exhaustruct/v4 v4.0.0 // indirect
 	dev.gaijin.team/go/golib v0.6.0 // indirect

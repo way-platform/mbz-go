@@ -10,62 +10,30 @@ import (
 	"net/url"
 
 	"github.com/way-platform/mbz-go/api/vehiclesv1"
+	fleetv1 "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mercedesbenz/fleet/v1"
 )
 
-type DesiredStatus string
-
-const (
-	DesiredStatusActive   DesiredStatus = "ACTIVE"
-	DesiredStatusInactive DesiredStatus = "INACTIVE"
-)
-
-type VehicleServices struct {
-	ServiceID     string        `json:"serviceId"`
-	DesiredStatus DesiredStatus `json:"desiredStatus"`
-}
-
-// PostVehicleServicesRequest is the request for [Client.PostVehicleServices].
-type PostVehicleServicesRequest struct {
-	DesiredServiceStatusInput []DesiredServiceStatusInput `json:"desiredServiceStatusInput"`
-}
-
-type DesiredServiceStatusInput struct {
-	// VIN of the vehicle to get the services for.
-	VIN string `json:"vin"`
-	// Services is the list of services to activate or deactivate for the given VIN.
-	Services []VehicleServices `json:"services"`
-}
-
-// PostVehicleServicesResponse is the response for [Client.PostVehicleServices].
-type PostVehicleServicesResponse struct{}
-
-// PostVehicleServices posts the actual service status for a vehicle.
+// PostVehicleServices activates or deactivates data services for vehicles.
 func (c *Client) PostVehicleServices(
 	ctx context.Context,
-	request *PostVehicleServicesRequest,
-	opts ...ClientOption,
-) (_ *PostVehicleServicesResponse, err error) {
+	request *fleetv1.PostVehicleServicesRequest,
+) (_ *fleetv1.PostVehicleServicesResponse, err error) {
 	defer func() {
 		if err != nil {
 			err = fmt.Errorf("mbz: post vehicle services: %w", err)
 		}
 	}()
-	cfg := c.config.with(opts...)
 	var requestBody []vehiclesv1.DesiredServiceStatusRequest
-	for _, desiredServiceStatusInput := range request.DesiredServiceStatusInput {
-		services := make(
-			[]vehiclesv1.DesiredServiceStatus,
-			0,
-			len(desiredServiceStatusInput.Services),
-		)
-		for _, service := range desiredServiceStatusInput.Services {
+	for _, input := range request.GetVehicleServiceInputs() {
+		services := make([]vehiclesv1.DesiredServiceStatus, 0, len(input.GetServices()))
+		for _, svc := range input.GetServices() {
 			services = append(services, vehiclesv1.DesiredServiceStatus{
-				ServiceID:     service.ServiceID,
-				DesiredStatus: vehiclesv1.Status(service.DesiredStatus),
+				ServiceID:     svc.GetServiceId(),
+				DesiredStatus: vehiclesv1.Status(svc.GetDesiredStatus()),
 			})
 		}
 		requestBody = append(requestBody, vehiclesv1.DesiredServiceStatusRequest{
-			VIN:      desiredServiceStatusInput.VIN,
+			VIN:      input.GetVin(),
 			Services: services,
 		})
 	}
@@ -88,7 +56,7 @@ func (c *Client) PostVehicleServices(
 	}
 	httpRequest.Header.Set("User-Agent", getUserAgent())
 	httpRequest.Header.Set("Content-Type", "application/json")
-	httpResponse, err := c.httpClient(cfg).Do(httpRequest)
+	httpResponse, err := c.httpClient(c.config).Do(httpRequest)
 	if err != nil {
 		return nil, err
 	}
@@ -100,5 +68,5 @@ func (c *Client) PostVehicleServices(
 	if httpResponse.StatusCode != http.StatusAccepted {
 		return nil, newResponseError(httpResponse)
 	}
-	return &PostVehicleServicesResponse{}, nil
+	return &fleetv1.PostVehicleServicesResponse{}, nil
 }

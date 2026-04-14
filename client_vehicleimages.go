@@ -11,48 +11,34 @@ import (
 
 	"github.com/way-platform/mbz-go/api/vehiclespecificationfleetv1"
 	mbzv1 "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mbz/v1"
+	vehiclespecv1 "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mercedesbenz/vehiclespec/v1"
 )
 
-// GetVehicleImageIdsRequest is the request for [Client.GetVehicleImageIds].
-type GetVehicleImageIdsRequest struct {
-	// VIN is the VIN (or FIN) of the vehicle (17 characters).
-	VIN string `json:"vin"`
-	// Background is an optional property that defines the images background.
-	// The default value is false (transparent). Set to true to retrieve images
-	// with a high level of detail and realistic reflections and light incidence.
-	Background bool `json:"background,omitempty"`
-	// FileFormat is an optional property that defines the images format.
-	// Valid values: png, jpeg, webp. Default is webp.
-	FileFormat string `json:"fileFormat,omitempty"`
-}
-
-// GetVehicleImageIds gets the vehicle image IDs for a given vehicle ID.
+// GetVehicleImageIds gets the vehicle image IDs for a given vehicle.
 // This method requires API key authentication via [WithAPIKey].
 func (c *Client) GetVehicleImageIds(
 	ctx context.Context,
-	request *GetVehicleImageIdsRequest,
-	opts ...ClientOption,
-) (_ *mbzv1.VehicleImages, err error) {
+	request *vehiclespecv1.GetVehicleImageIdsRequest,
+) (_ *vehiclespecv1.GetVehicleImageIdsResponse, err error) {
 	defer func() {
 		if err != nil {
 			err = fmt.Errorf("mbz: get vehicle image ids: %w", err)
 		}
 	}()
-	cfg := c.config.with(opts...)
-	if request.VIN == "" {
+	if request.GetVin() == "" {
 		return nil, fmt.Errorf("VIN is required")
 	}
 	values := url.Values{}
-	if request.Background {
+	if request.GetBackground() {
 		values.Set("background", "true")
 	}
-	if request.FileFormat != "" {
-		values.Set("fileFormat", request.FileFormat)
+	if request.GetFileFormat() != "" {
+		values.Set("fileFormat", request.GetFileFormat())
 	}
 	requestURL := fmt.Sprintf(
 		"%s/vehicle-images/%s",
 		vehiclespecificationfleetv1.BaseURL,
-		request.VIN,
+		request.GetVin(),
 	)
 	httpRequest, err := http.NewRequestWithContext(ctx, http.MethodGet, requestURL, nil)
 	if err != nil {
@@ -61,7 +47,7 @@ func (c *Client) GetVehicleImageIds(
 	httpRequest.Header.Set("User-Agent", getUserAgent())
 	httpRequest.URL.RawQuery = values.Encode()
 	httpRequest.Header.Set("Accept", "application/json")
-	httpResponse, err := c.httpClient(cfg).Do(httpRequest)
+	httpResponse, err := c.httpClient(c.config).Do(httpRequest)
 	if err != nil {
 		return nil, err
 	}
@@ -81,7 +67,9 @@ func (c *Client) GetVehicleImageIds(
 	if err := json.Unmarshal(responseData, &openAPIResp); err != nil {
 		return nil, err
 	}
-	return vehicleImagesResponseToProto(&openAPIResp), nil
+	resp := &vehiclespecv1.GetVehicleImageIdsResponse{}
+	resp.SetVehicleImages(vehicleImagesResponseToProto(&openAPIResp))
+	return resp, nil
 }
 
 func vehicleImagesResponseToProto(
@@ -91,7 +79,6 @@ func vehicleImagesResponseToProto(
 	if response == nil {
 		return &output
 	}
-	// Set image ID fields
 	if response.EXT150 != "" {
 		output.SetExt150(response.EXT150)
 	}

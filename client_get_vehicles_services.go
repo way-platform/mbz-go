@@ -10,35 +10,20 @@ import (
 	"net/url"
 
 	"github.com/way-platform/mbz-go/api/vehiclesv1"
+	fleetv1 "github.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mercedesbenz/fleet/v1"
 )
-
-// GetVehicleServicesRequest is the request for [Client.GetVehicleServices].
-type GetVehicleServicesRequest struct {
-	// VIN of the vehicle to get the services for.
-	VIN string `json:"vin"`
-}
-
-// GetVehicleServicesResponse is the response for [Client.GetVehicleServices].
-type GetVehicleServicesResponse struct {
-	// DeltaPush indicates if delta push is enabled for the vehicle.
-	DeltaPush bool `json:"deltaPush"`
-	// Services with the service availability.
-	Services []vehiclesv1.ServiceStatus `json:"services"`
-}
 
 // GetVehicleServices gets the actual service status for a vehicle.
 func (c *Client) GetVehicleServices(
 	ctx context.Context,
-	request *GetVehicleServicesRequest,
-	opts ...ClientOption,
-) (_ *GetVehicleServicesResponse, err error) {
+	request *fleetv1.GetVehicleServicesRequest,
+) (_ *fleetv1.GetVehicleServicesResponse, err error) {
 	defer func() {
 		if err != nil {
 			err = fmt.Errorf("mbz: get vehicle services: %w", err)
 		}
 	}()
-	cfg := c.config.with(opts...)
-	requestURL, err := url.JoinPath(c.baseURL, "/v2/accounts/vehicles", request.VIN, "services")
+	requestURL, err := url.JoinPath(c.baseURL, "/v2/accounts/vehicles", request.GetVin(), "services")
 	if err != nil {
 		return nil, fmt.Errorf("invalid request URL: %w", err)
 	}
@@ -47,7 +32,7 @@ func (c *Client) GetVehicleServices(
 		return nil, err
 	}
 	httpRequest.Header.Set("User-Agent", getUserAgent())
-	httpResponse, err := c.httpClient(cfg).Do(httpRequest)
+	httpResponse, err := c.httpClient(c.config).Do(httpRequest)
 	if err != nil {
 		return nil, err
 	}
@@ -67,8 +52,17 @@ func (c *Client) GetVehicleServices(
 	if err := json.Unmarshal(data, &responseBody); err != nil {
 		return nil, err
 	}
-	return &GetVehicleServicesResponse{
-		DeltaPush: responseBody.DeltaPush,
-		Services:  responseBody.Services,
-	}, nil
+	services := make([]*fleetv1.ServiceStatus, 0, len(responseBody.Services))
+	for _, s := range responseBody.Services {
+		ps := &fleetv1.ServiceStatus{}
+		ps.SetServiceId(s.ServiceID)
+		ps.SetStatus(string(s.Status))
+		ps.SetDesiredStatus(string(s.DesiredStatus))
+		ps.SetOrderTime(s.OrderTime)
+		services = append(services, ps)
+	}
+	resp := &fleetv1.GetVehicleServicesResponse{}
+	resp.SetDeltaPush(responseBody.DeltaPush)
+	resp.SetServices(services)
+	return resp, nil
 }
