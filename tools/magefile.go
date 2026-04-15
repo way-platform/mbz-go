@@ -89,6 +89,12 @@ func CLI() error {
 	return cmd(root("cmd/mbz"), "go", "install", ".").Run()
 }
 
+// BufPush pushes the proto module to the Buf Schema Registry.
+func BufPush() error {
+	log.Println("pushing proto module to BSR")
+	return tool(root("proto"), "buf", "push").Run()
+}
+
 // VHS records the CLI GIF using VHS.
 func VHS() error {
 	log.Println("recording CLI GIF")
