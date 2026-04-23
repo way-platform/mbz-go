@@ -239,7 +239,7 @@ func newListVehiclesCommand(cfg *config) *cobra.Command {
 		if err != nil {
 			return err
 		}
-		printJSON(response)
+		fmt.Println(protojson.Format(response))
 		return nil
 	}
 	return cmd
@@ -263,7 +263,7 @@ func newAssignVehiclesCommand(cfg *config) *cobra.Command {
 		if err != nil {
 			return err
 		}
-		printJSON(response)
+		fmt.Println(protojson.Format(response))
 		return nil
 	}
 	return cmd
@@ -287,7 +287,7 @@ func newDeleteVehiclesCommand(cfg *config) *cobra.Command {
 		if err != nil {
 			return err
 		}
-		printJSON(response)
+		fmt.Println(protojson.Format(response))
 		return nil
 	}
 	return cmd
@@ -313,7 +313,7 @@ func newListServicesCommand(cfg *config) *cobra.Command {
 		if err != nil {
 			return err
 		}
-		printJSON(response)
+		fmt.Println(protojson.Format(response))
 		return nil
 	}
 	return cmd
@@ -361,7 +361,7 @@ func newGetVehicleServicesCommand(cfg *config) *cobra.Command {
 		if err != nil {
 			return err
 		}
-		printJSON(response)
+		fmt.Println(protojson.Format(response))
 		return nil
 	}
 	return cmd
@@ -396,7 +396,7 @@ func newActivateVehicleServicesCommand(cfg *config) *cobra.Command {
 		if err != nil {
 			return err
 		}
-		printJSON(response)
+		fmt.Println(protojson.Format(response))
 		return nil
 	}
 	return cmd
@@ -431,7 +431,7 @@ func newDeactivateVehicleServicesCommand(cfg *config) *cobra.Command {
 		if err != nil {
 			return err
 		}
-		printJSON(response)
+		fmt.Println(protojson.Format(response))
 		return nil
 	}
 	return cmd
@@ -464,7 +464,7 @@ func newEnableDeltaPushCommand(cfg *config) *cobra.Command {
 		if err != nil {
 			return err
 		}
-		printJSON(response)
+		fmt.Println(protojson.Format(response))
 		return nil
 	}
 	return cmd
@@ -495,7 +495,7 @@ func newDisableDeltaPushCommand(cfg *config) *cobra.Command {
 		if err != nil {
 			return err
 		}
-		printJSON(response)
+		fmt.Println(protojson.Format(response))
 		return nil
 	}
 	return cmd
@@ -864,14 +864,6 @@ func getExtensionFromContentType(contentType string) string {
 	default:
 		return ".bin"
 	}
-}
-
-func printJSON(msg any) {
-	data, err := json.MarshalIndent(msg, "", "  ")
-	if err != nil {
-		slog.Error("failed to marshal JSON", "error", err)
-	}
-	fmt.Println(string(data))
 }
 
 type kgoLogger struct {
