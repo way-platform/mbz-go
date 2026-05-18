@@ -1,6 +1,7 @@
 package mbz
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -8,36 +9,18 @@ import (
 	"connectrpc.com/connect"
 )
 
-// ResponseError represents a Mercedes-Benz API response error.
-type ResponseError struct {
-	// StatusCode is the HTTP status code of the response.
-	StatusCode int
-	// Body is the body of the response.
-	Body []byte
-}
-
 func newResponseError(httpResponse *http.Response) error {
 	body, err := io.ReadAll(httpResponse.Body)
 	if err != nil {
 		body = fmt.Appendf(nil, "failed to read response body: %s", err)
 	}
-	respErr := &ResponseError{
-		StatusCode: httpResponse.StatusCode,
-		Body:       body,
+	var msg string
+	if len(body) > 0 {
+		msg = fmt.Sprintf("http %d: %s", httpResponse.StatusCode, body)
+	} else {
+		msg = fmt.Sprintf("http %d", httpResponse.StatusCode)
 	}
-	return respErr.connectError()
-}
-
-// Error implements the error interface.
-func (e *ResponseError) Error() string {
-	if len(e.Body) > 0 {
-		return fmt.Sprintf("http %d: %s", e.StatusCode, string(e.Body))
-	}
-	return fmt.Sprintf("http %d", e.StatusCode)
-}
-
-func (e *ResponseError) connectError() error {
-	return connect.NewError(httpStatusToConnectCode(e.StatusCode), e)
+	return connect.NewError(httpStatusToConnectCode(httpResponse.StatusCode), errors.New(msg))
 }
 
 func httpStatusToConnectCode(statusCode int) connect.Code {
