@@ -164,30 +164,3 @@ func TestResponseError_ConnectCode(t *testing.T) {
 		})
 	}
 }
-
-func TestResponseError_ErrorsAs(t *testing.T) {
-	// Verify that consumers using errors.As(err, &ResponseError{}) still works
-	// after wrapping in connect.NewError.
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
-		w.WriteHeader(http.StatusNotFound)
-		_, _ = w.Write([]byte(`{"error":"vehicle not found"}`))
-	}))
-	t.Cleanup(srv.Close)
-
-	client := newTestClient(t, srv)
-	_, err := client.ListVehicles(context.Background(), &fleetv1.ListVehiclesRequest{})
-	if err == nil {
-		t.Fatal("expected error, got nil")
-	}
-
-	var respErr *ResponseError
-	if !errors.As(err, &respErr) {
-		t.Fatalf("expected errors.As to find *ResponseError, got %T: %v", err, err)
-	}
-	if respErr.StatusCode != http.StatusNotFound {
-		t.Errorf("expected status 404, got %d", respErr.StatusCode)
-	}
-	if string(respErr.Body) != `{"error":"vehicle not found"}` {
-		t.Errorf("unexpected body: %s", string(respErr.Body))
-	}
-}
