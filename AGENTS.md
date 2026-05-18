@@ -3,19 +3,18 @@
 ## Package Manager
 
 Use **Go Modules**: `go mod tidy`, `go test ./...`
-Use **Mage**: `go tool mage [target]` (e.g. `go tool mage Build`)
+Use **Mise**: `mise run [task]` (e.g. `mise run build`, `mise run lint`)
 
 ## Key Conventions
 
 - **Testing**: Use standard `testing` and `github.com/google/go-cmp/cmp` **only**. No frameworks (Testify, Ginkgo, etc.).
 - **Linting**: Run `GolangCI-Lint` v2. Configure via project-specific `.golangci.yml`.
-- **Build**: Use `way-magefile` skill.
+- **Build**: Run `mise run build` for a full CI build. See `mise tasks` for all available tasks.
 - **Encore**: Use `encore-go-*` skills. Encore conventions (e.g., globals) take precedence.
 
 ## Local Skills
 
 - **Way Go Style**: Use `.agents/skills/way-go-style/SKILL.md`
-- **Way Magefile**: Use `.agents/skills/way-magefile/SKILL.md`
 - **Agents.md**: Use `.agents/skills/agents-md/SKILL.md`
 
 ## CLI Architecture

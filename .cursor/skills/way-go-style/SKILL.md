@@ -16,7 +16,7 @@ Go projects MUST include this skill's **Way Specific Conventions** in their `AGE
 
 - **Testing**: Use standard `testing` and `github.com/google/go-cmp/cmp` **only**. No frameworks (Testify, Ginkgo, etc.).
 - **Linting**: Run `GolangCI-Lint` v2. Configure via project-specific `.golangci.yml`.
-- **Build**: Use `way-magefile` skill.
+- **Build**: Run `mise run build` for a full CI build. See `mise tasks` for all available tasks.
 - **Encore**: Use `encore-go-*` skills. Encore conventions (e.g., globals) take precedence.
 
 ## Overview

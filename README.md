@@ -50,18 +50,18 @@ for _, vehicle := range response.Vehicles {
 
 #### Building
 
-The project is built using [Mage](https://magefile.org), see
-[tools/magefile.go](./tools/magefile.go) and the [tools/mage](./tools/mage)
-helper script.
+The project uses [mise](https://mise.jdx.dev) for tool management and build
+tasks. Install mise, then:
 
 ```bash
-$ ./tools/mage build
+$ mise install        # Install all tools
+$ mise run build      # Full CI build
 ```
 
 For all available build tasks, see:
 
 ```bash
-$ ./tools/mage -l
+$ mise tasks
 ```
 
 ## CLI tool
