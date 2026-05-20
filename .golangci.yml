@@ -13,3 +13,36 @@ formatters:
   settings:
     golines:
       max-len: 120
+
+linters:
+  enable:
+    - gosec
+  settings:
+    gosec:
+      excludes:
+        # Pre-existing proto/binary integer conversions; values are API-bounded.
+        - G115
+        # Signal integer values from the MBZ API are protocol-bounded to int32 range.
+        - G109
+        # Struct field name pattern matching — data carrier types, not hardcoded secrets.
+        - G117
+        # SSRF taint analysis — SDK HTTP client calls user-provided URLs by design.
+        - G704
+
+  exclusions:
+    rules:
+      # Test files: hardcoded test tokens/URLs and test file I/O are not vulnerabilities.
+      - path: "_test\\.go"
+        linters:
+          - gosec
+        text: "G101|G304|G306"
+      # Known token URL constants are not credentials.
+      - path: "region\\.go"
+        linters:
+          - gosec
+        text: "G101"
+      # CLI: output file writes with 0644 permissions are intentional.
+      - path: "cli/"
+        linters:
+          - gosec
+        text: "G306"
