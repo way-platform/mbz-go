@@ -1,0 +1,59 @@
+edition = "2023";
+
+package wayplatform.connect.mbz.v1;
+
+import "wayplatform/connect/mbz/v1/annotations.proto";
+
+// RFC 7807 Problem Details from Mercedes-Benz Fleet API error responses.
+//
+// Mercedes APIs return errors as JSON problem details:
+//
+//   {
+//     "type": "/vehicle/not-found",
+//     "title": "Not found",
+//     "detail": "Server can not find the requested resource",
+//     "instance": "about:blank",
+//     "statusCode": 404
+//   }
+//
+// Note: Mercedes uses "statusCode" rather than the RFC-standard "status"
+// field name. The SDK deserializes both.
+//
+// Attached as a detail on connect.Error when the SDK surfaces API failures.
+message ProblemDetail {
+  // Known problem type URIs from the Mercedes-Benz Fleet API.
+  enum Type {
+    // Default value. This value is unused.
+    TYPE_UNSPECIFIED = 0;
+
+    // The problem type URI is unrecognized.
+    TYPE_UNRECOGNIZED = 1;
+
+    // The requested vehicle was not found.
+    TYPE_VEHICLE_NOT_FOUND = 2 [(api_enum_value) = "/vehicle/not-found"];
+
+    // A request validation error occurred.
+    TYPE_VALIDATION_ERROR = 3 [(api_enum_value) = "/error/validation-error"];
+  }
+
+  // Parsed problem type.
+  Type type = 1;
+
+  // Raw "type" URI reference from the response (RFC 7807 §3.1).
+  // Identifies the problem type. When absent, assumed to be "about:blank".
+  string type_uri = 2;
+
+  // Short, human-readable summary of the problem type (RFC 7807 §3.1).
+  // SHOULD NOT change from occurrence to occurrence.
+  string title = 3;
+
+  // Human-readable explanation specific to this occurrence (RFC 7807 §3.1).
+  string detail = 4;
+
+  // URI reference identifying the specific occurrence (RFC 7807 §3.1).
+  string instance = 5;
+
+  // HTTP status code for this occurrence (RFC 7807 §3.1).
+  // Advisory; the actual HTTP status is on the response itself.
+  int32 status = 6;
+}
