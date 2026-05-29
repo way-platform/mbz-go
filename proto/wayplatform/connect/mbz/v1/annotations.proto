@@ -32,4 +32,10 @@ extend google.protobuf.EnumValueOptions {
   // Field number is the 28 most significant bits in the sha256 sum of
   // `wayplatform.connect.mbz.v1.signal_enum_value`.
   repeated SignalEnumValue signal_values = 46836650;
+
+  // Maps an enum value to its API string representation.
+  //
+  // Field number is the 28 most significant bits in the sha256 sum of
+  // `wayplatform.connect.mbz.v1.api_enum_value`.
+  repeated string api_enum_value = 219128601;
 }

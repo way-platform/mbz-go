@@ -54,6 +54,14 @@ var file_wayplatform_connect_mbz_v1_annotations_proto_extTypes = []protoimpl.Ext
 		Tag:           "bytes,46836650,rep,name=signal_values",
 		Filename:      "wayplatform/connect/mbz/v1/annotations.proto",
 	},
+	{
+		ExtendedType:  (*descriptorpb.EnumValueOptions)(nil),
+		ExtensionType: ([]string)(nil),
+		Field:         219128601,
+		Name:          "wayplatform.connect.mbz.v1.api_enum_value",
+		Tag:           "bytes,219128601,rep,name=api_enum_value",
+		Filename:      "wayplatform/connect/mbz/v1/annotations.proto",
+	},
 }
 
 // Extension fields to descriptorpb.EnumValueOptions.
@@ -87,6 +95,13 @@ var (
 	//
 	// repeated wayplatform.connect.mbz.v1.SignalEnumValue signal_values = 46836650;
 	E_SignalValues = &file_wayplatform_connect_mbz_v1_annotations_proto_extTypes[3]
+	// Maps an enum value to its API string representation.
+	//
+	// Field number is the 28 most significant bits in the sha256 sum of
+	// `wayplatform.connect.mbz.v1.api_enum_value`.
+	//
+	// repeated string api_enum_value = 219128601;
+	E_ApiEnumValue = &file_wayplatform_connect_mbz_v1_annotations_proto_extTypes[4]
 )
 
 var File_wayplatform_connect_mbz_v1_annotations_proto protoreflect.FileDescriptor
@@ -100,7 +115,8 @@ const file_wayplatform_connect_mbz_v1_annotations_proto_rawDesc = "" +
 	"signalType:m\n" +
 	"\vsignal_unit\x12!.google.protobuf.EnumValueOptions\x18\xb3ΐ\x1b \x01(\x0e2&.wayplatform.connect.mbz.v1.SignalUnitR\n" +
 	"signalUnit:v\n" +
-	"\rsignal_values\x12!.google.protobuf.EnumValueOptions\x18\xaaת\x16 \x03(\v2+.wayplatform.connect.mbz.v1.SignalEnumValueR\fsignalValuesB\x8b\x02\n" +
+	"\rsignal_values\x12!.google.protobuf.EnumValueOptions\x18\xaaת\x16 \x03(\v2+.wayplatform.connect.mbz.v1.SignalEnumValueR\fsignalValues:J\n" +
+	"\x0eapi_enum_value\x12!.google.protobuf.EnumValueOptions\x18\x99ƾh \x03(\tR\fapiEnumValueB\x8b\x02\n" +
 	"\x1ecom.wayplatform.connect.mbz.v1B\x10AnnotationsProtoP\x01ZLgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mbz/v1;mbzv1\xa2\x02\x03WCM\xaa\x02\x1aWayplatform.Connect.Mbz.V1\xca\x02\x1aWayplatform\\Connect\\Mbz\\V1\xe2\x02&Wayplatform\\Connect\\Mbz\\V1\\GPBMetadata\xea\x02\x1dWayplatform::Connect::Mbz::V1b\beditionsp\xe8\a"
 
 var file_wayplatform_connect_mbz_v1_annotations_proto_goTypes = []any{
@@ -114,13 +130,14 @@ var file_wayplatform_connect_mbz_v1_annotations_proto_depIdxs = []int32{
 	0, // 1: wayplatform.connect.mbz.v1.signal_type:extendee -> google.protobuf.EnumValueOptions
 	0, // 2: wayplatform.connect.mbz.v1.signal_unit:extendee -> google.protobuf.EnumValueOptions
 	0, // 3: wayplatform.connect.mbz.v1.signal_values:extendee -> google.protobuf.EnumValueOptions
-	1, // 4: wayplatform.connect.mbz.v1.signal_type:type_name -> wayplatform.connect.mbz.v1.SignalType
-	2, // 5: wayplatform.connect.mbz.v1.signal_unit:type_name -> wayplatform.connect.mbz.v1.SignalUnit
-	3, // 6: wayplatform.connect.mbz.v1.signal_values:type_name -> wayplatform.connect.mbz.v1.SignalEnumValue
-	7, // [7:7] is the sub-list for method output_type
-	7, // [7:7] is the sub-list for method input_type
-	4, // [4:7] is the sub-list for extension type_name
-	0, // [0:4] is the sub-list for extension extendee
+	0, // 4: wayplatform.connect.mbz.v1.api_enum_value:extendee -> google.protobuf.EnumValueOptions
+	1, // 5: wayplatform.connect.mbz.v1.signal_type:type_name -> wayplatform.connect.mbz.v1.SignalType
+	2, // 6: wayplatform.connect.mbz.v1.signal_unit:type_name -> wayplatform.connect.mbz.v1.SignalUnit
+	3, // 7: wayplatform.connect.mbz.v1.signal_values:type_name -> wayplatform.connect.mbz.v1.SignalEnumValue
+	8, // [8:8] is the sub-list for method output_type
+	8, // [8:8] is the sub-list for method input_type
+	5, // [5:8] is the sub-list for extension type_name
+	0, // [0:5] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
 }
 
@@ -139,7 +156,7 @@ func file_wayplatform_connect_mbz_v1_annotations_proto_init() {
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_wayplatform_connect_mbz_v1_annotations_proto_rawDesc), len(file_wayplatform_connect_mbz_v1_annotations_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   0,
-			NumExtensions: 4,
+			NumExtensions: 5,
 			NumServices:   0,
 		},
 		GoTypes:           file_wayplatform_connect_mbz_v1_annotations_proto_goTypes,
