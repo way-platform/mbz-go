@@ -67,7 +67,7 @@ func (s *Signal) AsProto() (*mbzv1.Signal, error) {
 	case mbzv1.SignalType_STRING:
 		result.SetStringValue(s.Value)
 	case mbzv1.SignalType_INTEGER:
-		intValue, err := strconv.Atoi(s.Value)
+		intValue, err := strconv.ParseInt(s.Value, 10, 32)
 		if err != nil {
 			return nil, fmt.Errorf("failed to parse integer value for signal %s: %w", s.Name, err)
 		}
