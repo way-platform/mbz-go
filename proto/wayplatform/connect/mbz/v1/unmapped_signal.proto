@@ -22,9 +22,16 @@ message UnmappedSignal {
   Reason reason = 5;
 
   enum Reason {
+    // Default value. This value is not used.
     REASON_UNSPECIFIED = 0;
+
+    // The signal name is not present in the signal identifier schema.
     UNKNOWN_NAME = 1;
+
+    // The signal name is known but the value is not a valid enum member.
     INVALID_ENUM = 2;
+
+    // The signal name is known but the value could not be parsed for the signal type.
     PARSE_ERROR = 3;
   }
 }

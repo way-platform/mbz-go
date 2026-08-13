@@ -24,10 +24,14 @@ const (
 type UnmappedSignal_Reason int32
 
 const (
+	// Default value. This value is not used.
 	UnmappedSignal_REASON_UNSPECIFIED UnmappedSignal_Reason = 0
-	UnmappedSignal_UNKNOWN_NAME       UnmappedSignal_Reason = 1
-	UnmappedSignal_INVALID_ENUM       UnmappedSignal_Reason = 2
-	UnmappedSignal_PARSE_ERROR        UnmappedSignal_Reason = 3
+	// The signal name is not present in the signal identifier schema.
+	UnmappedSignal_UNKNOWN_NAME UnmappedSignal_Reason = 1
+	// The signal name is known but the value is not a valid enum member.
+	UnmappedSignal_INVALID_ENUM UnmappedSignal_Reason = 2
+	// The signal name is known but the value could not be parsed for the signal type.
+	UnmappedSignal_PARSE_ERROR UnmappedSignal_Reason = 3
 )
 
 // Enum value maps for UnmappedSignal_Reason.
