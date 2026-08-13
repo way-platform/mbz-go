@@ -10,7 +10,9 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
+// VehicleSignalData is the decoded payload of a vehicle signal push message.
 type VehicleSignalData struct {
+	// Signals contained in the message.
 	Signals []Signal `json:"signals"`
 }
 

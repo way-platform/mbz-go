@@ -21,6 +21,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// Reason a signal could not be mapped to the canonical Signal message.
 type UnmappedSignal_Reason int32
 
 const (
