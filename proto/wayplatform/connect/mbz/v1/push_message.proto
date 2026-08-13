@@ -6,6 +6,7 @@ import "google/protobuf/timestamp.proto";
 import "wayplatform/connect/mbz/v1/message_type.proto";
 import "wayplatform/connect/mbz/v1/sending_behavior.proto";
 import "wayplatform/connect/mbz/v1/signal.proto";
+import "wayplatform/connect/mbz/v1/unmapped_signal.proto";
 
 // A push message from the Mercedes-Benz Kafka push API.
 message PushMessage {
@@ -32,4 +33,7 @@ message PushMessage {
 
   // Signals (valid for SIGNALS message type).
   repeated Signal signals = 8;
+
+  // Signals that could not be mapped to the canonical Signal message.
+  repeated UnmappedSignal unmapped_signals = 9;
 }

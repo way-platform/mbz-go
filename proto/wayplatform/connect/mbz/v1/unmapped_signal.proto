@@ -1,0 +1,30 @@
+edition = "2023";
+
+package wayplatform.connect.mbz.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// A signal that could not be mapped to the canonical Signal message.
+message UnmappedSignal {
+  // Original signal name from the Mercedes-Benz push API.
+  string name = 1;
+
+  // Timestamp of the signal.
+  google.protobuf.Timestamp time = 2;
+
+  // Raw value as sent by Mercedes-Benz (always a string).
+  string value = 3;
+
+  // Raw JSON type (ENUM, BOOLEAN, ...).
+  string type = 4;
+
+  // Reason the signal could not be mapped.
+  Reason reason = 5;
+
+  enum Reason {
+    REASON_UNSPECIFIED = 0;
+    UNKNOWN_NAME = 1;
+    INVALID_ENUM = 2;
+    PARSE_ERROR = 3;
+  }
+}

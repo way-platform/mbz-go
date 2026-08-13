@@ -32,6 +32,7 @@ type PushMessage struct {
 	xxx_hidden_ServiceId       *string                `protobuf:"bytes,6,opt,name=service_id,json=serviceId"`
 	xxx_hidden_SendingBehavior SendingBehavior        `protobuf:"varint,7,opt,name=sending_behavior,json=sendingBehavior,enum=wayplatform.connect.mbz.v1.SendingBehavior"`
 	xxx_hidden_Signals         *[]*Signal             `protobuf:"bytes,8,rep,name=signals"`
+	xxx_hidden_UnmappedSignals *[]*UnmappedSignal     `protobuf:"bytes,9,rep,name=unmapped_signals,json=unmappedSignals"`
 	XXX_raceDetectHookData     protoimpl.RaceDetectHookData
 	XXX_presence               [1]uint32
 	unknownFields              protoimpl.UnknownFields
@@ -137,14 +138,23 @@ func (x *PushMessage) GetSignals() []*Signal {
 	return nil
 }
 
+func (x *PushMessage) GetUnmappedSignals() []*UnmappedSignal {
+	if x != nil {
+		if x.xxx_hidden_UnmappedSignals != nil {
+			return *x.xxx_hidden_UnmappedSignals
+		}
+	}
+	return nil
+}
+
 func (x *PushMessage) SetMessageId(v string) {
 	x.xxx_hidden_MessageId = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 0, 8)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 0, 9)
 }
 
 func (x *PushMessage) SetVin(v string) {
 	x.xxx_hidden_Vin = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 1, 8)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 1, 9)
 }
 
 func (x *PushMessage) SetTime(v *timestamppb.Timestamp) {
@@ -153,26 +163,30 @@ func (x *PushMessage) SetTime(v *timestamppb.Timestamp) {
 
 func (x *PushMessage) SetMessageType(v MessageType) {
 	x.xxx_hidden_MessageType = v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 3, 8)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 3, 9)
 }
 
 func (x *PushMessage) SetVersion(v string) {
 	x.xxx_hidden_Version = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 4, 8)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 4, 9)
 }
 
 func (x *PushMessage) SetServiceId(v string) {
 	x.xxx_hidden_ServiceId = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 5, 8)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 5, 9)
 }
 
 func (x *PushMessage) SetSendingBehavior(v SendingBehavior) {
 	x.xxx_hidden_SendingBehavior = v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 6, 8)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 6, 9)
 }
 
 func (x *PushMessage) SetSignals(v []*Signal) {
 	x.xxx_hidden_Signals = &v
+}
+
+func (x *PushMessage) SetUnmappedSignals(v []*UnmappedSignal) {
+	x.xxx_hidden_UnmappedSignals = &v
 }
 
 func (x *PushMessage) HasMessageId() bool {
@@ -277,6 +291,8 @@ type PushMessage_builder struct {
 	SendingBehavior *SendingBehavior
 	// Signals (valid for SIGNALS message type).
 	Signals []*Signal
+	// Signals that could not be mapped to the canonical Signal message.
+	UnmappedSignals []*UnmappedSignal
 }
 
 func (b0 PushMessage_builder) Build() *PushMessage {
@@ -284,31 +300,32 @@ func (b0 PushMessage_builder) Build() *PushMessage {
 	b, x := &b0, m0
 	_, _ = b, x
 	if b.MessageId != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 0, 8)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 0, 9)
 		x.xxx_hidden_MessageId = b.MessageId
 	}
 	if b.Vin != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 1, 8)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 1, 9)
 		x.xxx_hidden_Vin = b.Vin
 	}
 	x.xxx_hidden_Time = b.Time
 	if b.MessageType != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 3, 8)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 3, 9)
 		x.xxx_hidden_MessageType = *b.MessageType
 	}
 	if b.Version != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 4, 8)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 4, 9)
 		x.xxx_hidden_Version = b.Version
 	}
 	if b.ServiceId != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 5, 8)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 5, 9)
 		x.xxx_hidden_ServiceId = b.ServiceId
 	}
 	if b.SendingBehavior != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 6, 8)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 6, 9)
 		x.xxx_hidden_SendingBehavior = *b.SendingBehavior
 	}
 	x.xxx_hidden_Signals = &b.Signals
+	x.xxx_hidden_UnmappedSignals = &b.UnmappedSignals
 	return m0
 }
 
@@ -316,7 +333,7 @@ var File_wayplatform_connect_mbz_v1_push_message_proto protoreflect.FileDescript
 
 const file_wayplatform_connect_mbz_v1_push_message_proto_rawDesc = "" +
 	"\n" +
-	"-wayplatform/connect/mbz/v1/push_message.proto\x12\x1awayplatform.connect.mbz.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a-wayplatform/connect/mbz/v1/message_type.proto\x1a1wayplatform/connect/mbz/v1/sending_behavior.proto\x1a'wayplatform/connect/mbz/v1/signal.proto\"\x89\x03\n" +
+	"-wayplatform/connect/mbz/v1/push_message.proto\x12\x1awayplatform.connect.mbz.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a-wayplatform/connect/mbz/v1/message_type.proto\x1a1wayplatform/connect/mbz/v1/sending_behavior.proto\x1a'wayplatform/connect/mbz/v1/signal.proto\x1a0wayplatform/connect/mbz/v1/unmapped_signal.proto\"\xe0\x03\n" +
 	"\vPushMessage\x12\x1d\n" +
 	"\n" +
 	"message_id\x18\x01 \x01(\tR\tmessageId\x12\x10\n" +
@@ -327,7 +344,8 @@ const file_wayplatform_connect_mbz_v1_push_message_proto_rawDesc = "" +
 	"\n" +
 	"service_id\x18\x06 \x01(\tR\tserviceId\x12V\n" +
 	"\x10sending_behavior\x18\a \x01(\x0e2+.wayplatform.connect.mbz.v1.SendingBehaviorR\x0fsendingBehavior\x12<\n" +
-	"\asignals\x18\b \x03(\v2\".wayplatform.connect.mbz.v1.SignalR\asignalsB\x8b\x02\n" +
+	"\asignals\x18\b \x03(\v2\".wayplatform.connect.mbz.v1.SignalR\asignals\x12U\n" +
+	"\x10unmapped_signals\x18\t \x03(\v2*.wayplatform.connect.mbz.v1.UnmappedSignalR\x0funmappedSignalsB\x8b\x02\n" +
 	"\x1ecom.wayplatform.connect.mbz.v1B\x10PushMessageProtoP\x01ZLgithub.com/way-platform/mbz-go/proto/gen/go/wayplatform/connect/mbz/v1;mbzv1\xa2\x02\x03WCM\xaa\x02\x1aWayplatform.Connect.Mbz.V1\xca\x02\x1aWayplatform\\Connect\\Mbz\\V1\xe2\x02&Wayplatform\\Connect\\Mbz\\V1\\GPBMetadata\xea\x02\x1dWayplatform::Connect::Mbz::V1b\beditionsp\xe8\a"
 
 var file_wayplatform_connect_mbz_v1_push_message_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
@@ -337,17 +355,19 @@ var file_wayplatform_connect_mbz_v1_push_message_proto_goTypes = []any{
 	(MessageType)(0),              // 2: wayplatform.connect.mbz.v1.MessageType
 	(SendingBehavior)(0),          // 3: wayplatform.connect.mbz.v1.SendingBehavior
 	(*Signal)(nil),                // 4: wayplatform.connect.mbz.v1.Signal
+	(*UnmappedSignal)(nil),        // 5: wayplatform.connect.mbz.v1.UnmappedSignal
 }
 var file_wayplatform_connect_mbz_v1_push_message_proto_depIdxs = []int32{
 	1, // 0: wayplatform.connect.mbz.v1.PushMessage.time:type_name -> google.protobuf.Timestamp
 	2, // 1: wayplatform.connect.mbz.v1.PushMessage.message_type:type_name -> wayplatform.connect.mbz.v1.MessageType
 	3, // 2: wayplatform.connect.mbz.v1.PushMessage.sending_behavior:type_name -> wayplatform.connect.mbz.v1.SendingBehavior
 	4, // 3: wayplatform.connect.mbz.v1.PushMessage.signals:type_name -> wayplatform.connect.mbz.v1.Signal
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	5, // 4: wayplatform.connect.mbz.v1.PushMessage.unmapped_signals:type_name -> wayplatform.connect.mbz.v1.UnmappedSignal
+	5, // [5:5] is the sub-list for method output_type
+	5, // [5:5] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_wayplatform_connect_mbz_v1_push_message_proto_init() }
@@ -358,6 +378,7 @@ func file_wayplatform_connect_mbz_v1_push_message_proto_init() {
 	file_wayplatform_connect_mbz_v1_message_type_proto_init()
 	file_wayplatform_connect_mbz_v1_sending_behavior_proto_init()
 	file_wayplatform_connect_mbz_v1_signal_proto_init()
+	file_wayplatform_connect_mbz_v1_unmapped_signal_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
