@@ -21,6 +21,7 @@ message UnmappedSignal {
   // Reason the signal could not be mapped.
   Reason reason = 5;
 
+  // Reason a signal could not be mapped to the canonical Signal message.
   enum Reason {
     // Default value. This value is not used.
     REASON_UNSPECIFIED = 0;
